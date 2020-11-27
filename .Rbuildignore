@@ -1,0 +1,15 @@
+README.md
+RepoStuff
+RepoStuff/*
+ChangeLogs
+ChangeLogs/ChangeLog*
+.git
+.github
+.gitignore
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.travis\.yml$
+\.gcov$
+\.gcda$
+\.gcno$
+^appveyor\.yml$

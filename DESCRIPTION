@@ -1,0 +1,54 @@
+Package: spatstat.geom
+Version: 0.0-0
+Date: 2020-11-27
+Title: Geometrical Functionality of the 'spatstat' Package
+Authors@R: c(person("Adrian", "Baddeley", 
+                    role = c("aut", "cre"),
+       	            email = "Adrian.Baddeley@curtin.edu.au"),
+	     person("Rolf", "Turner", 
+                    role = "aut",
+ 	            email="r.turner@auckland.ac.nz"),
+	     person("Ege",   "Rubak", 
+                    role = "aut",
+		    email = "rubak@math.aau.dk"),
+	     person("Kasper", "Klitgaard Berthelsen",
+	            role = "ctb"),
+	     person("Ottmar", "Cronie",
+	            role = "ctb"),
+	     person("Tilman", "Davies",
+	            role = "ctb"),
+	     person("Yongtao", "Guan",
+	            role = "ctb"),
+	     person("Ute", "Hahn",
+	            role = "ctb"),
+	     person("Abdollah", "Jalilian", 
+	            role = "ctb"),
+	     person("Marie-Colette", "van Lieshout",
+	            role = "ctb"),
+	     person("Greg", "McSwiggan",
+	            role = "ctb"),
+	     person("Tuomas", "Rajala",
+	            role = "ctb"),
+	     person("Suman", "Rakshit",
+	            role = "ctb"),
+	     person("Dominic", "Schuhmacher",
+	            role = "ctb"),
+	     person("Rasmus", "Plenge Waagepetersen",
+	            role = "ctb"),
+	     person("Hangsheng", "Wang",
+	            role = "ctb"))
+Maintainer: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>
+Depends: R (>= 3.5.0), spatstat.data (>= 1.4-2), stats, graphics, grDevices, utils, methods, nlme, rpart
+Imports: spatstat.utils (>= 1.18-0), spatstat.sparse, mgcv, Matrix, deldir (>= 0.0-21), abind, tensor, polyclip (>= 1.10-0), goftest (>= 1.2-2)
+Suggests: spatstat.core, spatstat.linnet, sm, maptools (>= 0.9-9), gsl, locfit, spatial, RandomFields (>= 3.1.24.1), RandomFieldsUtils(>= 0.3.3.1), fftwtools (>= 0.9-8)
+Remotes: spatstat/spatstat.utils, spatstat/spatstat.data, spatstat/spatstat.sparse, baddstats/spatstat.linnet, baddstats/polyclip
+Description: This is a subset of the original 'spatstat' package,
+	     containing the user-level code from 'spatstat'
+	     which performs geometrical operations, except for the
+	     geometry of linear networks.
+License: GPL (>= 2)
+URL: http://www.spatstat.org
+LazyData: true
+NeedsCompilation: yes
+ByteCompile: true
+BugReports: https://github.com/spatstat/spatstat.geom/issues
