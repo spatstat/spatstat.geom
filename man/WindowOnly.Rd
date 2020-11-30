@@ -1,5 +1,4 @@
 \name{WindowOnly}
-\alias{Window.msr}
 \alias{Window.quad}
 \alias{Window.quadratcount}
 \alias{Window.tess}
@@ -14,8 +13,6 @@
   in which the object is defined.
 }
 \usage{
-
- \method{Window}{msr}(X, \dots)
 
  \method{Window}{quad}(X, \dots)
 

@@ -14,8 +14,6 @@
 
 */
 
-void areadifs(double *, int *, double *, double *, int *, int *, double *); 
-void areaBdif(double *, int *, double *, double *, int *, int *, double *, double *, double *, double *, double *);
 void xysegint(int *, double *, double *, double *, double *, int *, double *, double *, double *, double *, double *, double *, double *, double *, double *, int *);
 void Fclosepairs(int *, double *, double *, double *, int *, int *, int *, int *, double *, double *, double *, double *, double *, double *, double *, int *); 
 void paircount(int *, double *, double *, double *, int *); 

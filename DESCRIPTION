@@ -1,6 +1,6 @@
 Package: spatstat.geom
 Version: 0.0-0
-Date: 2020-11-27
+Date: 2020-11-30
 Title: Geometrical Functionality of the 'spatstat' Package
 Authors@R: c(person("Adrian", "Baddeley", 
                     role = c("aut", "cre"),

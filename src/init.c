@@ -18,8 +18,6 @@
 
 static const R_CMethodDef CEntries[] = {
     {"anydupxy",          (DL_FUNC) &anydupxy,           4},
-    {"areaBdif",          (DL_FUNC) &areaBdif,          11},
-    {"areadifs",          (DL_FUNC) &areadifs,           7},
     {"auctionbf",         (DL_FUNC) &auctionbf,          7},
     {"bdrymask",          (DL_FUNC) &bdrymask,           4},
     {"Ccrossdist",        (DL_FUNC) &Ccrossdist,         8},

@@ -397,36 +397,6 @@ local({
   }
 })
 
-#'
-#'    tests/ssf.R
-#'
-#'   Tests of 'ssf' class
-#'
-#'   $Revision: 1.3 $ $Date: 2020/05/01 09:59:59 $
-#'
-
-if(FULLTEST) {
-local({
-  Y <- cells[1:5]
-  X <- rsyst(Window(Y), 5)
-  Z <- runifpoint(3, Window(Y))
-  f1 <- ssf(X, nncross(X,Y,what="dist"))
-  f2 <- ssf(X, nncross(X,Y,what="dist", k=1:2))
-  image(f1)
-  g1 <- as.function(f1)
-  g1(Z)
-  g2 <- as.function(f2)
-  g2(Z)
-  plot(f1, style="contour")
-  plot(f1, style="imagecontour")
-  contour(f1)
-  apply.ssf(f2, 1, sum)
-  range(f1)
-  min(f1)
-  max(f1)
-  integral(f1, weights=tile.areas(dirichlet(X)))
-})
-}
 ##
 ## tests/symbolmaps.R
 ##

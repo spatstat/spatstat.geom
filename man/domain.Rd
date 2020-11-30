@@ -5,7 +5,6 @@
 \alias{domain.im}
 \alias{domain.ppx}
 \alias{domain.pp3}
-\alias{domain.msr}
 \alias{domain.quad}
 \alias{domain.quadratcount}
 \alias{domain.tess}
@@ -32,8 +31,6 @@
    \method{domain}{ppx}(X, \dots)
 
    \method{domain}{pp3}(X, \dots)
-
- \method{domain}{msr}(X, \dots)
 
  \method{domain}{quad}(X, \dots)
 

@@ -4,7 +4,6 @@
 \alias{as.owin.owin}
 \alias{as.owin.ppp}
 \alias{as.owin.psp}
-\alias{as.owin.msr}
 \alias{as.owin.quad}
 \alias{as.owin.quadratcount}
 \alias{as.owin.tess}
@@ -30,8 +29,6 @@ in any of several formats, into an object of class \code{"owin"}.
  \method{as.owin}{ppp}(W, \dots, fatal=TRUE)
 
  \method{as.owin}{psp}(W, \dots, fatal=TRUE)
-
- \method{as.owin}{msr}(W, \dots, fatal=TRUE)
 
  \method{as.owin}{quad}(W, \dots, fatal=TRUE)
 
