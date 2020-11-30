@@ -155,6 +155,7 @@
 \alias{packupNNdata}
 \alias{parbreak}
 \alias{plan.legend.layout}
+\alias{pointweights}
 \alias{polyLaslett}
 \alias{polytileareaEngine}
 \alias{putSpatstatVariable}
@@ -302,6 +303,7 @@
 \alias{row.names<-.hyperframe}
 \alias{runifrect}
 \alias{safedeldir}
+\alias{safelookup}
 \alias{scalardilate.breakpts}
 \alias{scalardilate.diagramobj}
 \alias{shift.diagramobj}              
@@ -309,6 +311,7 @@
 \alias{shiftxy}              
 \alias{shiftxypolygon}              
 \alias{simulationresult}
+\alias{smudge}
 \alias{sort.im}
 \alias{spatstatDiagnostic}
 \alias{spatstat.deldir.setopt}
@@ -521,6 +524,7 @@ packupNNdata(NND, NNW, what, k)
 parbreak(terse)
 plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
                    started, map)
+pointweights(X, \dots, weights, parent)
 polyLaslett(X, \dots, oldX, verbose, plotit)
 polytileareaEngine(P, xrange, yrange, nx, ny, DivideByPixelArea)
 putSpatstatVariable(name, value)
@@ -673,6 +677,7 @@ rotxypolygon(p, angle = pi/2)
 \method{row.names}{hyperframe}(x) <- value
 runifrect(n, win, nsim, drop)
 safedeldir(X)
+safelookup(Z, x, factor, warn)
 \method{scalardilate}{breakpts}(X, f, \dots)
 \method{scalardilate}{diagramobj}(X, f, \dots)
 \method{shift}{diagramobj}(X, \dots)
@@ -680,6 +685,7 @@ safedeldir(X)
 shiftxy(X, vec = c(0, 0))
 shiftxypolygon(p, vec = c(0, 0))
 simulationresult(resultlist, nsim, drop, NameBase)
+smudge(X)
 \method{sort}{im}(x, \dots)
 spatstatDiagnostic(msg)
 spatstat.deldir.setopt(use.trigrafS, use.trigraf, debug.delaunay)
