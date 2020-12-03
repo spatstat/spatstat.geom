@@ -31,7 +31,8 @@
   is a convenient way of storing and plotting
   several different estimates of the same function.
   Objects of this class are returned 
-  by many commands in \pkg{spatstat}, such as \code{\link{Kest}}
+  by many commands in \pkg{spatstat},
+  such as \code{\link[COREPACKAGENAME]{Kest}}
   which returns an estimate of Ripley's \eqn{K}-function
   for a point pattern dataset.
 
@@ -92,14 +93,17 @@
   and \rolf
 }
 \seealso{
-   \code{\link{as.function.rhohat}}, 
+   \code{\link[COREPACKAGENAME]{as.function.rhohat}}, 
    \code{\link{fv}}, 
    \code{\link{fv.object}}, 
    \code{\link{fvnames}}, 
    \code{\link{plot.fv}}, 
-   \code{\link{Kest}}
+   \code{\link[COREPACKAGENAME]{Kest}}
 }
 \examples{
+%#%^!ifndef CORE
+if(require(spatstat.core)) {
+%#%^!endif
   K <- Kest(cells)
   f <- as.function(K)
   f
@@ -107,6 +111,9 @@
   g <- as.function(K, value=c("iso", "trans"))
   g
   g(0.1, "trans")
+%#%^!ifndef CORE
+}
+%#%^!endif
 }
 \keyword{spatial}
 \keyword{methods}
