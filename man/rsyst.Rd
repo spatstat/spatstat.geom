@@ -65,8 +65,8 @@
   random point patterns.
 }
 \seealso{
-  \code{\link{rstrat}},
-  \code{\link{runifpoint}},
+  \code{\link[spatstat.core]{rstrat}},
+  \code{\link[spatstat.core]{runifpoint}},
   \code{\link{quadscheme}}
 }
 \examples{

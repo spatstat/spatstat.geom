@@ -35,7 +35,7 @@ nearestValue(X)
   \adrian.
 }
 \seealso{
-  \code{\link{blur}}, \code{\link{Smooth.ppp}}
+  \code{\link[spatstat.core]{blur}}, \code{\link[spatstat.core]{Smooth.ppp}}
 }
 \examples{
   X <- as.im(function(x,y) { x + y }, letterR)

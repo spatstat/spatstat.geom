@@ -737,7 +737,7 @@ xy.grid(xr, yr, nx, ny, dx, dy)
 xypolyselfint(p, eps, proper, yesorno, checkinternal)
 xypolygon2psp(p, w, check)
 ZeroValue(x)
-\method{ZeroValue}{im}
+\method{ZeroValue}{im}(x)
 
 }
 \details{

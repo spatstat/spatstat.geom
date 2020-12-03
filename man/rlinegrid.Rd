@@ -26,7 +26,7 @@
 }
 \seealso{
   \code{\link{psp}},
-  \code{\link{rpoisline}}
+  \code{\link[spatstat.core]{rpoisline}}
 }
 \examples{
   plot(rlinegrid(30, 0.05))

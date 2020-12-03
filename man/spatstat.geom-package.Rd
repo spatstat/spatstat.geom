@@ -5,27 +5,86 @@
 \title{The spatstat.geom Package}
 \description{
   The \pkg{spatstat.geom} package
-  is a subset of the original \pkg{spatstat}
-  package, which defines spatial objects
-  and performs geometrical operations on them.
+  is a subset of the \pkg{spatstat} package. 
+  %  belongs to the \pkg{spatstat} family of packages.
+  It defines classes of geometrical objects such as windows
+  and point patterns, and provides functionality for geometrical
+  operations on them.
 }
 \details{
-  \pkg{spatstat} is a package for the statistical analysis
-  of spatial data. Its main focus is the analysis of
+  \pkg{spatstat} is
+  % a family of \R packages
+  an \R package
+  for the statistical analysis of spatial data.
+  Its main focus is the analysis of
   spatial patterns of points in two-dimensional space.
 
-  The orginal \pkg{spatstat} package has grown to be very large.
-  It is now in the process of being divided into several
-  \bold{sub-packages}.
+  The original \pkg{spatstat} package
+  is progressively being split into
+  %  has now been split into several
+  sub-packages.
 
-  This sub-package \pkg{spatstat.geom} contains the code
-  which defines spatial objects and performs geometrical operations.
+  \bold{New users are advised to install the original \pkg{spatstat}
+    package, rather than the sub-packages, until the split-up
+    is completed. The following information is provided for software
+    developers.}
+
+  This sub-package \pkg{spatstat.geom} defines the main classes
+  of geometrical objects (such as windows, point patterns, 
+  line segment patterns, pixel images) and supports geometrical
+  operations (such as shifting and rotating, measuring areas and
+  distances, finding nearest neighbours in a point pattern).
 
   Functions for performing statistical analysis and modelling
   are in the separate sub-package \pkg{spatstat.core}.
   
   Functions for linear networks
   are in the separate sub-package \pkg{spatstat.linnet}.
+
+%  Not true yet:
+%  For an overview of all the functions available in the \pkg{spatstat} family,
+%  see the help file for \pkg{spatstat} in the \pkg{spatstat} package.
+}
+\section{Structure of the spatstat family}{  
+  The original \pkg{spatstat} package grew to be very large,
+  and CRAN requested that the package be divided 
+  into several \bold{sub-packages}.
+  This transition is under way, but is not yet finished.
+  So far the following sub-packages exist:
+  \itemize{
+    \item \pkg{spatstat.utils} containing basic utilities
+    \item \pkg{spatstat.data} containing datasets
+    \item \pkg{spatstat.sparse} containing linear algebra utilities
+    \item \pkg{spatstat.geom} containing geometrical objects
+    and geometrical operations
+    \item \pkg{spatstat.core} containing the main functionality
+    for statistical analysis of spatial data
+    \item \pkg{spatstat.linnet} containing functions for
+    spatial data on a linear network
+% Not true yet    
+%    \item \pkg{spatstat}, which simply loads the other sub-packages
+%    listed above, and provides documentation.
+  }
+% Not true yet
+%  When you install \pkg{spatstat}, these sub-packages are also
+%  installed. Then if you load the \pkg{spatstat} package by typing
+%  \code{library(spatstat)}, the other sub-packages listed above will
+%  automatically be loaded or imported.
+%  For an overview of all the functions available in these sub-packages,
+%  see the help file for \pkg{spatstat} in the \pkg{spatstat} package,
+
+  Additionally there are several \bold{extension packages:}
+  \itemize{
+    \item \pkg{spatstat.gui} for interactive graphics
+    \item \pkg{spatstat.local} for local likelihood
+    (including geographically weighted regression)
+    \item \pkg{spatstat.Knet} for additional, computationally efficient code
+    for linear networks
+    \item \pkg{spatstat.sphere} (under development) for spatial data
+    on a sphere, including spatial data on the earth's surface
+  }
+%  The extension packages must be installed separately
+%  and loaded explicitly if needed. They also have separate documentation.
 }
 \section{Licence}{
   This library and its documentation are usable under the terms of the "GNU 

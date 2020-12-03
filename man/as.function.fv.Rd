@@ -32,7 +32,7 @@
   several different estimates of the same function.
   Objects of this class are returned 
   by many commands in \pkg{spatstat},
-  such as \code{\link[COREPACKAGENAME]{Kest}}
+  such as \code{\link[spatstat.core]{Kest}},
   which returns an estimate of Ripley's \eqn{K}-function
   for a point pattern dataset.
 
@@ -93,17 +93,15 @@
   and \rolf
 }
 \seealso{
-   \code{\link[COREPACKAGENAME]{as.function.rhohat}}, 
+   \code{\link[spatstat.core]{as.function.rhohat}}, 
    \code{\link{fv}}, 
    \code{\link{fv.object}}, 
    \code{\link{fvnames}}, 
    \code{\link{plot.fv}}, 
-   \code{\link[COREPACKAGENAME]{Kest}}
+   \code{\link[spatstat.core]{Kest}}
 }
 \examples{
-%#%^!ifndef CORE
 if(require(spatstat.core)) {
-%#%^!endif
   K <- Kest(cells)
   f <- as.function(K)
   f
@@ -111,9 +109,7 @@ if(require(spatstat.core)) {
   g <- as.function(K, value=c("iso", "trans"))
   g
   g(0.1, "trans")
-%#%^!ifndef CORE
 }
-%#%^!endif
 }
 \keyword{spatial}
 \keyword{methods}

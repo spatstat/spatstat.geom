@@ -40,7 +40,7 @@ local({
 #
 # check for various bugs related to factor conversions
 #
-#    $Revision: 1.5 $  $Date: 2020/04/28 12:58:26 $
+#    $Revision: 1.6 $  $Date: 2020/12/03 03:26:25 $
 #
 
 if(ALWAYS) {
@@ -50,7 +50,7 @@ local({
   Z <- im(m, xcol=1:4, yrow=1:4)
   ## make a point pattern
   set.seed(42)
-  X <- runifpoint(20, win=as.owin(Z))
+  X <- runifrect(20, win=as.owin(Z))
   ## look up the image at the points of X
   ## (a) internal
   ans1 <- lookup.im(Z, X$x, X$y)
@@ -115,7 +115,7 @@ local({
 #
 #  tests/func.R
 #
-#   $Revision: 1.7 $   $Date: 2020/11/02 07:00:08 $
+#   $Revision: 1.8 $   $Date: 2020/12/03 03:28:44 $
 #
 #  Tests of 'funxy' infrastructure etc
 

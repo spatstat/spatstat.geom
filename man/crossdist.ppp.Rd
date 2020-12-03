@@ -66,7 +66,7 @@
   \code{\link{crossdist.psp}},
   \code{\link{pairdist}},
   \code{\link{nndist}},
-  \code{\link{Gest}}
+  \code{\link[spatstat.core]{Gest}}
 }
 \examples{
    data(cells)

@@ -128,7 +128,7 @@
 
   To use the nearest neighbour distances for statistical inference,
   it is often advisable to use the edge-corrected empirical distribution,
-  computed by \code{\link{Gest}}.
+  computed by \code{\link[spatstat.core]{Gest}}.
 
   To find the nearest neighbour distances from one point pattern
   to another point pattern, use \code{\link{nncross}}.
@@ -155,7 +155,7 @@
   \code{\link{nndist.pp3}},
   \code{\link{nndist.ppx}},
   \code{\link{pairdist}},
-  \code{\link{Gest}},
+  \code{\link[spatstat.core]{Gest}},
   \code{\link{nnwhich}},
   \code{\link{nncross}},
   \code{\link{minnndist}}, \code{\link{maxnndist}}.

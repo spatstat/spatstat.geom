@@ -183,15 +183,16 @@
       The fast approximation is \code{\link{nnmap}}.
       \item
       an object of class \code{"densityfun"} representing a kernel
-      estimate of intensity (created by the command \code{\link{densityfun}}).
+      estimate of intensity (created by
+      the command \code{\link[spatstat.core]{densityfun}}).
       The fast approximation is the Fast Fourier Transform
-      algorithm in \code{\link{density.ppp}}.
+      algorithm in \code{\link[spatstat.core]{density.ppp}}.
       \item
       an object of class \code{"Smoothfun"} 
       representing kernel-smoothed values
-      (created by the command \code{\link{Smoothfun}}).
+      (created by the command \code{\link[spatstat.core]{Smoothfun}}).
       The fast approximation is the Fast Fourier Transform
-      algorithm in \code{\link{Smooth.ppp}}.
+      algorithm in \code{\link[spatstat.core]{Smooth.ppp}}.
     }
     \item
     An \code{expression} involving the variables \code{x} and \code{y}
