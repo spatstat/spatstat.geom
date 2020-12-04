@@ -101,6 +101,7 @@ connected(X, \dots)
   the connected components include a large number of pixels).
 }
 \examples{
+if(require(spatstat.core)) {
   d <- distmap(cells, dimyx=256)
   X <- levelset(d, 0.07)
   plot(X)
@@ -116,6 +117,7 @@ connected(X, \dots)
 
   # how to extract the components as a list of windows
   W <- tiles(tess(image=Z))
+}
 }
 \author{
   Original \R code by Julian Burgos, University of Washington.

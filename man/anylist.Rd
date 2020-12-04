@@ -51,7 +51,7 @@ as.anylist(x)
   \code{\link{anylapply}}.
 }
 \examples{
-  anylist(cells, intensity(cells), Kest(cells))
+  anylist(cells, intensity(cells))
   anylist()
 }
 \keyword{list}

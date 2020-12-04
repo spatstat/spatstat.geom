@@ -1,6 +1,6 @@
 Package: spatstat.geom
 Version: 1.65-0
-Date: 2020-12-03
+Date: 2020-12-04
 Title: Geometrical Functionality of the 'spatstat' Package
 Authors@R: c(person("Adrian", "Baddeley", 
                     role = c("aut", "cre"),
@@ -38,7 +38,7 @@ Authors@R: c(person("Adrian", "Baddeley",
 	     person("Hangsheng", "Wang",
 	            role = "ctb"))
 Maintainer: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>
-Depends: R (>= 3.5.0), spatstat.data (>= 1.4-2), stats, graphics, grDevices, utils, methods, nlme, rpart
+Depends: R (>= 3.5.0), spatstat.data (>= 1.6-1), stats, graphics, grDevices, utils, methods, nlme, rpart
 Imports: spatstat.utils (>= 1.18-0), spatstat.sparse, mgcv, Matrix, deldir (>= 0.0-21), abind, tensor, polyclip (>= 1.10-0), goftest (>= 1.2-2)
 Suggests: spatstat.core, spatstat.linnet, sm, maptools (>= 0.9-9), gsl, locfit, spatial, RandomFields (>= 3.1.24.1), RandomFieldsUtils(>= 0.3.3.1), fftwtools (>= 0.9-8)
 Remotes: spatstat/spatstat.utils, spatstat/spatstat.data, spatstat/spatstat.sparse, baddstats/spatstat.linnet, baddstats/polyclip

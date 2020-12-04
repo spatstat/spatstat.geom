@@ -162,9 +162,11 @@
  }
 
  # Scramble 60\% of data
+if(require(spatstat.core)) {
  X <- redwood
  modif <- (runif(npoints(X)) < 0.6)
  X[modif] <- runifpoint(ex=X[modif])
+}
 
  # Lansing woods data - multitype points
  lan <- lansing
@@ -179,8 +181,10 @@
   win <- owin(c(0.3, 0.6),c(0.2, 0.5))
   lsub <- lan[win]
 
+if(require(spatstat.core)) {
  # Scramble the locations of trees in subwindow, retaining their marks
   lan[win] <- runifpoint(ex=lsub) \%mark\% marks(lsub)
+}
 
  # Extract oaks only
  oaknames <- c("redoak", "whiteoak", "blackoak")
@@ -188,14 +192,18 @@
  oak <- subset(lan, marks \%in\% oaknames, drop=TRUE)
 
  # To clip or not to clip
- X <- runifpoint(25, letterR)
- B <- owin(c(2.2, 3.9), c(2, 3.5))
+ X <- unmark(demopat)
+ B <- owin(c(5500, 9000), c(2500, 7400))
  opa <- par(mfrow=c(1,2))
  plot(X, main="X[B]")
- plot(X[B], border="red", cols="red", add=TRUE, show.all=TRUE, main="")
+ plot(X[B], add=TRUE,
+      cols="blue", col="pink", border="blue",
+      show.all=TRUE, main="")
+ plot(Window(X), add=TRUE)
  plot(X, main="X[B, clip=TRUE]")
  plot(B, add=TRUE, lty=2)
- plot(X[B, clip=TRUE], border="blue", cols="blue", add=TRUE,
+ plot(X[B, clip=TRUE], add=TRUE,
+      cols="blue", col="pink", border="blue", 
       show.all=TRUE, main="")
  par(opa)
 }

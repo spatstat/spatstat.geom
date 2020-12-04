@@ -56,8 +56,14 @@
   \code{\link[spatstat.core]{G3est}}
 }
 \examples{
+if(require(spatstat.core)) {
    X <- runifpoint3(20)
    Y <- runifpoint3(30)
+} else {
+   X <- osteo$pts[[1]]
+   Y <- osteo$pts[[2]]
+   Y <- Y[domain(X)]
+}
    d <- crossdist(X, Y)
    d <- crossdist(X, Y, periodic=TRUE)
 }

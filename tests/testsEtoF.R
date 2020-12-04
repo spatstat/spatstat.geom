@@ -74,44 +74,6 @@ local({
   Pv <- mergeLevels(P, vowel="a", consonant=c("b","c","d"))
 })
 }
-#' tests/formuli.R
-#'
-#'  Test machinery for manipulating formulae
-#' 
-#' $Revision: 1.7 $  $Date: 2020/04/28 12:58:26 $
-
-local({
-
-  ff <- function(A, deletevar, B) {
-    D <- reduceformula(A, deletevar)
-    if(!spatstat.utils::identical.formulae(D, B)) {
-      AD <- as.expression(substitute(reduceformula(A,d),
-                                     list(A=A, d=deletevar)))
-      stop(paste(AD, "\n\tyields ", spatstat.utils::pasteFormula(D),
-                 " instead of ", spatstat.utils::pasteFormula(B)),
-           call.=FALSE)
-    }
-    invisible(NULL)
-  }
-
-  ff(~ x + z, "x", ~z)
-
-  ff(y ~ x + z, "x", y~z)
-
-  ff(~ I(x^2) + z, "x",  ~z)
-
-  ff(y ~ poly(x,2) + poly(z,3), "x", y ~poly(z,3))
-
-  ff(y ~ x + z, "g", y ~ x + z)
-
-  reduceformula(y ~ x+z, "g", verbose=TRUE)
-  reduceformula(y ~ sin(x-z), "z", verbose=TRUE)
-  
-  illegal.iformula(~str*g, itags="str", dfvarnames=c("marks", "g", "x", "y"))
-})
-
-
-
 #
 #  tests/func.R
 #

@@ -46,11 +46,13 @@ commonGrid(\dots)
   
 }
 \examples{
+if(require(spatstat.core)) {
    A <- setcov(square(1))
    G <- density(runifpoint(42), dimyx=16)
    H <- commonGrid(A, letterR, G)
    newR <- as.mask(letterR, xy=H)
    newG <- as.im(G, W=H)
+}
 }
 \seealso{
   \code{\link{harmonise.im}},

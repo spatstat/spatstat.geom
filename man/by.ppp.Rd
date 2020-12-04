@@ -61,17 +61,24 @@
 \examples{
   # multitype point pattern, broken down by type
   data(amacrine)
-  by(amacrine, FUN=density)
-  by(amacrine, FUN=function(x) { min(nndist(x)) } )
+  by(amacrine, FUN=minnndist)
+  by(amacrine, FUN=function(x) { intensity(unmark(x)) })
 
+  if(require(spatstat.core)) {
   # how to pass additional arguments to FUN
   by(amacrine, FUN=clarkevans, correction=c("Donnelly","cdf"))
+  }
 
   # point pattern broken down by tessellation
   data(swedishpines)
-  tes <- quadrats(swedishpines, 5, 5)
+  tes <- quadrats(swedishpines, 4,4)
+  ## compute minimum nearest neighbour distance for points in each tile
+  B <- by(swedishpines, tes, minnndist)
+
+  if(require(spatstat.core)) {
   B <- by(swedishpines, tes, clarkevans, correction="Donnelly")
-  unlist(lapply(B, as.numeric))
+  simplify2array(B)
+  }
 }
 \author{\adrian
   

@@ -52,12 +52,14 @@
   \code{\link{as.hyperframe}}
 }
 \examples{
+if(require(spatstat.core)) {
   lambda <- runif(5, min=10, max=30)
   X <- lapply(as.list(lambda), function(x) { rpoispp(x) })
   h <- hyperframe(lambda=lambda, X=X)
   g <- hyperframe(id=letters[1:5], Y=rev(X))
   gh <- cbind(h, g)
   hh <- rbind(h[1:2, ], h[3:5,])
+}
 }
 \keyword{spatial}
 \keyword{manip}

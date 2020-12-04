@@ -79,6 +79,7 @@
   \code{\link{cbind.fv}}
 }
 \examples{
+if(require(spatstat.core)) {
   # generate simulated data
   X <- replicate(3, rpoispp(100), simplify=FALSE)
   names(X) <- paste("Simulation", 1:3)
@@ -87,6 +88,7 @@
   # collapse
   K <- collapse(Klist, same="theo", different="iso")
   K
+}
 }
 \author{\adrian
   

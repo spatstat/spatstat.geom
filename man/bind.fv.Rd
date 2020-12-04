@@ -84,9 +84,10 @@ bind.fv(x, y, labl = NULL, desc = NULL, preferred = NULL, clip=FALSE)
   \spatstatAuthors.
 }
 \examples{
-   data(cells)
+if(require(spatstat.core)) {
    K1 <- Kest(cells, correction="border")
    K2 <- Kest(cells, correction="iso")
+
    # remove column 'theo' to avoid duplication
    K2 <- K2[, names(K2) != "theo"]
 
@@ -100,6 +101,7 @@ bind.fv(x, y, labl = NULL, desc = NULL, preferred = NULL, clip=FALSE)
                "\%s[bmo](r)",
                "monotone border-corrected estimate of \%s",
                "bmono") 
+}
 }
 \seealso{
   \code{\link{fv}}, 

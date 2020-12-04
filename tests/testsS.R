@@ -17,7 +17,7 @@ cat(paste("--------- Executing",
 ##   Tests of psp class and related code
 ##                      [SEE ALSO: tests/xysegment.R]
 ##
-##  $Revision: 1.30 $  $Date: 2020/11/09 09:01:13 $
+##  $Revision: 1.32 $  $Date: 2020/12/04 05:26:31 $
 
 
 local({
@@ -182,30 +182,6 @@ local({
   }
 
   if(FULLTEST) {
-    #' segment clipping in window (bug found by Rolf)
-    set.seed(42)
-    X <- runifpoint(50, letterR)
-    SP <- dirichletEdges(X) #' clip to polygonal window
-    Window(X) <- as.mask(Window(X))
-    SM <- dirichletEdges(X) #' clip to mask window
-  }
-  
-  if(FULLTEST) {
-    #' test rshift.psp and append.psp with marks (Ute Hahn)
-    m <- data.frame(A=1:10, B=letters[1:10])
-    g <- gl(3, 3, length=10)
-    X <- psp(runif(10), runif(10), runif(10), runif(10), window=owin(), marks=m)
-    Y <- rshift(X, radius = 0.1)
-    Y <- rshift(X, radius = 0.1, group=g)
-    #' mark management
-    b <- data.frame(A=1:10)
-    X <- psp(runif(10), runif(10), runif(10), runif(10), window=owin(), marks=b)
-    stopifnot(is.data.frame(marks(X)))
-    Y <- rshift(X, radius = 0.1)
-    Y <- rshift(X, radius = 0.1, group=g)
-  }
-
-  if(FULLTEST) {
     #' geometry
     m <- data.frame(A=1:10, B=letters[1:10])
     X <- psp(runif(10), runif(10), runif(10), runif(10), window=owin(), marks=m)
@@ -309,7 +285,7 @@ local({
 #
 #  Thanks to Marcelino de la Cruz
 #
-#  $Revision: 1.14 $  $Date: 2020/05/01 09:59:59 $
+#  $Revision: 1.15 $  $Date: 2020/12/04 04:02:22 $
 #
 
 local({
@@ -340,7 +316,7 @@ local({
   if(FULLTEST) {
     ## other bugs/ code blocks in split.ppp, split<-.ppp, [<-.splitppp
     flog <- rep(c(TRUE,FALSE), 21)
-    fimg <- as.im(dirichlet(runifpoint(5, Window(cells))))
+    fimg <- as.im(dirichlet(runifrect(5, Window(cells))))
     A <- split(cells, flog)
     B <- split(cells, square(0.5))
     D <- split(cells, fimg)
@@ -359,7 +335,8 @@ local({
     ## From Marcelino
     set.seed(1)
     W<- square(10) # the big window
-    puntos<- rpoispp(0.5, win=W)
+    ## puntos<- rpoispp(0.5, win=W)
+    puntos<- runifrect(rpois(1, 0.5 * area(W)), win=W)
     r00 <- letterR
     r05 <- shift(letterR,c(0,5))
     r50 <- shift(letterR,c(5,0))
@@ -369,8 +346,8 @@ local({
     split(puntos, tessr4, drop=TRUE) <- puntosr4
 
     ## More headaches with mark format
-    A <- runifpoint(10)
-    B <- runifpoint(10)
+    A <- runifrect(10)
+    B <- runifrect(10)
     AB <- split(superimpose(A=A, B=B))
 
     #' check that split<- respects ordering where possible
@@ -402,12 +379,12 @@ local({
 ##
 ##   Quirks associated with symbolmaps, etc.
 ##
-## $Revision: 1.4 $ $Date: 2020/05/01 09:59:59 $
+## $Revision: 1.5 $ $Date: 2020/12/04 08:02:52 $
 
 if(FULLTEST) {
 local({
   set.seed(100)
-  X <- runifpoint(8)
+  X <- runifrect(8)
 
   ## symbolmap 
   g1 <- symbolmap(range=c(0,100), size=function(x) x/50)
