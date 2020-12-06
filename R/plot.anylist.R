@@ -170,6 +170,10 @@ plot.anylist <- plot.solist <- plot.listof <-
       isfv <- unlist(lapply(x, is.fv))
       allfv <- all(isfv)
       somefv <- any(isfv)
+      if(somefv && !requireNamespace("spatstat.core"))
+        stop(paste("Package 'spatstat.core' is required",
+                   "for plotting objects of class 'fv'"),
+             call.=FALSE)
     }
     
     ## panel margins

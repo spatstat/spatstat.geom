@@ -2,23 +2,19 @@
 \title{Internal spatstat.geom functions}
 \alias{[.diagramobj}
 \alias{[.pp3}
-\alias{[.rat}
 \alias{[.splitppx}
 \alias{[<-.splitppx}
 \alias{acedist.show}
 \alias{acedist.noshow}
-\alias{adjust.ratfv}
 \alias{affinexy}
 \alias{affinexypolygon}
 \alias{allElementsIdentical}
 \alias{anycrossing.psp}
 \alias{applytolayers}
 \alias{applyPolyclipArgs}
-\alias{assemble.plot.objects}       
 \alias{AsymmDistance.psp}
 \alias{as.breakpts}
 \alias{as.character.unitname}
-\alias{as.data.frame.fv}
 \alias{as.double.im}
 \alias{as.imlist}
 \alias{as.linimlist}
@@ -29,7 +25,6 @@
 \alias{avenndist}
 \alias{bbEngine}
 \alias{bdry.mask}
-\alias{bind.ratfv}
 \alias{bounding.box3}
 \alias{break.holes}
 \alias{breakpts}
@@ -48,8 +43,6 @@
 \alias{closethresh}
 \alias{cocoEngine}
 \alias{coerce.marks.numeric}
-\alias{compatible.rat}
-\alias{conform.ratfv}
 \alias{crosspairquad}
 \alias{cobble.xy}
 \alias{codetime}
@@ -63,13 +56,9 @@
 \alias{dimnames<-.hyperframe}
 \alias{dflt.redraw}
 \alias{diagramobj}
-\alias{dim.fasp}               
 \alias{dim.hyperframe}               
 \alias{dim.im}               
 \alias{dim.owin}
-\alias{dimnames.fasp}               
-\alias{dimnames<-.fasp}
-\alias{distributecbind}
 \alias{dist2dpath}
 \alias{do.as.im}
 \alias{do.call.plotfun}
@@ -85,22 +74,12 @@
 \alias{existsSpatstatVariable}
 \alias{expandSpecialLists}
 \alias{fakemaintitle}
-\alias{fasp}
 \alias{fft2D}
 \alias{fftwAvailable}
-\alias{findbestlegendpos}
-\alias{findcbind}
 \alias{fillNA}
-\alias{flatfname}
 \alias{flipxypolygon}
 \alias{format.numberwithunit}
-\alias{FormatFaspFormulae}
 \alias{framebottomleft}
-\alias{fvexprmap}
-\alias{fvlabels}
-\alias{fvlabels<-}
-\alias{fvlabelmap}
-\alias{fvlegend}
 \alias{gammabreaks}
 \alias{genericNNdistBy}
 \alias{getfields}
@@ -151,18 +130,15 @@
 \alias{listof}
 \alias{logi.dummy}
 \alias{markvaluetype}
-\alias{maskLaslett}
 \alias{packupNNdata}
 \alias{parbreak}
 \alias{plan.legend.layout}
 \alias{pointweights}
-\alias{polyLaslett}
 \alias{polytileareaEngine}
 \alias{putSpatstatVariable}
 \alias{lookup.im}
 \alias{majorminorversion}
 \alias{make.even.breaks}
-\alias{makefvlabel}
 \alias{makeunitname}
 \alias{markappend}
 \alias{markcbind}
@@ -194,7 +170,6 @@
 \alias{multiply.only.finite.entries}
 \alias{na.handle.im}
 \alias{names.hyperframe}
-\alias{names<-.fv}
 \alias{names<-.hyperframe}
 \alias{nearest.pixel}
 \alias{nearest.valid.pixel}
@@ -217,26 +192,20 @@
 \alias{pppdist.mat}
 \alias{pppdist.prohorov}
 \alias{ppsubset}
-\alias{prefixfv}
 \alias{prepareTitle}
 \alias{print.anylist}    
 \alias{print.colourmap}
 \alias{print.distfun}
 \alias{print.ewcdf}
-\alias{print.fasp}       
 \alias{print.funxy}       
-\alias{print.fv}       
-\alias{print.fvfun}       
 \alias{print.hyperframe}
 \alias{print.indicfun}       
-\alias{print.laslett}
 \alias{print.layered}
 \alias{print.lut}
 \alias{print.nnfun}
 \alias{print.numberwithunit}
 \alias{print.onearrow}
 \alias{print.pppmatching}
-\alias{print.rat}
 \alias{print.simplepanel}
 \alias{print.solist}
 \alias{print.splitppp}
@@ -265,7 +234,6 @@
 \alias{qtPrepareCoordinate}
 \alias{quad}
 \alias{rasterfilter}
-\alias{ratfv}
 \alias{recognise.spatstat.type}
 \alias{rectquadrat.breaks}
 \alias{rectquadrat.countEngine}
@@ -283,17 +251,11 @@
 \alias{rasterx.im}
 \alias{rastery.im}
 \alias{rasterxy.im}
-\alias{rebadge.fv}
-\alias{rebadge.as.crossfun}
-\alias{rebadge.as.dotfun}
-\alias{rebadgeLabels}
 \alias{rebound}
 \alias{rebound.im}
 \alias{rebound.ppp}
 \alias{rebound.psp}
 \alias{rebound.owin}
-\alias{reconcile.fv}
-\alias{rename.fv}
 \alias{repair.old.factor.image}
 \alias{restrict.mask}
 \alias{reversePolyclipArgs}
@@ -301,7 +263,6 @@
 \alias{rotxypolygon}
 \alias{row.names.hyperframe}
 \alias{row.names<-.hyperframe}
-\alias{runifrect}
 \alias{safedeldir}
 \alias{safelookup}
 \alias{scalardilate.breakpts}
@@ -333,8 +294,6 @@
 \alias{trianglediameters}
 \alias{trim.mask}
 \alias{tweak.closepairs}
-\alias{tweak.fv.entry}
-\alias{tweak.ratfv.entry}
 \alias{\%unit\%} %DoNotExport
 %NAMESPACE export("%unit%")
 \alias{unitname.default}
@@ -344,7 +303,6 @@
 \alias{validradius}
 \alias{validate.mask}        
 \alias{validate.quad}        
-\alias{vanilla.fv}
 \alias{versioncurrency.spatstat}
 \alias{versionstring.spatstat}
 \alias{verifyclass}
@@ -369,23 +327,19 @@
 \usage{
 \method{[}{diagramobj}(x, \dots)
 \method{[}{pp3}(x, i, drop, \dots)
-\method{[}{rat}(x, \dots)
 \method{[}{splitppx}(x, \dots)
 \method{[}{splitppx}(x, \dots) <- value
 acedist.show(X, Y, n, d, timelag)
 acedist.noshow(X, Y, n, d)
-adjust.ratfv(f, columns, numfactor, denfactor)
 affinexy(X, mat, vec, invert)
 affinexypolygon(p, mat, vec, detmat)
 allElementsIdentical(x, entry)
 anycrossing.psp(A,B)
 applytolayers(L, FUN, \dots)
 applyPolyclipArgs(x, p)
-assemble.plot.objects(xlim, ylim, \dots, lines, polygon)
 AsymmDistance.psp(X, Y, metric, method)
 as.breakpts(\dots)
 \method{as.character}{unitname}(x, \dots)
-\method{as.data.frame}{fv}(x, \dots)
 \method{as.double}{im}(x, \dots)
 as.imlist(x, check)
 as.linimlist(x, check)
@@ -396,8 +350,6 @@ as.unitname(s)
 avenndist(X)
 bbEngine(\dots)
 bdry.mask(W)
-bind.ratfv(x, numerator, denominator, labl, desc, preferred,
-           ratio, quotient)
 bounding.box3(\dots)
 break.holes(x, splitby, depth, maxdepth)
 breakpts(val, maxi, even = FALSE, npos = NULL, step = NULL)
@@ -416,8 +368,6 @@ clippoly.psp(s, window, fragments)
 closethresh(X,R,S,twice,\dots)
 cocoEngine(nv, ie, je, algoname)
 coerce.marks.numeric(X, warn)
-\method{compatible}{rat}(A, B, \dots) 
-conform.ratfv(x)
 crosspairquad(Q,rmax,what)
 cobble.xy(x, y, f, fatal, \dots)
 codetime(x, hms, what)
@@ -431,13 +381,9 @@ default.ntile(X)
 \method{dimnames}{hyperframe}(x) <- value
 dflt.redraw(button, name, env)
 diagramobj(X, \dots)
-\method{dim}{fasp}(x)
 \method{dim}{hyperframe}(x)
 \method{dim}{im}(x)
 \method{dim}{owin}(x)
-\method{dimnames}{fasp}(x)
-\method{dimnames}{fasp}(x) <- value
-distributecbind(x)
 dist2dpath(dist, method="C")
 do.as.im(x, action, \dots, W, eps, dimyx, xy, na.replace)
 do.call.plotfun(fun, arglist, \dots, envir)
@@ -453,22 +399,12 @@ exactPdt(w)
 existsSpatstatVariable(name)
 expandSpecialLists(x, special)
 fakemaintitle(bb, main, \dots)
-fasp(fns, which, formulae, dataname, title, rowNames, colNames, checkfv)
 fft2D(z, inverse, west)
 fftwAvailable()
-findbestlegendpos(\dots)
-findcbind(root, depth, maxdepth)
 fillNA(x, value)
-flatfname(x)
 flipxypolygon(p)
 \method{format}{numberwithunit}(x, \dots, collapse, modifier)
-FormatFaspFormulae(f, argname)
 framebottomleft(w)
-fvexprmap(x)
-fvlabels(x, expand=FALSE)
-fvlabels(x) <- value
-fvlabelmap(x, dot=TRUE)
-fvlegend(object, elang)
 gammabreaks(ra, n, gamma)
 genericNNdistBy(X, by, k)
 getfields(X, L, fatal = TRUE)
@@ -518,20 +454,17 @@ is.vanilla(u)
 levelsAsFactor(x)
 listof(\dots)
 logi.dummy(X, dummytype, nd, mark.repeat, \dots)
-maskLaslett(X, \dots, eps, dimyx, xy, oldX, verbose, plotit)
 markvaluetype(x)
 packupNNdata(NND, NNW, what, k)
 parbreak(terse)
 plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
                    started, map)
 pointweights(X, \dots, weights, parent)
-polyLaslett(X, \dots, oldX, verbose, plotit)
 polytileareaEngine(P, xrange, yrange, nx, ny, DivideByPixelArea)
 putSpatstatVariable(name, value)
 lookup.im(Z, x, y, naok, strict)
 majorminorversion(v)
 make.even.breaks(bmax, npos, bstep)
-makefvlabel(op, accent, fname, sub, argname)
 makeunitname(sing, plur, mul)
 markappend(\dots)
 markcbind(\dots)
@@ -559,7 +492,6 @@ MinimalTess(W, \dots)
 multiplicityNumeric(x)
 multiply.only.finite.entries(x, a)
 na.handle.im(X, na.replace)
-\method{names}{fv}(x) <- value
 \method{names}{hyperframe}(x)
 \method{names}{hyperframe}(x) <- value
 nearest.pixel(x, y, Z)
@@ -590,26 +522,20 @@ pppdist.mat(X, Y, cutoff = 1, q = 1, matching = TRUE,
 pppdist.prohorov(X, Y, n, dfix, type, cutoff, matching,
             ccode, auction, precision, approximation) 
 ppsubset(X, I, Iname, fatal)
-prefixfv(x, tagprefix, descprefix, lablprefix, whichtags)
 prepareTitle(main)
 \method{print}{anylist}(x, \dots)
 \method{print}{colourmap}(x, \dots)
 \method{print}{distfun}(x, \dots)
 \method{print}{ewcdf}(x, digits, \dots)
-\method{print}{fasp}(x, \dots)
 \method{print}{funxy}(x, \dots)
-\method{print}{fv}(x, \dots, tight)
-\method{print}{fvfun}(x, \dots)
 \method{print}{hyperframe}(x, \dots)
 \method{print}{indicfun}(x, \dots)
-\method{print}{laslett}(x, \dots)
 \method{print}{layered}(x, \dots)
 \method{print}{lut}(x, \dots)
 \method{print}{nnfun}(x, \dots)
 \method{print}{numberwithunit}(x, \dots)
 \method{print}{onearrow}(x, \dots)
 \method{print}{pppmatching}(x, \dots)
-\method{print}{rat}(x, \dots)
 \method{print}{simplepanel}(x, \dots)
 \method{print}{solist}(x, \dots)
 \method{print}{splitppp}(x, \dots)
@@ -638,7 +564,6 @@ putlastshift(X, vec)
 qtPrepareCoordinate(covname, W, origin)
 quad(data, dummy, w, param)
 rasterfilter(X, f)
-ratfv(df, numer, denom, \dots, ratio)
 recognise.spatstat.type(x)
 rectquadrat.breaks(xr, yr, nx = 5, ny = nx, xbreaks = NULL, ybreaks = NULL)
 rectquadrat.countEngine(x, y, xbreaks, ybreaks, weights)
@@ -656,18 +581,11 @@ rasterxy.mask(w, drop)
 rasterx.im(x)
 rastery.im(x)
 rasterxy.im(x, drop)
-rebadge.fv(x, new.ylab, new.fname, tags, new.desc, new.labl, new.yexp,
-           new.dotnames, new.preferred, new.formula, new.tags)
-rebadge.as.crossfun(x, main, sub, i, j)
-rebadge.as.dotfun(x, main, sub, i)
-rebadgeLabels(x, new.fname)
 rebound(x, rect)
 \method{rebound}{im}(x, rect)  
 \method{rebound}{ppp}(x, rect) 
 \method{rebound}{psp}(x, rect) 
 \method{rebound}{owin}(x, rect)
-reconcile.fv(\dots)
-rename.fv(x, fname, ylab, yexp)
 repair.old.factor.image(x)
 restrict.mask(M, W)
 reversePolyclipArgs(x, p)
@@ -675,7 +593,6 @@ rotxy(X, angle = pi/2)
 rotxypolygon(p, angle = pi/2)
 \method{row.names}{hyperframe}(x)
 \method{row.names}{hyperframe}(x) <- value
-runifrect(n, win, nsim, drop)
 safedeldir(X)
 safelookup(Z, x, factor, warn)
 \method{scalardilate}{breakpts}(X, f, \dots)
@@ -712,8 +629,6 @@ trianglediameters(iedge, jedge, edgelength, \dots,
                   nvert, dmax, check)
 trim.mask(M, R, tolerant)
 tweak.closepairs(cl, rmax, i, deltax, deltay, deltaz)
-tweak.fv.entry(x, current.tag, new.labl, new.desc, new.tag)
-tweak.ratfv.entry(x, \dots)
 x \%unit\% u
 \method{unitname}{default}(x) 
 \method{unitname}{default}(x) <- value 
@@ -722,7 +637,6 @@ unstackFilter(x)
 validradius(r, caller)
 validate.mask(w, fatal=TRUE)        
 validate.quad(Q, fatal, repair, announce)
-vanilla.fv(x)
 versioncurrency.spatstat(today, checkR)
 versionstring.spatstat()
 veryunique(z)

@@ -111,7 +111,11 @@
     stringsAsFactors=FALSE)
 
   lambda <- runif(4, min=50, max=100)
-  X <- lapply(as.list(lambda), function(x) { rpoispp(x) })
+if(require(spatstat.core)) {
+  X <- lapply(as.list(lambda), rpoispp)
+} else {
+  X <- lapply(as.list(lambda), function(lam) runifrect(rpois(1, lam)))
+}
   h <- hyperframe(lambda=lambda, X=X)
   h
 

@@ -215,12 +215,14 @@
   and increase the values of \code{mar.panel}.
 }
 \examples{
+if(require(spatstat.core)) {
  trichotomy <- list(regular=cells,
                     random=japanesepines,
                     clustered=redwood)
  K <- lapply(trichotomy, Kest)
  K <- as.anylist(K)
  plot(K, main="")
+}
 
 # list of 3D point patterns
  ape1 <- osteo[osteo$shortid==4, "pts", drop=TRUE]
@@ -228,13 +230,8 @@
  plot(ape1, main.panel="", mar.panel=0.1, hsep=0.7, vsep=1,
       cex=1.5, pch=21, bg='white')
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{hplot}

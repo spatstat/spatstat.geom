@@ -170,13 +170,13 @@
   s7  <- superimpose(p1,p2) # O.K.
 
   # how to make a 2-type point pattern with types "a" and "b"
-  u <- superimpose(a = rpoispp(10), b = rpoispp(20))
+  u <- superimpose(a = runifrect(10), b = runifrect(20))
 
   # how to make a 2-type point pattern with types 1 and 2
-  u <- superimpose("1" = rpoispp(10), "2" = rpoispp(20))
+  u <- superimpose("1" = runifrect(10), "2" = runifrect(20))
  
   # superimposing line segment patterns
-  X <- rpoisline(10)
+  X <- as.psp(matrix(runif(20), 5, 4), window=owin())
   Y <- as.psp(matrix(runif(40), 10, 4), window=owin())
   Z <- superimpose(X, Y)
 

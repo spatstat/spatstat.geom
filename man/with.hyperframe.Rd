@@ -73,7 +73,11 @@
 \examples{
   # generate Poisson point patterns with intensities 10 to 100
    H <- hyperframe(L=seq(10,100, by=10))
+if(require(spatstat.core)) {
    X <- with(H, rpoispp(L))
+} else {
+   X <- with(H, runifrect(rpois(1, L)))
+}
 }
 \keyword{spatial}
 \keyword{manip}

@@ -43,7 +43,12 @@ test.selfcrossing.psp(A)
 }
 \examples{
   B <- edges(letterR)
+if(require(spatstat.core)) {
   A <- rpoisline(5, Frame(B))
+} else {
+  FB <- Frame(B)
+  A <- as.psp(from=runifrect(5, FB), to=runifrect(5, FB))
+}
   MA <- test.selfcrossing.psp(A)
   MAB <- test.crossing.psp(A, B)
 }

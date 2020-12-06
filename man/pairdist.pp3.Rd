@@ -53,7 +53,11 @@
   \code{\link[spatstat.core]{K3est}}
 }
 \examples{
+if(require(spatstat.core)) {
    X <- runifpoint3(20)
+} else {
+   X <- osteo$pts[[1]]
+}
    d <- pairdist(X)
    d <- pairdist(X, periodic=TRUE)
    d <- pairdist(X, squared=TRUE)

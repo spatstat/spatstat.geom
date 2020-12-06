@@ -74,7 +74,11 @@
   \code{\link{nncross}}
 }
 \examples{
+if(require(spatstat.core)) {
    X <- runifpoint3(30)
+} else {
+   X <- osteo$pts[[1]]
+}
    m <- nnwhich(X)
    m2 <- nnwhich(X, k=2)
 }
