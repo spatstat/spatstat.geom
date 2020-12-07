@@ -320,6 +320,7 @@
 \alias{ZeroValue.im}
 
 
+
 %%%%%%%
 \description{
   Internal spatstat.geom functions.
@@ -652,6 +653,7 @@ xypolyselfint(p, eps, proper, yesorno, checkinternal)
 xypolygon2psp(p, w, check)
 ZeroValue(x)
 \method{ZeroValue}{im}(x)
+
 
 }
 \details{

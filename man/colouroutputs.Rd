@@ -48,7 +48,7 @@ colouroutputs(x) <- value
   \code{\link{colourmap}}, 
   \code{\link{interp.colourmap}}, 
   \code{\link{tweak.colourmap}}, 
-  \code{\link[spatstat:colourtools]{colourtools}}.
+  \code{\link[spatstat.geom:colourtools]{colourtools}}.
 }
 \examples{
   m <- colourmap(rainbow(5), range=c(0,1))

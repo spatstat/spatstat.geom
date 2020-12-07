@@ -79,16 +79,14 @@ beachcolourmap(range, ...)
 }
 \seealso{
   \code{\link{colourmap}}, 
-  \code{\link[spatstat:colourtools]{colourtools}}.
+  \code{\link[spatstat.geom:colourtools]{colourtools}}.
 }
 \examples{
   plot(beachcolourmap(c(-2,2)))
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{color}

@@ -45,7 +45,7 @@ tweak.colourmap(m, col, ..., inputs=NULL, range=NULL)
   \code{\link{colourmap}}, 
   \code{\link{interp.colourmap}}, 
   \code{\link{colouroutputs}}, 
-  \code{\link[spatstat:colourtools]{colourtools}}.
+  \code{\link[spatstat.geom:colourtools]{colourtools}}.
 }
 \examples{
   co <- colourmap(rainbow(32), range=c(0,1))

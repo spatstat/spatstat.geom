@@ -55,7 +55,7 @@
   \code{\link{rgb}},
   \code{\link{hsv}}.
 
-  See \code{\link[spatstat:colourtools]{colourtools}}
+  See \code{\link[spatstat.geom:colourtools]{colourtools}}
   for additional colour tools.
 }
 \examples{

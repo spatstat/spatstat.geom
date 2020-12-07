@@ -39,17 +39,15 @@ interp.colourmap(m, n = 512)
 \seealso{
   \code{\link{colourmap}}, 
   \code{\link{tweak.colourmap}}, 
-  \code{\link[spatstat:colourtools]{colourtools}}.
+  \code{\link[spatstat.geom:colourtools]{colourtools}}.
 }
 \examples{
   co <- colourmap(inputs=c(0, 0.5, 1), c("black", "red", "white"))
   plot(interp.colourmap(co))
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{color}
