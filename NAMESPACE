@@ -2,15 +2,9 @@
 
 import(stats,graphics,grDevices,utils,methods)
 import(spatstat.utils,spatstat.data,spatstat.sparse)
-import(polyclip,goftest)
-import(Matrix,nlme,rpart)
+import(polyclip)
 importFrom(deldir,
            deldir,duplicatedxy,tile.list)
-importFrom(abind,abind)
-importFrom(tensor,tensor)
-importFrom(mgcv,
-           gam,gam.control,anova.gam,formula.gam,predict.gam,
-           print.gam,summary.gam,vcov.gam,s)
 
 # ....  load dynamic library .....
 #      (native routines are now registered in init.c)
@@ -63,6 +57,13 @@ export("applyPolyclipArgs")
 export("applytolayers")
 export("area")
 export("area.default")
+export("areaGain")
+export("areaGain.diri")       
+export("areaGain.grid")       
+export("areaLoss")
+export("areaLoss.diri")       
+export("areaLoss.grid")
+export("areaLoss.poly")
 export("area.owin")
 export("as.anylist")
 export("as.array.im")

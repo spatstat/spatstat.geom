@@ -12,6 +12,11 @@
 \alias{anycrossing.psp}
 \alias{applytolayers}
 \alias{applyPolyclipArgs}
+\alias{areaGain.diri}       
+\alias{areaGain.grid}       
+\alias{areaLoss.diri}       
+\alias{areaLoss.grid}
+\alias{areaLoss.poly}
 \alias{AsymmDistance.psp}
 \alias{as.breakpts}
 \alias{as.character.unitname}
@@ -338,6 +343,14 @@ allElementsIdentical(x, entry)
 anycrossing.psp(A,B)
 applytolayers(L, FUN, \dots)
 applyPolyclipArgs(x, p)
+areaGain.diri(u, X, r, \dots, W, verbose)
+areaGain.grid(u, X, r, \dots, W, ngrid)
+areaLoss.diri(X, r, \dots, W, subset)
+areaLoss.grid(X, r, \dots, W, subset,
+                         method = c("count", "distmap"),
+                         ngrid = spatstat.options("ngrid.disc"),
+                         exact = FALSE)
+areaLoss.poly(X, r, \dots, W, subset, splitem)
 AsymmDistance.psp(X, Y, metric, method)
 as.breakpts(\dots)
 \method{as.character}{unitname}(x, \dots)
