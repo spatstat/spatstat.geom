@@ -185,7 +185,7 @@
     \item{ngrid.disc}{
       Number of points in the square grid used to compute
       a discrete approximation to the areas of discs
-      in \code{\link[spatstat.core]{areaLoss}} and \code{\link[spatstat.core]{areaGain}}
+      in \code{\link[spatstat.geom]{areaLoss}} and \code{\link[spatstat.geom]{areaGain}}
       when exact calculation is not available.
       A single integer.
     }
