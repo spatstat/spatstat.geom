@@ -33,7 +33,7 @@ Description: This is a subset of the original 'spatstat' package,
 	     which performs geometrical operations, except for the
 	     geometry of linear networks.
 License: GPL (>= 2)
-URL: http://spatstat.org
+URL: http://spatstat.org/
 LazyData: true
 NeedsCompilation: yes
 ByteCompile: true
