@@ -1,6 +1,6 @@
 Package: spatstat.geom
 Version: 1.65-0
-Date: 2020-12-21
+Date: 2021-01-06
 Title: Geometrical Functionality of the 'spatstat' Package
 Authors@R: c(person("Adrian", "Baddeley", 
                     role = c("aut", "cre"),
@@ -33,7 +33,7 @@ Description: This is a subset of the original 'spatstat' package,
 	     which performs geometrical operations, except for the
 	     geometry of linear networks.
 License: GPL (>= 2)
-URL: http://www.spatstat.org
+URL: http://spatstat.org
 LazyData: true
 NeedsCompilation: yes
 ByteCompile: true
