@@ -3,7 +3,7 @@
 ##
 ## Farthest distance to boundary
 ##
-##  $Revision: 1.11 $ $Date: 2017/06/05 10:31:58 $
+##  $Revision: 1.12 $ $Date: 2021/01/07 01:15:08 $
 
 fardist <- function(X, ...) {
   UseMethod("fardist")
@@ -20,7 +20,7 @@ fardist.owin <- function(X, ..., squared=FALSE) {
   xstep <- M$xstep
   ystep <- M$ystep
   if(squared) {
-    z <- .C("fardist2grid",
+    z <- .C(SG_fardist2grid,
             nx = as.integer(nx),
             x0 = as.double(x0),
             xstep = as.double(xstep),
@@ -32,8 +32,8 @@ fardist.owin <- function(X, ..., squared=FALSE) {
             yp = as.double(V$y),
             dfar = as.double(numeric(nx * ny)),
             PACKAGE="spatstat.geom")
-  } else {
-    z <- .C("fardistgrid",
+    } else {
+    z <- .C(SG_fardistgrid,
             nx = as.integer(nx),
             x0 = as.double(x0),
             xstep = as.double(xstep),

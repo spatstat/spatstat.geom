@@ -1,7 +1,7 @@
 #
 # pppmatch.R
 #
-# $Revision: 1.25 $  $Date: 2018/10/26 08:06:28 $
+# $Revision: 1.26 $  $Date: 2021/01/07 01:15:08 $
 #
 # Code by Dominic Schuhmacher
 #
@@ -439,7 +439,7 @@ pppdist <- function(X, Y, type = "spa", cutoff = 1, q = 1, matching = TRUE,
       stopifnot(neps >= 1)
       d <- max(d)-d
       ## auctionbf uses a "desire matrix"
-      res <- .C("auctionbf",
+      res <- .C(SG_auctionbf,
                 as.integer(d),
                 as.integer(n),
                 pers_to_obj = as.integer(rep(-1,n)),
@@ -451,8 +451,8 @@ pppdist <- function(X, Y, type = "spa", cutoff = 1, q = 1, matching = TRUE,
       am <- matrix(0, n, n)
       am[cbind(1:n,res$pers_to_obj+1)] <- 1
     }
-    else {           
-      res <- .C("dwpure",
+      else {
+      res <- .C(SG_dwpure,
                 as.integer(d),
                 as.integer(rep.int(1,n)),
                 as.integer(rep.int(1,n)),
@@ -680,7 +680,7 @@ pppdist.prohorov <- function(X, Y, n, dfix, type, cutoff = 1, matching = TRUE,
         stopifnot(neps >= 1)
         d <- max(d)-d
         ## auctionbf uses a "desire matrix"
-        res <- .C("auctionbf",
+        res <- .C(SG_auctionbf,
                   as.integer(d),
                   as.integer(n),
                   pers_to_obj = as.integer(rep(-1,n)),
@@ -692,8 +692,8 @@ pppdist.prohorov <- function(X, Y, n, dfix, type, cutoff = 1, matching = TRUE,
         am <- matrix(0, n, n)
         am[cbind(1:n,res$pers_to_obj+1)] <- 1
       }
-      else {           
-        res <- .C("dwpure",
+        else {
+        res <- .C(SG_dwpure,
                   as.integer(d),
                   as.integer(rep.int(1,n)),
                   as.integer(rep.int(1,n)),
@@ -726,7 +726,7 @@ pppdist.prohorov <- function(X, Y, n, dfix, type, cutoff = 1, matching = TRUE,
                     "introduced, while rounding distances"))
     if (any(d > .Machine$integer.max))
       stop("integer overflow, while rounding the q-th powers of distances")
-    res <- .C("dinfty_R",
+    res <- .C(SG_dinfty_R,
               as.integer(d),
               as.integer(n),
               assignment = as.integer(rep.int(-1,n)),
@@ -785,7 +785,7 @@ pppdist.mat <- function(X, Y, cutoff = 1, q = 1, matching = TRUE, precision = 9,
     mass1 <- n2/gcd
     mass2 <- n1/gcd
 
-    res <- .C("dwpure",
+    res <- .C(SG_dwpure,
              as.integer(d),
              as.integer(rep.int(mass1,n1)),
              as.integer(rep.int(mass2,n2)),
@@ -812,7 +812,7 @@ pppdist.mat <- function(X, Y, cutoff = 1, q = 1, matching = TRUE, precision = 9,
       return(ifelse(f==0, 0, f * sum((x/f)^p * w)^(1/p)))
     }
 
-    res <- .C("dwpure",
+    res <- .C(SG_dwpure,
              as.integer(d),
              as.integer(rep.int(mass1,n1)),
              as.integer(rep.int(mass2,n2)),

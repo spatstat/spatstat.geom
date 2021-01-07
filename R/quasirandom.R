@@ -3,12 +3,12 @@
 ##
 ##  Quasi-random sequence generators
 ##
-##  $Revision: 1.6 $   $Date: 2017/06/05 10:31:58 $
+##  $Revision: 1.7 $   $Date: 2021/01/07 01:15:08 $
 ##
 
 vdCorput <- function(n, base) {
   stopifnot(is.prime(base))
-  z <- .C("Corput",
+  z <- .C(SG_Corput,
           base=as.integer(base),
           n=as.integer(n),
           result=as.double(numeric(n)),

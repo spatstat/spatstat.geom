@@ -1,7 +1,7 @@
 #
 # areadiff.R
 #
-#  $Revision: 1.39 $  $Date: 2020/12/13 03:55:34 $
+#  $Revision: 1.40 $  $Date: 2021/01/07 01:15:08 $
 #
 # Computes sufficient statistic for area-interaction process
 #
@@ -262,7 +262,7 @@ areaGain.grid <- function(u, X, r, ..., W=NULL, ngrid=spatstat.options("ngrid.di
     nclose <- sum(close)
     # invoke C routine
     if(!constrain) {
-      z <- .C("areadifs",
+      z <- .C(SG_areadifs,
               rad = as.double(r),
               nrads = as.integer(nr),
               x   = as.double(xshift[close]),
@@ -273,7 +273,7 @@ areaGain.grid <- function(u, X, r, ..., W=NULL, ngrid=spatstat.options("ngrid.di
               PACKAGE="spatstat.geom")
       result[i,] <- z$answer
     } else {
-      z <- .C("areaBdif",
+      z <- .C(SG_areaBdif,
               rad = as.double(r),
               nrads = as.integer(nr),
               x   = as.double(xshift[close]),

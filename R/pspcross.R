@@ -3,7 +3,7 @@
 #
 #    Intersections of line segments
 #    
-#    $Revision: 1.26 $   $Date: 2020/03/23 01:15:26 $
+#    $Revision: 1.28 $   $Date: 2021/01/07 01:33:13 $
 #
 #
 crossing.psp <- function(A,B,fatal=TRUE,details=FALSE) {
@@ -33,8 +33,8 @@ crossing.psp <- function(A,B,fatal=TRUE,details=FALSE) {
 
   useCall <- spatstat.options("crossing.psp.useCall")
   if(!useCall) {
-    # old C routine
-    out <- .C("xysegint",
+    ## old C routine
+    out <- .C(SG_xysegint,
               na=as.integer(na),
               x0a=as.double(x0a),
               y0a=as.double(y0a),
@@ -71,7 +71,7 @@ crossing.psp <- function(A,B,fatal=TRUE,details=FALSE) {
     storage.mode(x0b) <- storage.mode(y0b) <- "double"
     storage.mode(dxb) <- storage.mode(dyb) <- "double"
     storage.mode(eps) <- "double"
-    out <- .Call("Cxysegint",
+    out <- .Call(SG_Cxysegint,
                  x0a, 
                  y0a, 
                  dxa, 
@@ -117,7 +117,7 @@ test.crossing.psp <- function(A,B) {
   dxb <- eB$x1 - eB$x0
   dyb <- eB$y1 - eB$y0
 
-  out <- .C("xysi",
+  out <- .C(SG_xysi,
             na=as.integer(na),
             x0a=as.double(x0a),
             y0a=as.double(y0a),
@@ -157,7 +157,7 @@ anycrossing.psp <- function(A,B) {
   dxb <- eB$x1 - eB$x0
   dyb <- eB$y1 - eB$y0
 
-  out <- .C("xysiANY",
+  out <- .C(SG_xysiANY,
             na=as.integer(na),
             x0a=as.double(x0a),
             y0a=as.double(y0a),
@@ -188,8 +188,8 @@ selfcrossing.psp <- function(A) {
 
   useCall <- spatstat.options("selfcrossing.psp.useCall")
   if(!useCall) {
-    # old C routine
-    out <- .C("xysegXint",
+    ## old C routine
+    out <- .C(SG_xysegXint,
               n=as.integer(n),
               x0=as.double(x0),
               y0=as.double(y0),
@@ -213,7 +213,7 @@ selfcrossing.psp <- function(A) {
     storage.mode(x0) <- storage.mode(y0) <- "double"
     storage.mode(dx) <- storage.mode(dy) <- "double"
     storage.mode(eps) <- "double"
-    out <- .Call("CxysegXint",
+    out <- .Call(SG_CxysegXint,
                  x0, 
                  y0, 
                  dx, 
@@ -239,7 +239,7 @@ test.selfcrossing.psp <- function(A) {
   dx <- eA$x1 - eA$x0
   dy <- eA$y1 - eA$y0
 
-  out <- .C("xysxi",
+  out <- .C(SG_xysxi,
             na=as.integer(n),
             x0=as.double(x0),
             y0=as.double(y0),
@@ -273,7 +273,7 @@ selfcut.psp <- function(A, ..., eps) {
   storage.mode(x0) <- storage.mode(y0) <- "double"
   storage.mode(dx) <- storage.mode(dy) <- "double"
   storage.mode(eps) <- "double"
-  zz <- .Call("CxysegXint",
+  zz <- .Call(SG_CxysegXint,
               x0, 
               y0, 
               dx, 

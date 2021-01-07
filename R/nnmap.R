@@ -3,7 +3,7 @@
 #
 #    nearest or k-th nearest neighbour of each pixel
 #
-#  $Revision: 1.11 $  $Date: 2020/11/17 01:30:18 $
+#  $Revision: 1.12 $  $Date: 2021/01/07 01:15:08 $
 #
 
 nnmap <- function(X, k=1, what = c("dist", "which"), ...,
@@ -104,7 +104,7 @@ nnmap <- function(X, k=1, what = c("dist", "which"), ...,
     # ............. call C code ............................
     
     if(kmaxcalc == 1) {
-      zz <- .C("nnGinterface",
+      zz <- .C(SG_nnGinterface,
                nx = as.integer(nxcol),
                x0 = as.double(M$xcol[1]),
                xstep = as.double(M$xstep),
@@ -120,8 +120,8 @@ nnmap <- function(X, k=1, what = c("dist", "which"), ...,
                nnwhich = as.integer(nnwh),
                huge = as.double(huge),
                PACKAGE="spatstat.geom")
-    } else {
-      zz <- .C("knnGinterface",
+      } else {
+      zz <- .C(SG_knnGinterface,
                nx = as.integer(nxcol),
                x0 = as.double(M$xcol[1]),
                xstep = as.double(M$xstep),

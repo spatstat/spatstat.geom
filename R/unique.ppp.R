@@ -1,7 +1,7 @@
 #
 #   unique.ppp.R
 #
-# $Revision: 1.37 $  $Date: 2019/05/22 09:04:57 $
+# $Revision: 1.38 $  $Date: 2021/01/07 01:15:08 $
 #
 # Methods for 'multiplicity' co-authored by Sebastian Meyer
 # Copyright 2013 Adrian Baddeley and Sebastian Meyer 
@@ -66,7 +66,7 @@ anyDuplicated.ppp <- function(x, ...) {
   xx <- x$x
   yy <- x$y
   o <- order(xx, seq_len(n))
-  anydupXY <- .C("anydupxy",
+  anydupXY <- .C(SG_anydupxy,
                  n=as.integer(n),
                  x=as.double(xx[o]),
                  y=as.double(yy[o]),

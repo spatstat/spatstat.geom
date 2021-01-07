@@ -1,7 +1,7 @@
 #
 # closepairs.R
 #
-#   $Revision: 1.46 $   $Date: 2020/11/30 10:48:30 $
+#   $Revision: 1.47 $   $Date: 2021/01/07 01:15:08 $
 #
 #  simply extract the r-close pairs from a dataset
 # 
@@ -88,7 +88,7 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
     storage.mode(r) <- "double"
     storage.mode(p) <- "double"
     storage.mode(ng) <- "integer"
-    z <- .Call("closePpair",
+    z <- .Call(SG_closePpair,
                xx=x,
                yy=y,
                pp=p,
@@ -121,7 +121,7 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
     storage.mode(ng) <- "integer"
     switch(what,
            all = {
-             z <- .Call("Vclosepairs",
+             z <- .Call(SG_Vclosepairs,
                         xx=x, yy=y, rr=r, nguess=ng,
                         PACKAGE="spatstat.geom")
              if(length(z) != 9)
@@ -136,8 +136,8 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
              dy <- z[[8L]]
              d  <- z[[9L]]
            },
-           indices = {
-             z <- .Call("VcloseIJpairs",
+             indices = {
+             z <- .Call(SG_VcloseIJpairs,
                         xx=x, yy=y, rr=r, nguess=ng,
                         PACKAGE="spatstat.geom")
              if(length(z) != 2)
@@ -145,8 +145,8 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
              i  <- z[[1L]]  # NB no increment required
              j  <- z[[2L]]
            },
-           ijd = {
-             z <- .Call("VcloseIJDpairs",
+               ijd = {
+             z <- .Call(SG_VcloseIJDpairs,
                         xx=x, yy=y, rr=r, nguess=ng,
                         PACKAGE="spatstat.geom")
              if(length(z) != 3)
@@ -170,7 +170,7 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
     storage.mode(ng) <- "integer"
     switch(what,
            all = {
-             z <- .Call("altVclosepairs",
+             z <- .Call(SG_altVclosepairs,
                         xx=x, yy=y, rr=r, nguess=ng,
                         PACKAGE="spatstat.geom")
              if(length(z) != 9)
@@ -185,8 +185,8 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
              dy <- z[[8L]]
              d  <- z[[9L]]
            },
-           indices = {
-             z <- .Call("altVcloseIJpairs",
+             indices = {
+             z <- .Call(SG_altVcloseIJpairs,
                         xx=x, yy=y, rr=r, nguess=ng,
                         PACKAGE="spatstat.geom")
              if(length(z) != 2)
@@ -194,8 +194,8 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
              i  <- z[[1L]]  # NB no increment required
              j  <- z[[2L]]
            },
-           ijd = {
-             z <- .Call("altVcloseIJDpairs",
+               ijd = {
+             z <- .Call(SG_altVcloseIJDpairs,
                         xx=x, yy=y, rr=r, nguess=ng,
                         PACKAGE="spatstat.geom")
              if(length(z) != 3)
@@ -238,7 +238,7 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
     got.twice <- TRUE
     nsize <- nsize * 2
     z <-
-      .C("Fclosepairs",
+      .C(SG_Fclosepairs,
          nxy=as.integer(npts),
          x=as.double(Xsort$x),
          y=as.double(Xsort$y),
@@ -262,7 +262,7 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
       # Obtain an OVERCOUNT of the number of pairs
       # (to work around gcc bug #323)
       rmaxplus <- 1.25 * rmax
-      nsize <- .C("paircount",
+      nsize <- .C(SG_paircount,
                   nxy=as.integer(npts),
                   x=as.double(Xsort$x),
                   y=as.double(Xsort$y),
@@ -275,7 +275,7 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
       nsize <- ceiling(1.1 * nsize) + 2 * npts
       # now extract points
       z <-
-        .C("Fclosepairs",
+        .C(SG_Fclosepairs,
            nxy=as.integer(npts),
            x=as.double(Xsort$x),
            y=as.double(Xsort$y),
@@ -502,7 +502,7 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
     storage.mode(ng) <- "integer"
     switch(what,
            all = {
-             z <- .Call("Vcrosspairs",
+             z <- .Call(SG_Vcrosspairs,
                         xx1=Xx, yy1=Xy,
                         xx2=Yx, yy2=Yy,
                         rr=r, nguess=ng,
@@ -519,8 +519,8 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
              dy <- z[[8L]]
              d  <- z[[9L]]
            },
-           indices = {
-             z <- .Call("VcrossIJpairs",
+             indices = {
+             z <- .Call(SG_VcrossIJpairs,
                         xx1=Xx, yy1=Xy,
                         xx2=Yx, yy2=Yy,
                         rr=r, nguess=ng,
@@ -530,8 +530,8 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
              i  <- z[[1L]]  # NB no increment required
              j  <- z[[2L]]
            }, 
-           ijd = {
-             z <- .Call("VcrossIJDpairs",
+               ijd = {
+             z <- .Call(SG_VcrossIJDpairs,
                         xx1=Xx, yy1=Xy,
                         xx2=Yx, yy2=Yy,
                         rr=r, nguess=ng,
@@ -548,7 +548,7 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
     # obtain upper estimate of number of pairs
     # (to work around gcc bug 323)
     rmaxplus <- 1.25 * rmax
-    nsize <- .C("crosscount",
+    nsize <- .C(SG_crosscount,
                 nn1=as.integer(X$n),
                 x1=as.double(Xsort$x),
                 y1=as.double(Xsort$y),
@@ -566,7 +566,7 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
     
     # now extract pairs
     z <-
-      .C("Fcrosspairs",
+      .C(SG_Fcrosspairs,
          nn1=as.integer(X$n),
          x1=as.double(Xsort$x),
          y1=as.double(Xsort$y),
@@ -667,7 +667,7 @@ closethresh <- function(X, R, S, twice=TRUE, ...) {
   storage.mode(r) <- "double"
   storage.mode(s) <- "double"
   storage.mode(ng) <- "integer"
-  z <- .Call("Vclosethresh",
+  z <- .Call(SG_Vclosethresh,
              xx=x, yy=y, rr=r, ss=s, nguess=ng,
              PACKAGE="spatstat.geom")
   if(length(z) != 3)

@@ -3,7 +3,7 @@
 #'
 #'     Metric distance transform of pixel mask
 #'
-#'	$Revision: 1.6 $	$Date: 2020/11/29 07:42:07 $
+#'	$Revision: 1.7 $	$Date: 2021/01/07 01:15:08 $
 
 
 rectdistmap <- function(X, asp=1.0, npasses=1, verbose=FALSE) {
@@ -51,7 +51,7 @@ rectdistmap <- function(X, asp=1.0, npasses=1, verbose=FALSE) {
   x <- matrix(FALSE, nrow=Nnr, ncol=Nnc)
   x[rmin:rmax, cmin:cmax] <- w$m
   #' compute distmap
-  res <- .C("mdtPOrect",
+  res <- .C(SG_mdtPOrect,
             as.double(w$xrange[1L]),
             as.double(w$yrange[1L]),
             as.double(w$xrange[2L]),
@@ -90,7 +90,7 @@ rectdistmap <- function(X, asp=1.0, npasses=1, verbose=FALSE) {
     y[, cmin] <- TRUE
     y[, cmax] <- TRUE
     #' compute distmap
-    bres <- .C("mdtPOrect",
+    bres <- .C(SG_mdtPOrect,
                as.double(w$xrange[1L]),
                as.double(w$yrange[1L]),
                as.double(w$xrange[2L]),

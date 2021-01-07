@@ -2,7 +2,7 @@
 #	exactdt.S
 #	S function exactdt() for exact distance transform
 #
-#	$Revision: 4.17 $	$Date: 2017/06/05 10:31:58 $
+#	$Revision: 4.18 $	$Date: 2021/01/07 01:15:08 $
 #
 
 exactdt <- local({
@@ -42,7 +42,7 @@ exactdt <- local({
     cmin <- mc + 1
     cmax <- Nnc - mc
     ## go
-    res <- .C("exact_dt_R",
+    res <- .C(SG_exact_dt_R,
               as.double(X$x),
               as.double(X$y),
               as.integer(X$n),

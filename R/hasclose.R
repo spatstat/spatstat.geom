@@ -3,7 +3,7 @@
 #'
 #'    Determine whether each point has a close neighbour
 #'
-#'    $Revision: 1.11 $  $Date: 2017/06/05 10:31:58 $
+#'    $Revision: 1.12 $  $Date: 2021/01/07 01:15:08 $
 
 has.close <- function(X, r, Y=NULL, ...) {
   UseMethod("has.close")
@@ -37,7 +37,7 @@ has.close.ppp <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
   }
   if(is.null(Y)) {
     if(!periodic) {
-      zz <- .C("hasXclose",
+      zz <- .C(SG_hasXclose,
                n = as.integer(nX),
                x = as.double(cX$x),
                y = as.double(cX$y),
@@ -46,7 +46,7 @@ has.close.ppp <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
                PACKAGE="spatstat.geom")
     } else {
       b <- sidelengths(Frame(X))
-      zz <- .C("hasXpclose",
+      zz <- .C(SG_hasXpclose,
                n = as.integer(nX),
                x = as.double(cX$x),
                y = as.double(cX$y),
@@ -66,7 +66,7 @@ has.close.ppp <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
       cY <- cY[ooY, , drop=FALSE]
     }
     if(!periodic) {
-      zz <- .C("hasXYclose",
+      zz <- .C(SG_hasXYclose,
                n1 = as.integer(nX),
                x1 = as.double(cX$x),
                y1 = as.double(cX$y),
@@ -81,7 +81,7 @@ has.close.ppp <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
       bY <- sidelengths(Frame(Y))
       if(any(bX != bY))
         warning("Windows are not equal: periodic distance may be erroneous")
-      zz <- .C("hasXYpclose",
+      zz <- .C(SG_hasXYpclose,
                n1 = as.integer(nX),
                x1 = as.double(cX$x),
                y1 = as.double(cX$y),
@@ -114,7 +114,7 @@ has.close.pp3 <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
   }
   if(is.null(Y)) {
     if(!periodic) {
-      zz <- .C("hasX3close",
+      zz <- .C(SG_hasX3close,
                n = as.integer(nX),
                x = as.double(cX$x),
                y = as.double(cX$y),
@@ -124,7 +124,7 @@ has.close.pp3 <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
                PACKAGE="spatstat.geom")
     } else {
       b <- sidelengths(as.box3(X))
-      zz <- .C("hasX3pclose",
+      zz <- .C(SG_hasX3pclose,
                n = as.integer(nX),
                x = as.double(cX$x),
                y = as.double(cX$y),
@@ -145,7 +145,7 @@ has.close.pp3 <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
       cY <- cY[ooY, , drop=FALSE]
     }
     if(!periodic) {
-      zz <- .C("hasXY3close",
+      zz <- .C(SG_hasXY3close,
                n1 = as.integer(nX),
                x1 = as.double(cX$x),
                y1 = as.double(cX$y),
@@ -162,7 +162,7 @@ has.close.pp3 <- function(X, r, Y=NULL, ..., periodic=FALSE, sorted=FALSE) {
       bY <- sidelengths(as.box3(Y))
       if(any(bX != bY))
         warning("Domains are not equal: periodic distance may be erroneous")
-      zz <- .C("hasXY3pclose",
+      zz <- .C(SG_hasXY3pclose,
                n1 = as.integer(nX),
                x1 = as.double(cX$x),
                y1 = as.double(cX$y),

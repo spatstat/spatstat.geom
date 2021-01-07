@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.163 $     $Date: 2020/11/30 07:15:55 $
+#      $Revision: 1.164 $     $Date: 2021/01/07 01:15:08 $
 #
 #      The class "im" of raster images
 #
@@ -661,7 +661,7 @@ nearest.valid.pixel <- function(x, y, Z,
              yscaled <- (y - Z$yrow[1])/Z$ystep
              aspect  <- Z$ystep/Z$xstep
              inside <- as.owin(Z)$m
-             zz <- .C("nearestvalidpixel",
+             zz <- .C(SG_nearestvalidpixel,
                       n = as.integer(n),
                       x = as.double(xscaled),
                       y = as.double(yscaled),

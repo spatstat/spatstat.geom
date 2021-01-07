@@ -1,7 +1,7 @@
 #
 #      distances.R
 #
-#      $Revision: 1.47 $     $Date: 2018/10/07 11:07:54 $
+#      $Revision: 1.48 $     $Date: 2021/01/07 01:15:08 $
 #
 #
 #      Interpoint distances between pairs 
@@ -82,15 +82,15 @@ pairdist.default <-
          C={
            d <- numeric( n * n)
            if(!periodic) {
-               z<- .C("Cpairdist",
+               z<- .C(SG_Cpairdist,
                       n = as.integer(n),
                       x= as.double(x),
                       y= as.double(y),
                       squared=as.integer(squared),
                       d= as.double(d),
                       PACKAGE="spatstat.geom")
-           } else {
-             z <- .C("CpairPdist",
+               } else {
+             z <- .C(SG_CpairPdist,
                      n = as.integer(n),
                      x= as.double(x),
                      y= as.double(y),
@@ -178,7 +178,7 @@ crossdist.default <-
                },
                C = {
                  if(!periodic) {
-                   z<- .C("Ccrossdist",
+                   z<- .C(SG_Ccrossdist,
                           nfrom = as.integer(n1),
                           xfrom = as.double(x1),
                           yfrom = as.double(y1),
@@ -188,8 +188,8 @@ crossdist.default <-
                           squared = as.integer(squared),
                           d = as.double(matrix(0, nrow=n1, ncol=n2)),
                           PACKAGE="spatstat.geom")
-                 } else {
-                   z<- .C("CcrossPdist",
+                   } else {
+                   z<- .C(SG_CcrossPdist,
                           nfrom = as.integer(n1),
                           xfrom = as.double(x1),
                           yfrom = as.double(y1),

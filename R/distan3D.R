@@ -1,7 +1,7 @@
 #
 #      distan3D.R
 #
-#      $Revision: 1.13 $     $Date: 2017/06/05 10:31:58 $
+#      $Revision: 1.14 $     $Date: 2021/01/07 01:15:08 $
 #
 #      Interpoint distances for 3D points
 #
@@ -24,7 +24,7 @@ pairdist.pp3 <- function(X, ..., periodic=FALSE, squared=FALSE) {
     return(matrix(0,nrow=1L,ncol=1L))
   #
   if(!periodic) {
-    Cout <- .C("D3pairdist",
+    Cout <- .C(SG_D3pairdist,
                n = as.integer(n),
                x = as.double(x),
                y = as.double(y),
@@ -37,7 +37,7 @@ pairdist.pp3 <- function(X, ..., periodic=FALSE, squared=FALSE) {
     wide <- diff(b$xrange)
     high <- diff(b$yrange)
     deep <- diff(b$zrange)
-    Cout <- .C("D3pairPdist",
+    Cout <- .C(SG_D3pairPdist,
                n = as.integer(n),
                x = as.double(x),
                y = as.double(y),
@@ -104,7 +104,7 @@ nndist.pp3 <- function(X, ..., k=1, by=NULL) {
     nnd<-numeric(n)
     o <- fave.order(z)
     big <- sqrt(.Machine$double.xmax)
-    Cout <- .C("nnd3D",
+    Cout <- .C(SG_nnd3D,
                n= as.integer(n),
                x= as.double(x[o]),
                y= as.double(y[o]),
@@ -119,7 +119,7 @@ nndist.pp3 <- function(X, ..., k=1, by=NULL) {
     nnd<-numeric(n * kmaxcalc)
     o <- fave.order(z)
     big <- sqrt(.Machine$double.xmax)
-    Cout <- .C("knnd3D",
+    Cout <- .C(SG_knnd3D,
                n    = as.integer(n),
                kmax = as.integer(kmaxcalc),
                x    = as.double(x[o]),
@@ -195,7 +195,7 @@ nnwhich.pp3 <- function(X, ..., k=1) {
     nnw <- integer(n)
     o <- fave.order(z)
     big <- sqrt(.Machine$double.xmax)
-    Cout <- .C("nnw3D",
+    Cout <- .C(SG_nnw3D,
                n = as.integer(n),
                x = as.double(x[o]),
                y = as.double(y[o]),
@@ -216,7 +216,7 @@ nnwhich.pp3 <- function(X, ..., k=1) {
     nnw <- matrix(integer(n * kmaxcalc), nrow=n, ncol=kmaxcalc)
     o <- fave.order(z)
     big <- sqrt(.Machine$double.xmax)
-    Cout <- .C("knnw3D",
+    Cout <- .C(SG_knnw3D,
                n = as.integer(n),
                kmax = as.integer(kmaxcalc),
                x = as.double(x[o]),
@@ -264,7 +264,7 @@ crossdist.pp3 <- function(X, Y, ..., periodic=FALSE, squared=FALSE) {
     return(matrix(numeric(0), nrow=nX, ncol=nY))
 
   if(!periodic) {
-    Cout <- .C("D3crossdist",
+    Cout <- .C(SG_D3crossdist,
                nfrom = as.integer(nX),
                xfrom = as.double(cX$x),
                yfrom = as.double(cX$y),
@@ -281,7 +281,7 @@ crossdist.pp3 <- function(X, Y, ..., periodic=FALSE, squared=FALSE) {
     wide <- diff(b$xrange)
     high <- diff(b$yrange)
     deep <- diff(b$zrange)
-    Cout <- .C("D3crossPdist",
+    Cout <- .C(SG_D3crossPdist,
                nfrom = as.integer(nX),
                xfrom = as.double(cX$x),
                yfrom = as.double(cX$y),

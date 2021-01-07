@@ -1,7 +1,7 @@
 #
 #      distanxD.R
 #
-#      $Revision: 1.15 $     $Date: 2020/04/24 03:33:47 $
+#      $Revision: 1.16 $     $Date: 2021/01/07 01:15:08 $
 #
 #      Interpoint distances for multidimensional points
 #
@@ -112,7 +112,7 @@ nndist.ppx <- function(X, ..., k=1, by=NULL) {
     nnd<-numeric(n)
     o <- fave.order(coo[,1L])
     big <- sqrt(.Machine$double.xmax)
-    Cout <- .C("nndMD",
+    Cout <- .C(SG_nndMD,
                n= as.integer(n),
                m=as.integer(m),
                x= as.double(t(coo[o,])),
@@ -125,7 +125,7 @@ nndist.ppx <- function(X, ..., k=1, by=NULL) {
     nnd<-numeric(n * kmaxcalc)
     o <- fave.order(coo[,1L])
     big <- sqrt(.Machine$double.xmax)
-    Cout <- .C("knndMD",
+    Cout <- .C(SG_knndMD,
                n    = as.integer(n),
                m    = as.integer(m),
                kmax = as.integer(kmaxcalc),
@@ -204,7 +204,7 @@ nnwhich.ppx <- function(X, ..., k=1) {
     nnw <- integer(n)
     o <- fave.order(coo[,1L])
     big <- sqrt(.Machine$double.xmax)
-    Cout <- .C("nnwMD",
+    Cout <- .C(SG_nnwMD,
                n = as.integer(n),
                m = as.integer(m),
                x = as.double(t(coo[o,])),
@@ -223,7 +223,7 @@ nnwhich.ppx <- function(X, ..., k=1) {
     nnw <- matrix(integer(n * kmaxcalc), nrow=n, ncol=kmaxcalc)
     o <- fave.order(coo[,1L])
     big <- sqrt(.Machine$double.xmax)
-    Cout <- .C("knnwMD",
+    Cout <- .C(SG_knnwMD,
                n = as.integer(n),
                m = as.integer(m),
                kmax = as.integer(kmaxcalc),
@@ -337,7 +337,7 @@ nncross.ppx <- function(X, Y, iX=NULL, iY=NULL,
     nnd <- numeric(nX)
     nnw <- integer(nX)
     if(!exclude) {
-      Cout <- .C("nnXwMD",
+      Cout <- .C(SG_nnXwMD,
                  m  =as.integer(m),
                  n1 = as.integer(nX),
                  x1 = as.double(t(cooX[oX,])),
@@ -347,8 +347,8 @@ nncross.ppx <- function(X, Y, iX=NULL, iY=NULL,
                  nnwhich = as.integer(nnw),
                  as.double(big),
                  PACKAGE="spatstat.geom")
-    } else {
-      Cout <- .C("nnXxMD",
+      } else {
+      Cout <- .C(SG_nnXxMD,
                  m  =as.integer(m),
                  n1 = as.integer(nX),
                  x1 = as.double(t(cooX[oX,])),
@@ -376,7 +376,7 @@ nncross.ppx <- function(X, Y, iX=NULL, iY=NULL,
     nnd <- matrix(0,  nX, kmaxcalc)
     nnw <- matrix(0L, nX, kmaxcalc)
     if(!exclude) {
-      Cout <- .C("knnXwMD",
+      Cout <- .C(SG_knnXwMD,
                  m       = as.integer(m),
                  n1      = as.integer(nX),
                  x1      = as.double(t(cooX[oX,])),
@@ -387,8 +387,8 @@ nncross.ppx <- function(X, Y, iX=NULL, iY=NULL,
                  nnwhich = as.integer(nnw),
                  huge    = as.double(big),
                  PACKAGE="spatstat.geom")
-    } else {
-      Cout <- .C("knnXxMD",
+      } else {
+      Cout <- .C(SG_knnXxMD,
                  m       = as.integer(m),
                  n1      = as.integer(nX),
                  x1      = as.double(t(cooX[oX,])),

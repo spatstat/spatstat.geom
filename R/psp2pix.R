@@ -1,7 +1,7 @@
 #
 # psp2pix.R
 #
-#  $Revision: 1.13 $  $Date: 2020/11/17 03:47:24 $
+#  $Revision: 1.14 $  $Date: 2021/01/07 01:15:08 $
 #
 #
 
@@ -31,7 +31,7 @@ as.mask.psp <- function(x, W=NULL, ...) {
   y1 <- (ends$y1 - W$yrange[1])/W$ystep
   nr <- W$dim[1]
   nc <- W$dim[2]
-  zz <- .C("seg2pixI",
+  zz <- .C(SG_seg2pixI,
            ns=as.integer(nseg),
            x0=as.double(x0),
            y0=as.double(y0),
@@ -96,7 +96,7 @@ pixellate.psp <- function(x, W=NULL, ..., weights=NULL,
   nc <- Z$dim[2]
   switch(what,
          length = {
-           zz <- .C("seg2pixL",
+           zz <- .C(SG_seg2pixL,
                     ns=as.integer(nseg),
                     x0=as.double(x0),
                     y0=as.double(y0),
@@ -110,8 +110,8 @@ pixellate.psp <- function(x, W=NULL, ..., weights=NULL,
                     out=as.double(numeric(nr * nc)),
                     PACKAGE="spatstat.geom")
          },
-         number = {
-           zz <- .C("seg2pixN",
+           number = {
+           zz <- .C(SG_seg2pixN,
                     ns=as.integer(nseg),
                     x0=as.double(x0),
                     y0=as.double(y0),

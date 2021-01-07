@@ -3,7 +3,7 @@
 #'
 #' Interface to deldir package
 #'
-#'  $Revision: 1.35 $ $Date: 2020/12/13 03:51:25 $
+#'  $Revision: 1.36 $ $Date: 2021/01/07 01:15:08 $
 #'
 
 #' ..............................................
@@ -81,7 +81,7 @@ delaunay <- function(X) {
     nv <- nX
     ne <- length(a)
     ntmax <- ne
-    z <- .C("trigrafS",
+    z <- .C(SG_trigrafS,
             nv = as.integer(nv),
             ne = as.integer(ne),
             ie = as.integer(a),
@@ -100,7 +100,7 @@ delaunay <- function(X) {
     nv <- nX
     ne <- length(a)
     ntmax <- ne
-    z <- .C("trigraf",
+    z <- .C(SG_trigraf,
             nv = as.integer(nv),
             ne = as.integer(ne),
             ie = as.integer(a),
@@ -241,7 +241,7 @@ delaunayDistance <- function(X) {
   adj <- matrix(FALSE, nY, nY)
   diag(adj) <- TRUE
   adj[joins] <- TRUE
-  z <- .C("Idist2dpath",
+  z <- .C(SG_Idist2dpath,
           nv = as.integer(nY),
           d = as.integer(d), 
           adj = as.integer(adj),

@@ -3,7 +3,7 @@
 #
 # connected component transform
 #
-#    $Revision: 1.23 $  $Date: 2020/06/17 05:42:17 $
+#    $Revision: 1.24 $  $Date: 2021/01/07 01:15:08 $
 #
 # Interpreted code for pixel images by Julian Burgos <jmburgos@u.washington.edu>
 # Rewritten in C by Adrian Baddeley
@@ -39,8 +39,8 @@ connected.owin <- function(X, ..., method="C") {
     L <- M
     L[M] <- seq_len(sum(M))
     L[!M] <- 0
-    # resolve labels
-    z <- .C("cocoImage",
+    ## resolve labels
+    z <- .C(SG_cocoImage,
             mat=as.integer(t(L)),
             nr=as.integer(nr),
             nc=as.integer(nc),
@@ -172,7 +172,7 @@ cocoEngine <- function(nv, ie, je, algoname="connectedness algorithm") {
   #' no checks
   #' ie, je are 0-based indices (range between 0 and nv-1)
   ne <- length(ie)
-  zz <- .C("cocoGraph",
+  zz <- .C(SG_cocoGraph,
            nv=as.integer(nv),
            ne=as.integer(ne),
            ie=as.integer(ie),

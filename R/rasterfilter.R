@@ -3,7 +3,7 @@
 #'
 #'    raster filters implemented directly
 #'
-#'    $Revision: 1.5 $ $Date: 2017/11/18 07:17:18 $
+#'    $Revision: 1.6 $ $Date: 2021/01/07 01:15:08 $
 #'
 
 rasterfilter <- function(X, f) {
@@ -19,7 +19,7 @@ rasterfilter <- function(X, f) {
     v[isna] <- 0
   }
   #' compute
-  z <- .C("raster3filter",
+  z <- .C(SG_raster3filter,
           nx = as.integer(dimX[2]),
           ny = as.integer(dimX[1]),
           a  = as.double(v),

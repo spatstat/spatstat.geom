@@ -4,7 +4,7 @@
 #'   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2019
 #'   Licence: GNU Public Licence >= 2
 #'
-#'   $Revision: 1.16 $  $Date: 2020/01/26 03:50:10 $
+#'   $Revision: 1.17 $  $Date: 2021/01/07 01:15:08 $
 
 uniquemap <- function(x) { UseMethod("uniquemap") }
 
@@ -160,7 +160,7 @@ uniquemap.ppp <- function(x) {
   o <- order(xx, seqn)
 
   if(is.null(marx)) {
-    umap <- .C("uniqmapxy",
+    umap <- .C(SG_uniqmapxy,
                n=as.integer(n),
                x=as.double(xx[o]),
                y=as.double(yy[o]),
@@ -168,7 +168,7 @@ uniquemap.ppp <- function(x) {
                PACKAGE="spatstat.geom")$uniqmap
   } else {
     #' marks are (converted to) integers
-    umap <- .C("uniqmap2M",
+    umap <- .C(SG_uniqmap2M,
                n=as.integer(n),
                x=as.double(xx[o]),
                y=as.double(yy[o]),

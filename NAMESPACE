@@ -19,9 +19,10 @@ useDynLib(spatstat.geom, .registration=TRUE)
 # .................................................. 
 #  load dynamic library
 #      (native routines are now registered in init.c)
+#      (entry points are symbols)
 # .................................................. 
 
-useDynLib(spatstat.geom, .registration=TRUE)
+useDynLib(spatstat.geom, .registration=TRUE, .fixes="SG_")
 
 # .................................................. 
 # Automatically-generated list of documented objects 

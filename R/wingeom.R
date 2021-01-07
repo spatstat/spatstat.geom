@@ -1,7 +1,7 @@
 #
 #	wingeom.R	Various geometrical computations in windows
 #
-#	$Revision: 4.136 $	$Date: 2020/03/16 10:28:51 $
+#	$Revision: 4.137 $	$Date: 2021/01/07 01:15:08 $
 #
 
 volume.owin <- function(x) { area.owin(x) }
@@ -167,8 +167,8 @@ owinpoly2mask <- function(w, rasta, check=TRUE) {
     xp[whole] <-  xp[whole] + epsilon
     whole <- (ceiling(yp) == floor(yp))
     yp[whole] <-  yp[whole] + epsilon
-    # call C
-    z <- .C("poly2imI",
+    ## call C
+    z <- .C(SG_poly2imI,
             xp=as.double(xp),
             yp=as.double(yp),
             np=as.integer(np),
@@ -848,7 +848,7 @@ bdry.mask <- function(W) {
     b <- b | (m != cbind(m[, -1], FALSE))
   } else {
     b <- integer(nr * nc)
-    z <- .C("bdrymask",
+    z <- .C(SG_bdrymask,
             nx = as.integer(nc),
             ny = as.integer(nr),
             m = as.integer(m),
@@ -1085,7 +1085,7 @@ discs <- function(centres, radii=marks(centres)/2, ...,
   if(!separate && mask) {
     #' compute pixel approximation
     M <- as.mask(Window(centres), ...)
-    z <- .C("discs2grid",
+    z <- .C(SG_discs2grid,
             nx    = as.integer(M$dim[2L]),
             x0    = as.double(M$xcol[1L]),
             xstep = as.double(M$xstep),  

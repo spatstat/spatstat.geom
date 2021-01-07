@@ -1,7 +1,7 @@
 #
 # clip.psp.R
 #
-#    $Revision: 1.23 $   $Date: 2018/01/23 02:40:14 $
+#    $Revision: 1.24 $   $Date: 2021/01/07 01:15:08 $
 #
 #
  
@@ -176,7 +176,7 @@ clippoly.psp <- function(s, window, fragments=TRUE) {
   dxw <- ew$x1 - ew$x0
   dyw <- ew$y1 - ew$y0
 
-  out <- .C("xysegint",
+  out <- .C(SG_xysegint,
             na=as.integer(ns),
             x0a=as.double(x0s),
             y0a=as.double(y0s),

@@ -1,7 +1,7 @@
 #
 #     ewcdf.R
 #
-#     $Revision: 1.19 $  $Date: 2019/10/14 08:40:51 $
+#     $Revision: 1.20 $  $Date: 2021/01/07 01:15:08 $
 #
 #  With contributions from Kevin Ummel
 #
@@ -43,7 +43,7 @@ ewcdf <- function(x, weights=NULL, normalise=TRUE, adjust=1)
     wmatch <- rl$lengths
   } else {
     nv <- length(vals)
-    wmatch <- .C("tabsumweight",
+    wmatch <- .C(SG_tabsumweight,
                  nx=as.integer(n),
                  x=as.double(x),
                  w=as.double(w),

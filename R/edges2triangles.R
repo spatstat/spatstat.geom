@@ -1,7 +1,7 @@
 #
 #   edges2triangles.R
 #
-#   $Revision: 1.16 $  $Date: 2018/09/23 09:21:22 $
+#   $Revision: 1.17 $  $Date: 2021/01/07 01:38:36 $
 #
 
 edges2triangles <- function(iedge, jedge, nvert=max(iedge, jedge),
@@ -34,16 +34,16 @@ edges2triangles <- function(iedge, jedge, nvert=max(iedge, jedge),
   if(usefriends) {
     fr <- as.logical(friendly)
     storage.mode(fr) <- "integer"
-    zz <- .Call("trioxgraph",
+    zz <- .Call(SG_trioxgraph,
                 nv=nvert, iedge=iedge, jedge=jedge, friendly=fr,
                 PACKAGE="spatstat.geom")
-  } else if(spatstat.options("fast.trigraph")) {
-    zz <- .Call("triograph",
+    } else if(spatstat.options("fast.trigraph")) {
+    zz <- .Call(SG_triograph,
                 nv=nvert, iedge=iedge, jedge=jedge,
                 PACKAGE="spatstat.geom")
   } else {
     #' testing purposes only
-    zz <- .Call("trigraph",
+    zz <- .Call(SG_trigraph,
                 nv=nvert, iedge=iedge, jedge=jedge,
                 PACKAGE="spatstat.geom")
   }
@@ -78,12 +78,12 @@ trianglediameters <- function(iedge, jedge, edgelength, ...,
   storage.mode(nvert) <- storage.mode(iedge) <- storage.mode(jedge) <- "integer"
   storage.mode(edgelength) <- "double"
   if(is.infinite(dmax)) {
-    zz <- .Call("triDgraph",
+    zz <- .Call(SG_triDgraph,
                 nv=nvert, iedge=iedge, jedge=jedge, edgelength=edgelength,
                 PACKAGE="spatstat.geom")
   } else {
     storage.mode(dmax) <- "double"
-    zz <- .Call("triDRgraph",
+    zz <- .Call(SG_triDRgraph,
                 nv=nvert, iedge=iedge, jedge=jedge, edgelength=edgelength,
                 dmax=dmax,
                 PACKAGE="spatstat.geom")
@@ -117,8 +117,8 @@ edges2vees <- function(iedge, jedge, nvert=max(iedge, jedge),
     return(data.frame(i=numeric(0),
                       j=numeric(0),
                       k=numeric(0)))
-  # call 
-  vees <- .Call("graphVees",
+  ## call
+  vees <- .Call(SG_graphVees,
                 nv = nvert,
                 iedge = iedge,
                 jedge = jedge,

@@ -1,7 +1,7 @@
 #
 # close3Dpairs.R
 #
-#   $Revision: 1.14 $   $Date: 2020/02/06 05:53:02 $
+#   $Revision: 1.15 $   $Date: 2021/01/07 01:38:43 $
 #
 #  extract the r-close pairs from a 3D dataset
 # 
@@ -68,17 +68,17 @@ closepairs.pp3 <- local({
     ## go
     a <- switch(what,
                 all = {
-                  .Call("close3pairs",
+                  .Call(SG_close3pairs,
                         xx=x, yy=y, zz=z, rr=r, nguess=ng,
                         PACKAGE="spatstat.geom")
                 },
-                indices = {
-                  .Call("close3IJpairs",
+                  indices = {
+                  .Call(SG_close3IJpairs,
                         xx=x, yy=y, zz=z, rr=r, nguess=ng,
                         PACKAGE="spatstat.geom")
                 },
-                ijd = {
-                  .Call("close3IJDpairs",
+                    ijd = {
+                  .Call(SG_close3IJDpairs,
                         xx=x, yy=y, zz=z, rr=r, nguess=ng,
                         PACKAGE="spatstat.geom")
                 })
@@ -220,21 +220,21 @@ crosspairs.pp3 <- local({
     ## go
     a <- switch(what,
                 all = {
-                  .Call("cross3pairs",
+                  .Call(SG_cross3pairs,
                         xx1=Xx, yy1=Xy, zz1=Xz,
                         xx2=Yx, yy2=Yy, zz2=Yz,
                         rr=r, nguess=ng,
                         PACKAGE="spatstat.geom")
                 },
-                indices = {
-                  .Call("cross3IJpairs",
+                  indices = {
+                  .Call(SG_cross3IJpairs,
                         xx1=Xx, yy1=Xy, zz1=Xz,
                         xx2=Yx, yy2=Yy, zz2=Yz,
                         rr=r, nguess=ng,
                         PACKAGE="spatstat.geom")
                 },
-                ijd = {
-                  .Call("cross3IJDpairs",
+                    ijd = {
+                  .Call(SG_cross3IJDpairs,
                         xx1=Xx, yy1=Xy, zz1=Xz,
                         xx2=Yx, yy2=Yy, zz2=Yz,
                         rr=r, nguess=ng,

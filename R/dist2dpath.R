@@ -1,7 +1,7 @@
 #
 #  dist2dpath.R
 #
-#   $Revision: 1.10 $    $Date: 2017/06/05 10:31:58 $
+#   $Revision: 1.11 $    $Date: 2021/01/07 01:15:08 $
 #
 #       dist2dpath    compute shortest path distances
 #
@@ -45,7 +45,7 @@ dist2dpath <- function(dist, method="C") {
            diag(adj) <- TRUE
            d <- dist
            d[!adj] <- -1
-           z <- .C("Ddist2dpath",
+           z <- .C(SG_Ddist2dpath,
                    nv=as.integer(n),
                    d=as.double(d),
                    adj=as.integer(adj),

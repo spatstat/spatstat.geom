@@ -3,7 +3,7 @@
 ##
 ## Fast versions of min(nndist(X)), max(nndist(X))
 ##
-##  $Revision: 1.9 $  $Date: 2020/11/29 07:50:38 $
+##  $Revision: 1.10 $  $Date: 2021/01/07 01:15:08 $
 
 minnndist <- function(X, positive=FALSE, by=NULL) {
   stopifnot(is.ppp(X))
@@ -25,15 +25,15 @@ minnndist <- function(X, positive=FALSE, by=NULL) {
   o <- fave.order(y)
   big <- sqrt(.Machine$double.xmax)
   if(positive) {
-      z <- .C("minPnnd2",
+      z <- .C(SG_minPnnd2,
               n = as.integer(n),
               x = as.double(x[o]),
               y = as.double(y[o]),
               as.double(big),
               result = as.double(numeric(1)),
               PACKAGE="spatstat.geom")
-  } else {
-      z <- .C("minnnd2",
+      } else {
+      z <- .C(SG_minnnd2,
               n = as.integer(n),
               x = as.double(x[o]),
               y = as.double(y[o]),
@@ -64,15 +64,15 @@ maxnndist <- function(X, positive=FALSE, by=NULL) {
   o <- fave.order(y)
   big <- sqrt(.Machine$double.xmax)
   if(positive) {
-      z <- .C("maxPnnd2",
+      z <- .C(SG_maxPnnd2,
               n = as.integer(n),
               x = as.double(x[o]),
               y = as.double(y[o]),
               as.double(big),
               result = as.double(numeric(1)),
               PACKAGE="spatstat.geom")
-  } else {
-      z <- .C("maxnnd2",
+      } else {
+      z <- .C(SG_maxnnd2,
               n = as.integer(n),
               x = as.double(x[o]),
               y = as.double(y[o]),

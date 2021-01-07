@@ -3,7 +3,7 @@
 #'
 #'   weighted versions of hist, var, median, quantile
 #'
-#'  $Revision: 1.3 $  $Date: 2017/06/05 10:31:58 $
+#'  $Revision: 1.4 $  $Date: 2021/01/07 01:38:21 $
 #'
 
 
@@ -29,7 +29,7 @@ whist <- function(x, breaks, weights=NULL) {
           cell <- factor(cell, levels=0:N)
           h <- unlist(lapply(split(weights, cell), sum, na.rm=TRUE))
         } else {
-          h <- .Call("Cwhist",
+          h <- .Call(SG_Cwhist,
                      as.integer(cell), as.double(weights), as.integer(nb),
                      PACKAGE="spatstat.geom")
         }
