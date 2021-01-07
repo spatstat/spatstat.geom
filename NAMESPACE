@@ -1,4 +1,6 @@
-# spatstat.geom NAMESPACE file
+## spatstat.geom NAMESPACE file
+
+## ................  Import packages ..................
 
 import(stats,graphics,grDevices,utils,methods)
 import(spatstat.utils,spatstat.data,spatstat.sparse)
@@ -6,23 +8,17 @@ import(polyclip)
 importFrom(deldir,
            deldir,duplicatedxy,tile.list)
 
-# ....  load dynamic library .....
-#      (native routines are now registered in init.c)
-useDynLib(spatstat.geom, .registration=TRUE)
-
-# Do not edit the following.
-# It is generated automatically.
-
-
-
-
-# .................................................. 
-#  load dynamic library
-#      (native routines are now registered in init.c)
-#      (entry points are symbols)
-# .................................................. 
+## ................ Load dynamic library ..............
+##      (native routines are registered in init.c)
+##      (entry points are symbols with prefix "SG_")
 
 useDynLib(spatstat.geom, .registration=TRUE, .fixes="SG_")
+
+## //////////  DO NOT EDIT THE FOLLOWING  ///////////////
+## ////////  it is generated automatically  /////////////
+
+
+
 
 # .................................................. 
 # Automatically-generated list of documented objects 
