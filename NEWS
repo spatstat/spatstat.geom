@@ -1,0 +1,44 @@
+
+        CHANGES IN spatstat.geom VERSION 1.65-3
+
+OVERVIEW
+
+    o NEWS file initialised.
+
+
+        CHANGES IN spatstat.geom VERSION 1.65-2
+
+OVERVIEW
+
+    o Minor changes to satisfy CRAN.
+
+
+        CHANGES IN spatstat.geom VERSION 1.65-1
+
+OVERVIEW
+
+    o Minor changes to satisfy CRAN.
+
+
+        CHANGES IN spatstat.geom VERSION 1.65-0
+
+OVERVIEW
+
+    o Package initialised at version 1.65-0
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o spatstat.geom
+    The package 'spatstat.geom' has been created from a subset
+    of the code in the original 'spatstat' package version 1.65-0.
+    It contains definitions of geometrical objects (windows, point patterns,
+    pixel images, etc) and operations on them (geometry, superposition,
+    image arithmetic, etc).
+
+    o Execution
+    The 'spatstat.geom' package is slightly faster than the corresponding
+    code in the 'spatstat' package, because the procedure for calling
+    internal C functions has been streamlined.
+
+
+
