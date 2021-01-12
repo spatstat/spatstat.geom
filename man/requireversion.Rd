@@ -42,7 +42,7 @@ requireversion(pkg, ver, fatal=TRUE)
   \adrian
 }
 \examples{
-  requireversion(spatstat, "1.42-0")
-  requireversion(spatstat, "999.999-999", fatal=FALSE)
+  requireversion(spatstat.geom, "1.42-0")
+  requireversion(spatstat.data, "999.999-999", fatal=FALSE)
 }
 \keyword{environment}
