@@ -27,4 +27,8 @@ circumradius(x, \dots)
   \code{circumradius} is replaced by the more appropriately named
   \code{boundingradius}.
 }
+\value{
+\code{as.psp.owin} returns a window (object of class \code{"owin"}).
+\code{circumradius} returns a numeric value.
+}
 \keyword{internal}

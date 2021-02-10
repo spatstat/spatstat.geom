@@ -72,7 +72,7 @@
   m <- pppmatching(X, Y, am)
   summary(m)
   m$matrix
-  \dontrun{
+  if(interactive()) {
     plot(m)
   }
 
@@ -80,7 +80,7 @@
   m2 <- pppdist(X,Y)
   summary(m2)
   m2$matrix
-  \dontrun{
+  if(interactive()) {
     plot(m2)
   }
 }
