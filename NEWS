@@ -38,7 +38,13 @@ OVERVIEW
 
 OVERVIEW
 
-    o Package initialised at version 1.65-0
+    o Package initialised at version 1.65-0 from a subset of spatstat.
+
+    o Increased speed for large datasets.
+
+    o Bug fix in crossdist.pp3 with periodic distances.
+    
+    o Bug fixes and minor improvements.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -54,5 +60,43 @@ SIGNIFICANT USER-VISIBLE CHANGES
     code in the 'spatstat' package, because the procedure for calling
     internal C functions has been streamlined.
 
+    o dirichletEdges
+    New argument 'clip'.
+
+    o harmonise.im
+    The result belongs to class 'solist' and 'imlist'
+    so that it can be plotted.
+
+BUG FIXES
+
+    o crossdist.pp3
+    Results with periodic=TRUE were partially incorrect.
+    Fixed.
+    
+    o affine.owin
+    For mask windows, the pixel resolution of the result
+    was too fine, leading to very large datasets.
+    Fixed.
+
+    o affine.im
+    If the transformation matrix was not diagonal, the pixel resolution
+    of the result was too fine, leading to very large datasets.
+    Fixed.
+
+    o plot.ppp
+    For a point pattern in a binary mask window,
+    if both arguments 'col' and 'cols' were given,
+    the points were coloured according to 'col', which was incorrect.
+    Fixed.
+    
+    o dirichletEdges
+    Crashed if any edges crossed the boundary of the window.
+    Fixed.
+
+    o unitname
+    Spatial datasets with incorrect internal format
+    (or using an out-of-date version of the spatstat format)
+    caused an error if the 'units' package was loaded.
+    Fixed.
 
 

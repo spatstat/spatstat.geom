@@ -1,6 +1,8 @@
 ##  spatstat.geom/R/First.R
 
-.onLoad <- function(...) reset.spatstat.options()
+.onLoad <- function(...) {
+  reset.spatstat.options()
+}
 
 .onAttach <- function(libname, pkgname) {
   vs <- read.dcf(file=system.file("DESCRIPTION", package="spatstat.geom"),
