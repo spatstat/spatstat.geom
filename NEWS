@@ -1,4 +1,20 @@
 
+        CHANGES IN spatstat.geom VERSION 1.65-6
+
+OVERVIEW
+
+    o We thank Jean-Francois Coeurjolly for contributions.
+    
+    o Bug fix in 'inradius'
+
+BUG FIXES
+
+    o inradius
+    Coded incorrectly for rectangular windows.
+    [Spotted by Jean-Francois Coeurjolly]
+    Fixed.
+
+
         CHANGES IN spatstat.geom VERSION 1.65-5
 
 OVERVIEW

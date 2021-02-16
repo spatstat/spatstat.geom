@@ -1,7 +1,7 @@
 #
 #	wingeom.R	Various geometrical computations in windows
 #
-#	$Revision: 4.137 $	$Date: 2021/01/07 01:15:08 $
+#	$Revision: 4.138 $	$Date: 2021/02/16 02:25:19 $
 #
 
 volume.owin <- function(x) { area.owin(x) }
@@ -929,7 +929,7 @@ diameter.owin <- function(x) {
 
 inradius <- function(W) {
   stopifnot(is.owin(W))
-  if(W$type == "rectangle") diameter(W)/2 else max(distmap(W, invert=TRUE))
+  if(W$type == "rectangle") { shortside(W)/2 } else max(distmap(W, invert=TRUE))
 }
 
   
