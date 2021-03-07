@@ -1,4 +1,22 @@
 
+        CHANGES IN spatstat.geom VERSION 1.65-8
+
+OVERVIEW
+
+    o Reduced package dependence.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o spatstat.geom
+    No longer depends on 'spatstat.sparse'.
+    
+
+        CHANGES IN spatstat.geom VERSION 1.65-7
+
+OVERVIEW
+
+    o Tweak.
+    
         CHANGES IN spatstat.geom VERSION 1.65-6
 
 OVERVIEW

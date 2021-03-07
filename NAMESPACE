@@ -3,7 +3,7 @@
 ## ................  Import packages ..................
 
 import(stats,graphics,grDevices,utils,methods)
-import(spatstat.utils,spatstat.data,spatstat.sparse)
+import(spatstat.utils,spatstat.data)
 import(polyclip)
 importFrom(deldir,
            deldir,duplicatedxy,tile.list)
