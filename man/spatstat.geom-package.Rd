@@ -5,25 +5,22 @@
 \title{The spatstat.geom Package}
 \description{
   The \pkg{spatstat.geom} package
-  is a subset of the original \pkg{spatstat} package.
+  belongs to the \pkg{spatstat} family of packages.
   It defines classes of geometrical objects such as windows
   and point patterns, and provides functionality for geometrical
   operations on them.
 }
 \details{
   \pkg{spatstat} is
-  an \R package
+  a family of \R packages
   for the statistical analysis of spatial data.
   Its main focus is the analysis of
   spatial patterns of points in two-dimensional space.
 
   The original \pkg{spatstat} package
-  is progressively being split into
+  has now been split into several
   sub-packages.
 
-  \bold{New users are advised to install the original \pkg{spatstat}
-    package, rather than the sub-packages, until the split-up
-    is completed. }
   
   This sub-package \pkg{spatstat.geom} defines the main classes
   of geometrical objects (such as windows, point patterns, 
@@ -31,12 +28,19 @@
   operations (such as shifting and rotating, measuring areas and
   distances, finding nearest neighbours in a point pattern).
 
+  Functions for performing statistical analysis and modelling
+  are in the separate sub-package \pkg{spatstat.core}.
+  
+  Functions for linear networks
+  are in the separate sub-package \pkg{spatstat.linnet}.
+
+  For an overview of all the functions available in the \pkg{spatstat} family,
+  see the help file for \pkg{spatstat} in the \pkg{spatstat} package.
 }
 \section{Structure of the spatstat family}{  
   The original \pkg{spatstat} package grew to be very large,
   and CRAN requested that the package be divided 
   into several \bold{sub-packages}.
-  This transition is under way, but is not yet finished.
   So far the following sub-packages exist:
   \itemize{
     \item \pkg{spatstat.utils} containing basic utilities
@@ -48,7 +52,15 @@
     for statistical analysis of spatial data
     \item \pkg{spatstat.linnet} containing functions for
     spatial data on a linear network
+    \item \pkg{spatstat}, which simply loads the other sub-packages
+    listed above, and provides documentation.
   }
+  When you install \pkg{spatstat}, these sub-packages are also
+  installed. Then if you load the \pkg{spatstat} package by typing
+  \code{library(spatstat)}, the other sub-packages listed above will
+  automatically be loaded or imported.
+  For an overview of all the functions available in these sub-packages,
+  see the help file for \pkg{spatstat} in the \pkg{spatstat} package,
 
   Additionally there are several \bold{extension packages:}
   \itemize{
