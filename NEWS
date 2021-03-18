@@ -1,4 +1,19 @@
+        CHANGES IN spatstat.geom VERSION 2.0-0
 
+OVERVIEW
+
+    o Reduced package dependence.
+
+    o Improvement to venn.tess.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o spatstat.geom
+    No longer depends on 'spatstat.sparse'.
+    
+    o venn.tess
+    New argument 'labels'.
+    
         CHANGES IN spatstat.geom VERSION 1.65-8
 
 OVERVIEW

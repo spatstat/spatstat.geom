@@ -9,7 +9,7 @@
   windows. 
 }
 \usage{
-venn.tess(\dots, window = NULL)
+venn.tess(\dots, window = NULL, labels=FALSE)
 }
 \arguments{
   \item{\dots}{
@@ -22,6 +22,10 @@ venn.tess(\dots, window = NULL)
     If not specified, the default is the union of all the
     arguments \code{\dots}.
   }
+  \item{labels}{
+    Logical value, specifying whether to attach marks to each tile
+    that reveal how it was formed.
+  }
 }
 \details{
   The arguments \code{\dots} may be any number of windows.
@@ -32,8 +36,12 @@ venn.tess(\dots, window = NULL)
   excluded. 
 
   If the arguments \code{\dots} are named, then the resulting tiles
-  will also have names, which identify the inclusion/exclusion
+  will also have tile names, which identify the inclusion/exclusion
   combinations defining each tile. See the Examples.
+
+  If \code{labels=TRUE} then the tiles have marks which indicate the
+  inclusion/exclusion combinations defining each tile.
+  See the Examples.
 }
 \value{
   A tessellation (object of class \code{"tess"}).
@@ -52,11 +60,14 @@ venn.tess(\dots, window = NULL)
   and \code{\link[spatstat.core]{rpoislinetess}}.
 }
 \examples{
-   V <- venn.tess(A=square(1),
-                  B=square(c(-0.5, 0.5)),
-                  window=square(c(-1,1.5)))
+   A <- square(1)
+   B <- square(c(-0.5,0.5))
+   W <- square(c(-1, 1.5))
+   V <- venn.tess(A=A, B=B, window=W)
    V
    plot(V, do.labels=TRUE)
+   Vlab <- venn.tess(A=A, B=B, window=W, labels=TRUE)
+   marks(Vlab)
 }
 \keyword{spatial}
 \keyword{math}

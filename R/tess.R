@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.98 $ $Date: 2020/12/19 05:25:06 $
+#   $Revision: 1.99 $ $Date: 2021/03/17 05:33:57 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -867,7 +867,7 @@ intersect.tess <- function(X, Y, ..., keepmarks=FALSE, sep="x") {
   return(out)
 }
 
-venn.tess <- function(..., window=NULL) {
+venn.tess <- function(..., window=NULL, labels=FALSE) {
   argh <- list(...)
   nargh <- length(argh)
   if(nargh == 0) stop("No arguments given")
@@ -885,9 +885,11 @@ venn.tess <- function(..., window=NULL) {
       Z <- list(A, Out=setminus.owin(W, A))
       names(Z) <- paste0(c("", "not"), nama[i])
       A <- tess(tiles=Z, window=W)
+      if(labels) marks(A) <- c(TRUE, FALSE)
     }
-    Y <- if(i == 1) A else intersect.tess(Y, A)
+    Y <- if(i == 1) A else intersect.tess(Y, A, keepmarks=labels)
   }
+  if(labels) colnames(marks(Y)) <- nama
   return(Y)
 }
 

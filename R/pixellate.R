@@ -1,7 +1,7 @@
 #
 #           pixellate.R
 #
-#           $Revision: 1.27 $    $Date: 2021/01/07 01:15:08 $
+#           $Revision: 1.28 $    $Date: 2021/03/16 01:19:22 $
 #
 #     pixellate            convert an object to a pixel image
 #
@@ -50,10 +50,9 @@ pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE,
     weights <- if(k == 1) as.vector(weights) else as.data.frame(weights)
   } else {
     k <- 1
-    if(length(weights) == 0) weights <- NULL else 
-      stopifnot(length(weights) == npoints(x) || length(weights) == 1)
-    if(length(weights) == 1)
-      weights <- rep(weights, npoints(x))
+    nw <- length(weights)
+    if(nw == 0) weights <- NULL else check.nvector(weights, nx, oneok=TRUE)
+    if(nw == 1) weights <- rep(weights, nx)
   }
 
   # handle empty point pattern
