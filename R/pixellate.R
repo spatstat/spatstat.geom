@@ -1,7 +1,7 @@
 #
 #           pixellate.R
 #
-#           $Revision: 1.28 $    $Date: 2021/03/16 01:19:22 $
+#           $Revision: 1.29 $    $Date: 2021/03/19 00:55:56 $
 #
 #     pixellate            convert an object to a pixel image
 #
@@ -51,7 +51,8 @@ pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE,
   } else {
     k <- 1
     nw <- length(weights)
-    if(nw == 0) weights <- NULL else check.nvector(weights, nx, oneok=TRUE)
+    if(nw == 0) weights <- NULL else check.nvector(weights, nx,
+                                                   oneok=TRUE, naok=TRUE)
     if(nw == 1) weights <- rep(weights, nx)
   }
 
