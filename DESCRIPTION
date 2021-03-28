@@ -1,6 +1,6 @@
 Package: spatstat.geom
-Version: 2.0-1
-Date: 2021-03-19
+Version: 2.0-1.001
+Date: 2021-03-28
 Title: Geometrical Functionality of the 'spatstat' Family 
 Authors@R: c(person("Adrian", "Baddeley", 
                     role = c("aut", "cre"),
@@ -36,7 +36,6 @@ Description: Defines types of spatial data such as point patterns,
 	     the separate package 'spatstat.linnet'.
 License: GPL (>= 2)
 URL: http://spatstat.org/
-LazyData: true
 NeedsCompilation: yes
 ByteCompile: true
 BugReports: https://github.com/spatstat/spatstat.geom/issues
