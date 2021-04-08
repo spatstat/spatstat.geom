@@ -6,28 +6,41 @@
 \description{
   Given a point pattern, discretise its window by converting it to a
   binary pixel mask, adjusting the mask so that it still contains all
-  the points.
+  the points. Optionally discretise the point locations as well,
+  by moving them to the nearest pixel centres.
 }
 \usage{
-  discretise(X, eps = NULL, dimyx = NULL, xy = NULL)
+  discretise(X, eps = NULL, dimyx = NULL, xy = NULL, move.points=FALSE)
 }
 \arguments{
   \item{X}{A point pattern (object of class \code{"ppp"}) to be converted.}
   \item{eps}{(optional) width and height of each pixel}
   \item{dimyx}{(optional) pixel array dimensions}
   \item{xy}{(optional) pixel coordinates}
+  \item{move.points}{Logical value specifying whether the points should
+    also be discretised by moving each point to the nearest pixel centre.}
 }
 \details{
   This function modifies the point pattern \code{X} by converting its
   observation window \code{Window(X)} to a binary pixel image (a window
   of type \code{"mask"}). It ensures that no points of \code{X} are
   deleted by the discretisation.
+  If \code{move.points=TRUE}, the point coordinates are also discretised.
 
-  The window is first discretised using \code{\link{as.mask}}. 
-  It can happen that points of \code{X} that were inside the original
-  window may fall outside the new mask.
-  The \code{discretise} function corrects this by augmenting the mask
-  (so that the mask includes any pixel that contains a point of the pattern).
+  The window is first discretised using \code{\link{as.mask}}.
+  Next,
+  \itemize{
+    \item If \code{move.points=TRUE}, each point of \code{X}
+    is moved to the centre of the nearest pixel inside the
+    discretised window.
+    \item If \code{move.points=FALSE} (the default),
+    the point coordinates are unchanged.
+    It can happen that points of \code{X} that were inside the original
+    window may fall outside the new mask.
+    The \code{discretise} function corrects this by augmenting the mask
+    (so that the mask includes any pixel that contains a point of the
+    pattern).
+  }
 
   The arguments \code{eps}, \code{dimyx} and \code{xy}
   control the fineness of the pixel array. They are passed to
@@ -52,16 +65,11 @@
   These will cause an error.
 }
 \value{
-  A point pattern (object of class \code{"ppp"}),
-  identical to \code{X}, except that
-  its observation window has been converted to one
-  of type \code{mask}. 
+  A point pattern (object of class \code{"ppp"}).
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \seealso{
   \code{\link{as.mask}}

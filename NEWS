@@ -1,3 +1,28 @@
+        CHANGES IN spatstat.geom VERSION 2.0-1.002
+
+OVERVIEW
+
+    o Extension to 'discretise'.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o discretise
+    New argument 'move.points' determines whether the point coordinates
+    are also discretised.
+
+
+        CHANGES IN spatstat.geom VERSION 2.0-1
+
+OVERVIEW
+
+    o Minor bug fix
+
+BUG FIXES
+
+    o pixellate.ppp
+    crashed if 'weights' contained any NA values.
+    Fixed.
+    
         CHANGES IN spatstat.geom VERSION 2.0-0
 
 OVERVIEW
