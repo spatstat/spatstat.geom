@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.191 $	$Date: 2021/04/07 03:24:20 $
+#	$Revision: 4.192 $	$Date: 2021/04/09 08:36:59 $
 #
 #
 #	A window may be either
@@ -1179,21 +1179,30 @@ as.data.frame.owin <- function(x, ..., drop=TRUE) {
   return(df)
 }
 
-discretise <- function(X,eps=NULL,dimyx=NULL,xy=NULL, move.points=FALSE) {
+discretise <- function(X, eps=NULL, dimyx=NULL, xy=NULL, move.points=FALSE) {
   verifyclass(X,"ppp")
   W <- X$window
   ok <- inside.owin(X$x,X$y,W)
   if(!all(ok))
     stop("There are points of X outside the window of X")
-  oldmask <- is.mask(W) && is.null(eps) && is.null(dimyx) && is.null(xy)
-  WM <- if(oldmask) W else as.mask(W,eps=eps,dimyx=dimyx,xy=xy)
+  new.grid <- !is.null(eps) || !is.null(dimyx) || !is.null(xy)
+  new.mask <- new.grid || !is.mask(W) 
+  WM <- if(new.mask) as.mask(W,eps=eps,dimyx=dimyx,xy=xy) else W
   if(move.points) {
     ## move points to pixel centres 
-    if(!oldmask) X$window <- WM
-    indices <- nearest.valid.pixel(X$x, X$y, WM, nsearch=2)
-    coords(X) <- list(x=WM$xcol[indices$col],
-                      y=WM$yrow[indices$row])
-  } else if(!oldmask) {
+    if(new.mask) X$window <- WM
+    indices <- as.data.frame(nearest.valid.pixel(X$x, X$y, WM, nsearch=2))
+    xnew <- WM$xcol[indices$col]
+    ynew <- WM$yrow[indices$yrow]
+    ## insurance:
+    if(any(notfound <- !complete.cases(indices))) {
+      XP <- project2set(X[notfound], WM)
+      xnew[notfound] <- XP$x
+      ynew[notfound] <- XP$y
+    }
+    X$x <- xnew
+    X$y <- ynew
+  } else if(new.mask) {
     ## ensure points are inside new window
     nok <- !inside.owin(X$x,X$y,WM)
     if(any(nok)) {
