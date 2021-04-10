@@ -1193,7 +1193,7 @@ discretise <- function(X, eps=NULL, dimyx=NULL, xy=NULL, move.points=FALSE) {
     if(new.mask) X$window <- WM
     indices <- as.data.frame(nearest.valid.pixel(X$x, X$y, WM, nsearch=2))
     xnew <- WM$xcol[indices$col]
-    ynew <- WM$yrow[indices$yrow]
+    ynew <- WM$yrow[indices$row]
     ## insurance:
     if(any(notfound <- !complete.cases(indices))) {
       XP <- project2set(X[notfound], WM)
