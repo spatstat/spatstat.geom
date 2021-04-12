@@ -25,7 +25,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2013
   Licence: GPL >= 2
 
-  $Revision: 1.10 $  $Date: 2013/12/10 03:29:55 $
+  $Revision: 1.11 $  $Date: 2021/04/12 07:33:03 $
 
 
 */
@@ -71,7 +71,7 @@ void FNAME(n1, x1, y1, id1,
   if(npoints1 == 0 || npoints2 == 0)
     return;
 
-  lastjwhich = 0;
+  lastjwhich = 0; /* remains unchanged if EXCLUDE is defined */
 
   /* 
      create space to store the nearest neighbour distances and indices
@@ -115,7 +115,7 @@ void FNAME(n1, x1, y1, id1,
       Rprintf("i=%d : (%lf, %lf) ..................... \n", i, x1i, y1i);
 #endif
 
-      if(lastjwhich < npoints2) {
+      if(lastjwhich < npoints2) { /* always true if EXCLUDE is defined */
 #ifdef TRACER
 	Rprintf("\tForward search from lastjwhich=%d:\n", lastjwhich);
 #endif
@@ -197,7 +197,7 @@ void FNAME(n1, x1, y1, id1,
 	Rprintf("\tEnd forward search\n");
 #endif
       }
-      if(lastjwhich > 0) {
+      if(lastjwhich > 0) { /* always false if EXCLUDE is defined */
 #ifdef TRACER
 	Rprintf("\tBackward search from lastjwhich=%d:\n", lastjwhich);
 #endif
@@ -288,8 +288,10 @@ void FNAME(n1, x1, y1, id1,
 	nnwhich[nk * i + k] = which[k] + 1;  /* R indexing */
 #endif
       }
+#ifndef EXCLUDE      
       /* save index of last neighbour encountered */
       lastjwhich = jwhich;
+#endif      
       /* end of loop over points i */
     }
   }

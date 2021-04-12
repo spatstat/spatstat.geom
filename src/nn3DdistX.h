@@ -24,7 +24,7 @@
    such that
    x1[i], y1[i] and x2[j], y2[j] are the same point iff id1[i] = id2[j].
 
-  $Revision: 1.6 $ $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.7 $ $Date: 2021/04/12 08:15:12 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -56,7 +56,7 @@ void FNAME(n1, x1, y1, z1, id1,
   if(npoints1 == 0 || npoints2 == 0)
     return;
 
-  lastjwhich = 0;
+  lastjwhich = 0;  /* remains unchanged if EXCLUDE is defined */
 
   for(i = 0; i < npoints1; i++) {
     
@@ -72,7 +72,7 @@ void FNAME(n1, x1, y1, z1, id1,
 #endif
 
     /* search backward from previous nearest neighbour */
-    if(lastjwhich > 0) {
+    if(lastjwhich > 0) {  /* always true if EXCLUDE is defined */
       for(j = lastjwhich - 1; j >= 0; --j) {
 	dz = z2[j] - z1i;
 	dz2 = dz * dz;
@@ -96,7 +96,7 @@ void FNAME(n1, x1, y1, z1, id1,
     }
 
     /* search forward from previous nearest neighbour  */
-    if(lastjwhich < npoints2) {
+    if(lastjwhich < npoints2) { /* always false if EXCLUDE is defined */
       for(j = lastjwhich; j < npoints2; ++j) {
 	dz = z2[j] - z1i;
 	dz2 = dz * dz;
@@ -125,6 +125,8 @@ void FNAME(n1, x1, y1, z1, id1,
     /* convert to R indexing */
     nnwhich[i] = jwhich + 1;
 #endif
+#ifndef EXCLUDE    
     lastjwhich = jwhich;
+#endif    
   }
 }

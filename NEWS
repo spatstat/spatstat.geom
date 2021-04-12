@@ -1,15 +1,29 @@
-        CHANGES IN spatstat.geom VERSION 2.0-1.004
+        CHANGES IN spatstat.geom VERSION 2.0-1.005
 
 OVERVIEW
 
+    o We thank Hank Stevens for contributions.
+    
     o Extension to 'discretise'.
 
+    o Bug fix in nncross
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o discretise
     New argument 'move.points' determines whether the point coordinates
     are also discretised.
 
+BUG FIXES
+
+    o nncross.ppp
+    If the argument 'by' was given, some of the results were incorrect.
+    [Spotted by Hank Stevens.]
+    Fixed.
+
+    o nncross.ppp, nncross.pp3
+    If 'iX' and 'iY' were given, some of the results were incorrect.
+    Fixed.
 
         CHANGES IN spatstat.geom VERSION 2.0-1
 

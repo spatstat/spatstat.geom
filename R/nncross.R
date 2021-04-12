@@ -2,7 +2,7 @@
 #   nncross.R
 #
 #
-#    $Revision: 1.32 $  $Date: 2021/01/07 01:15:08 $
+#    $Revision: 1.34 $  $Date: 2021/04/12 07:16:27 $
 #
 #  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2012
 #  Licence: GNU Public Licence >= 2
@@ -122,17 +122,20 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
     if(exclude) iY <- iY[oY]
   }
 
+  #' upper bound on distance
+  dmax <- diameter(boundingbox(as.rectangle(X), as.rectangle(Y)))
+  huge <- 1.1 * dmax
+
+  
   # number of neighbours that are well-defined
   kmaxcalc <- min(nY, kmax)
-  
+
   if(kmaxcalc == 1) {
     # ............... single nearest neighbour ..................
     # call C code
     nndv <- if(want.dist) numeric(nX) else numeric(1)
     nnwh <- if(want.which) integer(nX) else integer(1)
     if(!exclude) iX <- iY <- integer(1)
-
-    huge <- 1.1 * diameter(boundingbox(as.rectangle(X), as.rectangle(Y)))
 
     z <- .C(SG_nnXinterface,
             n1=as.integer(nX),
@@ -151,20 +154,28 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
             huge=as.double(huge),
             PACKAGE="spatstat.geom")
 
-    if(want.which) {
-      nnwcode <- z$nnwhich #sic. C code now increments by 1
-      if(any(uhoh <- (nnwcode == 0))) {
-        warning("NA's produced in nncross()$which")
-        nnwcode[uhoh] <- NA
-      }
+    if(want.which) nnwcode <- z$nnwhich #sic. C code now increments by 1
+    if(want.dist)  nndval  <- z$nnd
+
+    if(want.which && any(uhoh <- (nnwcode == 0))) {
+      if(!exclude)
+        warning("NA's unexpectedly produced in nncross()$which",
+                call.=FALSE)
+      nnwcode[uhoh] <- NA
+      if(want.dist) nndval[uhoh] <- Inf
+    } else if(want.dist && any(uhoh <- (nndval > dmax))) {
+      if(!exclude)
+        warning("Infinite distances unexpectedly returned in nncross",
+                call.=FALSE)
+      nndval[uhoh] <- Inf
     }
-  
+    
     # reinterpret in original ordering
     if(is.sorted.X){
-      if(want.dist) nndv <- z$nnd
+      if(want.dist) nndv <- nndval
       if(want.which) nnwh <- if(is.sorted.Y) nnwcode else oY[nnwcode]
     } else {
-      if(want.dist) nndv[oX] <- z$nnd
+      if(want.dist) nndv[oX] <- nndval
       if(want.which) nnwh[oX] <- if(is.sorted.Y) nnwcode else oY[nnwcode]
     }
 
@@ -177,8 +188,6 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
     nndv <- if(want.dist) numeric(nX * kmaxcalc) else numeric(1)
     nnwh <- if(want.which) integer(nX * kmaxcalc) else integer(1)
     if(!exclude) iX <- iY <- integer(1)
-
-    huge <- 1.1 * diameter(boundingbox(as.rectangle(X), as.rectangle(Y)))
 
     z <- .C(SG_knnXinterface,
             n1=as.integer(nX),
@@ -205,7 +214,9 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
     if(want.which && any(uhoh <- (nnW == 0))) {
       nnW[uhoh] <- NA
       if(want.dist) nnD[uhoh] <- Inf
-    }
+    } else if(want.dist && any(uhoh <- (nnW > dmax)))
+      nnD[uhoh] <- Inf
+    
     # reinterpret indices in original ordering
     if(!is.sorted.Y) nnW <- oY[nnW]
     # reform as matrices

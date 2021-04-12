@@ -24,7 +24,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2012
   Licence: GPL >= 2
 
-  $Revision: 1.5 $  $Date: 2013/09/18 04:49:18 $
+  $Revision: 1.6 $  $Date: 2021/04/12 06:08:53 $
 
 
 */
@@ -45,6 +45,7 @@ void FNAME(n1, x1, y1, id1,
 { 
   int npoints1, npoints2, maxchunk, i, jleft, jright, jwhich, lastjwhich;
   double d2, d2min, x1i, y1i, dx, dy, dy2, hu, hu2;
+  
 #ifdef EXCLUDE
   int id1i;
 #endif
@@ -58,8 +59,8 @@ void FNAME(n1, x1, y1, id1,
   if(npoints1 == 0 || npoints2 == 0)
     return;
 
-  lastjwhich = 0;
-
+  lastjwhich = 0;  /* remains unchanged if EXCLUDE is defined */
+  
   /* loop in chunks of 2^16 */
 
   i = 0; maxchunk = 0; 
@@ -80,7 +81,7 @@ void FNAME(n1, x1, y1, id1,
       id1i = id1[i];
 #endif
 
-      if(lastjwhich < npoints2) {
+      if(lastjwhich < npoints2) {  /* always true if EXCLUDE is defined */
 	/* search forward from previous nearest neighbour  */
 	for(jright = lastjwhich; jright < npoints2; ++jright)
 	  {
@@ -104,7 +105,7 @@ void FNAME(n1, x1, y1, id1,
 	  }
 	/* end forward search */
       }
-      if(lastjwhich > 0) {
+      if(lastjwhich > 0) { /* always false if EXCLUDE is defined */
 	/* search backward from previous nearest neighbour */
 	for(jleft = lastjwhich - 1; jleft >= 0; --jleft)
 	  {
@@ -135,7 +136,11 @@ void FNAME(n1, x1, y1, id1,
 #ifdef WHICH
       nnwhich[i] = jwhich + 1; /* R indexing */
 #endif
+
+#ifndef EXCLUDE
       lastjwhich = jwhich;
+#endif
+      
     }
   }
 }

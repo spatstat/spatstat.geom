@@ -25,7 +25,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2013
   Licence: GPL >= 2
 
-  $Revision: 1.2 $  $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.3 $  $Date: 2021/04/12 08:16:35 $
 
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
@@ -71,7 +71,7 @@ void FNAME(n1, x1, y1, z1, id1,
   if(npoints1 == 0 || npoints2 == 0)
     return;
 
-  lastjwhich = 0;
+  lastjwhich = 0; /* remains unchanged if EXCLUDE is defined */
 
   /* 
      create space to store the nearest neighbour distances and indices
@@ -112,7 +112,7 @@ void FNAME(n1, x1, y1, z1, id1,
       id1i = id1[i];
 #endif
 
-      if(lastjwhich < npoints2) {
+      if(lastjwhich < npoints2) { /* always true if EXCLUDE is defined */
 	/* search forward from previous nearest neighbour  */
 	for(jright = lastjwhich; jright < npoints2; ++jright)
 	  {
@@ -164,7 +164,7 @@ void FNAME(n1, x1, y1, z1, id1,
 	  }
 	/* end forward search */
       }
-      if(lastjwhich > 0) {
+      if(lastjwhich > 0) { /* always false if EXCLUDE is defined */
 	/* search backward from previous nearest neighbour */
 	for(jleft = lastjwhich - 1; jleft >= 0; --jleft)
 	  {
@@ -227,8 +227,10 @@ void FNAME(n1, x1, y1, z1, id1,
 	nnwhich[nk * i + k] = which[k] + 1;  /* R indexing */
 #endif
       }
+#ifndef EXCLUDE      
       /* save index of last neighbour encountered */
       lastjwhich = jwhich;
+#endif      
       /* end of loop over points i */
     }
   }

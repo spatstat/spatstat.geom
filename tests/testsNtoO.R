@@ -22,7 +22,7 @@ cat(paste("--------- Executing",
 #
 # Also test whether minnndist(X) == min(nndist(X))
 #
-#   $Revision: 1.36 $  $Date: 2020/12/04 03:45:59 $
+#   $Revision: 1.37 $  $Date: 2021/04/12 07:59:00 $
 #
 
 
@@ -123,6 +123,29 @@ local({
     truewhich <- t(apply(crossdist(cells,flipcells), 1, order))[,1:4]
     if(any(calcwhich != truewhich))
       stop("nncross(k > 1) gives wrong answer")
+  }
+
+  if(ALWAYS) {
+    ## example from Hank Stevens
+    A <- data.frame(
+          m= c("K", "K", "A1", "A2", "G", "A2", "A3"),
+          x=c(4.85, 6.76, 10.58, 19.18, 15.74, 19.08, 12.27),
+          y=c(5.60, 12.92, 11.14, 17.22, 5.74, 1.24, 2.20),
+         stringsAsFactors=TRUE
+    )
+    X <- with(A, ppp(x, y, marks=m, window=bounding.box.xy(x, y)))
+    suspect <- nncross(X, X[7], iX=1:7, iY=7L)$dist
+    correct <- c(pairdist(X)[1:6, 7], Inf)
+    maxer <- max(abs(suspect[1:6] - correct[1:6]))
+    if(maxer > 0.001)
+      stop("Error in nncross (Inf values) in Hank Stevens example")
+    if(suspect[7] != Inf)
+      stop("Error in nncross (finite values) in Hank Stevens example")
+    M <- as.matrix(minnndist(X, by=marks(X)))
+    M[is.infinite(M)] <- 0
+    maxer <- range(M - t(M))
+    if(maxer > 0.001)
+      stop("Error in minnndist(by) in Hank Stevens example")
   }
 
   if(ALWAYS) {
