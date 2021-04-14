@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.167 $     $Date: 2021/04/14 08:47:52 $
+#      $Revision: 1.168 $     $Date: 2021/04/14 09:35:47 $
 #
 #      The class "im" of raster images
 #
@@ -241,19 +241,22 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
           values <- lookup.im(x, xy$x, xy$y, naok=TRUE)
           out <- im(values, out$xcol, out$yrow, unitname=unitname(out))
         }
+
         inside <- inside.owin(xy$x, xy$y, i)
-        ## set pixels outside window 'i' to NA 
-        out$v[!inside] <- NA
-        ## 
-        if(!drop && !tight) {
-          return(out)
-        } else if(!(rescue && i$type == "rectangle")) {
-          ## drop=TRUE
-          ## return pixel values that are not NA
+
+        if(drop && !(rescue && i$type == "rectangle")) {
+          ## return pixel values (possibly including NA)
           values <- out$v[inside]
-          values <- values[!is.na(values)]
           return(values)
         }
+        ## An image will be returned.
+        
+        ## pixels outside window 'i' have undefined values
+        out$v[!inside] <- NA
+        ## 
+        if(!drop && !tight) 
+          return(out)
+        
         ## Return image in smaller rectangle (possibly an empty image)
         xr <- clip(i$xrange, x$xrange)
         yr <- clip(i$yrange, x$yrange)

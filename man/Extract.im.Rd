@@ -28,10 +28,14 @@
   }
   \item{\dots}{Ignored.}
   \item{drop}{
-    Logical value. 
-    Locations in \code{w} that lie outside the spatial domain of the
-    image \code{x} return a pixel value of \code{NA} if
-    \code{drop=FALSE}, and are omitted if \code{drop=TRUE}.
+    Logical value, specifying whether to return a vector containing
+    the selected pixel values (\code{drop=TRUE}, the default)
+    or to return a pixel image containing
+    these values in their original spatial positions
+    (\code{drop=FALSE}).
+    The exception is that if \code{i} is a point pattern,
+    then \code{drop} specifies whether to delete \code{NA} values.
+    See Details.
   }
   \item{tight}{
     Logical value. If \code{tight=TRUE}, and if the result of the
@@ -72,64 +76,71 @@
     by \code{\link{as.ppp}(i, W=Window(x))},
     and \code{i} is not a matrix.
   }
-    
+
   If \code{i} is a spatial window (an object of class \code{"owin"}),
-  the values of the image inside this window are extracted
-  (after first clipping the window to the spatial domain of the image
-  if necessary).
-
-  If \code{i} is a linear network (object of class \code{"linnet"}),
-  the values of the image on this network are extracted.
-
+  the pixels inside this window are selected. 
+  \itemize{
+      \item
+      If \code{drop=TRUE} (the default) and either
+      \code{is.rectangle(i)=FALSE} or \code{rescue=FALSE},
+      the pixel values are extracted;
+      the result is a vector, with one entry for each pixel of \code{x}
+      that lies inside the window \code{i}.
+      Pixel values may be \code{NA}, indicating that the selected pixel
+      lies outside the spatial domain of the image.
+      \item
+      if \code{drop=FALSE},
+      the result is another pixel image, obtained by setting 
+      the pixel values to \code{NA} outside the window \code{i}.
+      The effect is that the pixel image \code{x} is clipped to the
+      window \code{i}.
+      \item 
+      if \code{i} is a rectangle and \code{rescue=TRUE},
+      the result is a pixel image as described above.
+      \item
+      To ensure that an image is produced in all circumstances,
+      set \code{drop=FALSE}.
+      To ensure that pixel values are extracted as a vector
+      in all circumstances, set \code{drop=TRUE, rescue=FALSE}.
+  }
   If \code{i} is a pixel image with logical values,
   it is interpreted as a spatial window (with \code{TRUE} values
   inside the window and \code{FALSE} outside).
 
-  If \code{i} is a point pattern (an object of class
-  \code{"ppp"}), then the values of the pixel image at the points of
-  this pattern are extracted. This is a simple way to read the
-  pixel values at a given spatial location.
-
-  At locations outside the spatial domain of the image, the pixel
-  value is undefined, and is taken to be \code{NA}.  The logical
-  argument \code{drop} determines whether such \code{NA} values
-  will be returned or omitted.  It also influences the format of
-  the return value.
-
-  If \code{i} is a point pattern (or something that can be converted
-  to a point pattern), then \code{X[i, drop=FALSE]} is a numeric
-  vector containing the pixel values at each of the points of
-  the pattern.  Its length is equal to the number of points in the
-  pattern \code{i}.  It may contain \code{NA}s corresponding to
-  points which lie outside the spatial domain of the image \code{x}.
-  By contrast, \code{X[i]} or \code{X[i, drop=TRUE]} contains only
-  those pixel values which are not \code{NA}. It may be shorter.
-
-  If \code{i} is a spatial window then \code{X[i, drop=FALSE]} is
-  another pixel image of the same dimensions as \code{X} obtained
-  by setting all pixels outside the window \code{i} to have value
-  \code{NA}. When the result is displayed by \code{\link{plot.im}}
-  the effect is that the pixel image \code{x} is clipped to the
-  window \code{i}.
-
-  If \code{i} is a linear network (object of class \code{"linnet"})
-  then \code{X[i, drop=FALSE]} is another pixel image of the same
-  dimensions as \code{X} obtained by restricting the pixel image
-  \code{X} to the linear network. The result also belongs to the
-  class \code{"linim"} (pixel image on a linear network). 
-
-  If \code{i} is a spatial window then \code{X[i, drop=TRUE]}
-  is either:
+  If \code{i} is a linear network (object of class \code{"linnet"}),
+  the pixels which lie on this network are selected.
   \itemize{
-    \item a numeric vector containing the pixel values for all pixels
-          that lie inside the window \code{i}.
-          This happens if \code{i} is \emph{not} a rectangle
-          (i.e. \code{i$type != "rectangle"})
-          or if \code{rescue=FALSE}.
-    \item  a pixel image.
-          This happens only if
-          \code{i} is a rectangle (\code{i$type = "rectangle"})
-          and \code{rescue=TRUE} (the default).
+      \item 
+      If \code{drop=TRUE} (the default),
+      the pixel values are extracted;
+      the result is a vector, with one entry for each pixel of \code{x}
+      that lies along the network \code{i}.
+      Pixel values may be \code{NA}, indicating that the selected pixel
+      lies outside the spatial domain of the image.
+      \item
+      if \code{drop=FALSE},
+      the result is a pixel image on a linear network (object of
+      class \code{"linim"}), obtained by setting the pixel values of
+      \code{x} to \code{NA} except for those which lie on the network \code{i}.
+      The effect is that the pixel image \code{x} is restricted to the
+      network \code{i}.
+  }
+
+  If \code{i} is a point pattern (an object of class
+  \code{"ppp"}) or something that can be converted to a point pattern,
+  then the values of the pixel image at the points of
+  this pattern are extracted.
+  The result is a vector of pixel values.
+  This is a simple way to read the
+  pixel values at a given spatial location. 
+  \itemize{
+    \item if \code{drop=FALSE} the length of the result 
+    is equal to the number of points in the pattern. It may contain
+    \code{NA} values which indicate that the corresponding point
+    lies outside the spatial domain of the image.
+    \item if \code{drop=TRUE} (the default), \code{NA} values are
+    deleted. The result is a vector whose length may be shorter than
+    the number of points of the pattern.
   }
 
   If the optional argument \code{raster} is given, then it should
