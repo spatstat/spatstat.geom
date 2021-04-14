@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.0-1.005
+        CHANGES IN spatstat.geom VERSION 2.0-1.007
 
 OVERVIEW
 
@@ -7,6 +7,8 @@ OVERVIEW
     o Extension to 'discretise'.
 
     o Bug fix in nncross
+
+    o Minor improvements and bug fixes
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -14,6 +16,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New argument 'move.points' determines whether the point coordinates
     are also discretised.
 
+    o summary.im
+    Output improved when the image is empty (i.e. when all pixel values
+    are undefined).
+    
 BUG FIXES
 
     o nncross.ppp
@@ -25,6 +31,11 @@ BUG FIXES
     If 'iX' and 'iY' were given, some of the results were incorrect.
     Fixed.
 
+    o [.im
+    Ignored argument 'drop' (and returned a numeric vector of length zero)
+    when 'i' was a window that did not overlap the window of x.
+    Fixed.
+    
         CHANGES IN spatstat.geom VERSION 2.0-1
 
 OVERVIEW

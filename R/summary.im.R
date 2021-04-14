@@ -21,48 +21,52 @@ summary.im <- function(object, ...) {
   v <- x$v
   inside <- !is.na(v)
   v <- v[inside]
+  empty <- !any(inside)
 
   # type of values?
   y$type <- x$type
-  
-  # factor-valued?
-  lev <- levels(x)
-  if(!is.null(lev) && !is.factor(v))
-    v <- factor(v, levels=seq_along(lev), labels=lev)
 
-  switch(x$type,
-         integer=,
-         real={
-           y$mean <- mv <- mean(v)
-           y$integral <- mv * length(v) * pixelarea
-           y$range <- ra <- range(v)
-           y$min <- ra[1]  
-           y$max <- ra[2]
-         },
-         factor={
-           y$levels <- lev
-           y$table <- table(v, dnn="")
-         },
-         complex={
-           y$mean <- mv <- mean(v)
-           y$integral <- mv * length(v) * pixelarea
-           rr <- range(Re(v))
-           y$Re <- list(range=rr, min=rr[1], max=rr[2])
-           ri <- range(Im(v))
-           y$Im <- list(range=ri, min=ri[1], max=ri[2])
-         },
-         {
-           # another unknown type
-           pixelvalues <- v
-           y$summary <- summary(pixelvalues)
-         })
-    
-  # summarise pixel raster
+  if(!empty) {
+    #' factor-valued?
+    lev <- levels(x)
+    if(!is.null(lev) && !is.factor(v))
+      v <- factor(v, levels=seq_along(lev), labels=lev)
+
+    switch(x$type,
+           integer=,
+           real={
+             y$mean <- mv <- mean(v)
+             y$integral <- mv * length(v) * pixelarea
+             y$range <- ra <- range(v)
+             y$min <- ra[1]  
+             y$max <- ra[2]
+           },
+           factor={
+             y$levels <- lev
+             y$table <- table(v, dnn="")
+           },
+           complex={
+             y$mean <- mv <- mean(v)
+             y$integral <- mv * length(v) * pixelarea
+             rr <- range(Re(v))
+             y$Re <- list(range=rr, min=rr[1], max=rr[2])
+             ri <- range(Im(v))
+             y$Im <- list(range=ri, min=ri[1], max=ri[2])
+           },
+           {
+             #' another unknown type
+             pixelvalues <- v
+             y$summary <- summary(pixelvalues)
+           })
+  }
+  
+  #' summarise pixel raster
   win <- as.owin(x)
   y$window <- summary.owin(win)
 
-  y$fullgrid <- (rescue.rectangle(win)$type == "rectangle")
-
+  y$empty <- empty
+  y$fullgrid <- !empty && (rescue.rectangle(win)$type == "rectangle")
+  
   y$units <- unitname(x)
   
   class(y) <- "summary.im"
@@ -90,12 +94,16 @@ print.summary.im <- function(x, ...) {
   if(!is.null(explain <- unitinfo$explain))
     splat(explain)
   fullgrid <- x$fullgrid
+  empty <- x$empty
   if(fullgrid) {
     splat("Image is defined on the full rectangular grid")
     whatpart <- "Frame"
-  } else {
+  } else if(!empty) {
     splat("Image is defined on a subset of the rectangular grid")
     whatpart <- "Subset"
+  } else {
+    splat("Image is empty (all pixel values are undefined)")
+    return(invisible(NULL))
   }
   splat(whatpart, "area =", win$area, "square", pluralunits)
   if(!fullgrid) {

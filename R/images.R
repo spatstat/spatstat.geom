@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.164 $     $Date: 2021/01/07 01:15:08 $
+#      $Revision: 1.167 $     $Date: 2021/04/14 08:47:52 $
 #
 #      The class "im" of raster images
 #
@@ -213,6 +213,12 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
         ##                 as an image (if 'i' is a rectangle)
         ##                 or as a vector (otherwise)
 
+        disjoint.frames <-
+          disjoint(i$xrange, x$xrange) || disjoint(i$yrange, x$yrange)
+        
+        if(disjoint.frames && drop) 
+          return(numeric(0))
+        
         ## determine pixel raster for output
         if(!is.null(raster)) {
           out <- as.im(raster)
@@ -236,37 +242,50 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
           out <- im(values, out$xcol, out$yrow, unitname=unitname(out))
         }
         inside <- inside.owin(xy$x, xy$y, i)
-        if(!drop) {
-          ## set other pixels to NA and return image
-          out$v[!inside] <- NA
-          if(!tight)
-            return(out)
+        ## set pixels outside window 'i' to NA 
+        out$v[!inside] <- NA
+        ## 
+        if(!drop && !tight) {
+          return(out)
         } else if(!(rescue && i$type == "rectangle")) {
-          ## return pixel values
+          ## drop=TRUE
+          ## return pixel values that are not NA
           values <- out$v[inside]
+          values <- values[!is.na(values)]
           return(values)
         }
-        ## return image in smaller rectangle
-        if(disjoint(i$xrange, x$xrange) || disjoint(i$yrange, x$yrange))
-          ## empty intersection
-          return(numeric(0))
+        ## Return image in smaller rectangle (possibly an empty image)
         xr <- clip(i$xrange, x$xrange)
         yr <- clip(i$yrange, x$yrange)
         colsub <- inrange(out$xcol, xr)
         rowsub <- inrange(out$yrow, yr)
         ncolsub <- sum(colsub)
         nrowsub <- sum(rowsub)
-        if(ncolsub == 0 || nrowsub == 0)
-          return(numeric(0))
-        marg <- list(mat=out$v[rowsub, colsub, drop=FALSE],
-                     unitname=unitname(x))
-        xarg <-
-          if(ncolsub > 1) list(xcol = out$xcol[colsub]) else list(xrange=xr)
-        yarg <-
-          if(nrowsub > 1) list(yrow = out$yrow[rowsub]) else list(yrange=yr)
-        result <- do.call(im, c(marg, xarg, yarg))
+        if(ncolsub > 1) {
+          xcolsub <- out$xcol[colsub]
+        } else {
+          xcolsub <- mean(xr)
+          if(diff(xr) == 0) xr <- c(-1,1) * out$xstep/2
+        }
+        if(nrowsub > 1) {
+          yrowsub <- out$yrow[rowsub]
+        } else {
+          yrowsub <- mean(yr)
+          if(diff(yr) == 0) yr <- c(-1,1) * out$ystep/2
+        }
+        if(ncolsub == 0 || nrowsub == 0) {
+          ## intersection of grids is empty
+          mat <- matrix(RelevantNA(x$v), max(nrowsub, 1L), max(ncolsub, 1L))
+        } else {
+          mat <- out$v[rowsub, colsub, drop=FALSE]
+        }
+        result <- im(mat,
+                     xcol=xcolsub, xrange=xr,
+                     yrow=yrowsub, yrange=yr,
+                     unitname = unitname(x))
         return(result)
       }
+
       if(verifyclass(i, "im", fatal=FALSE)) {
         if(jtype == "given")
           warning("Argument j ignored")
@@ -1072,7 +1091,7 @@ integral.im <- function(f, domain=NULL, ...) {
     names(a) <- tilenames(domain)
     return(a)
   }
-  if(!is.null(domain)) 
+  if(!is.null(domain))
     f <- f[domain, drop=FALSE, tight=TRUE]
   a <- with(f, sum(v, na.rm=TRUE) * xstep * ystep)
   return(a)

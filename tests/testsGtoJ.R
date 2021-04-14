@@ -69,7 +69,7 @@ local({
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.31 $   $Date: 2020/11/02 07:03:26 $
+#   $Revision: 1.32 $   $Date: 2021/04/14 08:57:21 $
 #
 
 

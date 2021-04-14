@@ -1,6 +1,6 @@
 Package: spatstat.geom
-Version: 2.0-1.005
-Date: 2021-04-12
+Version: 2.0-1.007
+Date: 2021-04-14
 Title: Geometrical Functionality of the 'spatstat' Family 
 Authors@R: c(person("Adrian", "Baddeley", 
                     role = c("aut", "cre"),
@@ -11,18 +11,13 @@ Authors@R: c(person("Adrian", "Baddeley",
 	     person("Ege",   "Rubak", 
                     role = "aut",
 		    email = "rubak@math.aau.dk"),
-	     person("Tilman", "Davies",
-	            role = "ctb"),
-	     person("Ute", "Hahn",
-	            role = "ctb"),
-	     person("Abdollah", "Jalilian", 
-	            role = "ctb"),
-	     person("Suman", "Rakshit",
-	            role = "ctb"),
-	     person("Dominic", "Schuhmacher",
-	            role = "ctb"),
-	     person("Rasmus", "Plenge Waagepetersen",
-	            role = "ctb"))
+	     person("Tilman",    "Davies",        role = "ctb"),
+	     person("Ute",       "Hahn",          role = "ctb"),
+	     person("Abdollah",  "Jalilian",      role = "ctb"),
+ 	     person("Sebastian", "Meyer",         role = "ctb"),
+	     person("Suman",     "Rakshit",       role = "ctb"),
+	     person("Dominic",   "Schuhmacher",   role = "ctb"),
+	     person("Rasmus",    "Waagepetersen", role = "ctb"))
 Maintainer: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>
 Depends: R (>= 3.5.0), spatstat.data (>= 2.0), stats, graphics, grDevices, utils, methods
 Imports: spatstat.utils (>= 2.1-0), deldir (>= 0.0-21), polyclip (>= 1.10-0)
