@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.0-1.007
+        CHANGES IN spatstat.geom VERSION 2.1-0
 
 OVERVIEW
 
@@ -31,11 +31,6 @@ BUG FIXES
     If 'iX' and 'iY' were given, some of the results were incorrect.
     Fixed.
 
-    o [.im
-    Ignored argument 'drop' (and returned a numeric vector of length zero)
-    when 'i' was a window that did not overlap the window of x.
-    Fixed.
-    
         CHANGES IN spatstat.geom VERSION 2.0-1
 
 OVERVIEW
