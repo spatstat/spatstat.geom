@@ -1,5 +1,9 @@
 # spatstat.geom
 
+## Spatial data classes and geometrical functionality for the spatstat family
+
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.geom)](http://cran.r-project.org/web/packages/spatstat.geom) 
+
 The original `spatstat` package has been split into
 several sub-packages.
 
