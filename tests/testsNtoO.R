@@ -125,7 +125,7 @@ local({
       stop("nncross(k > 1) gives wrong answer")
   }
 
-  if(ALWAYS) {
+  if(FULLTEST) {
     ## example from Hank Stevens
     A <- data.frame(
           m= c("K", "K", "A1", "A2", "G", "A2", "A3"),
@@ -158,7 +158,9 @@ local({
     Ndw <- nncross(X,Y, iX, iY, k=3)
     Nw  <- nncross(X,Y, iX, iY, k=3, what="which")
     Nd  <- nncross(X,Y, iX, iY, k=3, what="dist")
+  }
 
+  if(FULLTEST) {
     ## special cases
     nndist(X[FALSE])
     nndist(X[1])
@@ -179,7 +181,7 @@ local({
   if(ALWAYS) {
     rthree <- function(n) { pp3(runif(n), runif(n), runif(n), box3(c(0,1))) }
     ## X <- runifpoint3(42)
-    X <- rthree(42)
+    X <- rthree(24)
     nn <- nndist(X)
     nnP <- f(pairdist(X), 1)
     if(any(abs(nn - nnP) > eps))
@@ -216,6 +218,9 @@ local({
     a2 <- nncross(X,Y, what="which", k=2)
     if(any(a2 != gg(DXY, 2)))
       stop("incorrect result from nncross.pp3(k=2, what='which')")
+  }
+
+  if(FULLTEST) {
     iX <- 1:42
     iZ <- 30:42
     Z <- X[iZ]

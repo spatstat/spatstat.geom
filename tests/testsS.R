@@ -285,14 +285,14 @@ local({
 #
 #  Thanks to Marcelino de la Cruz
 #
-#  $Revision: 1.15 $  $Date: 2020/12/04 04:02:22 $
+#  $Revision: 1.17 $  $Date: 2021/04/15 06:19:51 $
 #
 
 local({
   W <- square(8)
   X <- ppp(c(2.98, 4.58, 7.27, 1.61, 7.19),
            c(7.56, 5.29, 5.03, 0.49, 1.65),
-           window=W)
+           window=W, check=FALSE)
   Z <- quadrats(W, 4, 4)
   Yall <- split(X, Z, drop=FALSE)
   Ydrop <- split(X, Z, drop=TRUE)
@@ -316,7 +316,7 @@ local({
   if(FULLTEST) {
     ## other bugs/ code blocks in split.ppp, split<-.ppp, [<-.splitppp
     flog <- rep(c(TRUE,FALSE), 21)
-    fimg <- as.im(dirichlet(runifrect(5, Window(cells))))
+    fimg <- as.im(dirichlet(runifrect(5, Window(cells))), dimyx=32)
     A <- split(cells, flog)
     B <- split(cells, square(0.5))
     D <- split(cells, fimg)
