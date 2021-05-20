@@ -1,10 +1,17 @@
-        CHANGES IN spatstat.geom VERSION 2.1-0.001
+        CHANGES IN spatstat.geom VERSION 2.1-0.002
 
 OVERVIEW
 
-    o Nothing yet.
+    o We thank Warick Brown for contributions.
     
-        CHANGES IN spatstat.geom VERSION 2.1-0
+    o New options for distmap.psp
+    
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o distmap.psp
+    New arguments 'extras' and 'clip' 
+
+CHANGES IN spatstat.geom VERSION 2.1-0
 
 OVERVIEW
 

@@ -22,7 +22,7 @@ cat(paste("--------- Executing",
 #
 # Also test whether minnndist(X) == min(nndist(X))
 #
-#   $Revision: 1.37 $  $Date: 2021/04/12 07:59:00 $
+#   $Revision: 1.39 $  $Date: 2021/05/20 09:31:23 $
 #
 
 
@@ -143,7 +143,7 @@ local({
       stop("Error in nncross (finite values) in Hank Stevens example")
     M <- as.matrix(minnndist(X, by=marks(X)))
     M[is.infinite(M)] <- 0
-    maxer <- range(M - t(M))
+    maxer <- max(abs(M - t(M)))
     if(maxer > 0.001)
       stop("Error in minnndist(by) in Hank Stevens example")
   }
@@ -180,8 +180,8 @@ local({
 
   if(ALWAYS) {
     rthree <- function(n) { pp3(runif(n), runif(n), runif(n), box3(c(0,1))) }
-    ## X <- runifpoint3(42)
-    X <- rthree(24)
+    XX <- rthree(42)
+    X <- XX[1:20]
     nn <- nndist(X)
     nnP <- f(pairdist(X), 1)
     if(any(abs(nn - nnP) > eps))
@@ -221,6 +221,7 @@ local({
   }
 
   if(FULLTEST) {
+    X <- XX
     iX <- 1:42
     iZ <- 30:42
     Z <- X[iZ]

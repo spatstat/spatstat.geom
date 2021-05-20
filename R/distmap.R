@@ -2,7 +2,7 @@
 #
 #      distmap.R
 #
-#      $Revision: 1.24 $     $Date: 2021/01/07 01:15:08 $
+#      $Revision: 1.26 $     $Date: 2021/05/20 09:08:15 $
 #
 #
 #     Distance transforms
@@ -99,23 +99,32 @@ distmap.owin <- function(X, ..., discretise=FALSE, invert=FALSE) {
   return(Dist)
 }
 
-distmap.psp <- function(X, ...) {
+distmap.psp <- function(X, ..., extras=TRUE, clip=FALSE) {
   verifyclass(X, "psp")
-  W <- as.mask(Window(X), ...)
+  W <- Window(X)
   uni <- unitname(W)
-  rxy <- rasterxy.mask(W)
+  M <- as.mask(W, ...)
+  rxy <- rasterxy.mask(M)
   xp <- rxy$x
   yp <- rxy$y
   E <- X$ends
   big <- 2 * diameter(Frame(W))^2
-  z <- NNdist2segments(xp, yp, E$x0, E$y0, E$x1, E$y1, big)
-  xc <- W$xcol
-  yr <- W$yrow
-  Dist <- im(array(sqrt(z$dist2), dim=W$dim), xc, yr, unitname=uni)
-  Indx <- im(array(z$index, dim=W$dim), xc, yr, unitname=uni)
-  Bdry <- im(bdist.pixels(W, style="matrix"), xc, yr, unitname=uni)
-  attr(Dist, "index") <- Indx
-  attr(Dist, "bdry")  <- Bdry
+  z <- NNdist2segments(xp, yp, E$x0, E$y0, E$x1, E$y1, big, wantindex=extras)
+  xc <- M$xcol
+  yr <- M$yrow
+  Dist <- im(array(sqrt(z$dist2), dim=M$dim), xc, yr, unitname=uni)
+  if(clip <- clip && !is.rectangle(W))
+    Dist <- Dist[M, drop=FALSE]
+  if(extras) {
+    Indx <- im(array(z$index, dim=M$dim), xc, yr, unitname=uni)
+    Bdry <- im(bdist.pixels(M, style="matrix"), xc, yr, unitname=uni)
+    if(clip) {
+       Indx <- Indx[M, drop=FALSE]
+       Bdry <- Bdry[M, drop=FALSE]
+    }
+    attr(Dist, "index") <- Indx
+    attr(Dist, "bdry")  <- Bdry
+  }
   return(Dist)
 }
 
