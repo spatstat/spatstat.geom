@@ -1,10 +1,15 @@
-        CHANGES IN spatstat.geom VERSION 2.1-0.002
+        CHANGES IN spatstat.geom VERSION 2.1-0.003
 
 OVERVIEW
 
     o We thank Warick Brown for contributions.
     
     o New options for distmap.psp
+
+NEW FUNCTIONS
+
+    o bufftess
+    Distance buffer tessellation
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

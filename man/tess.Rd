@@ -113,7 +113,8 @@
   \code{\link{dirichlet}}, \code{\link{delaunay}},
   \code{\link{venn.tess}},
   \code{\link{polartess}},
-  \code{\link{quantess}}
+  \code{\link{quantess}},
+  \code{\link{bufftess}}
   and \code{\link[spatstat.core]{rpoislinetess}}.
 }
 \value{

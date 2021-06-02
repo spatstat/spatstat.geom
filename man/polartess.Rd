@@ -94,7 +94,9 @@ polartess(W, \dots, nradial = NULL, nangular = NULL,
   \code{\link{tess}},
   \code{\link{quadrats}}, \code{\link{hextess}},
   \code{\link{venn.tess}},
-  \code{\link{dirichlet}}, \code{\link{delaunay}}, \code{\link{quantess}}
+  \code{\link{dirichlet}}, \code{\link{delaunay}},
+  \code{\link{quantess}},
+  \code{\link{bufftess}}
   and \code{\link[spatstat.core]{rpoislinetess}}.
   
 }

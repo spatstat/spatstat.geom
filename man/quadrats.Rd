@@ -85,14 +85,13 @@ quadrats(X, nx = 5, ny = nx, xbreaks = NULL, ybreaks = NULL, keepempty=FALSE)
   \code{\link{venn.tess}},
   \code{\link{polartess}},
   \code{\link{dirichlet}}, \code{\link{delaunay}},
-  \code{\link[spatstat.core]{rpoislinetess}} and \code{\link{quantess}}.
-
+  \code{\link{quantess}}, \code{\link{bufftess}}
+  and 
+  \code{\link[spatstat.core]{rpoislinetess}}.
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{utilities}
 \keyword{datagen}
