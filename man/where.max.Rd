@@ -14,7 +14,8 @@
 }
 \arguments{
   \item{x}{
-    A pixel image (object of class \code{"im"}).
+    A pixel image (object of class \code{"im"})
+    or data that can be converted to a pixel image by \code{\link{as.im}}.
   }
   \item{first}{
     Logical value. If \code{TRUE} (the default), then only one location

@@ -1,3 +1,20 @@
+        CHANGES IN spatstat.geom VERSION 2.2-0.001
+
+OVERVIEW
+
+    o Minor improvements.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o where.max, where.min
+    Argument 'x' may be either a pixel image (class 'im')
+    or data that can be converted to a pixel image by 'as.im'.
+
+BUGS
+
+    o None!
+
+
         CHANGES IN spatstat.geom VERSION 2.2-0
 
 OVERVIEW
@@ -18,7 +35,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o distmap.psp
     New arguments 'extras' and 'clip' 
 
-CHANGES IN spatstat.geom VERSION 2.1-0
+         CHANGES IN spatstat.geom VERSION 2.1-0
 
 OVERVIEW
 

@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.168 $     $Date: 2021/04/14 09:35:47 $
+#      $Revision: 1.169 $     $Date: 2021/06/23 02:19:29 $
 #
 #      The class "im" of raster images
 #
@@ -945,7 +945,7 @@ median.im <- if("..." %in% names(formals(median))) {
 }
 
 where.max <- function(x, first=TRUE) {
-  stopifnot(is.im(x))
+  x <- as.im(x)
   if(first) { 
     ## find the first maximum
     v <- x$v
@@ -966,7 +966,7 @@ where.max <- function(x, first=TRUE) {
 }
 
 where.min <- function(x, first=TRUE) {
-  stopifnot(is.im(x))
+  x <- as.im(x)
   if(first) { 
     ## find the first minimum
     v <- x$v
