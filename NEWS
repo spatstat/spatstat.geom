@@ -1,9 +1,17 @@
-        CHANGES IN spatstat.geom VERSION 2.2-0.001
+        CHANGES IN spatstat.geom VERSION 2.2-0.002
 
 OVERVIEW
 
+    o More options for converting a window to a mask.
+
     o Minor improvements.
 
+NEW FUNCTIONS
+
+    o owin2mask
+    Convert a window to a mask, with various options,
+    affecting the treatment of the boundary.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o where.max, where.min
