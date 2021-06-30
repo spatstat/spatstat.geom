@@ -118,8 +118,8 @@
 \alias{is.marked.default}    
 \alias{is.marked.psp}    
 \alias{is.marked.quad}
-\alias{is.multitype.quad}    
 \alias{is.multitype.default}    
+\alias{is.multitype.quad}    
 \alias{is.ppplist}
 \alias{is.pp3}
 \alias{is.ppx}
@@ -314,6 +314,7 @@
 \alias{veryunique}
 \alias{warn.once}
 \alias{waxlyrical}
+\alias{wrangle2image}
 \alias{w.quad}               
 \alias{x.quad}
 \alias{y.quad}
@@ -657,6 +658,7 @@ veryunique(z)
 verifyclass(X, C, N = deparse(substitute(X)), fatal = TRUE)
 warn.once(key, \dots)
 waxlyrical(type, terse)
+wrangle2image(values, template)
 w.quad(Q)               
 x.quad(Q)
 y.quad(Q)

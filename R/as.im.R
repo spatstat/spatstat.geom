@@ -3,7 +3,7 @@
 #
 #    conversion to class "im"
 #
-#    $Revision: 1.58 $   $Date: 2020/01/21 04:50:04 $
+#    $Revision: 1.59 $   $Date: 2021/06/30 08:23:24 $
 #
 #    as.im()
 #
@@ -350,3 +350,64 @@ repair.image.xycoords <- function(x) {
     dim(v) <- c(length(x$yrow), length(x$xcol))
   im(v, xrange=x$xrange, yrange=x$yrange, unitname=unitname(x))
 }
+
+## ...... wrangle2image ................
+##   'values' can be vector, matrix or array
+##   Must have the dimensions expected for 'template'
+##   Result is an image or imlist
+
+wrangle2image <- function(values, template) {
+  W        <- as.mask(template)
+  template <- as.im(template)
+  tdim <- dim(template)
+  nt <- prod(tdim)
+  vdim <- dim(values) # may be NULL
+  nv <- length(values)
+  vlev <- levels(values)
+  vnames <- NULL
+  if(is.null(vdim)) {
+    ## vector or factor of values 
+    if(nv == nt) {
+      ## values are a flattened matrix of the right dimensions
+      values <- matrix(values, tdim[1], tdim[2])
+    } else if(nv %% nt == 0) {
+      ## values are a flattened array of the right dimensions
+      k <- nv/nt
+      values <- array(values, dim=c(tdim, k))
+    } else stop("Unable to wrangle data vector to a matrix")
+  } else if(is.matrix(values)) {
+    ## matrix of values 
+    if(all(vdim == tdim)) {
+      ## values are a matrix of the desired dimensions
+    } else if(vdim[1] == nt) {
+      ## each column of 'values' is a flattened matrix of the desired dimensions
+      vnames <- colnames(values)
+      values <- array(values, dim=c(tdim, vdim[2]))
+    } else stop("Unable to wrangle data matrix")
+  } else if(is.array(values)) {
+    if(length(vdim) > 3) stop("Cannot wrangle a higher dimensional array")
+    if(all(vdim[1:2] == tdim)) {
+      ## each slice of values is a matrix of the desired dimension
+      vnames <- dimnames(values)[[3L]]
+    } else stop("Unable to wrangle data array")
+  }
+  ## values is now a matrix or array
+  if(is.matrix(values)) {
+    result <- template
+    result[drop=FALSE] <- values
+    result <- result[W, drop=FALSE]
+  } else {
+    m <- dim(values)[3L]
+    result <- vector(mode="list", length=m)
+    for(i in seq_len(m)) {
+      Z <- template
+      Z[drop=FALSE] <- values[,,i]
+      Z <- Z[W, drop=FALSE]
+      result[[i]] <- Z
+    }
+    names(result) <- vnames
+    result <- as.solist(result)
+  }
+  return(result)
+}
+
