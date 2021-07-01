@@ -1,0 +1,52 @@
+
+# Run CI for R using https://eddelbuettel.github.io/r-ci/
+
+name: ci
+
+on:
+  push:
+  pull_request:
+
+env:
+  USE_BSPM: "true"
+  _R_CHECK_FORCE_SUGGESTS_: "false"
+  SPATSTAT_TEST: "true"
+  R_REMOTES_UPGRADE: "false"
+
+jobs:
+  ci:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {os: macOS-latest}
+          - {os: ubuntu-latest}
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Bootstrap
+        run: |
+          curl -OLs https://eddelbuettel.github.io/r-ci/run.sh
+          chmod 0755 run.sh
+          ./run.sh bootstrap
+
+      - name: Dependencies Binary
+        run: ./run.sh install_r spatstat
+
+      - name: Dependencies
+        run: ./run.sh install_all
+
+      - name: Test
+        run: ./run.sh run_tests
+
+      - name: Coverage
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          sudo apt-get -y --no-install-recommends --allow-unauthenticated install r-cran-covr
+          Rscript -e "covr::codecov(type = 'all')"
+      - name: Dump logs
+        if: failure()
+        run: ./run.sh dump_logs
