@@ -1,7 +1,9 @@
-        CHANGES IN spatstat.geom VERSION 2.2-0.003
+        CHANGES IN spatstat.geom VERSION 2.2-0.004
 
 OVERVIEW
 
+    o We thank Marc Schneble for contributions.
+    
     o More options for converting a window to a mask.
 
     o Minor improvements.
@@ -20,8 +22,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
 BUGS
 
-    o None!
-
+    o Math.linim
+    If 'Z' was a pixel image on a network (class 'linim')
+    and 'v' was a single number, then 'Z/v' was a pixel image (class 'im')
+    instead of a pixel image on a network (class 'linim').
+    [Spotted by Marc Schneble.]
+    Fixed.
+    
 
         CHANGES IN spatstat.geom VERSION 2.2-0
 
