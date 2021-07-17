@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.169 $     $Date: 2021/06/23 02:19:29 $
+#      $Revision: 1.170 $     $Date: 2021/07/17 02:44:48 $
 #
 #      The class "im" of raster images
 #
@@ -1352,4 +1352,19 @@ fillNA <- function(x, value=0) {
   v[is.na(v)] <- value
   x$v <- v
   return(x)
+}
+
+
+## probability integral transformation
+## aka histogram equalisation
+## aka transformation to uniformity
+
+transformquantiles <- function(X, uniform=FALSE, reverse=FALSE, ...) {
+  if(!uniform && !reverse) return(X)
+  o <- order(X[])
+  V <- X
+  n <- length(o)
+  if(uniform) V[][o] <- (seq_len(n) - 0.5)/n
+  if(reverse) V[][o] <- V[][rev(o)]
+  return(V)
 }
