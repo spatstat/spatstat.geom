@@ -1,14 +1,23 @@
-        CHANGES IN spatstat.geom VERSION 2.2-2.001
+        CHANGES IN spatstat.geom VERSION 2.2-2.002
 
 OVERVIEW
 
     o Quantile transformation.
 
+    o Distance metric based on a convex set.
+    
 NEW FUNCTIONS
 
     o transformquantiles
     Transform the quantiles of a vector, matrix, array or pixel image.
 
+    o convexdistmap
+    Distance transform for the distance metric based on a convex set.
+    
+    o convexpairdist, convexcrossdist,
+    convexnndist, convexnnwhich, convexnncross
+    Distances between points using the distance metric based on a convex set.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o None

@@ -282,6 +282,8 @@
 \alias{spatstatDiagnostic}
 \alias{spatstat.deldir.setopt}
 \alias{spatstat.xy.coords}
+\alias{sptvex}
+\alias{sptvexsym}
 \alias{store.versionstring.spatstat}
 \alias{str.hyperframe}
 \alias{summary.hyperframe}
@@ -622,6 +624,8 @@ smudge(X)
 spatstatDiagnostic(msg)
 spatstat.deldir.setopt(use.trigrafS, use.trigraf, debug.delaunay)
 spatstat.xy.coords(x, y)
+sptvex(K, origin, show)
+sptvexsym(K)
 store.versionstring.spatstat()
 \method{str}{hyperframe}(object, \dots)
 \method{summary}{hyperframe}(object, \dots, brief=FALSE)

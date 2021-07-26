@@ -70,6 +70,7 @@ static const R_CMethodDef CEntries[] = {
     {"knnXxMD",           (DL_FUNC) &knnXxMD,           11},
     {"maxnnd2",           (DL_FUNC) &maxnnd2,            5},
     {"maxPnnd2",          (DL_FUNC) &maxPnnd2,           5},
+    {"mdtPconv",          (DL_FUNC) &mdtPconv,          16},
     {"mdtPOrect",         (DL_FUNC) &mdtPOrect,         14},
     {"minnnd2",           (DL_FUNC) &minnnd2,            5},
     {"minPnnd2",          (DL_FUNC) &minPnnd2,           5},
