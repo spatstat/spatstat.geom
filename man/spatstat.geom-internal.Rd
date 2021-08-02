@@ -207,6 +207,8 @@
 \alias{print.indicfun}       
 \alias{print.layered}
 \alias{print.lut}
+\alias{print.metric}
+\alias{print.metricfamily}
 \alias{print.nnfun}
 \alias{print.numberwithunit}
 \alias{print.onearrow}
@@ -282,8 +284,6 @@
 \alias{spatstatDiagnostic}
 \alias{spatstat.deldir.setopt}
 \alias{spatstat.xy.coords}
-\alias{sptvex}
-\alias{sptvexsym}
 \alias{store.versionstring.spatstat}
 \alias{str.hyperframe}
 \alias{summary.hyperframe}
@@ -549,6 +549,8 @@ prepareTitle(main)
 \method{print}{indicfun}(x, \dots)
 \method{print}{layered}(x, \dots)
 \method{print}{lut}(x, \dots)
+\method{print}{metric}(x, \dots)
+\method{print}{metricfamily}(x, \dots)
 \method{print}{nnfun}(x, \dots)
 \method{print}{numberwithunit}(x, \dots)
 \method{print}{onearrow}(x, \dots)
@@ -624,8 +626,6 @@ smudge(X)
 spatstatDiagnostic(msg)
 spatstat.deldir.setopt(use.trigrafS, use.trigraf, debug.delaunay)
 spatstat.xy.coords(x, y)
-sptvex(K, origin, show)
-sptvexsym(K)
 store.versionstring.spatstat()
 \method{str}{hyperframe}(object, \dots)
 \method{summary}{hyperframe}(object, \dots, brief=FALSE)
