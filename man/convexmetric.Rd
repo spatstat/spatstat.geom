@@ -37,18 +37,20 @@ convexmetric(K)
 }
 \examples{
   K <- owin(poly=list(x=c(2.5,2,0.5,-2.5,-2,-0.5),y=c(0,1,2,0,-1,-2)))
-  plot(K)
   m <- convexmetric(K)
+  plot(m$ball(), main="Unit ball")
+  points(0,0)
+  ## show redwood data and identify point number 43
   plot(redwood)
-  ## show point number 43
   plot(redwood[43], pch=16, add=TRUE)
-  ## nearest neighbour distances
-  nn <- m[["nndist"]](redwood)
-  ## Nearest neighbour distance for point number 43 is nn[43]; verify
-  plot(shift(scalardilate(K, nn[43]), redwood[43]), add=TRUE)
-  kk <- m[["nnwhich"]](redwood)
-  ## nearest neighbour for point number 43 is point number kk[43]; verify
-  plot(redwood[kk[43]], pch=3, col="red", add=TRUE)
+  ## nearest neighbour distances and identifiers
+  nd <- m[["nndist"]](redwood)
+  nw <- m[["nnwhich"]](redwood)
+  ## Nearest neighbour distance for point number 43 is nd[43]; verify
+  B43 <- m$ball(radius=nd[43], centre=redwood[43])
+  plot(B43, add=TRUE)
+  ## nearest neighbour for point number 43 is point number nw[43]; verify
+  plot(redwood[nw[43]], pch=3, col="red", add=TRUE)
 }
 \keyword{spatial}
 \keyword{math}

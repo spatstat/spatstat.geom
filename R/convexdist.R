@@ -2,7 +2,7 @@
 #'
 #'  Distance metric whose unit ball is a given, symmetric, convex polygon.
 #'
-#' $Revision: 1.4 $  $Date: 2021/07/26 09:22:35 $
+#' $Revision: 1.5 $  $Date: 2021/08/03 07:03:52 $
 
 
 convexmetric <- local({
@@ -135,8 +135,9 @@ convexmetric <- local({
   }
 
   
-  convexdistmap <- function(W, sp, npasses=5, verbose=FALSE) {
-    w <- as.mask(W)
+  convexdistmap <- function(X, sp, npasses=5, verbose=FALSE) {
+    ## converts X to a set
+    w <- as.mask(X)
     check.1.integer(npasses)
     ## get support vectors
     sx <- sp$co
@@ -232,7 +233,15 @@ convexmetric <- local({
                    convexnncross(X,Y,spK,what)
         },
         distmap=function(X, ...) {
+          ## handles all spatial objects by discretising
           convexdistmap(as.mask(X, ...), spK)
+        },
+        ball=function(radius=1, centre=c(0,0), ...) {
+          check.1.real(radius)
+          stopifnot(radius > 0)
+          centre <- as2vector(centre)
+          B <- shift(scalardilate(K, radius), vec=centre)
+          return(B)
         },
         print=function(...) {
           splat("Distance metric defined by the convex set:") 
