@@ -11,10 +11,16 @@ disc <- local({
   indic <- function(x,y,x0,y0,r) { as.integer((x-x0)^2 + (y-y0)^2 < r^2) }
   
   disc <- function(radius=1, centre=c(0,0), ...,
-                   mask=FALSE, npoly=128, delta=NULL) {
+                   mask=FALSE, npoly=128, delta=NULL,
+                   metric=NULL) {
     check.1.real(radius)
     stopifnot(radius > 0)
     centre <- as2vector(centre)
+    if(inherits(metric, "metric")) {
+      W <- metric$ball(radius=radius, centre=centre, ...,
+                       mask=mask, npoly=npoly, delta=delta)
+      return(W)
+    }
     if(!missing(npoly) && !is.null(npoly) && !is.null(delta))
       stop("Specify either npoly or delta")
     if(!missing(npoly) && !is.null(npoly)) {

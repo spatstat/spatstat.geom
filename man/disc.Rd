@@ -5,7 +5,8 @@
 Creates a circular window
 }
 \usage{
- disc(radius=1, centre=c(0,0), \dots, mask=FALSE, npoly=128, delta=NULL)
+ disc(radius=1, centre=c(0,0), \dots,
+      mask=FALSE, npoly=128, delta=NULL, metric=NULL)
 }
 \arguments{
   \item{radius}{Radius of the circle.}
@@ -24,6 +25,7 @@ Creates a circular window
   \item{\dots}{Arguments passed to \code{as.mask} determining the
     pixel resolution, if \code{mask=TRUE}.
   }
+  \item{metric}{Experimental. Do not use.}
 }
 \value{
   An object of class \code{"owin"} (see \code{\link{owin.object}})

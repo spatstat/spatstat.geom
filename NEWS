@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.2-2.004
+        CHANGES IN spatstat.geom VERSION 2.2-2.005
 
 OVERVIEW
 
@@ -22,7 +22,8 @@ NEW FUNCTIONS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
-    o None
+    o disc
+    New argument 'metric'.
 
 BUG FIXES
 
