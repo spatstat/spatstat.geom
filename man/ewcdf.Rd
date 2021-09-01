@@ -24,7 +24,7 @@ ewcdf(x, weights = NULL, normalise=TRUE, adjust=1)
   }
 }
 \details{
-  This is a modification of the standard function \code{\link{ecdf}}
+  This is a modification of the standard function \code{\link[stats]{ecdf}}
   allowing the observations \code{x} to have weights.
 
   The weighted e.c.d.f. (empirical cumulative distribution function)
@@ -43,11 +43,16 @@ ewcdf(x, weights = NULL, normalise=TRUE, adjust=1)
   \code{ecdf(x)} except for the class membership.
 
   The result of \code{ewcdf} is a function, of class \code{"ewcdf"},
-  inheriting from the classes \code{"ecdf"} (if \code{normalise=TRUE})
+  inheriting from the classes \code{"ecdf"} (only if \code{normalise=TRUE})
   and \code{"stepfun"}.
-  The class \code{ewcdf} has methods for \code{print} and \code{quantile}.
+  
+  The class \code{ewcdf} has methods for
+  \code{\link[base]{print}}, 
+  \code{\link[stats]{quantile}}
+  and \code{\link[base]{mean}}.
+  
   The inherited classes \code{ecdf} and \code{stepfun}
-  have methods for \code{plot} and \code{summary}.
+  have methods for \code{\link[base]{plot}} and \code{\link[base]{summary}}.
 }
 \value{
   A function, of class \code{"ewcdf"}, inheriting from 
@@ -57,9 +62,12 @@ ewcdf(x, weights = NULL, normalise=TRUE, adjust=1)
   \spatstatAuthors.
 }
 \seealso{
-  \code{\link{ecdf}}.
+  \code{\link[stats]{ecdf}}.
   
-  \code{\link{quantile.ewcdf}}
+  \code{\link{quantile.ewcdf}}, \code{\link{mean.ewcdf}}.
+
+  Integrals with respect to the weighted cumulative distribution function
+  can be computed using \code{\link[spatstat.core]{stieltjes}}.
 }
 \examples{
    x <- rnorm(100)

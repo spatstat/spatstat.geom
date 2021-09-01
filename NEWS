@@ -1,10 +1,12 @@
-        CHANGES IN spatstat.geom VERSION 2.2-2.005
+        CHANGES IN spatstat.geom VERSION 2.2-2.006
 
 OVERVIEW
 
     o Quantile transformation.
 
     o Distance metric based on a convex set.
+
+    o Minor improvements.
 
 NEW CLASSES
 
@@ -19,6 +21,9 @@ NEW FUNCTIONS
 
     o convexmetric
     Distance metric based on a convex set.
+
+    o mean.ecdf, mean.ewcdf
+    Calculate the mean of an empirical cumulative distribution function.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

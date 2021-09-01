@@ -1,7 +1,7 @@
 #
 #     ewcdf.R
 #
-#     $Revision: 1.20 $  $Date: 2021/01/07 01:15:08 $
+#     $Revision: 1.23 $  $Date: 2021/09/01 02:41:58 $
 #
 #  With contributions from Kevin Ummel
 #
@@ -159,5 +159,20 @@ quantile.ewcdf <- function(x, probs=seq(0,1,0.25), names=TRUE, ...,
     names(o.pr)[p.ok] <- names(qs)
     o.pr
   } else qs
+}
+
+mean.ecdf <- mean.ewcdf <- function(x, trim=0, ...) {
+  Fun <- x
+  xx <- get("x", envir=environment(Fun))
+  Fx <- get("y", envir=environment(Fun))
+  dF <- diff(c(0, Fx))
+  if(trim > 0) {
+    lim <- quantile(Fun, c(trim, 1-trim))
+    ok <- (xx >= lim[1L]) & (xx <= lim[2L])
+    if(!any(ok)) stop("No data remain after trimming", call.=FALSE)
+    xx <- xx[ok]
+    Fx <- Fx[ok]
+  }
+  sum(xx * dF)/sum(dF)
 }
 
