@@ -208,7 +208,7 @@
 \alias{print.layered}
 \alias{print.lut}
 \alias{print.metric}
-\alias{print.metricfamily}
+\alias{print.metricfun}
 \alias{print.nnfun}
 \alias{print.numberwithunit}
 \alias{print.onearrow}
@@ -550,7 +550,7 @@ prepareTitle(main)
 \method{print}{layered}(x, \dots)
 \method{print}{lut}(x, \dots)
 \method{print}{metric}(x, \dots)
-\method{print}{metricfamily}(x, \dots)
+\method{print}{metricfun}(x, \dots)
 \method{print}{nnfun}(x, \dots)
 \method{print}{numberwithunit}(x, \dots)
 \method{print}{onearrow}(x, \dots)

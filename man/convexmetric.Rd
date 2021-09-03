@@ -44,8 +44,8 @@ convexmetric(K)
   plot(redwood, main="")
   plot(redwood[43], pch=16, add=TRUE)
   ## nearest neighbour distances and identifiers
-  nd <- m[["nndist"]](redwood)
-  nw <- m[["nnwhich"]](redwood)
+  nd <- m$functions[["nndist"]](redwood)
+  nw <- m$functions[["nnwhich"]](redwood)
   ## Nearest neighbour distance for point number 43 is nd[43]; verify
   B43 <- disc(radius=nd[43], centre=redwood[43], metric=m)
   plot(B43, add=TRUE)

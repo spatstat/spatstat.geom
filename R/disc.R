@@ -3,7 +3,7 @@
 ##
 ##  discs and ellipses
 ##
-## $Revision: 1.18 $ $Date: 2017/01/15 05:25:16 $
+## $Revision: 1.19 $ $Date: 2021/09/03 10:11:18 $
 ##
 
 disc <- local({
@@ -17,8 +17,9 @@ disc <- local({
     stopifnot(radius > 0)
     centre <- as2vector(centre)
     if(inherits(metric, "metric")) {
-      W <- metric$ball(radius=radius, centre=centre, ...,
-                       mask=mask, npoly=npoly, delta=delta)
+      W <- invoke.metric(metric, "disc",
+                         radius=radius, centre=centre, ...,
+                         mask=mask, npoly=npoly, delta=delta)
       return(W)
     }
     if(!missing(npoly) && !is.null(npoly) && !is.null(delta))
