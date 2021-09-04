@@ -2,7 +2,7 @@
 #'
 #'  Distance metric whose unit ball is a given, symmetric, convex polygon.
 #'
-#' $Revision: 1.6 $  $Date: 2021/09/04 04:52:29 $
+#' $Revision: 1.7 $  $Date: 2021/09/04 10:38:39 $
 
 
 convexmetric <- local({
@@ -222,7 +222,14 @@ convexmetric <- local({
     convexmetric <- function(K) {
       stopifnot(is.owin(K))
       stopifnot(is.convex(K))
+      if(!inside.owin(0, 0, K))
+        stop("The origin (0,0) must be inside the set K")
+      if(bdist.points(ppp(0, 0, window=K)) < sqrt(.Machine$double.eps))
+        stop("The origin (0,0) must lie in the interior of K")
       spK <- sptvexsym(K, standardise=TRUE)
+      if(!all(is.finite(unlist(spK))))
+        stop("Support vectors are singular (infinite or undefined)",
+             call.=FALSE)
       result <- list(
         tasks=list(
           pairdist.ppp="pairdist",

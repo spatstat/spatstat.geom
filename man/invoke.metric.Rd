@@ -1,6 +1,5 @@
 \name{invoke.metric}
 \alias{invoke.metric}
-\alias{metricOperation}
 \title{
   Perform Geometric Task using a Specified Metric
 }
@@ -9,9 +8,7 @@
   using a specified distance metric.
 }
 \usage{
-  invoke.metric(m, task, \dots)
-
-  metricOperation(m, task)
+  invoke.metric(m, task, \dots, evaluate=TRUE)
 }
 \arguments{
   \item{m}{
@@ -26,6 +23,12 @@
     Input to the function that performs the geometrical operation
     (matching the arguments of \code{task}).
   }
+  \item{evaluate}{
+    Logical value specifying whether to actually perform the
+    computation and return the result (\code{evaluate=TRUE}, the default)
+    or to simply return the function which performs the computation
+    (\code{evaluate=FALSE}).
+  }
 }
 \details{
   A \sQuote{metric} is a measure of distance between points in space.
@@ -35,33 +38,31 @@
 
   The argument \code{task} should be the name of an existing function
   in the \pkg{spatstat} family representing a geometrical operation, such
-  as measuring pairwise distances, nearest-neighbour distances,
-  calculating a distance map, and so on. The code will determine whether
-  this geometrical operation has a counterpart for the specified metric,
+  as computing pairwise distances, nearest-neighbour distances,
+  the distance map, and so on. The code will determine whether
+  this geometrical operation has a counterpart using the specified metric,
   that is defined and supported in the object \code{m}.
-  If so, then  \code{invoke.metric} will apply this operation to the
-  data specified in \code{\dots}, while \code{metricOperation} simply
-  returns a function that performs this operation.
+  If so, then this operation will be applied to the
+  data specified in \code{\dots}, and the result will be returned.
 
   For example, the \pkg{spatstat} function \code{\link{nndist.ppp}} computes
-  nearest-neighbour distances using the Euclidean metric.
-  To calculate nearest-neighbour
-  distances using another metric \code{m}, first call
-  \code{f <- metricOperation(m, "nndist.ppp")} to obtain the function
-  that calculates the nearest-neighbour distances, and then apply
-  \code{f} to your point pattern data.
+  nearest-neighbour distances using the Euclidean distance metric.
+  To calculate nearest-neighbour distances for a point pattern \code{X}
+  using another metric \code{m},
+  use \code{invoke.metric(m, "nndist.ppp", X)}.
 
-  If the desired operation is generic,
-  then \code{task} should be the name
-  of the particular \emph{method} that is required. 
+  If \code{evaluate=FALSE}, the computation is not performed,
+  and \code{invoke.metric} simply returns a function to
+  perform the desired operation. 
 }
 \value{
-  \code{metricOperation} returns a \code{function} in the \R language
-  to perform the operation; or \code{NULL} if the operation is not supported.
-
-  \code{invoke.metric} returns the result of the geometrical operation
-  applied to \code{\dots}. This has the same format as the result
-  of the function named \code{task}.
+  If \code{evaluate=TRUE} (the default), the result of the computation has the
+  same format as the result of the computation using the existing
+  function named \code{task}.
+  
+  If \code{evaluate=FALSE}, the result is a \code{function} in the \R language
+  to perform the desired operation;
+  or \code{NULL} if the operation is not supported by the metric.
 }
 \author{
   \adrian.
@@ -71,9 +72,11 @@
 }
 \examples{
   ## nearest-neighbour distances using rectangular metric (L^1 metric)
-  d <- convexmetric(square(1))
+  d <- convexmetric(square(c(-1,1)))
   y <- invoke.metric(d, "nndist.ppp", cells)
-  metricOperation(d, "orderPizza")
+  f <- invoke.metric(d, "nndist.ppp", cells, evaluate=FALSE)
+  y <- f(cells)
+  invoke.metric(d, "orderPizza", evaluate=FALSE)
 }
 \keyword{spatial}
 \keyword{math}
