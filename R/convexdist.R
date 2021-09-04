@@ -2,7 +2,7 @@
 #'
 #'  Distance metric whose unit ball is a given, symmetric, convex polygon.
 #'
-#' $Revision: 1.5 $  $Date: 2021/08/03 07:03:52 $
+#' $Revision: 1.6 $  $Date: 2021/09/04 04:52:29 $
 
 
 convexmetric <- local({
@@ -246,7 +246,8 @@ convexmetric <- local({
           },
           distmap=function(X, ...) {
             ## handles all spatial objects by discretising
-            convexdistmap(as.mask(X, ...), spK)
+            X <- if(is.psp(X)) as.mask.psp(X, ...) else as.mask(X, ...)
+            convexdistmap(X, spK)
           },
           ball=function(radius=1, centre=c(0,0), ...) {
             check.1.real(radius)
