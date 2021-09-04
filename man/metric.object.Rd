@@ -30,9 +30,14 @@
 
   Objects of class \code{"metric"} are produced by the function
   \code{\link{convexmetric}} and possibly by other functions.
+
+  There are methods for \code{print} and \code{summary} 
+  for the class \code{"metric"}.
+
+  Use \code{\link{invoke.metric}} to perform computations using the metric.
 }
 \seealso{
-  \code{\link{convexmetric}}
+  \code{\link{convexmetric}}, \code{\link{invoke.metric}}
 }
 \author{
   \spatstatAuthors.

@@ -25,6 +25,8 @@ convexmetric(K)
   The argument \code{K} must be a window (class \code{"owin"}).
   It will be converted to a polygon.
   It must be convex, and symmetric about the origin.
+
+  Use \code{\link{invoke.metric}} to perform computations using the metric.
 }
 \value{
   An object of class \code{"metric"}.
@@ -33,21 +35,24 @@ convexmetric(K)
   \adrian
 }
 \seealso{
-  \code{\link{metric.object}}
+  \code{\link{metric.object}},
+  \code{\link{invoke.metric}}
 }
 \examples{
   K <- owin(poly=list(x=c(2.5,2,0.5,-2.5,-2,-0.5),y=c(0,1,2,0,-1,-2)))
   plot(K)
   points(0,0)
   m <- convexmetric(K)
+  m
+  summary(m)
   ## show redwood data and identify point number 43
   plot(redwood, main="")
   plot(redwood[43], pch=16, add=TRUE)
   ## nearest neighbour distances and identifiers
-  nd <- m$functions[["nndist"]](redwood)
-  nw <- m$functions[["nnwhich"]](redwood)
+  nd <- invoke.metric(m, "nndist.ppp", redwood)
+  nw <- invoke.metric(m, "nnwhich.ppp", redwood)
   ## Nearest neighbour distance for point number 43 is nd[43]; verify
-  B43 <- disc(radius=nd[43], centre=redwood[43], metric=m)
+  B43 <- invoke.metric(m, "disc", radius=nd[43], centre=redwood[43])
   plot(B43, add=TRUE)
   ## nearest neighbour for point number 43 is point number nw[43]; verify
   plot(redwood[nw[43]], pch=3, col="red", add=TRUE)

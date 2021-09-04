@@ -289,6 +289,7 @@
 \alias{summary.hyperframe}
 \alias{summary.logiquad}
 \alias{summary.lut}
+\alias{summary.metric}
 \alias{summary.pppmatching}
 \alias{summary.ppx}
 \alias{summary.splitppx}
@@ -631,6 +632,7 @@ store.versionstring.spatstat()
 \method{summary}{hyperframe}(object, \dots, brief=FALSE)
 \method{summary}{logiquad}(object, \dots, checkdup=FALSE)
 \method{summary}{lut}(object, \dots)
+\method{summary}{metric}(object, \dots)
 \method{summary}{pppmatching}(object, \dots)
 \method{summary}{ppx}(object, \dots)
 \method{summary}{splitppx}(object, \dots)
