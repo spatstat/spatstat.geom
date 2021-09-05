@@ -6,7 +6,9 @@
   taken from two different point patterns.
 }
 \usage{
-  \method{crossdist}{ppp}(X, Y, \dots, periodic=FALSE, method="C", squared=FALSE)
+  \method{crossdist}{ppp}(X, Y, \dots,
+                periodic=FALSE, method="C", squared=FALSE,
+                metric=NULL)
 }
 \arguments{
   \item{X,Y}{
@@ -25,6 +27,11 @@
   \item{squared}{
     Logical. If \code{squared=TRUE}, the squared distances are
     returned instead (this computation is faster).
+  }
+  \item{metric}{
+    Optional. A distance metric
+    (object of class \code{"metric"}, see \code{\link{metric.object}})
+    which will be used to compute the distances.
   }
 }
 \value{

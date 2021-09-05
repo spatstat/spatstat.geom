@@ -2,7 +2,7 @@
 #   nncross.R
 #
 #
-#    $Revision: 1.34 $  $Date: 2021/04/12 07:16:27 $
+#    $Revision: 1.35 $  $Date: 2021/09/05 10:58:54 $
 #
 #  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2012
 #  Licence: GNU Public Licence >= 2
@@ -22,8 +22,18 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
                     k = 1,
                     sortby=c("range", "var", "x", "y"),
                     is.sorted.X = FALSE,
-                    is.sorted.Y = FALSE) {
+                    is.sorted.Y = FALSE,
+                    metric=NULL) {
   stopifnot(is.ppp(Y) || is.psp(Y))
+  if(!is.null(metric)) {
+    ans <- invoke.metric(metric, "nncross.ppp",
+                         X=X, Y=Y, what=what, ...,
+                         k=k, sortby=sortby,
+                         is.sorted.X=is.sorted.X,
+                         is.sorted.Y=is.sorted.Y)
+    return(ans)
+  }
+  
   sortby <- match.arg(sortby)
   what   <- match.arg(what, choices=c("dist", "which"), several.ok=TRUE)
   want.dist  <- "dist" %in% what 

@@ -2,7 +2,7 @@
 #'
 #'  Distance metric whose unit ball is a given, symmetric, convex polygon.
 #'
-#' $Revision: 1.9 $  $Date: 2021/09/05 03:48:09 $
+#' $Revision: 1.11 $  $Date: 2021/09/05 11:23:03 $
 
 
 convexmetric <- local({
@@ -249,6 +249,10 @@ convexmetric <- local({
           return(if(squared) y^2 else y)
         },
         nncross.ppp=function(X,Y,what=c("dist","which"), ...) {
+          if(is.psp(Y))
+            stop(paste("This metric does not support the case",
+                       "where Y is a psp object"),
+                 call.=FALSE)
           warn.unsupported.args(list(iX=NULL, iY=NULL, k=1,
                                      sortby=c("range", "var", "x", "y"),
                                      is.sorted.X=FALSE, is.sorted.Y=FALSE),
@@ -256,17 +260,19 @@ convexmetric <- local({
           convexnncross(X,Y,spK,what)
         },
         distmap.ppp=function(X, ...) {
-          w <- as.mask(X, ...)
+          w <- pixellate(X, ..., preserve=TRUE)
+          w <- solutionset(w > 0)
           convexdistmapmask(w, spK)
         },
         distmap.owin=function(X, ...) {
           warn.unsupported.args(list(discretise=FALSE, invert=FALSE), ...)
-          w <- as.mask(X, ...)
+          w <- do.call.matched(as.mask, list(w=quote(X), ...))
           convexdistmapmask(w, spK)
         },
         distmap.psp=function(X, ...) {
           warn.unsupported.args(list(extras=TRUE, clip=FALSE), ...)
-          w <- as.mask.psp(X, ...)
+          w <- do.call.matched(as.mask.psp, list(x=quote(X), ...),
+                               extrargs=names(formals(as.mask))[-1])
           convexdistmapmask(w, spK)
         },
         disc=function(radius=1, centre=c(0,0), ...) {
@@ -279,7 +285,7 @@ convexmetric <- local({
         },
         print=function(...) {
           splat("Distance metric defined by the convex set:") 
-          print(K)
+          print(K, prefix="\t")
           invisible(NULL)
         }
       )

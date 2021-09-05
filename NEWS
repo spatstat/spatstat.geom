@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.2-2.013
+        CHANGES IN spatstat.geom VERSION 2.2-2.014
 
 OVERVIEW
 
@@ -6,9 +6,7 @@ OVERVIEW
 
     o Distance metric based on a convex set.
 
-    o Basic support for non-Euclidean distance metrics.
-
-    o Minor improvements.
+    o Basic support for calculations using non-Euclidean distance metrics.
 
 NEW CLASSES
 
@@ -24,31 +22,25 @@ NEW FUNCTIONS
     o convexmetric
     Distance metric based on a convex set.
 
-    o pairdist.ppp
-    New argument 'metric' specifies a non-Euclidean distance metric
-    to measure the pairwise distances.
-    
-    o nndist.ppp
-    New argument 'metric' specifies a non-Euclidean distance metric
-    to measure the nearest neighbour distances.
-    
-    o nnwhich.ppp
-    New argument 'metric' specifies a non-Euclidean distance metric
-    to identify the nearest neighbours.
-    
-    o disc
-    New argument 'metric' specifies a non-Euclidean distance metric
-    defining the disc.
+    o mean.ecdf, mean.ewcdf
+    Calculate the mean of an empirical cumulative distribution function.
     
     o invoke.metric
     Low level function to perform a desired operation using a given metric.
 
-    o mean.ecdf, mean.ewcdf
-    Calculate the mean of an empirical cumulative distribution function.
-    
 SIGNIFICANT USER-VISIBLE CHANGES
 
-    o None
+    o pairdist.ppp, crossdist.ppp, nndist.ppp, nnwhich.ppp, nncross.ppp
+    New argument 'metric' specifies a non-Euclidean distance metric
+    to measure the distances.
+    
+    o distmap.ppp, distmap.owin, distmap.psp
+    New argument 'metric' specifies a non-Euclidean distance metric
+    to measure the distances.
+    
+    o disc
+    New argument 'metric' specifies a non-Euclidean distance metric
+    defining the disc.
     
 BUG FIXES
 

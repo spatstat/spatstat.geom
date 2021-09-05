@@ -3,7 +3,7 @@
 #
 #   nearest neighbour distances (nndist) and identifiers (nnwhich)
 #
-#   $Revision: 1.14 $ $Date: 2021/09/05 05:28:33 $
+#   $Revision: 1.15 $ $Date: 2021/09/05 10:59:04 $
 #
 
 nndist <- function(X, ...) {

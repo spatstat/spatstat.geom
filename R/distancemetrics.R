@@ -3,7 +3,7 @@
 #'
 #'   Metrics on the spatial domain
 #' 
-#'   $Revision: 1.9 $ $Date: 2021/09/05 03:05:47 $
+#'   $Revision: 1.11 $ $Date: 2021/09/05 11:22:57 $
 #'
 #'  An object of class 'metric' is essentially a named list of functions
 #'  where the names specify the tasks. 
@@ -18,7 +18,8 @@ print.metric <- function(x, ...) { x$print() }
 
 summary.metric <- function(object, ...) {
   print(object, ...)
-  splat("Supported operations:", commasep(sQuote(names(object))))
+  splat("\nSupported operations:")
+  splat(commasep(sQuote(names(object))), indent=5)
   invisible(NULL)
 }
 
@@ -54,7 +55,8 @@ print.metricfun <- function(x, ...) {
 warn.no.metric.support <- function(caller, ..., metric) {
   if(!missing(metric))
     warning(paste("Argument 'metric' is not implemented for",
-                  paste0(sQuote(caller), " and was ignored")))
+                  paste0(sQuote(caller), " and was ignored")),
+            call.=FALSE)
   invisible(NULL)
 }
 

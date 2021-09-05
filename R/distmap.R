@@ -2,7 +2,7 @@
 #
 #      distmap.R
 #
-#      $Revision: 1.26 $     $Date: 2021/05/20 09:08:15 $
+#      $Revision: 1.27 $     $Date: 2021/09/05 10:58:43 $
 #
 #
 #     Distance transforms
@@ -12,8 +12,12 @@ distmap <- function(X, ...) {
   UseMethod("distmap")
 }
 
-distmap.ppp <- function(X, ...) {
+distmap.ppp <- function(X, ..., metric=NULL) {
   verifyclass(X, "ppp")
+  if(!is.null(metric)) {
+    ans <- invoke.metric(metric, "distmap.ppp", X=X, ...)
+    return(ans)
+  }
   e <- exactdt(X, ...)
   W <- e$w
   uni <- unitname(W)
@@ -39,8 +43,13 @@ distmap.ppp <- function(X, ...) {
   return(V)
 }
 
-distmap.owin <- function(X, ..., discretise=FALSE, invert=FALSE) {
+distmap.owin <- function(X, ..., discretise=FALSE, invert=FALSE, metric=NULL) {
   verifyclass(X, "owin")
+  if(!is.null(metric)) {
+    ans <- invoke.metric(metric, "distmap.owin", X=X, ...,
+                         discretise=discretise, invert=invert)
+    return(ans)
+  }
   uni <- unitname(X)
   if(X$type == "rectangle") {
     M <- as.mask(X, ...)
@@ -99,8 +108,13 @@ distmap.owin <- function(X, ..., discretise=FALSE, invert=FALSE) {
   return(Dist)
 }
 
-distmap.psp <- function(X, ..., extras=TRUE, clip=FALSE) {
+distmap.psp <- function(X, ..., extras=TRUE, clip=FALSE, metric=NULL) {
   verifyclass(X, "psp")
+  if(!is.null(metric)) {
+    ans <- invoke.metric(metric, "distmap.psp", X=X, ...,
+                         extras=extras, clip=clip)
+    return(ans)
+  }
   W <- Window(X)
   uni <- unitname(W)
   M <- as.mask(W, ...)

@@ -1,7 +1,7 @@
 #
 #      distances.R
 #
-#      $Revision: 1.48 $     $Date: 2021/01/07 01:15:08 $
+#      $Revision: 1.49 $     $Date: 2021/09/05 10:44:32 $
 #
 #
 #      Interpoint distances between pairs 
@@ -122,9 +122,16 @@ crossdist <- function(X, Y, ...) {
 }
 
 crossdist.ppp <- function(X, Y, ...,
-                          periodic=FALSE, method="C", squared=FALSE) {
+                          periodic=FALSE, method="C", squared=FALSE,
+                          metric=NULL) {
   verifyclass(X, "ppp")
   Y <- as.ppp(Y)
+  if(!is.null(metric)) {
+    d <- invoke.metric(metric, "crossdist.ppp",
+                       X, Y, ...,
+                       periodic=periodic, method=method, squared=squared)
+    return(d)
+  }
   if(!periodic)
     return(crossdist.default(X$x, X$y, Y$x, Y$y,
                              method=method, squared=squared))

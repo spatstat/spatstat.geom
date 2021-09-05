@@ -8,7 +8,7 @@
   line segment in the given line segment pattern.
 }
 \usage{
-  \method{distmap}{psp}(X, \dots, extras=TRUE, clip=FALSE)
+  \method{distmap}{psp}(X, \dots, extras=TRUE, clip=FALSE, metric=NULL)
 }
 \arguments{
   \item{X}{A line segment pattern (object of class \code{"psp"}).
@@ -24,6 +24,11 @@
   \item{clip}{
     Logical value specifying whether the resulting pixel image
     should be clipped to the window of \code{X}.
+  }
+  \item{metric}{
+    Optional. A distance metric
+    (object of class \code{"metric"}, see \code{\link{metric.object}})
+    which will be used to compute the distances.
   }
 }
 \value{

@@ -6,7 +6,7 @@
   in the given window.
 }
 \usage{
-  \method{distmap}{owin}(X, \dots, discretise=FALSE, invert=FALSE)
+  \method{distmap}{owin}(X, \dots, discretise=FALSE, invert=FALSE, metric=NULL)
 }
 \arguments{
   \item{X}{
@@ -23,6 +23,11 @@
   \item{invert}{
     If \code{TRUE}, compute the distance transform of the
     complement of the window.
+  }
+  \item{metric}{
+    Optional. A distance metric
+    (object of class \code{"metric"}, see \code{\link{metric.object}})
+    which will be used to compute the distances.
   }
 }
 \value{

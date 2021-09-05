@@ -8,13 +8,18 @@
   point in the given point pattern.
 }
 \usage{
-  \method{distmap}{ppp}(X, \dots)
+  \method{distmap}{ppp}(X, \dots, metric=NULL)
 }
 \arguments{
   \item{X}{A point pattern (object of class \code{"ppp"}).
   }
   \item{\dots}{Arguments passed to \code{\link{as.mask}}
     to control pixel resolution.
+  }
+  \item{metric}{
+    Optional. A distance metric
+    (object of class \code{"metric"}, see \code{\link{metric.object}})
+    which will be used to compute the distances.
   }
 }
 \value{

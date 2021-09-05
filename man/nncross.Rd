@@ -18,7 +18,8 @@
           k = 1,
           sortby=c("range", "var", "x", "y"),
           is.sorted.X = FALSE,
-          is.sorted.Y = FALSE)
+          is.sorted.Y = FALSE,
+          metric=NULL)
 
   \method{nncross}{default}(X, Y, \dots)
 }
@@ -47,6 +48,11 @@
   \item{is.sorted.X, is.sorted.Y}{
     Logical values attesting whether the point patterns \code{X} and
     \code{Y} have been sorted. See Details.
+  }
+  \item{metric}{
+    Optional. A distance metric
+    (object of class \code{"metric"}, see \code{\link{metric.object}})
+    which will be used to compute the distances.
   }
   \item{\dots}{Ignored.}
 }
