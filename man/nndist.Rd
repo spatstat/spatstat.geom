@@ -10,7 +10,7 @@
 }
 \usage{
   nndist(X, \dots)
-  \method{nndist}{ppp}(X, \dots, k=1, by=NULL, method="C")
+  \method{nndist}{ppp}(X, \dots, k=1, by=NULL, method="C", metric=NULL)
   \method{nndist}{default}(X, Y=NULL, \dots, k=1, by=NULL, method="C")
 }
 \arguments{
@@ -45,6 +45,10 @@
   }
   \item{method}{String specifying which method of calculation to use.
     Values are \code{"C"} and \code{"interpreted"}.
+  }
+  \item{metric}{
+    Optional. A metric (object of class \code{"metric"})
+    that will be used to define and compute the distances.
   }
 }
 \value{

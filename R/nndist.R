@@ -3,7 +3,7 @@
 #
 #   nearest neighbour distances (nndist) and identifiers (nnwhich)
 #
-#   $Revision: 1.13 $ $Date: 2021/01/07 01:15:08 $
+#   $Revision: 1.14 $ $Date: 2021/09/05 05:28:33 $
 #
 
 nndist <- function(X, ...) {
@@ -12,9 +12,14 @@ nndist <- function(X, ...) {
 
 nndist.ppp <- local({
 
-  nndist.ppp <- function(X, ..., k=1, by=NULL, method="C") {
+  nndist.ppp <- function(X, ..., k=1, by=NULL, method="C", metric=NULL) {
     verifyclass(X, "ppp")
     trap.extra.arguments(..., .Context="In nndist.ppp")
+    if(!is.null(metric)) {
+      d <- invoke.metric(metric, "nndist.ppp",
+                         X, ..., k=k, by=by, method=method)
+      return(d)
+    }
     if(is.null(by)) # usual case
       return(nndist.default(X$x, X$y, k=k, by=by, method=method))
     return(nndistby(X, k=k, by=by))
@@ -39,6 +44,7 @@ nndist.ppp <- local({
 nndist.default <-
   function(X, Y=NULL, ..., k=1, by=NULL, method="C")
 {
+  warn.no.metric.support("nndist.default", ...)
 	#  computes the vector of nearest-neighbour distances 
 	#  for the pattern of points (x[i],y[i])
 	#
@@ -183,9 +189,14 @@ nnwhich <- function(X, ...) {
 
 nnwhich.ppp <- local({
 
-  nnwhich.ppp <- function(X, ..., k=1, by=NULL, method="C") {
+  nnwhich.ppp <- function(X, ..., k=1, by=NULL, method="C", metric=NULL) {
     verifyclass(X, "ppp")
     trap.extra.arguments(..., .Context="In nnwhich.ppp")
+    if(!is.null(metric)) {
+      d <- invoke.metric(metric, "nnwhich.ppp",
+                         X, ..., k=k, by=by, method=method)
+      return(d)
+    }
     if(is.null(by))
       return(nnwhich.default(X$x, X$y, k=k, method=method))
     return(nnwhichby(X, k=k, by=by))
@@ -222,6 +233,7 @@ nnwhich.ppp <- local({
 nnwhich.default <-
   function(X, Y=NULL, ..., k=1, by=NULL, method="C")
 {
+  warn.no.metric.support("nnwhich.default", ...)
 	#  identifies nearest neighbour of each point in
 	#  the pattern of points (x[i],y[i])
 	#

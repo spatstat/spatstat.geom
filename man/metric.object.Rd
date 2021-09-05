@@ -33,12 +33,28 @@
 
   There are methods for \code{print} and \code{summary} 
   for the class \code{"metric"}.
+  The \code{summary} method lists the operations that are supported
+  by the metric.
 
-  Use \code{\link{invoke.metric}} to perform computations using the metric.
+  To perform distance calculations (for example, nearest-neighbour
+  distances) using a desired metric instead of the
+  Euclidean metric, first check whether the standard function for this
+  purpose (for example \code{nndist.ppp}) 
+  has an argument named \code{metric}. 
+  the low-level function \code{\link{invoke.metric}}.
+  If so, use the standard function
+  and add the argument \code{metric}; if not, use
+  the low-level function \code{\link{invoke.metric}}.
 }
 \seealso{
   \code{\link{convexmetric}}, \code{\link{invoke.metric}}
 }
+\examples{
+  m <- convexmetric(square(c(-1,1)))
+  summary(m)
+  y <- nndist(cells, metric=m)
+}
+
 \author{
   \spatstatAuthors.
 }

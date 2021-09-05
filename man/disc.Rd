@@ -6,7 +6,8 @@ Creates a circular window
 }
 \usage{
  disc(radius=1, centre=c(0,0), \dots,
-      mask=FALSE, npoly=128, delta=NULL)
+      mask=FALSE, npoly=128, delta=NULL,
+      metric=NULL)
 }
 \arguments{
   \item{radius}{Radius of the circle.}
@@ -24,6 +25,10 @@ Creates a circular window
   }
   \item{\dots}{Arguments passed to \code{as.mask} determining the
     pixel resolution, if \code{mask=TRUE}.
+  }
+  \item{metric}{
+    Optional. A distance metric (object of class \code{"metric"}).
+    The disc with respect to this metric will be computed.
   }
 }
 \value{
@@ -45,7 +50,12 @@ Creates a circular window
   The argument \code{centre} specifies the disc centre: it can be either 
   a numeric vector of length 2 giving the coordinates,
   or a \code{list(x,y)} giving the coordinates of exactly one point, or a
-  point pattern (object of class \code{"ppp"}) containing exactly one point.
+  point pattern (object of class \code{"ppp"}) containing exactly one
+  point.
+
+  If the argument \code{metric} is given, it should be a distance metric
+  (object of class \code{"metric"}). The disc with respect to this
+  metric will be computed. 
 }
 \seealso{
   \code{\link{ellipse}},

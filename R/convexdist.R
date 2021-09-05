@@ -2,7 +2,7 @@
 #'
 #'  Distance metric whose unit ball is a given, symmetric, convex polygon.
 #'
-#' $Revision: 1.7 $  $Date: 2021/09/04 10:38:39 $
+#' $Revision: 1.9 $  $Date: 2021/09/05 03:48:09 $
 
 
 convexmetric <- local({
@@ -63,7 +63,7 @@ convexmetric <- local({
     return(sp)
   }
 
-  #' ..........  main functions  ......................
+  #' ..........  main 'engine' functions  ......................
 
   convexpairdist <- function(X, sp) {
     nX <- npoints(X)
@@ -135,9 +135,8 @@ convexmetric <- local({
   }
 
   
-  convexdistmap <- function(X, sp, npasses=5, verbose=FALSE) {
-    ## converts X to a set
-    w <- as.mask(X)
+  convexdistmapmask <- function(w, sp, npasses=5, verbose=FALSE) {
+    stopifnot(is.mask(w))
     check.1.integer(npasses)
     ## get support vectors
     sx <- sp$co
@@ -231,44 +230,59 @@ convexmetric <- local({
         stop("Support vectors are singular (infinite or undefined)",
              call.=FALSE)
       result <- list(
-        tasks=list(
-          pairdist.ppp="pairdist",
-          nndist.ppp="nndist",
-          nnwhich.ppp="nnwhich",
-          crossdist.ppp="crossdist",
-          nncross.ppp="nncross",
-          distmap.ppp="distmap",
-          distmap.owin="distmap",
-          distmap.psp="distmap",
-          disc="ball",
-          print="print"
-        ),
-        functions=list(
-          pairdist=function(X) { convexpairdist(X, spK) },
-          nndist=function(X) { convexnndist(X, spK) },
-          nnwhich=function(X) { convexnnwhich(X, spK) },
-          crossdist=function(X, Y) { convexcrossdist(X,Y,spK) },
-          nncross=function(X,Y,what=c("dist","which")) {
-            convexnncross(X,Y,spK,what)
-          },
-          distmap=function(X, ...) {
-            ## handles all spatial objects by discretising
-            X <- if(is.psp(X)) as.mask.psp(X, ...) else as.mask(X, ...)
-            convexdistmap(X, spK)
-          },
-          ball=function(radius=1, centre=c(0,0), ...) {
-            check.1.real(radius)
-            stopifnot(radius > 0)
-            centre <- as2vector(centre)
-            B <- shift(scalardilate(K, radius), vec=centre)
-            return(B)
-          },
-          print=function(...) {
-            splat("Distance metric defined by the convex set:") 
-            print(K)
-            invisible(NULL)
-          })
-        )
+        pairdist.ppp=function(X, ..., squared=FALSE) {
+          warn.unsupported.args(list(periodic=FALSE, method="C"), ...)
+          y <- convexpairdist(X, spK)
+          return(if(squared) y^2 else y)
+        },
+        nndist.ppp=function(X, ...) {
+          warn.unsupported.args(list(k=1, by=NULL, method="C"), ...)
+          convexnndist(X, spK)
+        },
+        nnwhich.ppp=function(X, ...) {
+          warn.unsupported.args(list(k=1, by=NULL, method="C"), ...)
+          convexnnwhich(X, spK)
+        },
+        crossdist.ppp=function(X, Y, ..., squared=FALSE) {
+          warn.unsupported.args(list(periodic=FALSE, method="C"), ...)
+          y <- convexcrossdist(X,Y,spK)
+          return(if(squared) y^2 else y)
+        },
+        nncross.ppp=function(X,Y,what=c("dist","which"), ...) {
+          warn.unsupported.args(list(iX=NULL, iY=NULL, k=1,
+                                     sortby=c("range", "var", "x", "y"),
+                                     is.sorted.X=FALSE, is.sorted.Y=FALSE),
+                                ...)
+          convexnncross(X,Y,spK,what)
+        },
+        distmap.ppp=function(X, ...) {
+          w <- as.mask(X, ...)
+          convexdistmapmask(w, spK)
+        },
+        distmap.owin=function(X, ...) {
+          warn.unsupported.args(list(discretise=FALSE, invert=FALSE), ...)
+          w <- as.mask(X, ...)
+          convexdistmapmask(w, spK)
+        },
+        distmap.psp=function(X, ...) {
+          warn.unsupported.args(list(extras=TRUE, clip=FALSE), ...)
+          w <- as.mask.psp(X, ...)
+          convexdistmapmask(w, spK)
+        },
+        disc=function(radius=1, centre=c(0,0), ...) {
+          warn.unsupported.args(list(mask=FALSE, npoly=128, delta=NULL), ...)
+          check.1.real(radius)
+          stopifnot(radius > 0)
+          centre <- as2vector(centre)
+          B <- shift(scalardilate(K, radius), vec=centre)
+          return(B)
+        },
+        print=function(...) {
+          splat("Distance metric defined by the convex set:") 
+          print(K)
+          invisible(NULL)
+        }
+      )
       class(result) <- "metric"
       return(result)
     }

@@ -316,6 +316,8 @@
 \alias{verifyclass}
 \alias{veryunique}
 \alias{warn.once}
+\alias{warn.no.metric.support}
+\alias{warn.unsupported.args}
 \alias{waxlyrical}
 \alias{wrangle2image}
 \alias{w.quad}               
@@ -663,6 +665,8 @@ versionstring.spatstat()
 veryunique(z)
 verifyclass(X, C, N = deparse(substitute(X)), fatal = TRUE)
 warn.once(key, \dots)
+warn.no.metric.support(caller, \dots, metric)
+warn.unsupported.args(unsup, \dots)
 waxlyrical(type, terse)
 wrangle2image(values, template)
 w.quad(Q)               

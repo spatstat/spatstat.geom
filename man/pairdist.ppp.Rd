@@ -6,7 +6,8 @@
   in a point pattern.
 }
 \usage{
-  \method{pairdist}{ppp}(X, \dots, periodic=FALSE, method="C", squared=FALSE)
+  \method{pairdist}{ppp}(X, \dots,
+                        periodic=FALSE, method="C", squared=FALSE, metric=NULL)
 }
 \arguments{
   \item{X}{
@@ -26,6 +27,10 @@
   \item{squared}{
     Logical. If \code{squared=TRUE}, the squared distances are
     returned instead (this computation is faster).
+  }
+  \item{metric}{
+    Optional. A metric (object of class \code{"metric"})
+    that will be used to define and compute the distances.
   }
 }
 \value{

@@ -12,8 +12,15 @@ pairdist <- function(X, ...) {
   UseMethod("pairdist")
 }
 
-pairdist.ppp <- function(X, ..., periodic=FALSE, method="C", squared=FALSE) {
+pairdist.ppp <- function(X, ..., periodic=FALSE, method="C", squared=FALSE,
+                         metric=NULL) {
   verifyclass(X, "ppp")
+  if(!is.null(metric)) {
+    d <- invoke.metric(metric, "pairdist.ppp",
+                       X, ...,
+                       periodic=periodic, method=method, squared=squared)
+    return(d)
+  }
   if(!periodic)
     return(pairdist.default(X$x, X$y, method=method, squared=squared))
   # periodic case
@@ -31,9 +38,11 @@ pairdist.ppp <- function(X, ..., periodic=FALSE, method="C", squared=FALSE) {
 pairdist.default <-
   function(X, Y=NULL, ..., period=NULL, method="C", squared=FALSE)
 {
+  warn.no.metric.support("pairdist.default", ...)
+  
   if(!is.null(dim(X)) && ncol(X) > 2)
     stop("Data contain more than 2 coordinates")
-  
+
   xy <- xy.coords(X,Y)[c("x","y")]
 
   if(identical(xy$xlab, "Index")) 
