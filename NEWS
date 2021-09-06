@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.2-2.014
+        CHANGES IN spatstat.geom VERSION 2.2-2.015
 
 OVERVIEW
 
@@ -147,6 +147,8 @@ OVERVIEW
 
     o Improvement to venn.tess.
 
+    o Changed default value of 'stringsAsFactors'.
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o spatstat.geom
@@ -154,7 +156,44 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o venn.tess
     New argument 'labels'.
+
+    o hyperframe, as.im.function
+    The formal default value of 'stringsAsFactors' has been changed
+    to 'NULL' to conform to changes in R. (The actual default value
+    is TRUE for R < 4.1.0 and FALSE for R >= 4.1.0)
+
+    o plot.psp
+    The code for 'style="width"' has been completely rewritten,
+    so that it no longer depends on plot.linim, and is more efficient.
+    The formal argument list has been extended.
+
+    o integral.im
+    Accelerated in the case where 'domain' is a tessellation.
+
+    o cbind.hyperframe
+    Row names are not altered (previously they were altered
+    using 'make.names')
+
+    o [.ppx
+    New argument 'clip'
+
+BUG FIXES
+
+    o colourmap
+    If a colour map was applied to numbers lying outside the range of the
+    colour map, the wrong number of NA's was sometimes produced.
+    Fixed.
+
+    o MinkowskiSum
+    Crashed sometimes with an error message about 'sumconnected'.
+    Fixed.
+
+    o hyperframe
+    Crashed if the argument 'row.names' was given
+    and the hyperframe had exactly one row.
+    Fixed.
     
+
         CHANGES IN spatstat.geom VERSION 1.65-8
 
 OVERVIEW

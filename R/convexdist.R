@@ -2,7 +2,7 @@
 #'
 #'  Distance metric whose unit ball is a given, symmetric, convex polygon.
 #'
-#' $Revision: 1.11 $  $Date: 2021/09/05 11:23:03 $
+#' $Revision: 1.12 $  $Date: 2021/09/05 14:48:32 $
 
 
 convexmetric <- local({
