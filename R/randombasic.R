@@ -7,7 +7,7 @@
 #'    rsyst()           systematic random (randomly-displaced grid)
 #'    rjitter()         random perturbation
 #'
-#'   $Revision: 1.5 $  $Date: 2020/11/30 08:05:10 $
+#'   $Revision: 1.6 $  $Date: 2021/09/07 06:24:03 $
 
 
 simulationresult <- function(resultlist, nsim, drop, NameBase="Simulation") {
@@ -97,8 +97,12 @@ xy.grid <- function(xr, yr, nx, ny, dx, dy) {
 
 ## rjitter
 
-rjitter <- function(X, radius, retry=TRUE, giveup=10000, ...,
-                    nsim=1, drop=TRUE) {
+rjitter <- function(X, ...) {
+  UseMethod("rjitter")
+}
+
+rjitter.ppp <- function(X, radius, retry=TRUE, giveup=10000, ...,
+                        nsim=1, drop=TRUE) {
   verifyclass(X, "ppp")
   check.1.integer(nsim)
   stopifnot(nsim >= 1)

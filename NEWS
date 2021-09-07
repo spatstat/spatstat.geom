@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.2-2.015
+        CHANGES IN spatstat.geom VERSION 2.2-2.016
 
 OVERVIEW
 
@@ -16,6 +16,10 @@ NEW CLASSES
     
 NEW FUNCTIONS
 
+    o rjitter.ppp
+    This function was previously called 'rjitter'. It is now a method
+    for the new generic function 'rjitter'.
+    
     o transformquantiles
     Transform the quantiles of a vector, matrix, array or pixel image.
 
@@ -29,6 +33,10 @@ NEW FUNCTIONS
     Low level function to perform a desired operation using a given metric.
 
 SIGNIFICANT USER-VISIBLE CHANGES
+
+    o rjitter
+    The function previously called 'rjitter' is now called 'rjitter.ppp'
+    and is now a method for the new generic 'rjitter'.
 
     o pairdist.ppp, crossdist.ppp, nndist.ppp, nnwhich.ppp, nncross.ppp
     New argument 'metric' specifies a non-Euclidean distance metric
