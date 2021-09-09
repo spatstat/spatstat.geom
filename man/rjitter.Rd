@@ -20,6 +20,9 @@ rjitter(X, \dots)
     The displacement vectors will be uniformly
     distributed in a circle of this radius.
     There is a sensible default.
+    Alternatively, \code{radius} may be a numeric vector of length
+    equal to the number of points in \code{X}, giving a different
+    displacement radius for each data point.
   }
   \item{retry}{
     What to do when a perturbed point lies outside the window

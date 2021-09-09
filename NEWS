@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.2-2.016
+        CHANGES IN spatstat.geom VERSION 2.2-2.017
 
 OVERVIEW
 
@@ -8,6 +8,8 @@ OVERVIEW
 
     o Basic support for calculations using non-Euclidean distance metrics.
 
+    o Improvements to 'rjitter'.
+    
 NEW CLASSES
 
     o metric
@@ -16,10 +18,6 @@ NEW CLASSES
     
 NEW FUNCTIONS
 
-    o rjitter.ppp
-    This function was previously called 'rjitter'. It is now a method
-    for the new generic function 'rjitter'.
-    
     o transformquantiles
     Transform the quantiles of a vector, matrix, array or pixel image.
 
@@ -32,11 +30,11 @@ NEW FUNCTIONS
     o invoke.metric
     Low level function to perform a desired operation using a given metric.
 
+    o rjitter.ppp
+    This function was previously called 'rjitter'. It is now a method
+    for the new generic function 'rjitter'.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
-
-    o rjitter
-    The function previously called 'rjitter' is now called 'rjitter.ppp'
-    and is now a method for the new generic 'rjitter'.
 
     o pairdist.ppp, crossdist.ppp, nndist.ppp, nnwhich.ppp, nncross.ppp
     New argument 'metric' specifies a non-Euclidean distance metric
@@ -49,7 +47,15 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o disc
     New argument 'metric' specifies a non-Euclidean distance metric
     defining the disc.
-    
+
+    o rjitter
+    The function previously called 'rjitter' is now called 'rjitter.ppp'
+    and is now a method for the new generic 'rjitter'.
+
+    o rjitter.ppp
+    The argument 'radius' may be a numeric vector, specifying a different
+    displacement radius for each data point.
+
 BUG FIXES
 
     o None!
