@@ -201,7 +201,7 @@ as.psp.default <- function(x, ..., window=NULL, marks=NULL,
 
 as.psp.owin <- function(x, ..., window=NULL,
                         check=spatstat.options("checksegments"), fatal=TRUE) {
-  .Deprecated("edges", package="spatstat")
+  .Deprecated("edges", package="spatstat.geom")
   edges(x, ..., window=window, check=check)
 }
 

@@ -42,9 +42,9 @@ rjitter(X, \dots)
   }
 }
 \value{
-  A point pattern (an object of class \code{"ppp"})
-  if \code{nsim=1}, or a list of point patterns if \code{nsim > 1},
-  in the same window as \code{X}.
+  The result of \code{rjitter.ppp} is
+  a point pattern (an object of class \code{"ppp"})
+  or a list of point patterns.
 }
 \details{
   The function \code{rjitter} is generic, with methods for point
