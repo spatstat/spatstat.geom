@@ -2,7 +2,7 @@
 #'
 #'  Distance metric whose unit ball is a given, symmetric, convex polygon.
 #'
-#' $Revision: 1.12 $  $Date: 2021/09/05 14:48:32 $
+#' $Revision: 1.13 $  $Date: 2021/09/20 14:14:35 $
 
 
 convexmetric <- local({
@@ -116,16 +116,22 @@ convexmetric <- local({
     return(r)
   }
 
-  convexnncross <- function(X, Y, sp, what=c("dist", "which")) {
+  convexnncross <- function(X, Y, sp, ve, what=c("dist", "which")) {
+    #' X is a point pattern
+    #' Y is a point pattern or segment pattern
     what <- match.arg(what, several.ok=TRUE)
     nX <- npoints(X)
-    nY <- npoints(Y)
+    nY <- nobjects(Y)
     ## trivial cases
     if(nX == 0 || nY == 0) {
       nnd <- rep(Inf, nX)
       nnw <- rep(NA_integer_, nX)
     } else {
-      d <- convexcrossdist(X, Y, sp)
+      if(is.ppp(Y)) {
+        d <- convexcrossdist(X, Y, sp)
+      } else if(is.psp(Y)) {
+        d <- convexPxS(X, Y, sp, ve)
+      } else stop("Y should be a point pattern or line segment pattern")
       nnd <- if("dist" %in% what) apply(d, 1, min) else NULL
       nnw <- if("which" %in% what) apply(d, 1, which.min) else NULL
     }
@@ -134,7 +140,55 @@ convexmetric <- local({
     return(result)
   }
 
-  
+    convexPxS <- function(X, Y, sp, ve) {
+      #' convex distance from each point of X to each segment in Y
+      #' requires vertices as well as support vectors
+      stopifnot(is.ppp(X))
+      stopifnot(is.psp(Y))
+      nX <- npoints(X)
+      nY <- nsegments(Y)
+      if(nX == 0 || nY == 0)
+        return(matrix(, nX, nY))
+      #' vertices - distance from origin
+      vl <- with(ve, sqrt(x^2+y^2))
+      nv <- length(vl)
+      #' distances from points of X to endpoints of Y
+      D1 <- convexcrossdist(X, endpoints.psp(Y, "first"), sp)
+      D2 <- convexcrossdist(X, endpoints.psp(Y, "second"), sp)
+      D <- matrix(pmin(D1, D2), nX, nY)
+      dmax <- apply(D, 1, max)
+      #' distances from points of X to locations on segments
+      B <- boundingbox(Frame(X), Frame(Y))
+      B <- grow.rectangle(B, max(sidelengths(B))/5)
+      coX <- coords(X)
+      xx <- coX[, "x"]
+      yy <- coX[, "y"]
+      for(i in 1:nrow(coX)) {
+        #' construct segments from X[i] along expansion line of each vertex
+        Zi <- psp(rep(xx[i], nv),
+                  rep(yy[i], nv),
+                  xx[i] + dmax[i] * ve$x,
+                  yy[i] + dmax[i] * ve$y,
+                  window=B)
+        #' intersect with target segments
+        V <- crossing.psp(Zi, Y, details=TRUE)
+        if(npoints(V) > 0) {
+          marv <- marks(V)
+          #' crossing point with which target segment?
+          jj <- marv$jB
+          #' crossing point of extension of which vertex?
+          kk <- marv$iA
+          #' Euclidean distance from X[i] to crossing point
+          dE <- crossdist(X[i], V)
+          #' metric distance
+          dd <- dE/vl[kk]
+          #' minimise
+          D[i, jj] <- pmin(D[i, jj], dd)
+        }
+      }
+      return(D)
+    }
+
   convexdistmapmask <- function(w, sp, npasses=5, verbose=FALSE) {
     stopifnot(is.mask(w))
     check.1.integer(npasses)
@@ -218,6 +272,7 @@ convexmetric <- local({
       return(result)
     }
 
+
     convexmetric <- function(K) {
       stopifnot(is.owin(K))
       stopifnot(is.convex(K))
@@ -225,6 +280,7 @@ convexmetric <- local({
         stop("The origin (0,0) must be inside the set K")
       if(bdist.points(ppp(0, 0, window=K)) < sqrt(.Machine$double.eps))
         stop("The origin (0,0) must lie in the interior of K")
+      vertK <- vertices(K)
       spK <- sptvexsym(K, standardise=TRUE)
       if(!all(is.finite(unlist(spK))))
         stop("Support vectors are singular (infinite or undefined)",
@@ -249,15 +305,11 @@ convexmetric <- local({
           return(if(squared) y^2 else y)
         },
         nncross.ppp=function(X,Y,what=c("dist","which"), ...) {
-          if(is.psp(Y))
-            stop(paste("This metric does not support the case",
-                       "where Y is a psp object"),
-                 call.=FALSE)
           warn.unsupported.args(list(iX=NULL, iY=NULL, k=1,
                                      sortby=c("range", "var", "x", "y"),
                                      is.sorted.X=FALSE, is.sorted.Y=FALSE),
                                 ...)
-          convexnncross(X,Y,spK,what)
+          convexnncross(X,Y,spK,vertK,what)
         },
         distmap.ppp=function(X, ...) {
           w <- pixellate(X, ..., preserve=TRUE)

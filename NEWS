@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.2-2.018
+        CHANGES IN spatstat.geom VERSION 2.2-2.019
 
 OVERVIEW
 
@@ -27,13 +27,13 @@ NEW FUNCTIONS
     o mean.ecdf, mean.ewcdf
     Calculate the mean of an empirical cumulative distribution function.
     
-    o invoke.metric
-    Low level function to perform a desired operation using a given metric.
-
     o rjitter.ppp
     This function was previously called 'rjitter'. It is now a method
     for the new generic function 'rjitter'.
     
+    o invoke.metric
+    Low level function to perform a desired operation using a given metric.
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o pairdist.ppp, crossdist.ppp, nndist.ppp, nnwhich.ppp, nncross.ppp
@@ -49,16 +49,14 @@ SIGNIFICANT USER-VISIBLE CHANGES
     defining the disc.
 
     o rjitter
+    This is now a generic function.
     The function previously called 'rjitter' is now called 'rjitter.ppp'
     and is now a method for the new generic 'rjitter'.
 
     o rjitter.ppp
     The argument 'radius' may be a numeric vector, specifying a different
-    displacement radius for each data point.
+    maximum displacement radius for each data point.
 
-BUG FIXES
-
-    o None!
 
         CHANGES IN spatstat.geom VERSION 2.2-2
 
