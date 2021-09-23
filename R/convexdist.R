@@ -2,7 +2,7 @@
 #'
 #'  Distance metric whose unit ball is a given, symmetric, convex polygon.
 #'
-#' $Revision: 1.13 $  $Date: 2021/09/20 14:14:35 $
+#' $Revision: 1.14 $  $Date: 2021/09/23 07:10:38 $
 
 
 convexmetric <- local({
@@ -159,7 +159,7 @@ convexmetric <- local({
       dmax <- apply(D, 1, max)
       #' distances from points of X to locations on segments
       B <- boundingbox(Frame(X), Frame(Y))
-      B <- grow.rectangle(B, max(sidelengths(B))/5)
+      B <- grow.rectangle(B, max(dmax) * max(vl))
       coX <- coords(X)
       xx <- coX[, "x"]
       yy <- coX[, "y"]
@@ -182,6 +182,13 @@ convexmetric <- local({
           dE <- crossdist(X[i], V)
           #' metric distance
           dd <- dE/vl[kk]
+          #' minimise over each target segment
+          oo <- order(jj, dd) 
+          jj <- jj[oo]
+          dd <- dd[oo]
+          ok <- !duplicated(jj)
+          jj <- jj[ok]
+          dd <- dd[ok]
           #' minimise
           D[i, jj] <- pmin(D[i, jj], dd)
         }
