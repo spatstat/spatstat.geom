@@ -1,7 +1,7 @@
 #
 #      distanxD.R
 #
-#      $Revision: 1.16 $     $Date: 2021/01/07 01:15:08 $
+#      $Revision: 1.17 $     $Date: 2021/09/26 07:00:30 $
 #
 #      Interpoint distances for multidimensional points
 #
@@ -433,13 +433,3 @@ nncross.ppx <- function(X, Y, iX=NULL, iY=NULL,
 }
 
 
-packupNNdata <- function(NND, NNW, what, k) {
-  result <- as.data.frame(list(dist=NND, which=NNW)[what])
-  if(max(k) > 1L) {
-    colnames(result) <- c(if("dist" %in% what) paste0("dist.", k) else NULL,
-                          if("which" %in% what) paste0("which.",k) else NULL)
-  }
-  if(ncol(result) == 1L)
-    result <- result[, , drop=TRUE]
-  return(result)
-}

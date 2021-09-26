@@ -186,6 +186,7 @@
 \alias{owinpoly2mask}
 \alias{owin2polypath}
 \alias{param.quad}
+\alias{PDtoNN}
 \alias{pickoption}
 \alias{plotEachLayer}
 \alias{plot3Dpoints}
@@ -325,6 +326,7 @@
 \alias{y.quad}
 \alias{xy.grid}
 \alias{xtfrm.im}
+\alias{XDtoNN}
 \alias{xypolygon2psp}
 \alias{xypolyselfint}
 \alias{ZeroValue}
@@ -524,6 +526,7 @@ owinpolycheck(W, verbose=TRUE)
 owinpoly2mask(w, rasta, check=TRUE)
 owin2polypath(w)
 param.quad(Q)
+PDtoNN(d, what, k, \dots)
 pickoption(what="option", key, keymap, \dots,
            exact=FALSE, list.on.err=TRUE, die=TRUE, multi=FALSE,
            allow.all=TRUE)
@@ -675,6 +678,7 @@ y.quad(Q)
 xy.grid(xr, yr, nx, ny, dx, dy)
 \method{xtfrm}{im}(x)
 xypolyselfint(p, eps, proper, yesorno, checkinternal)
+XDtoNN(d, what, iX, iY, k, \dots)
 xypolygon2psp(p, w, check)
 ZeroValue(x)
 \method{ZeroValue}{im}(x)

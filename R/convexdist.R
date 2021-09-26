@@ -2,7 +2,7 @@
 #'
 #'  Distance metric whose unit ball is a given, symmetric, convex polygon.
 #'
-#' $Revision: 1.14 $  $Date: 2021/09/23 07:10:38 $
+#' $Revision: 1.16 $  $Date: 2021/09/26 06:32:56 $
 
 
 convexmetric <- local({
@@ -80,23 +80,17 @@ convexmetric <- local({
     return(r)
   }
 
-  convexnndist <- function(X, sp) {
-    nX <- npoints(X)
-    if(nX <= 1) return(numeric(0))
-    if(nX == 1) return(Inf)
+  convexnndist <- function(X, sp, k=1L) {
     d <- convexpairdist(X, sp)
     diag(d) <- Inf
-    nn <- apply(d, 1, min)
+    nn <- PDtoNN(d, "dist", k=k)
     return(nn)
   }
 
-  convexnnwhich <- function(X, sp) {
-    nX <- npoints(X)
-    if(nX == 0) return(integer(0))
-    if(nX == 1) return(NA_integer_)
+  convexnnwhich <- function(X, sp, k=1L) {
     d <- convexpairdist(X, sp)
     diag(d) <- Inf
-    nw <- apply(d, 1, which.min)
+    nw <- PDtoNN(d, "which", k=k)
     return(nw)
   }
 
@@ -116,27 +110,22 @@ convexmetric <- local({
     return(r)
   }
 
-  convexnncross <- function(X, Y, sp, ve, what=c("dist", "which")) {
+  convexnncross <- function(X, Y, sp, ve,
+                            iX=NULL, iY=NULL, what=c("dist", "which"),
+                            k=1L) {
     #' X is a point pattern
     #' Y is a point pattern or segment pattern
     what <- match.arg(what, several.ok=TRUE)
     nX <- npoints(X)
     nY <- nobjects(Y)
-    ## trivial cases
     if(nX == 0 || nY == 0) {
-      nnd <- rep(Inf, nX)
-      nnw <- rep(NA_integer_, nX)
-    } else {
-      if(is.ppp(Y)) {
-        d <- convexcrossdist(X, Y, sp)
-      } else if(is.psp(Y)) {
-        d <- convexPxS(X, Y, sp, ve)
-      } else stop("Y should be a point pattern or line segment pattern")
-      nnd <- if("dist" %in% what) apply(d, 1, min) else NULL
-      nnw <- if("which" %in% what) apply(d, 1, which.min) else NULL
-    }
-    result <- list(dist=nnd, which=nnw)[what]
-    result <- as.data.frame(result)[,,drop=TRUE]
+      d <- matrix(Inf, nX, nY)
+    } else if(is.ppp(Y)) {
+      d <- convexcrossdist(X, Y, sp)
+    } else if(is.psp(Y)) {
+      d <- convexPxS(X, Y, sp, ve)
+    } else stop("Y should be a point pattern or line segment pattern")
+    result <- XDtoNN(d, what=what, iX=iX, iY=iY, k=k)
     return(result)
   }
 
@@ -280,6 +269,8 @@ convexmetric <- local({
     }
 
 
+    #' >>>>>>>>>>>>>> Function to create a metric <<<<<<<<<<<<<<<<<<<<<<
+    
     convexmetric <- function(K) {
       stopifnot(is.owin(K))
       stopifnot(is.convex(K))
@@ -287,36 +278,39 @@ convexmetric <- local({
         stop("The origin (0,0) must be inside the set K")
       if(bdist.points(ppp(0, 0, window=K)) < sqrt(.Machine$double.eps))
         stop("The origin (0,0) must lie in the interior of K")
+      ## vertices of K
       vertK <- vertices(K)
+      ## support vectors of K
       spK <- sptvexsym(K, standardise=TRUE)
       if(!all(is.finite(unlist(spK))))
         stop("Support vectors are singular (infinite or undefined)",
              call.=FALSE)
+      ## build object in this environment so that K, spK, vertK are accessible
       result <- list(
         pairdist.ppp=function(X, ..., squared=FALSE) {
           warn.unsupported.args(list(periodic=FALSE, method="C"), ...)
           y <- convexpairdist(X, spK)
           return(if(squared) y^2 else y)
         },
-        nndist.ppp=function(X, ...) {
-          warn.unsupported.args(list(k=1, by=NULL, method="C"), ...)
-          convexnndist(X, spK)
+        nndist.ppp=function(X, ..., k=1L) {
+          warn.unsupported.args(list(by=NULL, method="C"), ...)
+          convexnndist(X, spK, k=k)
         },
-        nnwhich.ppp=function(X, ...) {
-          warn.unsupported.args(list(k=1, by=NULL, method="C"), ...)
-          convexnnwhich(X, spK)
+        nnwhich.ppp=function(X, ..., k=1L) {
+          warn.unsupported.args(list(by=NULL, method="C"), ...)
+          convexnnwhich(X, spK, k=k)
         },
         crossdist.ppp=function(X, Y, ..., squared=FALSE) {
           warn.unsupported.args(list(periodic=FALSE, method="C"), ...)
           y <- convexcrossdist(X,Y,spK)
           return(if(squared) y^2 else y)
         },
-        nncross.ppp=function(X,Y,what=c("dist","which"), ...) {
-          warn.unsupported.args(list(iX=NULL, iY=NULL, k=1,
-                                     sortby=c("range", "var", "x", "y"),
+        nncross.ppp=function(X,Y,iX=NULL, iY=NULL, what=c("dist","which"),
+                             ..., k=1L) {
+          warn.unsupported.args(list(sortby=c("range", "var", "x", "y"),
                                      is.sorted.X=FALSE, is.sorted.Y=FALSE),
                                 ...)
-          convexnncross(X,Y,spK,vertK,what)
+          convexnncross(X,Y,spK,vertK, iX, iY, what, k)
         },
         distmap.ppp=function(X, ...) {
           w <- pixellate(X, ..., preserve=TRUE)
@@ -352,6 +346,7 @@ convexmetric <- local({
       return(result)
     }
 
+    
     class(convexmetric) <- "metricfun"
     attr(convexmetric, "explain") <-
       "Creates a distance metric based on a convex set K"
