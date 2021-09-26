@@ -132,10 +132,12 @@
 }
 \examples{
    # an image
-   Z <- setcov(owin())
+   Z <- setcov(owin(), dimyx=32)
    persp(Z, colmap=terrain.colors(128))
-   co <- colourmap(range=c(0,1), col=rainbow(128))
-   persp(Z, colmap=co, axes=FALSE, shade=0.3)
+   if(interactive()) {
+     co <- colourmap(range=c(0,1), col=rainbow(128))
+     persp(Z, colmap=co, axes=FALSE, shade=0.3)
+   }
 
    ## Terrain elevation
    persp(bei.extra$elev, colmap=terrain.colors(128),

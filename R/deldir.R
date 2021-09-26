@@ -3,7 +3,7 @@
 #'
 #' Interface to deldir package
 #'
-#'  $Revision: 1.36 $ $Date: 2021/01/07 01:15:08 $
+#'  $Revision: 1.38 $ $Date: 2021/09/26 08:03:56 $
 #'
 
 #' ..............................................
@@ -301,7 +301,7 @@ dirichletAreas <- function(X) {
   switch(win$type,
          rectangle = {
            rw <- c(win$xrange, win$yrange)
-           dd <- deldir(X$x, X$y, dpl=NULL, rw=rw)
+           dd <- deldir(X$x, X$y, rw=rw)
            w <- dd$summary[, 'dir.area']
          },
          polygonal = {
@@ -343,29 +343,3 @@ dirichletEdges <- function(X, clip=TRUE) {
 }
 
 
-## deprecated older names
-
-# delaunay.distance <- function(...) {
-#   .Deprecated("delaunayDistance", package="spatstat")
-#   delaunayDistance(...)
-# }
-
-# delaunay.network <- function(...) {
-#   .Deprecated("delaunayNetwork", package="spatstat")
-#   delaunayNetwork(...)
-# }
-
-# dirichlet.edges <- function(...) {
-#   .Deprecated("dirichletEdges", package="spatstat")
-#   dirichletEdges(...)
-# }
-
-# dirichlet.network <- function(...) {
-#   .Deprecated("dirichletNetwork", package="spatstat")
-#   dirichletNetwork(...)
-# }
-
-# dirichlet.vertices <- function(...) {
-#   .Deprecated("dirichletVertices", package="spatstat")
-#   dirichletVertices(...)
-# }
