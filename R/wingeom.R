@@ -1,7 +1,7 @@
 #
 #	wingeom.R	Various geometrical computations in windows
 #
-#	$Revision: 4.138 $	$Date: 2021/02/16 02:25:19 $
+#	$Revision: 4.139 $	$Date: 2021/10/03 02:37:31 $
 #
 
 volume.owin <- function(x) { area.owin(x) }
@@ -131,9 +131,9 @@ square <- function(r=1, unitname=NULL) {
 owinpoly2mask <- function(w, rasta, check=TRUE) {
   if(check) {
     verifyclass(w, "owin")
-    stopifnot(w$type == "polygonal")
+    stopifnot(is.polygonal(w))
     verifyclass(rasta, "owin")
-    stopifnot(rasta$type == "mask")
+    stopifnot(is.mask(rasta))
   }
   
   bdry <- w$bdry
@@ -146,46 +146,42 @@ owinpoly2mask <- function(w, rasta, check=TRUE) {
   nx    <- dimyx[2L]
   ny    <- dimyx[1L]
 
-  epsilon <- with(.Machine, double.base^floor(double.ulp.digits/2))
-
-  score <- numeric(nx*ny)
-  
-  for(i in seq_along(bdry)) {
-    p <- bdry[[i]]
-    xp <- p$x
-    yp <- p$y
-    np <- length(p$x)
-    # repeat last vertex
-    xp <- c(xp, xp[1L])
-    yp <- c(yp, yp[1L])
-    np <- np + 1
-    # rescale coordinates so that pixels are at integer locations
-    xp <- (xp - x0)/xstep
-    yp <- (yp - y0)/ystep
-    # avoid exact integer locations for vertices
-    whole <- (ceiling(xp) == floor(xp))
-    xp[whole] <-  xp[whole] + epsilon
-    whole <- (ceiling(yp) == floor(yp))
-    yp[whole] <-  yp[whole] + epsilon
-    ## call C
-    z <- .C(SG_poly2imI,
-            xp=as.double(xp),
-            yp=as.double(yp),
-            np=as.integer(np),
-            nx=as.integer(nx),
-            ny=as.integer(ny),
-            out=as.integer(integer(nx * ny)),
-            PACKAGE="spatstat.geom")
-    if(i == 1)
-      score <- z$out
-    else 
-      score <- score + z$out
+  score <- 0
+  if(xstep > 0 && ystep > 0) {
+    epsilon <- with(.Machine, double.base^floor(double.ulp.digits/2))
+    for(i in seq_along(bdry)) {
+      p <- bdry[[i]]
+      xp <- p$x
+      yp <- p$y
+      np <- length(p$x)
+      ## repeat last vertex
+      xp <- c(xp, xp[1L])
+      yp <- c(yp, yp[1L])
+      np <- np + 1
+      ## rescale coordinates so that pixels are at integer locations
+      xp <- (xp - x0)/xstep
+      yp <- (yp - y0)/ystep
+      ## avoid exact integer locations for vertices
+      whole <- (ceiling(xp) == floor(xp))
+      xp[whole] <-  xp[whole] + epsilon
+      whole <- (ceiling(yp) == floor(yp))
+      yp[whole] <-  yp[whole] + epsilon
+      ## call C
+      z <- .C(SG_poly2imI,
+              xp=as.double(xp),
+              yp=as.double(yp),
+              np=as.integer(np),
+              nx=as.integer(nx),
+              ny=as.integer(ny),
+              out=as.integer(integer(nx * ny)),
+              PACKAGE="spatstat.geom")
+      score <- if(i == 1) z$out else (score + z$out)
+    }
   }
   status <- (score != 0)
   out <- owin(rasta$xrange, rasta$yrange, mask=matrix(status, ny, nx))
   return(out)
 }
-
 
 
 overlap.owin <- function(A, B) {

@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.192 $	$Date: 2021/04/09 08:36:59 $
+#	$Revision: 4.193 $	$Date: 2021/10/03 02:15:29 $
 #
 #
 #	A window may be either
@@ -602,8 +602,24 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL) {
       message(whinge)
       warning(whinge, call.=FALSE)
     }
-    # Initialise mask with all entries TRUE
-    rasta <- owin(w$xrange, w$yrange, mask=matrix(TRUE, nr, nc))
+    ## Initialise mask with all entries TRUE
+    xrange <- w$xrange
+    yrange <- w$yrange
+    nowidth  <- (diff(xrange) < .Machine$double.eps)
+    noheight <- (diff(yrange) < .Machine$double.eps)
+    if(nowidth || noheight) {
+      if(nowidth && noheight) {
+        nr <- nc <- 1
+      } else if(noheight) {
+        nr <- 1
+        yrange <- yrange + c(-1/2,1/2) * diff(xrange)/(nc+1)
+      } else if(nowidth) {
+        ## ensure square pixels
+        nc <- 1
+        xrange <- xrange + c(-1/2,1/2) * diff(yrange)/(nr+1)
+      }
+    }
+    rasta <- owin(xrange, yrange, mask=matrix(TRUE, nr, nc))
   } else {
 # 
 # Pixel coordinates given explicitly:

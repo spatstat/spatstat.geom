@@ -27,7 +27,7 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
   stopifnot(is.ppp(Y) || is.psp(Y))
   if(!is.null(metric)) {
     ans <- invoke.metric(metric, "nncross.ppp",
-                         X=X, Y=Y, what=what, ...,
+                         X=X, Y=Y, iX=iX, iY=iY, what=what, ...,
                          k=k, sortby=sortby,
                          is.sorted.X=is.sorted.X,
                          is.sorted.Y=is.sorted.Y)

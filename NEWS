@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.2-2.022
+        CHANGES IN spatstat.geom VERSION 2.2-2.023
 
 OVERVIEW
 
@@ -58,7 +58,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
 BUG FIXES
 
-    o None!
+    o as.mask
+    Crashed if 'Frame(w)' had zero height or zero width.
+    Fixed.
 
         CHANGES IN spatstat.geom VERSION 2.2-2
 
