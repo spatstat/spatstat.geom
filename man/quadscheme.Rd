@@ -104,6 +104,41 @@
   using the package \code{deldir}; otherwise it is computed
   approximately by discretisation.
 }
+\section{Error Messages}{
+  The following error messages need some explanation.
+  (See also the list of error messages in \code{\link[spatstat.core]{ppm.ppp}}).
+  \itemize{
+    \item{\dQuote{Some tiles with positive area do not contain any
+	quadrature points: relative error = X\%}}{
+      This is not important unless the relative error is large.
+      In the default rule for computing the
+      quadrature weights, space is divided into rectangular tiles,
+      and the number of quadrature points (data and dummy points) in
+      each tile is counted. It is possible for a tile with non-zero area
+      to contain no quadrature points; in this case, the quadrature
+      scheme will contribute a bias to the model-fitting procedure.
+      \bold{A small relative error (less than 2 percent) is not	important.}
+      Relative errors of a few percent can occur because of the shape of
+      the window.
+      If the relative error is greater than about 5 percent, we
+      recommend trying different parameters for the quadrature scheme,
+      perhaps setting a larger value of \code{nd} to increase the number
+      of dummy points. A relative error greater than 10 percent
+      indicates a major problem with the input data. The quadrature
+      scheme should be inspected by plotting and printing it.
+      (The most likely cause of this problem is that the spatial coordinates
+      of the original data were not handled correctly, for example,
+      coordinates of the locations and the window boundary were incompatible.)
+    }
+    \item{\dQuote{Some tiles with zero area contain quadrature points}}{
+      This error message is rare, and has no consequences.
+      It is mainly of interest to
+      programmers. It occurs when the area of a
+      tile is calculated to be equal to zero, but a quadrature point
+      has been placed in the tile. 
+    }
+  }
+}
 \references{
   Baddeley, A. and Turner, R.
   Practical maximum pseudolikelihood for spatial point patterns.
