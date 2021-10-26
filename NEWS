@@ -1,4 +1,21 @@
-        CHANGES IN spatstat.geom VERSION 2.3-0
+        CHANGES IN spatstat.geom VERSION 2.3-0.001
+
+OVERVIEW
+
+    o New options for weighted.quantile
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o weighted.quantile
+    New argument 'type' allows the user to choose between several rules
+    for the weighted quantile.
+
+    o weighted.median
+    New argument 'type' allows the user to choose between several rules
+    for the weighted median. The default rule has changed.
+
+
+        CHANGES IN spatstat.geom VERSION 2.3-0.001
 
 OVERVIEW
 

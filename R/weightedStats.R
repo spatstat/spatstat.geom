@@ -3,7 +3,7 @@
 #'
 #'   weighted versions of hist, var, median, quantile
 #'
-#'  $Revision: 1.4 $  $Date: 2021/01/07 01:38:21 $
+#'  $Revision: 1.7 $  $Date: 2021/10/26 01:41:47 $
 #'
 
 
@@ -59,15 +59,18 @@ weighted.var <- function(x, w, na.rm=TRUE) {
 
 #' weighted median
 
-weighted.median <- function(x, w, na.rm=TRUE) {
-  unname(weighted.quantile(x, probs=0.5, w=w, na.rm=na.rm))
+weighted.median <- function(x, w, na.rm=TRUE, type=2) {
+  unname(weighted.quantile(x, probs=0.5, w=w, na.rm=na.rm, type=type))
 }
 
 #' weighted quantile
 
-weighted.quantile <- function(x, w, probs=seq(0,1,0.25), na.rm=TRUE) {
+weighted.quantile <- function(x, w, probs=seq(0,1,0.25), na.rm=TRUE, type=4) {
   x <- as.numeric(as.vector(x))
   w <- as.numeric(as.vector(w))
+  if(is.na(m <- match(type, c(1,2,4))))
+    stop("Argument 'type' must equal 1, 2 or 4", call.=FALSE)
+  type <- c(1,2,4)[m]
   if(anyNA(x) || anyNA(w)) {
     ok <- !(is.na(x) | is.na(w))
     x <- x[ok]
@@ -80,23 +83,21 @@ weighted.quantile <- function(x, w, probs=seq(0,1,0.25), na.rm=TRUE) {
   x <- x[oo]
   w <- w[oo]
   Fx <- cumsum(w)/sum(w)
-  #'
-  result <- numeric(length(probs))
-  for(i in seq_along(result)) {
-    p <- probs[i]
-    lefties <- which(Fx <= p)
-    if(length(lefties) == 0) {
-      result[i] <- x[1]
-    } else {
-      left <- max(lefties)
-      result[i] <- x[left]
-      if(Fx[left] < p && left < length(x)) {
-        right <- left+1
-        y <- x[left] + (x[right]-x[left]) * (p-Fx[left])/(Fx[right]-Fx[left])
-        if(is.finite(y)) result[i] <- y
-      }
-    }
+  #' 
+  if(anyDuplicated(x)) {
+    dup <- rev(duplicated(rev(x)))
+    x <- x[!dup]
+    Fx <- Fx[!dup]
   }
+  #'
+  out <- switch(as.character(type),
+                "1" = approx(Fx, x, xout=probs, ties="ordered", rule=2,
+                             method="constant", f=1),
+                "2" = approx(Fx, x, xout=probs, ties="ordered", rule=2,
+                             method="constant", f=1/2),
+                "4" = approx(Fx, x, xout=probs, ties="ordered", rule=2,
+                             method="linear"))
+  result <- out$y
   names(result) <- paste0(format(100 * probs, trim = TRUE), "%")
   return(result)
 }
