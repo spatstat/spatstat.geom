@@ -137,6 +137,7 @@
 \alias{markvaluetype}
 \alias{packupNNdata}
 \alias{parbreak}
+\alias{perspVisible}
 \alias{plan.legend.layout}
 \alias{pointweights}
 \alias{polytileareaEngine}
@@ -479,6 +480,7 @@ logi.dummy(X, dummytype, nd, mark.repeat, \dots)
 markvaluetype(x)
 packupNNdata(NND, NNW, what, k)
 parbreak(terse)
+perspVisible(x, y, z, M)
 plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
                    started, map)
 pointweights(X, \dots, weights, parent)
