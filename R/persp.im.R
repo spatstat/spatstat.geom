@@ -4,7 +4,7 @@
 ##  'persp' method for image objects
 ##      plus annotation
 ##  
-##  $Revision: 1.24 $ $Date: 2021/11/01 02:49:56 $
+##  $Revision: 1.25 $ $Date: 2021/11/01 03:33:22 $
 ##
 
 persp.im <- function(x, ...,
@@ -276,9 +276,11 @@ perspSegments <- local({
     if(is.null(V)) {
       Y <- eX
     } else {
-      ## chop segments to length of single pixel
-      eps <- with(Z, min(xstep,ystep))
-      Y <- do.call(rbind, lapply(as.data.frame(t(eX)), chopsegment, eps=eps))
+      ## chop each segment to length of single pixel along either axis
+      xstep <- Z$xstep
+      ystep <- Z$ystep
+      Y <- do.call(rbind, lapply(as.data.frame(t(eX)), chopsegment,
+                                 eps1=xstep, eps2=ystep))
       ## determine which segments are visible
       yleft  <- list(x=Y[,1], y=Y[,2])
       yright <- list(x=Y[,3], y=Y[,4])
@@ -293,10 +295,10 @@ perspSegments <- local({
     segments(x0y0$x, x0y0$y, x1y1$x, x1y1$y, ...)
   }
 
-  chopsegment <- function(x, eps) {
-    len2 <- (x[3] - x[1])^2 + (x[4] - x[2])^2
-    if(len2 <= eps^2) return(x)
-    n <- ceiling(sqrt(len2)/eps)
+  chopsegment <- function(x, eps1, eps2) {
+    n1 <- ceiling(abs(x[3] - x[1])/eps1)
+    n2 <- ceiling(abs(x[4] - x[2])/eps2)
+    n <- max(1, n1, n2)
     b <- (1:n)/n
     a <- (0:(n-1))/n
     return(cbind(x[1] + a * (x[3]-x[1]),

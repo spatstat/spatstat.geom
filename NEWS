@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.3-0.003
+        CHANGES IN spatstat.geom VERSION 2.3-0.004
 
 OVERVIEW
 
@@ -14,6 +14,8 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New argument 'type' allows the user to choose between several rules
     for the weighted median. The default rule has changed.
 
+    o perspSegments
+    Improved quality of result when pixels are not square.
 
         CHANGES IN spatstat.geom VERSION 2.3-0.001
 
