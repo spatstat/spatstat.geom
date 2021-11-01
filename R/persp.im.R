@@ -4,7 +4,7 @@
 ##  'persp' method for image objects
 ##      plus annotation
 ##  
-##  $Revision: 1.25 $ $Date: 2021/11/01 03:33:22 $
+##  $Revision: 1.26 $ $Date: 2021/11/01 05:17:13 $
 ##
 
 persp.im <- function(x, ...,
@@ -173,15 +173,20 @@ perspVisible <- function(x, y, z, M) {
     X <- values
     Xmat <- as.matrix(X)
     xyz <- as.matrix(as.data.frame(X)) # drops NA entries
+    xstep <- X$xstep
+    ystep <- X$ystep
   } else if(is.matrix(x)) {
     ## base graphics image convention x = row, y = col
-    Xmat <- values
-    if(is.null(xmargin)) xmargin <- seq(0, 1, length.out=nrow(Xmat))
-    if(is.null(ymargin)) ymargin <- seq(0, 1, length.out=ncol(Xmat))
-    xyz <- cbind(x=xmargin[row(Xmat)],
-                 y=ymargin[col(Xmat)],
+    ## convert to spatstat convention
+    Xmat <- t(values)
+    if(is.null(xmargin)) xmargin <- seq(0, 1, length.out=ncol(Xmat))
+    if(is.null(ymargin)) ymargin <- seq(0, 1, length.out=nrow(Xmat))
+    xyz <- cbind(x=xmargin[col(Xmat)],
+                 y=ymargin[row(Xmat)],
                  z=as.numeric(Xmat))
     xyz <- xyz[complete.cases(xyz), ,drop=FALSE]
+    xstep <- mean(diff(xmargin))
+    ystep <- mean(diff(ymargin))
   } else stop("format is not understood")
   ## project the coordinates
   ## onto (x,y) plane of plot and z axis pointing out of it
@@ -194,17 +199,17 @@ perspVisible <- function(x, y, z, M) {
   PZ <- Xmat
   ok <- !is.na(PZ)
   PZ[ok] <- pz
-  maxslip <- max(0, abs(apply(PZ, 1, diff)),
-                 abs(apply(PZ, 2, diff)), na.rm=TRUE)
+  maxslipx <- max(0, abs(apply(PZ, 1, diff)), na.rm=TRUE)
+  maxslipy <- max(0, abs(apply(PZ, 2, diff)), na.rm=TRUE)
   ## determine which pixels are in front
   d <- ceiling(dim(Xmat)/2)
   jx <- cut(px, breaks=d[2])
   iy <- cut(py, breaks=d[1])
   zmax <- tapply(pz, list(iy,jx), max)
-  isvis <- infront <- (pz > zmax[cbind(iy,jx)] - 2 * maxslip)
+  infront <- (pz > zmax[cbind(iy,jx)] - maxslipx - maxslipy)
   ## Additionally check whether unit normal to surface is pointing to viewer
-  dzdx <- cbind(0, t(apply(Xmat, 1, diff)))/X$xstep
-  dzdy <- rbind(0, apply(Xmat, 2, diff))/X$ystep
+  dzdx <- cbind(0, t(apply(Xmat, 1, diff)))/xstep
+  dzdy <- rbind(0, apply(Xmat, 2, diff))/ystep
   dzdx <- as.vector(dzdx[ok])
   dzdy <- as.vector(dzdy[ok])
   ## unscaled normal is (-dzdx, -dzdy, 1)
@@ -224,7 +229,7 @@ perspVisible <- function(x, y, z, M) {
     answer[answer] <- isvis
   }
   Vmat <- matrix(answer, nrow(Xmat), ncol(Xmat))
-  if(!is.im(values)) return(Vmat)
+  if(!is.im(values)) return(t(Vmat))
   V <- (X > 0)
   V[drop=FALSE] <- Vmat
   return(V)
