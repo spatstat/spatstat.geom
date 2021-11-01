@@ -4,7 +4,7 @@
 ##  'persp' method for image objects
 ##      plus annotation
 ##  
-##  $Revision: 1.26 $ $Date: 2021/11/01 05:17:13 $
+##  $Revision: 1.27 $ $Date: 2021/11/01 07:26:43 $
 ##
 
 persp.im <- function(x, ...,
@@ -191,35 +191,37 @@ perspVisible <- function(x, y, z, M) {
   ## project the coordinates
   ## onto (x,y) plane of plot and z axis pointing out of it
   v <- cbind(xyz, 1) %*% M
-  pxyz <- v[,1:3]/v[,4]
-  px <- pxyz[,1]
-  py <- pxyz[,2]
-  pz <- pxyz[,3]
+  px <- v[,1]/v[,4]
+  py <- v[,2]/v[,4]
+  pz <- v[,3]/v[,4]
+  pw <- v[,4]
   ## determine greatest possible difference in 'depth' in one pixel step
   PZ <- Xmat
   ok <- !is.na(PZ)
   PZ[ok] <- pz
   maxslipx <- max(0, abs(apply(PZ, 1, diff)), na.rm=TRUE)
   maxslipy <- max(0, abs(apply(PZ, 2, diff)), na.rm=TRUE)
-  ## determine which pixels are in front
+  ## First, determine which pixels are in front
   d <- ceiling(dim(Xmat)/2)
   jx <- cut(px, breaks=d[2])
   iy <- cut(py, breaks=d[1])
   zmax <- tapply(pz, list(iy,jx), max)
   infront <- (pz > zmax[cbind(iy,jx)] - maxslipx - maxslipy)
-  ## Additionally check whether unit normal to surface is pointing to viewer
+  ## Second, determine whether outward normal to surface is pointing to viewer
   dzdx <- cbind(0, t(apply(Xmat, 1, diff)))/xstep
   dzdy <- rbind(0, apply(Xmat, 2, diff))/ystep
   dzdx <- as.vector(dzdx[ok])
   dzdy <- as.vector(dzdy[ok])
-  ## unscaled normal is (-dzdx, -dzdy, 1)
-  ## Determine viewer eye position
-  theta <- atan2(M[2,1],M[1,1]) + pi/2
-  phi <-  - atan2(M[3,3], M[3,2])
-  ## view vector
-  viewer <- cos(phi) * c(cos(theta), sin(theta), 0) + c(0, 0, sin(phi))
-  ## inner product
-  dotprod <- -dzdx * viewer[1] - dzdy * viewer[2] + viewer[3]
+  ## unscaled normal vector
+  normalx <- -dzdx
+  normaly <- -dzdy
+  normalz <- 1
+  ## derivative of projected depth with respect to 3D input position
+  dDdx <- (M[1,3] - M[1,4]/pz)/pw
+  dDdy <- (M[2,3] - M[2,4]/pz)/pw
+  dDdz <- (M[3,3] - M[3,4]/pz)/pw
+  ## inner product = derivative of projected depth along outward normal vector
+  dotprod <- normalx * dDdx + normaly * dDdy + normalz * dDdz
   ## Visible?
   isvis <- infront & (dotprod < 0)
   if(!anyNA(Xmat)) {
