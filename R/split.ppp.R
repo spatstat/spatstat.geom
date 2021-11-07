@@ -1,7 +1,7 @@
 #
 # split.ppp.R
 #
-# $Revision: 1.37 $ $Date: 2020/11/29 07:36:13 $
+# $Revision: 1.40 $ $Date: 2021/11/07 02:44:38 $
 #
 # split.ppp and "split<-.ppp"
 #
@@ -58,12 +58,40 @@ split.ppp <- function(x, f = marks(x), drop=FALSE, un=NULL, reduce=FALSE, ...) {
       f <- marks(cut(x, fsplit))
       splittype <- "tess"
     } else if(is.character(f) && length(f) == 1) {
-      # f is the name of a column of marks
+      # f should be 'marks' or the name of a column of marks
       marx <- marks(x)
-      if(is.data.frame(marx) && (f %in% names(marx))) 
-        fsplit <- f <- marx[[f]]
-      else
-        stop(paste("The name", sQuote(f), "does not match any column of marks"))
+      switch(markformat(x),
+             none = {
+               stop(paste("The name", sQuote(f),
+                          "does not specify a column of marks",
+                          "(there are no marks)"),
+                    call.=FALSE)
+             },
+             vector = {
+               if(f != "marks") 
+                 stop(paste("The name", sQuote(f),
+                            "does not specify a column of marks",
+                            "(the marks are a vector)"),
+                      call.=FALSE)
+               if(!is.factor(marx))
+                 stop("The marks must be a factor", call.=FALSE)
+               fsplit <- f <- marx
+             },
+             dataframe = ,
+             hyperframe = {
+               if(!(f %in% colnames(marx))) 
+                 stop(paste("The name", sQuote(f),
+                            "does not match any column of marks"),
+                      call.=FALSE)
+               marxf <- marx[,f, drop=TRUE]
+               if(!is.factor(marxf))
+                 stop(paste("The column of marks named", sQuote(f),
+                            "is not a factor"),
+                      call.=FALSE)
+               fsplit <- f <- marxf
+             },
+             stop("The marks must be a factor", call.=FALSE)
+             )
       splittype <- "factor"
     } else 
       stop(paste("f must be",

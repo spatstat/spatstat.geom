@@ -3,7 +3,7 @@
 #
 #   nearest neighbour distances (nndist) and identifiers (nnwhich)
 #
-#   $Revision: 1.15 $ $Date: 2021/09/05 10:59:04 $
+#   $Revision: 1.16 $ $Date: 2021/11/07 02:00:29 $
 #
 
 nndist <- function(X, ...) {
@@ -26,7 +26,12 @@ nndist.ppp <- local({
   }
 
   nndistby <- function(X, k, by) {
-    # split by factor 
+    ## split by factor
+    if(is.character(by)) {
+      ## Interpret using split.ppp
+      Y <- split(X, f=by, drop=FALSE)
+      by <- attr(Y, "fgroup")
+    }
     idX <- seq_len(npoints(X))
     Y <- split(X %mark% idX, f=by, un=FALSE)
     distY <- lapply(Y, nndistsub, XX=X, iX=idX, k=k)
@@ -41,8 +46,7 @@ nndist.ppp <- local({
   nndist.ppp
 })
 
-nndist.default <-
-  function(X, Y=NULL, ..., k=1, by=NULL, method="C")
+nndist.default <- function(X, Y=NULL, ..., k=1, by=NULL, method="C")
 {
   warn.no.metric.support("nndist.default", ...)
 	#  computes the vector of nearest-neighbour distances 
@@ -204,6 +208,11 @@ nnwhich.ppp <- local({
 
   nnwhichby <- function(X, k, by) {
     # split by factor 
+    if(is.character(by)) {
+      ## Interpret using split.ppp
+      Y <- split(X, f=by, drop=FALSE)
+      by <- attr(Y, "fgroup")
+    }
     idX <- seq_len(npoints(X))
     Y <- split(X %mark% idX, f=by, un=FALSE)
     whichY <- lapply(Y, nnwhichsub, XX=X, iX=idX, k=k)

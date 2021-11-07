@@ -33,7 +33,8 @@
   }
   \item{by}{
     Optional. A factor, which separates \code{X} into groups.
-    The algorithm will find the nearest neighbour in each group. 
+    The algorithm will find the nearest neighbour in each group.
+    See Details.
   }
   \item{method}{String specifying which method of calculation to use.
     Values are \code{"C"} and \code{"interpreted"}.
@@ -61,7 +62,10 @@
   index of the \code{k[j]}th nearest neighbour for the
   \code{i}th data point.
 
-  If the argument \code{by} is given, then the result is a data frame
+  If the argument \code{by} is given, then it should be a \code{factor}
+  which separates \code{X} into groups (or any type of data acceptable to
+  \code{\link{split.ppp}} that determines the grouping).
+  The result is a data frame
   containing the indices described above, from each point of \code{X},
   to the nearest point in each subset of \code{X}
   defined by the factor \code{by}.
