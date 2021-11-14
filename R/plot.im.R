@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.142 $   $Date: 2021/11/04 10:05:30 $
+#  $Revision: 1.145 $   $Date: 2021/11/14 07:41:07 $
 #
 #  Plotting code for pixel images
 #
@@ -21,8 +21,7 @@ plot.im <- local({
     aarg <- resolve.defaults(...)
     add      <- resolve.1.default(list(add=FALSE),     aarg)
     show.all <- resolve.1.default(list(show.all=!add), aarg)
-    addcontour <- resolve.1.default(list(addcontour=FALSE), aarg)
-    args.contour <- resolve.1.default(list(args.contour=list()), aarg)
+    addcontour <- isTRUE(aarg$addcontour)
     ##
     if(add && show.all) {
       ## set up the window space *with* the main title
@@ -51,14 +50,16 @@ plot.im <- local({
     z <- do.call.matched(image.default,
                          append(imagedata, aarg),
                          extrargs=extrargs)
-    if(addcontour)
+    if(addcontour) {
       do.call(do.contour,
               resolve.defaults(imagedata,
                                list(add=TRUE),
-                               args.contour,
+                               aarg$args.contour,
                                list(col=par('fg')),
                                aarg,
                                .StripNull=TRUE))
+    }
+    
     return(z)
   }
 
@@ -114,7 +115,7 @@ plot.im <- local({
                                           levels=levels,
                                           labels=labels,
                                           drawlabels=drawlabels),
-                                     .StripNULL=TRUE))
+                                     .StripNull=TRUE))
   }
                  
   do.box.etc <- function(bb, add, argh) {
