@@ -27,7 +27,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o split.ppp
     Argument 'f="marks"' is now accepted, when 'marks(X)' is a factor.
     
-        CHANGES IN spatstat.geom VERSION 2.3-0.001
+        CHANGES IN spatstat.geom VERSION 2.3-0
 
 OVERVIEW
 
