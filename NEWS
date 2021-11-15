@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.3-0.010
+        CHANGES IN spatstat.geom VERSION 2.3-0.012
 
 OVERVIEW
 
@@ -22,10 +22,17 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o nndist.ppp, nnwhich.ppp
     Argument 'by' can be a factor, a logical vector,
     a pixel image with factor values, a tessellation, a window,
-    the string 'marks', or the name of one of the columns of marks.
+    the string 'marks' (if marks(x) is a factor),
+    or the name of one of the columns of marks (if marks(x) is a data frame).
 
-    o split.ppp
-    Argument 'f="marks"' is now accepted, when 'marks(X)' is a factor.
+    o nndist.pp3, nnwhich.pp3
+    Argument 'by' can be a factor, a logical vector,
+    the string 'marks' (if marks(x) is a factor), or
+    the name of one of the columns of marks (if marks(x) is a data frame).
+
+    o split.ppp, split.ppx
+    The argument 'f' may now be the character string "marks",
+    signifying 'f=marks(X)', provided 'marks(X)' is a factor.
     
         CHANGES IN spatstat.geom VERSION 2.3-0
 

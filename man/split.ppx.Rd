@@ -54,8 +54,10 @@
     The \code{i}th point of \code{x} will be placed in the sub-pattern
     \code{split.ppx(x)$l} where \code{l = f[i]}.
     \item
+    the character string \code{"marks"}, if \code{marks(x)} is a factor.
+    \item
     a character string, matching the name of one of the columns of
-    marks, if \code{marks(x)} is a data frame. This column should
+    marks, if \code{marks(x)} is a data frame or hyperframe. This column should
     be a factor.
   }
   If \code{f} is missing, then it will be determined by the

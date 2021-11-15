@@ -76,6 +76,8 @@
     Each point of \code{x} will be classified according to
     whether it falls inside or outside this window.
     \item
+    the character string \code{"marks"}, if \code{marks(x)} is a factor.
+    \item
     a character string, matching the name of one of the columns of
     marks, if \code{marks(x)} is a data frame. This column should
     be a factor.

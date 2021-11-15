@@ -1,7 +1,7 @@
 #
 # split.ppp.R
 #
-# $Revision: 1.40 $ $Date: 2021/11/07 02:44:38 $
+# $Revision: 1.41 $ $Date: 2021/11/15 03:08:49 $
 #
 # split.ppp and "split<-.ppp"
 #
@@ -73,9 +73,7 @@ split.ppp <- function(x, f = marks(x), drop=FALSE, un=NULL, reduce=FALSE, ...) {
                             "does not specify a column of marks",
                             "(the marks are a vector)"),
                       call.=FALSE)
-               if(!is.factor(marx))
-                 stop("The marks must be a factor", call.=FALSE)
-               fsplit <- f <- marx
+               fsplit <- f <- as.factor(marx)
              },
              dataframe = ,
              hyperframe = {
@@ -83,14 +81,10 @@ split.ppp <- function(x, f = marks(x), drop=FALSE, un=NULL, reduce=FALSE, ...) {
                  stop(paste("The name", sQuote(f),
                             "does not match any column of marks"),
                       call.=FALSE)
-               marxf <- marx[,f, drop=TRUE]
-               if(!is.factor(marxf))
-                 stop(paste("The column of marks named", sQuote(f),
-                            "is not a factor"),
-                      call.=FALSE)
-               fsplit <- f <- marxf
+               fsplit <- f <- as.factor(marx[,f, drop=TRUE])
              },
-             stop("The marks must be a factor", call.=FALSE)
+             stop(paste("The name", sQuote(f), "is not recognised as a column of marks"),
+                  call.=FALSE)
              )
       splittype <- "factor"
     } else 
