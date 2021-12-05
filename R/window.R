@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.193 $	$Date: 2021/10/03 02:15:29 $
+#	$Revision: 4.194 $	$Date: 2021/12/05 10:35:59 $
 #
 #
 #	A window may be either
@@ -260,6 +260,8 @@ owin <- local({
       stop(paste(sQuote("mask"), "must be a matrix"))
     if(!is.logical(mask))
       stop(paste("The entries of", sQuote("mask"), "must be logical"))
+    if(anyNA(mask)) 
+      mask[is.na(mask)] <- FALSE
     
     nc <- ncol(mask)
     nr <- nrow(mask)

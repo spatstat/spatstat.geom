@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.3-0.012
+        CHANGES IN spatstat.geom VERSION 2.3-0.013
 
 OVERVIEW
 
@@ -33,6 +33,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o split.ppp, split.ppx
     The argument 'f' may now be the character string "marks",
     signifying 'f=marks(X)', provided 'marks(X)' is a factor.
+
+    o owin
+    If argument 'mask' is a logical matrix,
+    NA entries will be accepted, and converted to FALSE.
     
         CHANGES IN spatstat.geom VERSION 2.3-0
 

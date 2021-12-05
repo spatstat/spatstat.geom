@@ -93,7 +93,8 @@ describing a window in the two-dimensional plane.
       Normally the argument \code{mask} should be a logical matrix
       such that \code{mask[i,j]} is \code{TRUE} if the point
       \code{(x[j],y[i])} belongs to the window, and \code{FALSE} if it
-      does not. Note carefully that rows of \code{mask} correspond to the
+      does not (\code{NA} entries will be treated as \code{FALSE}).
+      Note carefully that rows of \code{mask} correspond to the
       \eqn{y} coordinate, and columns to the \eqn{x} coordinate.
       Here \code{x} and \code{y} are vectors of \eqn{x} and \eqn{y}
       coordinates equally spaced over \code{xrange} and \code{yrange}
