@@ -115,7 +115,7 @@
   \code{\link{polartess}},
   \code{\link{quantess}},
   \code{\link{bufftess}}
-  and \code{\link[spatstat.core]{rpoislinetess}}.
+  and \code{\link[spatstat.random]{rpoislinetess}}.
 }
 \value{
   An object of class \code{"tess"} representing the tessellation.
@@ -139,7 +139,7 @@
   \code{\link{venn.tess}},
   \code{\link{polartess}},
   \code{\link{dirichlet}}, \code{\link{delaunay}}, \code{\link{quantess}}
-  and \code{\link[spatstat.core]{rpoislinetess}}.
+  and \code{\link[spatstat.random]{rpoislinetess}}.
 
   To divide space into pieces containing equal
   amounts of stuff, use \code{\link{quantess}}.

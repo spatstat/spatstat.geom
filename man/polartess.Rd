@@ -97,7 +97,7 @@ polartess(W, \dots, nradial = NULL, nangular = NULL,
   \code{\link{dirichlet}}, \code{\link{delaunay}},
   \code{\link{quantess}},
   \code{\link{bufftess}}
-  and \code{\link[spatstat.core]{rpoislinetess}}.
+  and \code{\link[spatstat.random]{rpoislinetess}}.
   
 }
 \examples{

@@ -20,18 +20,15 @@ circumradius(x, \dots)
   the \pkg{spatstat.geom} package.
   
   \code{as.psp.owin} has been replaced by \code{\link{edges}}.
-  
-  \code{which.max.im(x)} is replaced by
-  \code{\link{im.apply}(x, which.max)}.
 
   \code{circumradius} is replaced by the more appropriately named
   \code{boundingradius}.
 
-  \code{rjitterlpp} is replaced by \code{rjitter.lpp}, a method for the
-  generic \code{rjitter}.
+  
 }
 \value{
 \code{as.psp.owin} returns a window (object of class \code{"owin"}).
+
 \code{circumradius} returns a numeric value.
 }
 \keyword{internal}

@@ -57,7 +57,7 @@ venn.tess(\dots, window = NULL, labels=FALSE)
   \code{\link{quadrats}}, \code{\link{hextess}},
   \code{\link{polartess}},
   \code{\link{dirichlet}}, \code{\link{delaunay}}, \code{\link{quantess}}
-  and \code{\link[spatstat.core]{rpoislinetess}}.
+  and \code{\link[spatstat.random]{rpoislinetess}}.
 }
 \examples{
    A <- square(1)

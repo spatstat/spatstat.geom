@@ -41,7 +41,6 @@
   Euclidean metric, first check whether the standard function for this
   purpose (for example \code{nndist.ppp}) 
   has an argument named \code{metric}. 
-  the low-level function \code{\link{invoke.metric}}.
   If so, use the standard function
   and add the argument \code{metric}; if not, use
   the low-level function \code{\link{invoke.metric}}.

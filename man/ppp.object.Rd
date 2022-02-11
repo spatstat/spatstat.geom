@@ -69,15 +69,15 @@
   of the data.
   
   Patterns may be generated at random by
-   \code{\link[spatstat.core]{runifpoint}},
-   \code{\link[spatstat.core]{rpoispp}},
-   \code{\link[spatstat.core]{rMaternI}},
-   \code{\link[spatstat.core]{rMaternII}},
-   \code{\link[spatstat.core]{rSSI}},
-   \code{\link[spatstat.core]{rNeymanScott}},
-   \code{\link[spatstat.core]{rMatClust}},
+   \code{\link[spatstat.random]{runifpoint}},
+   \code{\link[spatstat.random]{rpoispp}},
+   \code{\link[spatstat.random]{rMaternI}},
+   \code{\link[spatstat.random]{rMaternII}},
+   \code{\link[spatstat.random]{rSSI}},
+   \code{\link[spatstat.random]{rNeymanScott}},
+   \code{\link[spatstat.random]{rMatClust}},
    and
-   \code{\link[spatstat.core]{rThomas}}.
+   \code{\link[spatstat.random]{rThomas}}.
 
    Most functions which are intended to operate on a window
    (of class \code{\link{owin}})

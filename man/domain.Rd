@@ -47,6 +47,8 @@
  \method{domain}{funxy}(X, \dots)
 
 
+
+
 }
 \arguments{
   \item{X}{
@@ -58,7 +60,7 @@
   }
 }
 \details{
-  The function \code{domain} is generic.
+  The function \code{\link[spatstat.geom]{domain}} is generic.
 
   For a spatial object \code{X} in any number of dimensions, 
   \code{domain(X)} extracts the spatial domain in which \code{X} is
@@ -80,12 +82,16 @@
   \spatstatAuthors.
 }
 \seealso{
+  \code{\link[spatstat.core]{domain.ppm}},
+  \code{\link[spatstat.random]{domain.rmhmodel}},
+  \code{\link[spatstat.linnet]{domain.lpp}}.
   \code{\link{Window}},
-  \code{\link{Frame}}
+  \code{\link{Frame}}.
 }
 \examples{
-  domain(cells)
+  domain(redwood)
   domain(bei.extra$elev)
+  domain(osteo$pts[[1]])
 }
 \keyword{spatial}
 \keyword{manip}

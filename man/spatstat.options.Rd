@@ -71,7 +71,7 @@
     \item{expand}{
       The default expansion factor (area inflation factor)
       for expansion of the simulation window in
-      \code{\link[spatstat.core]{rmh}} (see \code{\link[spatstat.core]{rmhcontrol}}).
+      \code{\link[spatstat.random]{rmh}} (see \code{\link[spatstat.random]{rmhcontrol}}).
       Initialised to \code{2}.
     }
     \item{expand.polynom}{
@@ -83,7 +83,7 @@
     \item{fastpois}{
       Logical. Whether to use a fast algorithm
       (introduced in \pkg{spatstat 1.42-3}) for
-      simulating the Poisson point process in \code{\link[spatstat.core]{rpoispp}}
+      simulating the Poisson point process in \code{\link[spatstat.random]{rpoispp}}
       when the argument \code{lambda} is a pixel image.
       Initialised to \code{TRUE}.
       Should be set to \code{FALSE} if needed to guarantee repeatability
@@ -92,7 +92,7 @@
     \item{fastthin}{
       Logical. Whether to use a fast C language algorithm
       (introduced in \pkg{spatstat 1.42-3}) for
-      random thinning in \code{\link[spatstat.core]{rthin}} when the argument
+      random thinning in \code{\link[spatstat.random]{rthin}} when the argument
       \code{P} is a single number.
       Initialised to \code{TRUE}.
       Should be set to \code{FALSE} if needed to guarantee repeatability
@@ -133,7 +133,7 @@
       not generate an error (possible errors include failure to allocate
       sufficient memory, and integer overflow of \code{n}).
       An attempt to generate more than this number of random points
-      triggers a warning from \code{\link[spatstat.core]{runifpoint}} and other
+      triggers a warning from \code{\link[spatstat.random]{runifpoint}} and other
       functions. Defaults to \code{1e6}.
     }
     \item{image.colfun}{
@@ -278,15 +278,15 @@
       New default values for the parameters \code{p}, \code{q}
       and \code{nrep} in the Metropolis-Hastings simulation
       algorithm. These override the defaults
-      in \code{\link[spatstat.core]{rmhcontrol.default}}.
+      in \code{\link[spatstat.random]{rmhcontrol.default}}.
     }
     \item{scalable}{
-      Logical flag indicating whether the new code in \code{rmh.default}
+      Logical flag indicating whether the new code in \code{\link[spatstat.random]{rmh.default}}
       which makes the results scalable (invariant to change of units)
       should be used.  In order to recover former behaviour (so that
       previous results can be reproduced) set this option equal to
       \code{FALSE}.  See the \dQuote{Warning} section in the help for
-      \code{\link[spatstat.core]{rmh}()} for more detail.
+      \code{\link[spatstat.random]{rmh}()} for more detail.
     }
     \item{terse}{
       Integer between 0 and 4.

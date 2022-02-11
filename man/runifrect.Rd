@@ -28,14 +28,14 @@ runifrect(n, win = owin(c(0, 1), c(0, 1)), nsim = 1, drop = TRUE)
 }
 \details{
   This function is a slightly faster version of
-  \code{\link[spatstat.core]{runifpoint}}
+  \code{\link[spatstat.random]{runifpoint}}
   for the special case where the window is a rectangle.
 
   The function generates \code{n} independent random points,
   uniformly distributed in the window \code{win},
   by assigning uniform random values to the cartesian coordinates.
 
-  For normal usage we recommend \code{\link[spatstat.core]{runifpoint}}
+  For normal usage we recommend \code{\link[spatstat.random]{runifpoint}}
   because it is more flexible.
   However, \code{runifrect} is slightly faster (when the window is a rectangle),
   and may be preferable in very computationally-demanding tasks.
@@ -48,9 +48,9 @@ runifrect(n, win = owin(c(0, 1), c(0, 1)), nsim = 1, drop = TRUE)
 \seealso{
 \code{\link{ppp.object}},
 \code{\link{owin.object}},
-\code{\link[spatstat.core]{runifpoint}},
-\code{\link[spatstat.core]{rpoispp}},
-\code{\link[spatstat.core]{rpoint}}
+\code{\link[spatstat.random]{runifpoint}},
+\code{\link[spatstat.random]{rpoispp}},
+\code{\link[spatstat.random]{rpoint}}
 }
 \examples{
  # 42 random points in the unit square

@@ -26,7 +26,7 @@
 }
 \seealso{
   \code{\link{psp}},
-  \code{\link[spatstat.core]{rpoisline}}
+  \code{\link[spatstat.random]{rpoisline}}
 }
 \examples{
   plot(rlinegrid(30, 0.05))

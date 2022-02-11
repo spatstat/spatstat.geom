@@ -2,7 +2,7 @@
 #	centroid.S	Centroid of a window
 #			and related operations
 #
-#	$Revision: 1.6 $	$Date: 2014/11/10 08:20:59 $
+#	$Revision: 1.7 $	$Date: 2022/01/04 05:30:06 $
 #
 # Function names (followed by "xypolygon" or "owin")
 #	

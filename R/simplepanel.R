@@ -4,7 +4,7 @@
 #  A simple, robust point & click interface
 #     used in rmh visual debugger.
 #
-#  $Revision: 1.14 $  $Date: 2016/04/25 02:34:40 $
+#  $Revision: 1.15 $  $Date: 2022/01/04 05:30:06 $
 #
 
 simplepanel <- function(title, B, boxes, clicks, redraws=NULL, exit=NULL, env) {

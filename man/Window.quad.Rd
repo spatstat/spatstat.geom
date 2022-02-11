@@ -1,4 +1,4 @@
-\name{WindowOnly}
+\name{Window.quad}
 \alias{Window.quad}
 \alias{Window.quadratcount}
 \alias{Window.tess}
@@ -13,6 +13,7 @@
   in which the object is defined.
 }
 \usage{
+
 
  \method{Window}{quad}(X, \dots)
 
@@ -50,8 +51,8 @@
   \code{\link{owin.object}}
 }
 \examples{
-   X <- quadratcount(cells, 4)
-   Window(X)
+   A <- quadratcount(cells, 4)
+   Window(A)
 }
 \author{
   \spatstatAuthors.

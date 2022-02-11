@@ -1,7 +1,7 @@
 #
 #  colourtools.R
 #
-#   $Revision: 1.21 $   $Date: 2019/04/05 09:20:59 $
+#   $Revision: 1.22 $   $Date: 2022/01/04 05:30:06 $
 #
 
 

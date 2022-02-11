@@ -1,3 +1,12 @@
+        CHANGES IN spatstat.geom VERSION 2.3-1.001
+
+OVERVIEW
+
+    o 'spatstat.geom' now suggests the package 'spatstat.random'.
+    
+    o Updated help files.
+
+
         CHANGES IN spatstat.geom VERSION 2.3-1
 
 OVERVIEW

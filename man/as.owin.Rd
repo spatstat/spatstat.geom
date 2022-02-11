@@ -49,10 +49,6 @@ in any of several formats, into an object of class \code{"owin"}.
  \method{as.owin}{funxy}(W, \dots, fatal=TRUE)
 
  \method{as.owin}{boxx}(W, \dots, fatal=TRUE)
-
-
-
-
 }
 \arguments{
   \item{W}{
@@ -132,6 +128,27 @@ in any of several formats, into an object of class \code{"owin"}.
     lies outside the window, is transformed into the logical value
     \code{FALSE}, which is the corresponding convention for window masks.
     \item
+    an object of class \code{"ppm"}, \code{"kppm"}, \code{"slrm"}
+    or \code{"dppm"}
+    representing a fitted point process
+    model. In this case, if \code{from="data"} (the default),
+    \code{as.owin} extracts the  original point
+    pattern data to which the model was fitted, and returns the
+    observation window of this point pattern. If
+    \code{from="covariates"} then \code{as.owin} extracts the
+    covariate images to which the model was fitted,
+    and returns a binary mask window that specifies the pixel locations.
+    \item
+    an object of class \code{"lpp"}
+    representing a point pattern on a linear network.
+    In this case, \code{as.owin} extracts the linear network
+    and returns a window containing this network. 
+    \item
+    an object of class \code{"lppm"}
+    representing a fitted point process model on a linear network.
+    In this case, \code{as.owin} extracts the linear network
+    and returns a window containing this network. 
+    \item
     A \code{data.frame} with exactly three columns. Each row of the
     data frame corresponds to one pixel. Each row contains the
     \eqn{x} and \eqn{y} coordinates of a pixel, and a logical value
@@ -145,6 +162,14 @@ in any of several formats, into an object of class \code{"owin"}.
     or \code{"funxy"} representing a function of spatial location,
     defined on a spatial domain. The spatial domain of the function will be
     extracted.
+    \item
+    an object of class \code{"rmhmodel"} representing a
+    point process model that can be simulated using \code{\link[spatstat.random]{rmh}}.
+    The window (spatial domain) of the model will be extracted.
+    The window may be \code{NULL} in some circumstances (indicating that the
+    simulation window has not yet been determined). This is not treated
+    as an error, because the argument \code{fatal} defaults to
+    \code{FALSE} for this method.
     \item
     an object of class \code{"layered"} representing a
     list of spatial objects. See \code{\link{layered}}.
@@ -169,6 +194,10 @@ in any of several formats, into an object of class \code{"owin"}.
   will be guessed from the data.
 }
 \seealso{
+  \code{\link[spatstat.core]{as.owin.ppm}},
+  \code{\link[spatstat.random]{as.owin.rmhmodel}},
+  \code{\link[spatstat.linnet]{as.owin.lpp}}.
+  
   \code{\link{owin.object}},
   \code{\link{owin}}.
 

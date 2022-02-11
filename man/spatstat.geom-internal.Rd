@@ -335,6 +335,7 @@
 
 
 
+
 %%%%%%%
 \description{
   Internal spatstat.geom functions.
@@ -684,6 +685,7 @@ XDtoNN(d, what, iX, iY, k, \dots)
 xypolygon2psp(p, w, check)
 ZeroValue(x)
 \method{ZeroValue}{im}(x)
+
 
 
 }

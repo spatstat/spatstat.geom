@@ -3,7 +3,7 @@
 #
 #  cut method for ppp objects
 #
-#  $Revision: 1.15 $   $Date: 2016/10/26 09:29:57 $
+#  $Revision: 1.16 $   $Date: 2022/01/04 05:30:06 $
 #
 
 cut.ppp <- function(x, z=marks(x), ...) {

@@ -3,7 +3,7 @@
 #'
 #'   Methods for head() and tail()
 #'
-#'   $Revision: 1.1 $  $Date: 2016/12/20 01:11:29 $
+#'   $Revision: 1.2 $  $Date: 2022/01/04 05:30:06 $
 
 head.tess <- head.psp <- head.ppx <- head.ppp <- function(x, n=6L, ...) {
   stopifnot(length(n) == 1L)

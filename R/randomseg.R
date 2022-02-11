@@ -1,7 +1,7 @@
 #
 # randomseg.R
 #
-# $Revision: 1.16 $ $Date: 2021/09/10 08:10:54 $
+# $Revision: 1.17 $ $Date: 2022/01/04 05:30:06 $
 #
 
 

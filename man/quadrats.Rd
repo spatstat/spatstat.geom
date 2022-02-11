@@ -77,7 +77,7 @@ quadrats(X, nx = 5, ny = nx, xbreaks = NULL, ybreaks = NULL, keepempty=FALSE)
   For calculations using quadrats, see
   \code{\link{quadratcount}},
   \code{\link[spatstat.core]{quadrat.test}},
-  \code{\link[spatstat.core]{quadratresample}}
+  \code{\link[spatstat.random]{quadratresample}}
 
   For other kinds of tessellations, see 
   \code{\link{tess}},
@@ -87,7 +87,7 @@ quadrats(X, nx = 5, ny = nx, xbreaks = NULL, ybreaks = NULL, keepempty=FALSE)
   \code{\link{dirichlet}}, \code{\link{delaunay}},
   \code{\link{quantess}}, \code{\link{bufftess}}
   and 
-  \code{\link[spatstat.core]{rpoislinetess}}.
+  \code{\link[spatstat.random]{rpoislinetess}}.
 }
 \author{
   \adrian

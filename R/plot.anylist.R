@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.30 $ $Date: 2020/11/17 03:47:24 $
+##  $Revision: 1.31 $ $Date: 2022/01/04 05:30:06 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-

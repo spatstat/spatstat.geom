@@ -99,7 +99,7 @@ bufftess(X, breaks, W = Window(X), \dots, polygonal = TRUE)
   \code{\link{dirichlet}}, \code{\link{delaunay}},
   \code{\link{quantess}}, \code{\link{quadrats}}
   and 
-  \code{\link[spatstat.core]{rpoislinetess}}.
+  \code{\link[spatstat.random]{rpoislinetess}}.
 }
 \examples{
   X <- cells[c(FALSE,FALSE,FALSE,TRUE)] 

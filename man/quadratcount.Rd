@@ -129,7 +129,7 @@
   \code{\link[spatstat.core]{quadrat.test}},
   \code{\link{tess}},
   \code{\link{hextess}},
-  \code{\link[spatstat.core]{quadratresample}},
+  \code{\link[spatstat.random]{quadratresample}},
   \code{\link[spatstat.core]{miplot}}
 }
 \references{
