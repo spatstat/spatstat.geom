@@ -3,7 +3,7 @@
 #
 #    conversion to class "im"
 #
-#    $Revision: 1.59 $   $Date: 2021/06/30 08:23:24 $
+#    $Revision: 1.60 $   $Date: 2022/02/12 06:09:33 $
 #
 #    as.im()
 #
@@ -361,9 +361,13 @@ wrangle2image <- function(values, template) {
   template <- as.im(template)
   tdim <- dim(template)
   nt <- prod(tdim)
-  vdim <- dim(values) # may be NULL
+  if(!is.null(vlev <- levels(values))) {
+    ## flatten and convert to integer
+    if(!is.factor(values)) values <- factor(values, levels=vlev)
+    values <- as.integer(values)
+  } 
   nv <- length(values)
-  vlev <- levels(values)
+  vdim <- dim(values) # may be NULL
   vnames <- NULL
   if(is.null(vdim)) {
     ## vector or factor of values 
@@ -393,17 +397,27 @@ wrangle2image <- function(values, template) {
   }
   ## values is now a matrix or array
   if(is.matrix(values)) {
-    result <- template
-    result[drop=FALSE] <- values
+    if(!is.null(vlev)) values <- factor(values, labels=vlev)
+    result <- im(values,
+                 xcol=template$xcol,
+                 yrow=template$yrow,
+                 xrange=template$xrange,
+                 yrange=template$yrange,
+                 unitname=unitname(template))
     result <- result[W, drop=FALSE]
   } else {
     m <- dim(values)[3L]
     result <- vector(mode="list", length=m)
     for(i in seq_len(m)) {
-      Z <- template
-      Z[drop=FALSE] <- values[,,i]
-      Z <- Z[W, drop=FALSE]
-      result[[i]] <- Z
+      vi <- values[,,i]
+      if(!is.null(vlev)) vi <- factor(vi, labels=vlev)
+      Z <- im(vi,
+              xcol=template$xcol,
+              yrow=template$yrow,
+              xrange=template$xrange,
+              yrange=template$yrange,
+              unitname=unitname(template))
+      result[[i]] <- Z[W, drop=FALSE]
     }
     names(result) <- vnames
     result <- as.solist(result)

@@ -3,7 +3,7 @@
 #'
 #'  Utilities for extracting nndist/nncross from distance matrices
 #'
-#'  $Revision: 1.3 $  $Date: 2021/09/26 07:32:16 $
+#'  $Revision: 1.4 $  $Date: 2022/02/12 06:12:14 $
 
 
 PDtoNN <- function(d, what=c("dist", "which"), k=1L, ...) {
@@ -17,7 +17,7 @@ PDtoNN <- function(d, what=c("dist", "which"), k=1L, ...) {
   what   <- match.arg(what, several.ok=TRUE)
   want.dist  <- "dist" %in% what 
   want.which <- "which" %in% what
-  want.both  <- want.dist && want.which
+  ## want.both  <- want.dist && want.which
 
   if(!missing(k)) {
     # k can be a single integer or an integer vector
@@ -87,7 +87,7 @@ XDtoNN <- function(d, what=c("dist", "which"),
   what   <- match.arg(what, several.ok=TRUE)
   want.dist  <- "dist" %in% what 
   want.which <- "which" %in% what
-  want.both  <- want.dist && want.which
+  ## want.both  <- want.dist && want.which
 
   if(!missing(k)) {
     # k can be a single integer or an integer vector

@@ -62,7 +62,7 @@
 \author{
   Dominic Schuhmacher
   \email{dominic.schuhmacher@stat.unibe.ch}
-  \url{http://dominic.schuhmacher.name/}
+  URL \code{http://dominic.schuhmacher.name/}
 }
 \seealso{
   \code{\link{pppdist}}

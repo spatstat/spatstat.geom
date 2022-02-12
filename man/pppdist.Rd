@@ -178,7 +178,7 @@
 \author{
   Dominic Schuhmacher
   \email{dominic.schuhmacher@mathematik.uni-goettingen.de} \cr
-  \url{http://dominic.schuhmacher.name/}
+  URL \code{http://dominic.schuhmacher.name/}
 }
 \seealso{
   \code{\link{pppmatching.object}}, \code{\link{matchingdist}},

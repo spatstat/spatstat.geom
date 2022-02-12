@@ -3,7 +3,7 @@
 #'
 #'   Metrics on the spatial domain
 #' 
-#'   $Revision: 1.11 $ $Date: 2021/09/05 11:22:57 $
+#'   $Revision: 1.12 $ $Date: 2022/02/12 06:11:18 $
 #'
 #'  An object of class 'metric' is essentially a named list of functions
 #'  where the names specify the tasks. 
@@ -66,7 +66,7 @@ warn.no.metric.support <- function(caller, ..., metric) {
 
 warn.unsupported.args <- function(unsup, ...) {
   given <- list(...)
-  if(any(hit <- names(unsup) %in% names(given))) {
+  if(any(names(unsup) %in% names(given))) {
     values <- resolve.defaults(given, unsup)[names(unsup)]
     changed <- !mapply(identical, x=unsup, y=values)
     if(any(changed)) {
