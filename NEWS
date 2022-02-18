@@ -1,3 +1,34 @@
+        CHANGES IN spatstat.geom VERSION 2.3-2.001
+
+OVERVIEW
+
+    o Bug fixes in 'closepairs'.
+
+BUG FIXES
+
+    o closepairs.ppp
+    If distinct=FALSE and what="all", the resulting vectors
+    'yi' and 'yj' contained incorrect values, and had the wrong length.
+    Fixed.
+    
+    o closepairs.ppp
+    Crashed with a message 'unable to allocate memory'
+    if the window of X had zero area.
+
+    o crosspairs.ppp
+    Crashed with a message 'unable to allocate memory'
+    if the window of Y had zero area.
+
+    o closepairs.pp3
+    Crashed with a message 'unable to allocate memory'
+    if the domain of X had zero volume.
+
+    o crosspairs.pp3
+    Crashed with a message 'unable to allocate memory'
+    if the domain of Y had zero volume.
+
+
+
         CHANGES IN spatstat.geom VERSION 2.3-2
 
 OVERVIEW

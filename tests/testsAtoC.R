@@ -42,29 +42,66 @@ local({
 ##  tests/closeshave.R
 ## check 'closepairs/crosspairs' code
 ## validity and memory allocation
-## $Revision: 1.26 $ $Date: 2020/12/03 02:32:09 $
+## $Revision: 1.28 $ $Date: 2022/02/18 03:06:00 $
 
 ## ------- All this code must be run on every hardware -------
 local({
   r <- 0.12
+
   close.all <- closepairs(redwood, r)
   close.ij <- closepairs(redwood, r, what="indices")
   close.ijd <- closepairs(redwood, r, what="ijd")
   close.every <- closepairs(redwood, r, what="all", distinct=FALSE)
+
+  ## test agreement
   stopifnot(identical(close.ij, close.all[c("i","j")]))
   stopifnot(identical(close.ijd, close.all[c("i","j","d")]))
+
+  ## validate basic format of result
+  checkformat <- function(object, callstring) {
+    if(length(unique(lengths(object))) > 1)
+      stop(paste("Result of", callstring,
+                 "contains vectors with different lengths"))
+    return(invisible(TRUE))
+  }
+  checkformat(close.all, "closepairs(redwood, r)")  
+  checkformat(close.ij, "closepairs(redwood, r, what='indices')")  
+  checkformat(close.ijd, "closepairs(redwood, r, what='ijd')")  
+  checkformat(close.every,
+              "closepairs(redwood, r, what='all', distinct=FALSE)")  
 
   #' test memory overflow code
   close.cigar <- closepairs(redwood, r, what="ijd", nsize=2)
   close.cigar <- closepairs(redwood, r, what="ijd", nsize=2, periodic=TRUE)
+
+  #' test special cases
+  onepoint <- redwood[1]
+  checkformat(closepairs(onepoint, r),
+              "closepairs(onepoint, r)")
+  checkformat(closepairs(onepoint, r, what="indices"),
+              "closepairs(onepoint, r, what='indices')")
+  checkformat(closepairs(onepoint, r, what="ijd"),
+              "closepairs(onepoint, r, what='ijd')")
+  checkformat(closepairs(onepoint, r, what="all", distinct=FALSE),
+              "closepairs(onepoint, r, what='all', distinct=FALSE)")
   
+  #' ..............  crosspairs ..................................
   Y <- split(amacrine)
   on <- Y$on
   off <- Y$off
+  
   cross.all <- crosspairs(on, off, r)
   cross.ij <- crosspairs(on, off, r, what="indices")
   cross.ijd <- crosspairs(on, off, r, what="ijd")
   cross.every <- crosspairs(on, off, r, what="all", distinct=FALSE)
+
+  ## validate basic format
+  checkformat(cross.all, "crosspairs(on, off, r)")
+  checkformat(cross.ij, "crosspairs(on, off, r, what='indices')")
+  checkformat(cross.ijd, "crosspairs(on, off, r, what='ijd')")
+  checkformat(cross.every, "crosspairs(on, off, r, what='all', distinct=FALSE)")
+  
+  ## test agreement
   stopifnot(identical(cross.ij, cross.all[c("i","j")]))
   stopifnot(identical(cross.ijd, cross.all[c("i","j","d")]))
 

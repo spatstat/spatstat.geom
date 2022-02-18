@@ -1,7 +1,7 @@
 #
 # close3Dpairs.R
 #
-#   $Revision: 1.15 $   $Date: 2021/01/07 01:38:43 $
+#   $Revision: 1.16 $   $Date: 2022/02/18 02:35:28 $
 #
 #  extract the r-close pairs from a 3D dataset
 # 
@@ -44,13 +44,20 @@ closepairs.pp3 <- local({
       splat("Using nsize =", nsize)
     } else {
       #' normal usage
-      nsize <- ceiling(5 * pi * (npts^2) * (rmax^3)/volume(as.box3(X)))
-      nsize <- max(1024, nsize)
-      if(nsize > .Machine$integer.max) {
-        warning(
-          "Estimated number of close pairs exceeds maximum possible integer",
-          call.=FALSE)
-        nsize <- .Machine$integer.max
+      npairs <- npts^2
+      if(npairs <= 1024) {
+        nsize <- 1024
+      } else {
+        catchfraction <- (4/3) * pi * (rmax^3)/volume(as.box3(X))
+        nsize <- ceiling(4 * catchfraction * npairs)
+        nsize <- min(nsize, npairs)
+        nsize <- max(1024, nsize)
+        if(nsize > .Machine$integer.max) {
+          warning(
+            "Estimated number of close pairs exceeds maximum possible integer",
+            call.=FALSE)
+          nsize <- .Machine$integer.max
+        }
       }
     }
     ## Now extract pairs
@@ -193,14 +200,21 @@ crosspairs.pp3 <- local({
       splat("Using nsize =", nsize)
     } else {
       #' normal usage
-      nsize <- ceiling(3 * pi * (rmax^3) * nX * nY/volume(as.box3(Y)))
-      nsize <- max(1024, nsize)
-    }
-    if(nsize > .Machine$integer.max) {
-      warning(
-        "Estimated number of close pairs exceeds maximum possible integer",
-        call.=FALSE)
-      nsize <- .Machine$integer.max
+      nXY <- nX * nY
+      if(nXY <= 1024) {
+        nsize <- 1024
+      } else {
+        catchfraction <- (4/3) * pi * (rmax^3)/volume(as.box3(Y))
+        nsize <- ceiling(4 * catchfraction * nXY)
+        nsize <- min(nXY, nsize)
+        nsize <- max(1024, nsize)
+        if(nsize > .Machine$integer.max) {
+          warning(
+            "Estimated number of close pairs exceeds maximum possible integer",
+            call.=FALSE)
+          nsize <- .Machine$integer.max
+        }
+      }
     }
     ## .Call
     XsortC <- coords(Xsort)

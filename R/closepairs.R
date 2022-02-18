@@ -1,7 +1,7 @@
 #
 # closepairs.R
 #
-#   $Revision: 1.47 $   $Date: 2021/01/07 01:15:08 $
+#   $Revision: 1.48 $   $Date: 2022/02/18 02:29:50 $
 #
 #  simply extract the r-close pairs from a dataset
 # 
@@ -65,13 +65,22 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
   if(!is.null(nsize)) {
     splat("Using nsize =", nsize)
   } else {
-    #' normal usage 
-    nsize <- ceiling(2 * pi * (npts^2) * (rmax^2)/area(Window(X)))
-    nsize <- max(1024, nsize)
-    if(nsize > .Machine$integer.max) {
-     warning("Estimated number of close pairs exceeds maximum possible integer",
-              call.=FALSE)
-      nsize <- .Machine$integer.max
+    #' normal usage
+    #' calculate a conservative estimate of the number of pairs
+    npairs <- npts^2
+    if(npairs <= 1024) {
+      nsize <- 1024
+    } else {
+      catchfraction <- pi * (rmax^2)/area(Frame(X))
+      nsize <- ceiling(2 * catchfraction * npairs)
+      nsize <- min(nsize, npairs)
+      nsize <- max(1024, nsize)
+      if(nsize > .Machine$integer.max) {
+        warning(
+          "Estimated number of close pairs exceeds maximum possible integer",
+          call.=FALSE)
+        nsize <- .Machine$integer.max
+      }
     }
   }
   ## Now extract pairs
@@ -410,7 +419,7 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
              xi <- c(xi, xx)
              yi <- c(yi, yy)
              xj <- c(xj, xx)
-             yi <- c(yi, yy)
+             yj <- c(yj, yy)
              dx <- c(dx, zeroes)
              dy <- c(dy, zeroes)
              d  <- c(d, zeroes)
@@ -479,15 +488,22 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
   ooY <- fave.order(Y$x)
   Ysort <- Y[ooY]
   if(spatstat.options("crosspairs.newcode")) {
-    # ------------------- use new faster code ---------------------
-    # First (over)estimate the number of pairs
-    nsize <- ceiling(2 * pi * (rmax^2) * nX * nY/area(Window(Y)))
-    nsize <- max(1024, nsize)
-    if(nsize > .Machine$integer.max) {
-      warning(
-        "Estimated number of close pairs exceeds maximum possible integer",
-        call.=FALSE)
-      nsize <- .Machine$integer.max
+    ## ------------------- use new faster code ---------------------
+    ## First (over)estimate the number of pairs
+    nXY <- nX * nY
+    if(nXY <= 1024) {
+      nsize <- 1024
+    } else {
+      catchfraction <- pi * (rmax^2)/area(Frame(Y))
+      nsize <- ceiling(2 * catchfraction * nXY)
+      nsize <- min(nsize, nXY)
+      nsize <- max(1024, nsize)
+      if(nsize > .Machine$integer.max) {
+        warning(
+          "Estimated number of close pairs exceeds maximum possible integer",
+          call.=FALSE)
+        nsize <- .Machine$integer.max
+      }
     }
     # .Call
     Xx <- Xsort$x
@@ -643,18 +659,26 @@ closethresh <- function(X, R, S, twice=TRUE, ...) {
     twice <- ordered
   }
   npts <- npoints(X)
-   if(npts == 0)
+   if(npts <= 1)
      return(list(i=integer(0), j=integer(0), t=logical(0)))
   # sort points by increasing x coordinate
   oo <- fave.order(X$x)
   Xsort <- X[oo]
-  # First make an OVERESTIMATE of the number of pairs
-  nsize <- ceiling(4 * pi * (npts^2) * (R^2)/area(Window(X)))
-  nsize <- max(1024, nsize)
-  if(nsize > .Machine$integer.max) {
-    warning("Estimated number of close pairs exceeds maximum possible integer",
-            call.=FALSE)
-    nsize <- .Machine$integer.max
+  ## First make an OVERESTIMATE of the number of pairs
+  npairs <- npts * (npts - 1)
+  if(npairs <= 1024) {
+    nsize <- 1024
+  } else {
+    catchfraction <- pi * (R^2)/area(Frame(X))
+    nsize <- ceiling(4 * catchfraction * npairs)
+    nsize <- min(nsize, npairs)
+    nsize <- max(1024, nsize)
+    if(nsize > .Machine$integer.max) {
+      warning(
+        "Estimated number of close pairs exceeds maximum possible integer",
+        call.=FALSE)
+      nsize <- .Machine$integer.max
+    }
   }
   # Now extract pairs
   x <- Xsort$x
