@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.99 $ $Date: 2021/03/17 05:33:57 $
+#   $Revision: 1.101 $ $Date: 2022/03/03 06:52:40 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -573,18 +573,18 @@ tile.areas <- function(x) {
          rect={
            xg <- x$xgrid
            yg <- x$ygrid
-#           nx <- length(xg) - 1 
-#           ny <- length(yg) - 1
            a <- outer(rev(diff(yg)), diff(xg), "*")
            a <- as.vector(t(a))
            names(a) <- as.vector(t(tilenames(x)))
          },
          tiled={
-           a <- unlist(lapply(x$tiles, area))
+           a <- as.numeric(sapply(x$tiles, area))
+           names(a) <- tilenames(x)
          },
          image={
            z <- x$image
-           a <- table(z$v) * z$xstep * z$ystep
+           a <- as.numeric(table(z$v)) * z$xstep * z$ystep
+           names(a) <- tilenames(x)
          })
   return(a)
 }

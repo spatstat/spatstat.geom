@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.3-2.001
+        CHANGES IN spatstat.geom VERSION 2.3-2.002
 
 OVERVIEW
 
@@ -14,19 +14,28 @@ BUG FIXES
     o closepairs.ppp
     Crashed with a message 'unable to allocate memory'
     if the window of X had zero area.
+    Fixed.
 
     o crosspairs.ppp
     Crashed with a message 'unable to allocate memory'
     if the window of Y had zero area.
+    Fixed.
 
     o closepairs.pp3
     Crashed with a message 'unable to allocate memory'
     if the domain of X had zero volume.
+    Fixed.
 
     o crosspairs.pp3
     Crashed with a message 'unable to allocate memory'
     if the domain of Y had zero volume.
+    Fixed.
 
+    o tile.areas
+    For a tessellation defined by a pixel image,
+    the result of tile.areas() was not a numeric vector.
+    [Spotted by Suman Rakshit.]
+    Fixed.
 
 
         CHANGES IN spatstat.geom VERSION 2.3-2
