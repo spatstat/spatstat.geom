@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.101 $ $Date: 2022/03/03 06:52:40 $
+#   $Revision: 1.102 $ $Date: 2022/03/11 05:20:12 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -759,7 +759,7 @@ as.tess.owin <- function(X) {
 
 domain.tess <- Window.tess <- function(X, ...) { as.owin(X) } 
 
-intersect.tess <- function(X, Y, ..., keepmarks=FALSE, sep="x") {
+intersect.tess <- function(X, Y, ..., keepempty=FALSE, keepmarks=FALSE, sep="x") {
   X <- as.tess(X)
   check.1.string(sep)
 
@@ -767,34 +767,38 @@ intersect.tess <- function(X, Y, ..., keepmarks=FALSE, sep="x") {
     ## intersection of a tessellation with a window
     if(Y$type == "mask") {
       ## convert to pixel image 
-      result <- as.im(Y)
       Xtiles <- tiles(X)
       seqXtiles <- seq_along(Xtiles)
+      result <- as.im(Y, value=factor(1, levels=seqXtiles))
       for(i in seqXtiles) {
         tilei <- Xtiles[[i]]
         result[tilei] <- i
       }
       result <- result[Y, drop=FALSE]
-      out <- tess(image=result, window=Y)
+      out <- tess(image=result, window=Y, keepempty=keepempty)
       if(keepmarks && !is.null(marx <- marks(X))) {
-        #' identify non-empty tiles
-        tab <- table(factor(result[], levels=seqXtiles))
-        marks(out) <- marksubset(marx, tab > 0)
+        if(keepempty) {
+          marks(out) <- marx
+        } else {
+          #' identify non-empty tiles
+          tab <- table(factor(result[], levels=seqXtiles))
+          marks(out) <- marksubset(marx, tab > 0)
+        }
       }
       return(out)
     } else {
       ## efficient code when Y is a window, retaining names of tiles of X
       Ztiles <- lapply(tiles(X), intersect.owin, B=Y, ..., fatal=FALSE)
-      isempty <- sapply(Ztiles, is.empty)
+      isempty <- !keepempty & sapply(Ztiles, is.empty)
       Ztiles <- Ztiles[!isempty]
       Xwin <- as.owin(X)
       Ywin <- Y
       Zwin <- intersect.owin(Xwin, Ywin)
-      out <- tess(tiles=Ztiles, window=Zwin)
+      out <- tess(tiles=Ztiles, window=Zwin, keepempty=keepempty)
       if(keepmarks) {
         marx <- marks(X)
         if(!is.null(marx))
-          marx <- as.data.frame(marx)[!isempty, ]
+          marx <- as.data.frame(marx)[!isempty, , drop=FALSE]
         marks(out) <- marx
       }
       return(out)
@@ -836,7 +840,7 @@ intersect.tess <- function(X, Y, ..., keepmarks=FALSE, sep="x") {
   for(i in seq_along(Xtiles)) {
     Xi <- Xtiles[[i]]
     Ti <- lapply(Ytiles, intersect.owin, B=Xi, ..., fatal=FALSE)
-    isempty <- sapply(Ti, is.empty)
+    isempty <- !keepempty & sapply(Ti, is.empty)
     nonempty <- !isempty
     if(any(nonempty)) {
       Ti <- Ti[nonempty]
@@ -861,7 +865,7 @@ intersect.tess <- function(X, Y, ..., keepmarks=FALSE, sep="x") {
   Xwin <- as.owin(X)
   Ywin <- as.owin(Y)
   Zwin <- intersect.owin(Xwin, Ywin)
-  out <- tess(tiles=Ztiles, window=Zwin)
+  out <- tess(tiles=Ztiles, window=Zwin, keepempty=keepempty)
   if(keepmarks) 
     marks(out) <- marx
   return(out)

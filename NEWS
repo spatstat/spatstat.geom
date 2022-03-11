@@ -1,9 +1,18 @@
-        CHANGES IN spatstat.geom VERSION 2.3-2.002
+        CHANGES IN spatstat.geom VERSION 2.3-2.003
 
 OVERVIEW
 
+    o We thank Suman Rakshit for contributions.
+    
     o Bug fixes in 'closepairs'.
 
+    o Minor improvements and bug fixes.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o intersect.tess
+    New argument 'keepempty'.
+    
 BUG FIXES
 
     o closepairs.ppp
@@ -31,9 +40,20 @@ BUG FIXES
     if the domain of Y had zero volume.
     Fixed.
 
+    o as.im.owin
+    If 'value' was a categorical (factor) value, the result was not a factor-valued image.
+    Fixed.
+    
     o tile.areas
     For a tessellation defined by a pixel image,
     the result of tile.areas() was not a numeric vector.
+    [Spotted by Suman Rakshit.]
+    Fixed.
+
+    o dirichlet
+    Rarely, the number of tiles in the tessellation
+    was less than the number of unique data points.
+    This occurred only when the window was a binary mask.
     [Spotted by Suman Rakshit.]
     Fixed.
 

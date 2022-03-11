@@ -3,7 +3,7 @@
 #
 #    conversion to class "im"
 #
-#    $Revision: 1.60 $   $Date: 2022/02/12 06:09:33 $
+#    $Revision: 1.61 $   $Date: 2022/03/11 06:13:49 $
 #
 #    as.im()
 #
@@ -43,14 +43,18 @@ as.im.owin <- function(X, W=NULL, ...,
                        eps=NULL, dimyx=NULL, xy=NULL,
                        na.replace=NULL, value=1) {
   if(!(is.null(eps) && is.null(dimyx) && is.null(xy))) {
-    # raster dimensions determined by dimyx etc
-    # convert X to a mask 
+    ## raster dimensions determined by dimyx etc
+    ## convert X to a mask 
     M <- as.mask(X, eps=eps, dimyx=dimyx, xy=xy)
-    # convert mask to image
+    ## convert mask to image
     d <- M$dim
     v <- matrix(value, d[1L], d[2L])
+    ## factor case
+    levels(v) <- levels(value)
+    ## outside window
     m <- M$m
     v[!m] <- if(is.null(na.replace)) NA else na.replace
+    ## create
     out <- im(v, M$xcol, M$yrow,
               xrange=M$xrange, yrange=M$yrange,
               unitname=unitname(X))
@@ -69,6 +73,7 @@ as.im.owin <- function(X, W=NULL, ...,
     } else {
       # map {0, 1} to {na.replace, value}
       v <- matrix(ifelseAB(Z$v == 0, na.replace, value), d[1L], d[2L])
+      levels(v) <- levels(value)
       out <- im(v, W$xcol, W$yrow, unitname=unitname(X))
     }
     return(out)
@@ -80,6 +85,7 @@ as.im.owin <- function(X, W=NULL, ...,
     v <- matrix(value, d[1L], d[2L])
     m <- X$m
     v[!m] <- if(is.null(na.replace)) NA else na.replace
+    levels(v) <- levels(value)
     out <- im(v, xcol=X$xcol, yrow=X$yrow,
               xrange=X$xrange, yrange=X$yrange, unitname=unitname(X))
     return(out)
@@ -91,6 +97,7 @@ as.im.owin <- function(X, W=NULL, ...,
   # convert mask to image
   d <- M$dim
   v <- matrix(value, d[1L], d[2L])
+  levels(v) <- levels(value)
   m <- M$m
   v[!m] <- if(is.null(na.replace)) NA else na.replace
   out <- im(v, M$xcol, M$yrow, unitname=unitname(X))

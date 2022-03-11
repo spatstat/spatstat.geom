@@ -3,7 +3,7 @@
 #'
 #' Interface to deldir package
 #'
-#'  $Revision: 1.38 $ $Date: 2021/09/26 08:03:56 $
+#'  $Revision: 1.39 $ $Date: 2022/03/11 05:21:01 $
 #'
 
 #' ..............................................
@@ -43,7 +43,7 @@ dirichlet <- local({
       names(pp) <- seq_len(npoints(X))
     dir <- tess(tiles=pp, window=as.rectangle(w))
     if(w$type != "rectangle")
-      dir <- intersect.tess(dir, w)
+      dir <- intersect.tess(dir, w, keepempty=TRUE)
     return(dir)
   }
 
@@ -218,7 +218,7 @@ delaunay <- function(X) {
   wc <- convexhull.xy(x, y)
   del <- tess(tiles=tiles, window=wc)
   if(w$type != "rectangle")
-    del <- intersect.tess(del, w)
+    del <- intersect.tess(del, w, keepempty=TRUE)
   return(del)
 }
 

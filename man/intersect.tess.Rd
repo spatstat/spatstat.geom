@@ -6,7 +6,7 @@
   or the intersection of a tessellation with a window.
 }
 \usage{
-   intersect.tess(X, Y, \dots, keepmarks=FALSE, sep="x")
+   intersect.tess(X, Y, \dots, keepempty=FALSE, keepmarks=FALSE, sep="x")
 }
 \arguments{
   \item{X,Y}{Two tessellations (objects of class \code{"tess"}),
@@ -17,6 +17,11 @@
   \item{\dots}{
     Optional arguments passed to \code{\link{as.mask}}
     to control the discretisation, if required.
+  }
+  \item{keepempty}{
+    Logical value specifying whether empty intersections between tiles
+    should be retained (\code{keepempty=TRUE}) or
+    deleted (\code{keepempty=FALSE}, the default).
   }
   \item{keepmarks}{
     Logical value. If \code{TRUE}, the marks attached to the
@@ -48,11 +53,9 @@
   subwindows determined by a tessellation. See the Examples.
 }
 
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \seealso{
   \code{\link{tess}},
