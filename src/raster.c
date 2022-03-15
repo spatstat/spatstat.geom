@@ -16,9 +16,8 @@ shape_raster(ras,data,xmin,ymin,xmax,ymax,nrow,ncol,mrow,mcol)
      Raster          *ras;           /* the raster structure to be initialised */
      void		*data;
      int 	        nrow, ncol;  /* absolute dimensions of storage array */
-     int 		mrow, mcol;  /* margins clipped off */
-	                             /* e.g. valid width is ncol - 2*mcol columns */
-     double		xmin, ymin,	/* image dimensions in R^2 after clipping */
+     int 		mrow, mcol;  /* margins for working */
+     double		xmin, ymin,  /* range of GRID COORDS excluding margin */
 		        xmax, ymax;     
 {
 	ras->data	= data;

@@ -5,39 +5,40 @@
 
       requires <math.h> (for floor())
 
-      $Revision: 1.4 $ $Date: 2018/12/18 02:43:11 $
+      $Revision: 1.6 $ $Date: 2022/03/15 02:19:08 $
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
 
 */
 
 typedef struct Raster{
- /* array of data */
-	char		*data;		/* coerced to appropriate type */
-	int	nrow;		/* dimensions of entire array */
-	int	ncol;
-	int	length;
-	int	rmin;		/* position of valid subrectangle */
-	int	rmax;
-	int	cmin;
-	int	cmax;
-/* definition of mapping into continuous space */
-	double	x0;	/* position of entry (rmin,cmin) */
-	double	y0;
-	double	x1;	/* position of entry (rmax,cmax) */
-	double	y1;
-	double	xstep;	/* x increment for each column step */
-	double	ystep;	/* y increment for each row step */
-	                /*
-			   xstep = (x1 - x0)/(cmax - cmin)
-			         = (x1 - x0)/(number of valid columns - 1)
-			   CAN BE POSITIVE OR NEGATIVE 
-			 */
-	 /* image of valid subrectangle */
-	double	xmin;	/* = min{x0,x1} */
-	double	xmax;
-	double	ymin;
-	double	ymax;
+  /* array of data */
+  char	*data;		/* coerced to appropriate type */
+  int	nrow;		/* dimensions of entire array */
+  int	ncol;
+  int	length;
+  int	rmin;		/* position of valid subrectangle */
+  int	rmax;
+  int	cmin;
+  int	cmax;
+  /* definition of mapping into continuous space */
+  double x0;	/* position of entry (rmin,cmin) */
+  double y0;
+  double x1;	/* position of entry (rmax,cmax) */
+  double y1;
+  double xstep;	/* x increment for each column step */
+  double ystep;	/* y increment for each row step */
+  /*
+    xstep = (x1 - x0)/(cmax - cmin)
+          = (x1 - x0)/(number of valid columns - 1)
+          CAN BE POSITIVE OR NEGATIVE 
+  */
+  /* ranges of grid coordinates */
+  double xmin;	/* = min{x0,x1} */
+  double xmax;
+  double ymin;
+  double ymax;
+  /* limits of enclosing frame are xmin-xstep/2, xmax+xstep/2 etc. */
 } Raster;
 
 /*      how to clear the data      */

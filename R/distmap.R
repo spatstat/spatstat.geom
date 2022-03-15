@@ -2,7 +2,7 @@
 #
 #      distmap.R
 #
-#      $Revision: 1.27 $     $Date: 2021/09/05 10:58:43 $
+#      $Revision: 1.28 $     $Date: 2022/03/15 01:01:41 $
 #
 #
 #     Distance transforms
@@ -78,17 +78,17 @@ distmap.owin <- function(X, ..., discretise=FALSE, invert=FALSE, metric=NULL) {
     yr <- X$yrow
     nr <- X$dim[1L]
     nc <- X$dim[2L]
-# pad out the input image with a margin of width 1 on all sides
+## pad out the input image with a margin of width 1 on all sides
     mat <- X$m
     pad <- invert # boundary condition is opposite of value inside W
     mat <- cbind(pad, mat, pad)
     mat <- rbind(pad, mat, pad)
     ## call C routine
     res <- .C(SG_distmapbin,
-              xmin=as.double(X$xrange[1L]),
-              ymin=as.double(X$yrange[1L]),
-              xmax=as.double(X$xrange[2L]),
-              ymax=as.double(X$yrange[2L]),
+              xmin=as.double(xc[1L]),
+              ymin=as.double(yr[1L]),
+              xmax=as.double(xc[nc]),
+              ymax=as.double(yr[nr]),
               nr = as.integer(nr),
               nc = as.integer(nc),
               inp = as.integer(as.logical(t(mat))),

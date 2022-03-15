@@ -6,7 +6,7 @@
        
        Code template which is #included several times in metricPdist.c
 
-       $Revision: 1.4 $ $Date: 2021/07/26 08:01:14 $
+       $Revision: 1.6 $ $Date: 2022/03/15 01:37:36 $
 
        Uses the following definitions
        FNAME          Function name (called from R)
@@ -29,7 +29,8 @@ void FNAME(xmin, ymin, xmax, ymax,
 	   npasses,
 	   distances, rows, cols
 	   )
-	double *xmin, *ymin, *xmax, *ymax;  	  /* x, y dimensions */
+	double *xmin, *ymin, *xmax, *ymax; /* range of coords of grid points */
+        /* WARNING: the enclosing frame is larger than xmin, xmax, ymin, ymax */
 	int *nr, *nc;	 	                  /* raster dimensions
 				                     EXCLUDING margins */
 	int *mr, *mc;                             /* margins */

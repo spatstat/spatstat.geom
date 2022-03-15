@@ -1,8 +1,8 @@
-        CHANGES IN spatstat.geom VERSION 2.3-2.003
+        CHANGES IN spatstat.geom VERSION 2.3-2.004
 
 OVERVIEW
 
-    o We thank Suman Rakshit for contributions.
+    o We thank Fernando Milesi and Suman Rakshit for contributions.
     
     o Bug fixes in 'closepairs'.
 
@@ -15,6 +15,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
 BUG FIXES
 
+    o distmap.owin
+    If the window was a binary mask, the distance values were
+    slightly too large, due to a coding error.
+    [Spotted by Fernando Milesi.]
+    [Under investigation - may not be fixed.]
+    
     o closepairs.ppp
     If distinct=FALSE and what="all", the resulting vectors
     'yi' and 'yj' contained incorrect values, and had the wrong length.
@@ -43,7 +49,7 @@ BUG FIXES
     o as.im.owin
     If 'value' was a categorical (factor) value, the result was not a factor-valued image.
     Fixed.
-    
+
     o tile.areas
     For a tessellation defined by a pixel image,
     the result of tile.areas() was not a numeric vector.

@@ -3,7 +3,7 @@
 #'
 #'     Metric distance transform of pixel mask
 #'
-#'	$Revision: 1.7 $	$Date: 2021/01/07 01:15:08 $
+#'	$Revision: 1.8 $	$Date: 2022/03/15 01:46:59 $
 
 
 rectdistmap <- function(X, asp=1.0, npasses=1, verbose=FALSE) {
@@ -36,6 +36,8 @@ rectdistmap <- function(X, asp=1.0, npasses=1, verbose=FALSE) {
   #'
   nr <- w$dim[1L]
   nc <- w$dim[2L]
+  xcol <- w$xcol
+  yrow <- w$yrow
   #' input image will be padded out with a margin of width 2 on all sides
   mr <- mc <- 2L
   #' full dimensions of padded image
@@ -52,10 +54,10 @@ rectdistmap <- function(X, asp=1.0, npasses=1, verbose=FALSE) {
   x[rmin:rmax, cmin:cmax] <- w$m
   #' compute distmap
   res <- .C(SG_mdtPOrect,
-            as.double(w$xrange[1L]),
-            as.double(w$yrange[1L]),
-            as.double(w$xrange[2L]),
-            as.double(w$yrange[2L]),
+            as.double(xcol[1L]),
+            as.double(yrow[1L]),
+            as.double(xcol[nc]),
+            as.double(yrow[nr]),
             nr = as.integer(nr),
             nc = as.integer(nc),
             mr = as.integer(mr),
@@ -91,10 +93,10 @@ rectdistmap <- function(X, asp=1.0, npasses=1, verbose=FALSE) {
     y[, cmax] <- TRUE
     #' compute distmap
     bres <- .C(SG_mdtPOrect,
-               as.double(w$xrange[1L]),
-               as.double(w$yrange[1L]),
-               as.double(w$xrange[2L]),
-               as.double(w$yrange[2L]),
+               as.double(xcol[1L]),
+               as.double(yrow[1L]),
+               as.double(xcol[nc]),
+               as.double(yrow[nr]),
                nr = as.integer(nr),
                nc = as.integer(nc),
                mr = as.integer(mr),

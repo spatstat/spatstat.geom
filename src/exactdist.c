@@ -4,7 +4,7 @@
        Exact distance transform of a point pattern
        (used to estimate the empty space function F)
        
-       $Revision: 1.14 $ $Date: 2020/11/30 11:19:48 $
+       $Revision: 1.18 $ $Date: 2022/03/15 02:44:29 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -151,23 +151,37 @@ exact_dt(x, y, npt, dist, index)
 #define MIN(A,B) (((A) < (B)) ? (A) : (B))
 
 void
-dist_to_bdry(d)		/* compute distance to boundary from each raster point */
-	Raster *d;
-	                /* of course this is easy for a rectangular grid
-			   but we implement it in C
-			   for ease of future modification */
+dist_to_bdry(d)	    /* distance to frame boundary from each raster point */
+     Raster *d;
 {
-	int j, k;
-	double x, y, xd, yd;
-	for(j = d->rmin; j <= d->rmax;j++) {
-		y = Ypos(*d,j);
-		yd = MIN(y - d->ymin, d->ymax - y);
-		for(k = d->cmin; k <= d->cmax;k++) {
-			x = Xpos(*d,k);
-			xd = MIN(x - d->xmin, d->xmax - x);
-			Entry(*d,j,k,double) = MIN(xd,yd);
-		}
-	}
+  int j, k;
+  double x, y, xd, yd, Xmin, Xmax, Ymin, Ymax;
+  /* Frame limits */
+  Xmin = d->xmin - d->xstep/2.0;
+  Xmax = d->xmax + d->xstep/2.0;
+  Ymin = d->ymin - d->ystep/2.0;
+  Ymax = d->ymax + d->ystep/2.0;
+
+#ifdef DEBUG
+  Rprintf("xmin=%lf,xmax=%lf\nymin=%lf,ymax=%lf\n",
+	  d->xmin, d->xmax, d->ymin, d->ymax);
+  Rprintf("xstep=%lf,ystep=%lf\n",
+	  d->xstep, d->ystep);
+  Rprintf("Xmin=%lf,Xmax=%lf\nYmin=%lf,Ymax=%lf\n",
+	  Xmin,Xmax, Ymin, Ymax);
+  Rprintf("(Xpos,Ypos)(cmin,rmin) = (%lf, %lf)\n",
+	  Xpos(*d,cmin), Ypos(*d,rmin));
+#endif
+  
+  for(j = d->rmin; j <= d->rmax;j++) {
+    y = Ypos(*d,j);
+    yd = MIN(y - Ymin, Ymax - y);
+    for(k = d->cmin; k <= d->cmax;k++) {
+      x = Xpos(*d,k);
+      xd = MIN(x - Xmin, Xmax - x);
+      Entry(*d,j,k,double) = MIN(xd,yd);
+    }
+  }
 }
 
 /* R interface */

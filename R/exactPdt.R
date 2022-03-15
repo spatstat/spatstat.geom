@@ -2,7 +2,7 @@
 #	exactPdt.R
 #	R function exactPdt() for exact distance transform of pixel image
 #
-#	$Revision: 4.18 $	$Date: 2021/01/07 01:15:08 $
+#	$Revision: 4.19 $	$Date: 2022/03/15 01:26:18 $
 #
 
 "exactPdt"<-
@@ -11,9 +11,11 @@
   verifyclass(w, "owin")
   if(w$type != "mask")
     stop(paste("Input must be a window of type", sQuote("mask")))
-#	
+  ##	
   nr <- w$dim[1L]
   nc <- w$dim[2L]
+  xcol <- w$xcol
+  yrow <- w$yrow
 # input image will be padded out with a margin of width 2 on all sides
   mr <- mc <- 2L
   # full dimensions of padded image
@@ -25,15 +27,14 @@
   rmax <- Nnr - mr
   cmin <- mc + 1L
   cmax <- Nnc - mc
-  # do padding
+  ## do padding
   x <- matrix(FALSE, nrow=Nnr, ncol=Nnc)
   x[rmin:rmax, cmin:cmax] <- w$m
-                                        #
   res <- .C(SG_ps_exact_dt_R,
-            as.double(w$xrange[1L]),
-            as.double(w$yrange[1L]),
-            as.double(w$xrange[2L]),
-            as.double(w$yrange[2L]),
+            as.double(xcol[1L]),
+            as.double(yrow[1L]),
+            as.double(xcol[nc]),
+            as.double(yrow[nr]),
             nr = as.integer(nr),
             nc = as.integer(nc),
             mr = as.integer(mr),
