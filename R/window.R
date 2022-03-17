@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.194 $	$Date: 2021/12/05 10:35:59 $
+#	$Revision: 4.195 $	$Date: 2022/03/17 06:01:45 $
 #
 #
 #	A window may be either
@@ -755,12 +755,15 @@ as.polygonal <- function(W, repair=FALSE) {
            notM <- !M
            xcol <- W$xcol
            yrow <- W$yrow
-           xbracket <- 1.1 * c(-1,1) * W$xstep/2
-           ybracket <- 1.1 * c(-1,1) * W$ystep/2
            ## determine resolution for polyclip operations
+           eps <- max(W$xstep, W$ystep)/(2^31)
+           eps <- max(eps, 4 * .Machine$double.eps)
            p <- list(x0 = xcol[1],
                      y0 = yrow[1],
-                     eps = max(W$xstep, W$ystep)/(2^31))
+                     eps = eps)
+           ## pixels will be slightly expanded to avoid artefacts
+           xbracket <- c(-1,1) * (W$xstep/2 + 4 * eps)
+           ybracket <- c(-1,1) * (W$ystep/2 + 4 * eps)
            # identify runs of TRUE entries in each column
            start <- M & rbind(TRUE, notM[-nr, ])
            finish <- M & rbind(notM[-1, ], TRUE)
