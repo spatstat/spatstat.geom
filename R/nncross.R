@@ -2,7 +2,7 @@
 #   nncross.R
 #
 #
-#    $Revision: 1.36 $  $Date: 2022/01/04 05:30:06 $
+#    $Revision: 1.37 $  $Date: 2022/03/18 09:55:11 $
 #
 #  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2012
 #  Licence: GNU Public Licence >= 2
@@ -69,11 +69,14 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
     return(result)
   }
   
-  # Y is a line segment pattern 
+  ## Y is a line segment pattern 
   if(is.psp(Y)) {
-    if(!identical(k, 1L))
-      stop("Sorry, the case k > 1 is not yet implemented for psp objects")
-    return(ppllengine(X,Y,"distance")[, what])
+    if(identical(k, 1L))
+      return(ppllengine(X,Y,"distance")[, what])
+    ## all distances
+    D <- distppll(coords(X), Y$ends, mintype=0)
+    ans <- XDtoNN(D, what=what, iX=iX, iY=iX, k=k)
+    return(ans)
   }
 
   # Y is a point pattern

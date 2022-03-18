@@ -64,6 +64,12 @@
   on a grid of locations, and returns the distance
   values in the form of a pixel image.
 
+  The distance values returned by \code{f <- distfun(X); d <- f(x)}
+  are computed using coordinate geometry; they are more accurate,
+  but slower to compute, than the distance values returned by
+  \code{Z <- distmap(X); d <- Z[x]}
+  which are computed using a fast recursive algorithm. 
+  
   The result of \code{f <- distfun(X)} also belongs to the class
   \code{"funxy"} and to the special class \code{"distfun"}.
   It can be printed and plotted immediately as shown in the Examples.

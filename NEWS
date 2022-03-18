@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.3-2.005
+        CHANGES IN spatstat.geom VERSION 2.3-2.006
 
 OVERVIEW
 
@@ -11,6 +11,10 @@ OVERVIEW
     o Minor improvements and bug fixes.
 
 SIGNIFICANT USER-VISIBLE CHANGES
+
+    o nncross.ppp
+    When X is a point pattern and Y is a line segment pattern,
+    higher order neighbours (k > 1) are now supported.
 
     o intersect.tess
     New argument 'keepempty'.
@@ -27,7 +31,7 @@ BUG FIXES
     If the window was a binary mask, the distance values were
     slightly too small.
     [Spotted by Fernando Milesi.]
-    [Under investigation - may not be fixed.]
+    Fixed.
     
     o closepairs.ppp
     If distinct=FALSE and what="all", the resulting vectors
