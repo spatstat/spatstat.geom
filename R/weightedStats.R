@@ -3,7 +3,7 @@
 #'
 #'   weighted versions of hist, var, median, quantile
 #'
-#'  $Revision: 1.7 $  $Date: 2021/10/26 01:41:47 $
+#'  $Revision: 1.8 $  $Date: 2022/03/22 01:31:47 $
 #'
 
 
@@ -59,15 +59,18 @@ weighted.var <- function(x, w, na.rm=TRUE) {
 
 #' weighted median
 
-weighted.median <- function(x, w, na.rm=TRUE, type=2) {
-  unname(weighted.quantile(x, probs=0.5, w=w, na.rm=na.rm, type=type))
+weighted.median <- function(x, w, na.rm=TRUE, type=2, collapse=TRUE) {
+  unname(weighted.quantile(x, probs=0.5, w=w, na.rm=na.rm, type=type, collapse=collapse))
 }
 
 #' weighted quantile
 
-weighted.quantile <- function(x, w, probs=seq(0,1,0.25), na.rm=TRUE, type=4) {
+weighted.quantile <- function(x, w, probs=seq(0,1,0.25), na.rm=TRUE, type=4, collapse=TRUE) {
   x <- as.numeric(as.vector(x))
   w <- as.numeric(as.vector(w))
+  if(length(x) == 0)
+    stop("No data given")
+  stopifnot(length(x) == length(w))
   if(is.na(m <- match(type, c(1,2,4))))
     stop("Argument 'type' must equal 1, 2 or 4", call.=FALSE)
   type <- c(1,2,4)[m]
@@ -76,6 +79,8 @@ weighted.quantile <- function(x, w, probs=seq(0,1,0.25), na.rm=TRUE, type=4) {
     x <- x[ok]
     w <- w[ok]
   }
+  if(length(x) == 0)
+    stop("At least one non-NA value is required")
   stopifnot(all(w >= 0))
   if(all(w == 0)) stop("All weights are zero", call.=FALSE)
   #'
@@ -84,20 +89,24 @@ weighted.quantile <- function(x, w, probs=seq(0,1,0.25), na.rm=TRUE, type=4) {
   w <- w[oo]
   Fx <- cumsum(w)/sum(w)
   #' 
-  if(anyDuplicated(x)) {
+  if(collapse && anyDuplicated(x)) {
     dup <- rev(duplicated(rev(x)))
     x <- x[!dup]
     Fx <- Fx[!dup]
   }
   #'
-  out <- switch(as.character(type),
-                "1" = approx(Fx, x, xout=probs, ties="ordered", rule=2,
-                             method="constant", f=1),
-                "2" = approx(Fx, x, xout=probs, ties="ordered", rule=2,
-                             method="constant", f=1/2),
-                "4" = approx(Fx, x, xout=probs, ties="ordered", rule=2,
-                             method="linear"))
-  result <- out$y
+  if(length(x) > 1) {
+    out <- switch(as.character(type),
+                  "1" = approx(Fx, x, xout=probs, ties="ordered", rule=2,
+                               method="constant", f=1),
+                  "2" = approx(Fx, x, xout=probs, ties="ordered", rule=2,
+                               method="constant", f=1/2),
+                  "4" = approx(Fx, x, xout=probs, ties="ordered", rule=2,
+                               method="linear"))
+    result <- out$y
+  } else {
+    result <- rep.int(x, length(probs))
+  }
   names(result) <- paste0(format(100 * probs, trim = TRUE), "%")
   return(result)
 }

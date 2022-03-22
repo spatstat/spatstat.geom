@@ -1,8 +1,8 @@
-        CHANGES IN spatstat.geom VERSION 2.3-2.007
+        CHANGES IN spatstat.geom VERSION 2.3-2.008
 
 OVERVIEW
 
-    o We thank Fernando Milesi and Suman Rakshit for contributions.
+    o We thank Fernando Milesi, Suman Rakshit and Mark Walsh for contributions.
 
     o Bug fixes in 'distmap' and 'distfun'.
     

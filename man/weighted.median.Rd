@@ -10,9 +10,9 @@
   weights associated with them.
 }
 \usage{
-weighted.median(x, w, na.rm = TRUE, type=2)
+weighted.median(x, w, na.rm = TRUE, type=2, collapse=TRUE)
 
-weighted.quantile(x, w, probs=seq(0,1,0.25), na.rm = TRUE, type=4)
+weighted.quantile(x, w, probs=seq(0,1,0.25), na.rm = TRUE, type=4, collapse=TRUE)
 
 weighted.var(x, w, na.rm = TRUE)
 }
@@ -39,7 +39,7 @@ weighted.var(x, w, na.rm = TRUE)
     The only valid choices are \code{type=1}, \code{2} or \code{4}.
     See Details.
   }
-    
+  \item{collapse}{Research use only.}
 }
 \details{
   The \code{i}th observation \code{x[i]} is treated as having
