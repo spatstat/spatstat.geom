@@ -2,7 +2,7 @@
 #   nncross.R
 #
 #
-#    $Revision: 1.37 $  $Date: 2022/03/18 09:55:11 $
+#    $Revision: 1.38 $  $Date: 2022/03/22 00:42:41 $
 #
 #  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2012
 #  Licence: GNU Public Licence >= 2
@@ -227,7 +227,7 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
     if(want.which && any(uhoh <- (nnW == 0))) {
       nnW[uhoh] <- NA
       if(want.dist) nnD[uhoh] <- Inf
-    } else if(want.dist && any(uhoh <- (nnW > dmax)))
+    } else if(want.dist && any(uhoh <- (nnD > dmax)))
       nnD[uhoh] <- Inf
     
     # reinterpret indices in original ordering

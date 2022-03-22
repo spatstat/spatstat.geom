@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.3-2.006
+        CHANGES IN spatstat.geom VERSION 2.3-2.007
 
 OVERVIEW
 
@@ -7,6 +7,8 @@ OVERVIEW
     o Bug fixes in 'distmap' and 'distfun'.
     
     o Bug fixes in 'closepairs'.
+
+    o Bug fixes in 'nncross.ppp'.
 
     o Minor improvements and bug fixes.
 
@@ -36,6 +38,10 @@ BUG FIXES
     o closepairs.ppp
     If distinct=FALSE and what="all", the resulting vectors
     'yi' and 'yj' contained incorrect values, and had the wrong length.
+    Fixed.
+
+    o nncross.ppp
+    When k > 1, distance values were incorrectly replaced by 'Inf' in some cases.
     Fixed.
     
     o closepairs.ppp
