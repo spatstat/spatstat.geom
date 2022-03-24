@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.170 $     $Date: 2021/07/17 02:44:48 $
+#      $Revision: 1.171 $     $Date: 2022/03/24 03:22:07 $
 #
 #      The class "im" of raster images
 #
@@ -788,7 +788,9 @@ safelookup <- function(Z, x, factor=2, warn=TRUE) {
   Zvals[isna] <- Nvals
   if(all(fixed))
     return(Zvals)
-  isna[isna] <- !fixed
+  notfixed <- !fixed
+  isna[isna] <- notfixed
+  Xbad <- Xbad[notfixed]
   #' Third pass - project to nearest pixel at any distance
   W <- as.mask(Z)
   eW <- exactPdt(W)
