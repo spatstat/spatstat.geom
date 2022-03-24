@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.3-2.008
+        CHANGES IN spatstat.geom VERSION 2.3-2.009
 
 OVERVIEW
 
@@ -20,6 +20,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o intersect.tess
     New argument 'keepempty'.
+
+    o unnormdensity
+    Argument 'weights' may have length 1.
+    New argument 'defaults'.
     
 BUG FIXES
 
