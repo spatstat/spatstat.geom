@@ -2,7 +2,7 @@
 #
 #      distmap.R
 #
-#      $Revision: 1.28 $     $Date: 2022/03/15 01:01:41 $
+#      $Revision: 1.31 $     $Date: 2022/03/26 03:06:43 $
 #
 #
 #     Distance transforms
@@ -12,10 +12,10 @@ distmap <- function(X, ...) {
   UseMethod("distmap")
 }
 
-distmap.ppp <- function(X, ..., metric=NULL) {
+distmap.ppp <- function(X, ..., clip=FALSE, metric=NULL) {
   verifyclass(X, "ppp")
   if(!is.null(metric)) {
-    ans <- invoke.metric(metric, "distmap.ppp", X=X, ...)
+    ans <- invoke.metric(metric, "distmap.ppp", X=X, ..., clip=clip)
     return(ans)
   }
   e <- exactdt(X, ...)
@@ -30,13 +30,15 @@ distmap.ppp <- function(X, ..., metric=NULL) {
     bmat <- e$b
     B <- im(bmat, W$xcol, W$yrow, unitname=uni)
   } else {
-    # distance to window boundary, not frame boundary
+    ## distance to window boundary, not frame boundary
     bmat <- bdist.pixels(W, style="matrix")
     B <- im(bmat, W$xcol, W$yrow, unitname=uni)
-    # clip all to window
-    V <- V[W, drop=FALSE]
-    I <- I[W, drop=FALSE]
-    B <- B[W, drop=FALSE]
+    if(clip) {
+      ## clip all to window
+      V <- V[W, drop=FALSE]
+      I <- I[W, drop=FALSE]
+      B <- B[W, drop=FALSE]
+    }
   }
   attr(V, "index") <- I
   attr(V, "bdry")  <- B
@@ -45,12 +47,18 @@ distmap.ppp <- function(X, ..., metric=NULL) {
 
 distmap.owin <- function(X, ..., discretise=FALSE, invert=FALSE, metric=NULL) {
   verifyclass(X, "owin")
+  uni <- unitname(X)
   if(!is.null(metric)) {
     ans <- invoke.metric(metric, "distmap.owin", X=X, ...,
                          discretise=discretise, invert=invert)
     return(ans)
   }
-  uni <- unitname(X)
+  if(is.empty(X)) {
+    ## handle empty window
+    Dist <- as.im(Inf, X)
+    attr(Dist, "bdry") <- framedist.pixels(X, ...)
+    return(Dist)
+  }
   if(X$type == "rectangle") {
     M <- as.mask(X, ...)
     Bdry <- im(bdist.pixels(M, style="matrix"),
@@ -78,11 +86,10 @@ distmap.owin <- function(X, ..., discretise=FALSE, invert=FALSE, metric=NULL) {
     yr <- X$yrow
     nr <- X$dim[1L]
     nc <- X$dim[2L]
-## pad out the input image with a margin of width 1 on all sides
+    ## pad out the input image with a margin of width 1 on all sides
     mat <- X$m
-    pad <- invert # boundary condition is opposite of value inside W
-    mat <- cbind(pad, mat, pad)
-    mat <- rbind(pad, mat, pad)
+    mat <- cbind(FALSE, mat, FALSE)
+    mat <- rbind(FALSE, mat, FALSE)
     ## call C routine
     res <- .C(SG_distmapbin,
               xmin=as.double(xc[1L]),
@@ -118,6 +125,21 @@ distmap.psp <- function(X, ..., extras=TRUE, clip=FALSE, metric=NULL) {
   W <- Window(X)
   uni <- unitname(W)
   M <- as.mask(W, ...)
+  ## handle empty pattern
+  if(nsegments(X) == 0) {
+    Dist <- as.im(Inf, W)
+    if(extras) {
+      Indx <- as.im(NA, W)
+      Bdry <- bdist.pixels(M)
+      if(clip) {
+       Indx <- Indx[M, drop=FALSE]
+       Bdry <- Bdry[M, drop=FALSE]
+      }
+      attr(Dist, "index") <- Indx
+      attr(Dist, "bdry")  <- Bdry
+    }
+    return(Dist)
+  }
   rxy <- rasterxy.mask(M)
   xp <- rxy$x
   yp <- rxy$y

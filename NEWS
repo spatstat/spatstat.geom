@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.3-2.010
+        CHANGES IN spatstat.geom VERSION 2.3-2.011
 
 OVERVIEW
 
@@ -12,6 +12,11 @@ OVERVIEW
 
     o Minor improvements and bug fixes.
 
+NEW FUNCTIONS
+
+    o framedist.pixels
+    Computes distance from each pixel to the enclosing rectangle.
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o nncross.ppp
@@ -24,19 +29,41 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o unnormdensity
     Argument 'weights' may have length 1.
     New argument 'defaults'.
+
+    o distmap.owin
+    Behaviour has been altered so that, when X is a binary mask, the results of
+    distmap(X, invert=TRUE) and distmap(complement.owin(X)) are identical.
+    This affects a few pixels close to the edge of the frame.
+    [Suggested by Fernando Milesi.]
+
+    o distmap.ppp
+    New argument 'clip'.
     
 BUG FIXES
 
     o distmap.owin
     If the window was a binary mask, the distance values were
-    slightly too large, due to a coding error.
+    slightly too large (by a factor 1 + 1/n where n is the pixel grid dimension),
+    due to a coding error.
     [Spotted by Fernando Milesi.]
     Fixed.
     
     o distfun.owin
     If the window was a binary mask, the distance values were
-    slightly too small.
+    slightly too small (typically reduced by 1/20 of a pixel width).
     [Spotted by Fernando Milesi.]
+    Fixed.
+
+    o distmap.owin
+    Values were incorrect if X was an empty window (is.empty(X) = TRUE).
+    Fixed.
+    
+    o distmap.ppp, distmap.psp
+    Values were incorrect if X was an empty pattern (npoints(X) = 0).
+    Fixed.
+    
+    o distmap.psp
+    Values were incorrect if X was an empty pattern (nsegments(X) = 0).
     Fixed.
     
     o closepairs.ppp

@@ -1,8 +1,8 @@
 #
 #	exactPdt.R
-#	R function exactPdt() for exact distance transform of pixel image
+#	R function exactPdt() for exact distance transform of binary mask
 #
-#	$Revision: 4.19 $	$Date: 2022/03/15 01:26:18 $
+#	$Revision: 4.22 $	$Date: 2022/03/26 02:46:53 $
 #
 
 "exactPdt"<-
@@ -16,6 +16,13 @@
   nc <- w$dim[2L]
   xcol <- w$xcol
   yrow <- w$yrow
+  ## handle empty window
+  if(!any(w$m)) {
+    dist <- matrix(Inf, nr, nc)
+    rows <- cols <- matrix(NA_integer_ , nr, nc)
+    bdist <- framedist.pixels(w, style="matrix")
+    return(list(d=dist,row=rows,col=cols,b=bdist, w=w))
+  }
 # input image will be padded out with a margin of width 2 on all sides
   mr <- mc <- 2L
   # full dimensions of padded image

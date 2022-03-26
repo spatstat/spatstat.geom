@@ -48,18 +48,21 @@
   to the nearest line segment of the pattern \code{X}.
   Distances are computed using analytic geometry.
 
-  The result is a pixel image. If \code{clip=TRUE} (the default), the
-  pixel values are defined only inside the original window of \code{X},
-  and are \code{NA} outside this window.
-  If \code{clip=FALSE}, the pixel values are defined at every pixel in
-  \code{Frame(X)}. Computation is faster when \code{clip=FALSE}.
+  The result is a pixel image.
+  If \code{clip=FALSE} (the default), the pixel values are defined at every pixel in
+  the rectangle \code{Frame(X)}. If \code{clip=TRUE}, the pixel values are defined
+  only inside \code{Window(X)}, and are \code{NA} outside this window.
+  Computation is faster when \code{clip=FALSE}.
   
   Additionally, if \code{extras=TRUE}, the return value 
   has two attributes, \code{"index"} and \code{"bdry"}, which are
-  also pixel images. The grey values in \code{"bdry"} give the
-  distance from each pixel to the bounding rectangle of the image.
-  The grey values in \code{"index"} are integers identifying which
-  line segment of \code{X} is closest.
+  also pixel images. The pixels values of \code{"bdry"} give the
+  distance from each pixel to the boundary of the window of \code{X}
+  (and are zero outside this window).
+  The pixel values of \code{"index"} are integers identifying which
+  line segment of \code{X} is closest. 
+  If \code{clip=FALSE} (the default), these images are defined at every pixel
+  in \code{Frame(X)}; if \code{clip=TRUE}, they are clipped to the window of \code{X}.
   Computation is faster when \code{extras=FALSE}.
   
   This is a method for the generic function \code{\link{distmap}}.

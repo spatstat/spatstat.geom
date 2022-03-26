@@ -2,7 +2,7 @@
 #	exactdt.S
 #	S function exactdt() for exact distance transform
 #
-#	$Revision: 4.19 $	$Date: 2022/03/15 01:28:23 $
+#	$Revision: 4.23 $	$Date: 2022/03/26 02:46:27 $
 #
 
 exactdt <- local({
@@ -31,6 +31,13 @@ exactdt <- local({
     nc <- w$dim[2L]
     xcol <- w$xcol
     yrow <- w$yrow
+    ## Handle empty pattern
+    if(npoints(X) == 0) {
+      dist <- matrix(Inf, nr, nc)
+      inde <- matrix(NA_integer_ , nr, nc)
+      bdry <- framedist.pixels(w, style="matrix")
+      return(list(d = dist, i = inde, b = bdry, w=w))
+    } 
     ## margins in C array 
     mr <- 2
     mc <- 2

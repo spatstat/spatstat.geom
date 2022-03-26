@@ -8,13 +8,17 @@
   point in the given point pattern.
 }
 \usage{
-  \method{distmap}{ppp}(X, \dots, metric=NULL)
+  \method{distmap}{ppp}(X, \dots, clip=FALSE, metric=NULL)
 }
 \arguments{
   \item{X}{A point pattern (object of class \code{"ppp"}).
   }
   \item{\dots}{Arguments passed to \code{\link{as.mask}}
     to control pixel resolution.
+  }
+  \item{clip}{
+    Logical value specifying whether the resulting pixel image
+    should be clipped to the window of \code{X}.
   }
   \item{metric}{
     Optional. A distance metric
@@ -38,10 +42,15 @@
   at a pixel \eqn{u} equals the distance from \eqn{u} to the nearest
   point of the pattern \code{X}.
 
+  If \code{clip=FALSE} (the default), the resulting pixel values are defined at every pixel in
+  the rectangle \code{Frame(X)}. If \code{clip=TRUE}, the pixel values are defined
+  only inside \code{Window(X)}, and are \code{NA} outside this window.
+  Computation is faster when \code{clip=FALSE}.
+  
   Additionally, the return value 
   has two attributes, \code{"index"} and \code{"bdry"}, which are
   also pixel images. The grey values in \code{"bdry"} give the
-  distance from each pixel to the bounding rectangle of the image.
+  distance from each pixel to the boundary of the window containing \code{X}.
   The grey values in \code{"index"} are integers identifying which
   point of \code{X} is closest. 
   
@@ -63,19 +72,16 @@
   Nearest neighbour distance \code{\link{nncross}}
 }
 \examples{
-  data(cells)
   U <- distmap(cells)
   if(interactive()) {
-  plot(U)
-  plot(attr(U, "bdry"))
-  plot(attr(U, "index"))
+    plot(U)
+    plot(attr(U, "bdry"))
+    plot(attr(U, "index"))
   }
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{math}

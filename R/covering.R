@@ -1,7 +1,7 @@
 #'
 #'   covering.R
 #'
-#'  $Revision: 1.4 $  $Date: 2019/12/31 03:57:05 $
+#'  $Revision: 1.5 $  $Date: 2022/03/26 03:55:47 $
 #'
 
 covering <- function(W, r, ..., giveup=1000) {
@@ -27,7 +27,7 @@ covering <- function(W, r, ..., giveup=1000) {
   if(npoints(H) == 0) H <- X
   ## this may not suffice if W is irregular
   for(i in 1:giveup) {
-    DH <- distmap(H)
+    DH <- distmap(H, clip=TRUE)
     if(max(DH) < ruse && npoints(H) > 0) return(H)
     Hnew <- where.max(DH)
     H <- superimpose(H, Hnew, W=W)

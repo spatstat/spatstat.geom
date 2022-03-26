@@ -1,7 +1,7 @@
 #
 #	distbdry.S		Distance to boundary
 #
-#	$Revision: 4.45 $	$Date: 2019/02/06 10:53:48 $
+#	$Revision: 4.48 $	$Date: 2022/03/26 03:13:10 $
 #
 # -------- functions ----------------------------------------
 #
@@ -51,10 +51,10 @@ function(X)
         return(result)
 }
 
-"bdist.pixels" <- function(w, ..., style="image",
+"bdist.pixels" <- function(w, ..., style=c("image", "matrix", "coords"),
                            method=c("C", "interpreted")) {
 	verifyclass(w, "owin")
-
+        style <- match.arg(style)
         masque <- as.mask(w, ...)
         
         switch(w$type,
@@ -129,6 +129,30 @@ function(X)
                },
                stop(paste("Unrecognised option for style:", style)))
 } 
+
+framedist.pixels <- function(w, ..., style=c("image", "matrix", "coords")) {
+  ## Distance to Frame boundary
+  style <- match.arg(style)
+  masque <- as.mask(w, ...)
+  rxy <- rasterxy.mask(masque)
+  x <- rxy$x
+  y <- rxy$y
+  xmin <- w$xrange[1L]
+  xmax <- w$xrange[2L]
+  ymin <- w$yrange[1L]
+  ymax <- w$yrange[2L]
+  b <- pmin.int(x - xmin, xmax - x, y - ymin, ymax - y)
+  b <- matrix(b, nrow=masque$dim[1L], ncol=masque$dim[2L])
+  result <- switch(style,
+                   matrix = b,
+                   coords = list(x=masque$xcol,
+                                 y=masque$yrow,
+                                 z=t(b)),
+                   image  = im(b,
+                               xcol=masque$xcol, yrow=masque$yrow,
+                               unitname=unitname(masque)))
+  return(b)
+}
 
 erodemask <- function(w, r, strict=FALSE) {
   # erode a binary image mask without changing any other entries
