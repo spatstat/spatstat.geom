@@ -18,7 +18,7 @@
 
   MARKED     if defined, points have INTEGER marks (tested for equality)
 
-  $Revision: 1.6 $ $Date: 2019/05/21 07:30:51 $
+  $Revision: 1.7 $ $Date: 2022/03/27 02:00:34 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2019
   Licence: GNU Public Licence >= 2
@@ -87,7 +87,7 @@ void FUNNAME(int *n,
 	  /* scan forward */
 	  for(j = i + 1; j < N; j++) {
 	    dx = x[j] - xi;
-	    if(dx > DOUBLE_EPS) 
+	    if(dx > DBL_EPSILON) 
 	      break;
 	    dy = y[j] - yi;
 	    d2 = dx * dx + dy * dy;
