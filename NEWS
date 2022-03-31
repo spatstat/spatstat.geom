@@ -1,3 +1,16 @@
+        CHANGES IN spatstat.geom VERSION 2.4-0.001
+
+OVERVIEW
+
+    o Bug fixes.
+
+BUG FIXES
+
+    o framedist.pixels
+    Result was always a matrix, regardless of the value of 'style'.
+    Fixed.
+    
+    
         CHANGES IN spatstat.geom VERSION 2.4-0
 
 OVERVIEW

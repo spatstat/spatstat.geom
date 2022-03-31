@@ -1,7 +1,7 @@
 #
 #	distbdry.S		Distance to boundary
 #
-#	$Revision: 4.48 $	$Date: 2022/03/26 03:13:10 $
+#	$Revision: 4.49 $	$Date: 2022/03/31 01:13:38 $
 #
 # -------- functions ----------------------------------------
 #
@@ -151,7 +151,7 @@ framedist.pixels <- function(w, ..., style=c("image", "matrix", "coords")) {
                    image  = im(b,
                                xcol=masque$xcol, yrow=masque$yrow,
                                unitname=unitname(masque)))
-  return(b)
+  return(result)
 }
 
 erodemask <- function(w, r, strict=FALSE) {
