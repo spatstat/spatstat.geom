@@ -3,7 +3,7 @@
 #'
 #'   Buffer (Distance) Tessellation
 #'
-#'   $Revision: 1.2 $ $Date: 2021/06/02 11:54:09 $
+#'   $Revision: 1.3 $ $Date: 2022/03/31 09:05:10 $
 #'
 #'   Copyright (c) 2021 Adrian Baddeley, Ege Rubak and Rolf Turner
 #'   GNU Public Licence >= 2.0
@@ -24,6 +24,7 @@ bufftess <- function(X, breaks, W=Window(X), ..., polygonal=TRUE) {
     ## pixel image tessellation 
     G <- cut(x=D, breaks=breaks, ...)
     Y <- tess(image=G)
+    attr(Y, "breaks") <- breaks
     return(Y)
   } else {
     ## polygonal tiles tessellation 
@@ -55,6 +56,7 @@ bufftess <- function(X, breaks, W=Window(X), ..., polygonal=TRUE) {
     names(Ytiles) <- levels(cut(breaks, breaks, ...))
     Wfinal <- rescue.rectangle(setminus.owin(B, Bmin))
     Y <- tess(tiles=Ytiles, window=Wfinal)
+    attr(Y, "breaks") <- breaks
     return(Y)
   }
 }

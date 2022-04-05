@@ -1,9 +1,15 @@
-        CHANGES IN spatstat.geom VERSION 2.4-0.001
+        CHANGES IN spatstat.geom VERSION 2.4-0.002
 
 OVERVIEW
 
-    o Bug fixes.
+    o Bug fixes and minor improvements.
 
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o bufftess 
+    The result now has attribute 'breaks' which is the vector of
+    distance breakpoints.
+   
 BUG FIXES
 
     o framedist.pixels

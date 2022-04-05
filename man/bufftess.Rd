@@ -80,6 +80,8 @@ bufftess(X, breaks, W = Window(X), \dots, polygonal = TRUE)
 }
 \value{
   A tessellation (object of class \code{"tess"}).
+  
+  The result also has an attribute \code{breaks} which is the vector of distance breakpoints.
 }
 \author{
   \spatstatAuthors.

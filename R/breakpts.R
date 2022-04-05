@@ -109,9 +109,10 @@ make.even.breaks <- function(bmax, npos, bstep) {
     # single argument
     X <- XL[[1L]]
 
-    if(!is.null(class(X)) && class(X) == "breakpts")
-    # X already in correct form
+    if(inherits(X, "breakpts")) {
+      ## X already in correct form
       return(X)
+    }
   
     if(is.vector(X) && length(X) > 2) {
       ## it's a vector

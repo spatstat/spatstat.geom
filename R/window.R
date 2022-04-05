@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.195 $	$Date: 2022/03/17 06:01:45 $
+#	$Revision: 4.196 $	$Date: 2022/03/31 23:55:46 $
 #
 #
 #	A window may be either
@@ -496,8 +496,7 @@ as.owin.default <- function(W, ..., fatal=TRUE) {
     return(Z)
   } else if(!is.null(Z <- attr(W, "bbox"))) {
     return(as.owin(Z, ..., fatal=fatal))
-  } else if(any(c("SpatialPolygons", "SpatialPolygonsDataFrame")
-                %in% class(W))) {
+  } else if(inherits(W, c("SpatialPolygons", "SpatialPolygonsDataFrame"))) {
     gripe <- "The package 'maptools' is needed to convert this data type"
     if(fatal) stop(gripe, call.=FALSE) else warning(gripe, call.=FALSE)
     return(NULL)
