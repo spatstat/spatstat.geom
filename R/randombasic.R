@@ -7,10 +7,10 @@
 #'    rsyst()           systematic random (randomly-displaced grid)
 #'    rjitter()         random perturbation
 #'
-#'   $Revision: 1.7 $  $Date: 2021/09/09 10:05:42 $
+#'   $Revision: 1.10 $  $Date: 2022/04/06 02:06:33 $
 
 
-simulationresult <- function(resultlist, nsim, drop, NameBase="Simulation") {
+simulationresult <- function(resultlist, nsim=length(resultlist), drop=TRUE, NameBase="Simulation") {
   if(nsim == 1 && drop)
     return(resultlist[[1L]])
   #' return 'solist' if appropriate, otherwise 'anylist'
@@ -22,8 +22,12 @@ runifrect <- function(n, win=owin(c(0,1),c(0,1)), nsim=1, drop=TRUE)
   ## no checking
   xr <- win$xrange
   yr <- win$yrange
+  if(!missing(nsim)) {
+    check.1.integer(nsim)
+    stopifnot(nsim >= 0)
+  }
   result <- vector(mode="list", length=nsim)
-  for(isim in 1:nsim) {
+  for(isim in seq_len(nsim)) {
     x <- runif(n, min=xr[1], max=xr[2])
     y <- runif(n, min=yr[1], max=yr[2])
     result[[isim]] <- ppp(x, y, window=win, check=FALSE)
@@ -36,7 +40,7 @@ rsyst <- function(win=square(1), nx=NULL, ny=nx, ..., dx=NULL, dy=dx,
                   nsim=1, drop=TRUE) {
   if(!missing(nsim)) {
     check.1.integer(nsim)
-    stopifnot(nsim >= 1)
+    stopifnot(nsim >= 0)
   }
   win <- as.owin(win)
   xr <- win$xrange
@@ -52,7 +56,7 @@ rsyst <- function(win=square(1), nx=NULL, ny=nx, ..., dx=NULL, dy=dx,
   ## assemble grid and randomise location
   xy0 <- expand.grid(x=x0, y=y0)
   result <- vector(mode="list", length=nsim)
-  for(isim in 1:nsim) {
+  for(isim in seq_len(nsim)) {
     x <- xy0$x + runif(1, min = 0, max = dx)
     y <- xy0$y + runif(1, min = 0, max = dy)
     Xbox <- ppp(x, y, xr, yr, check=FALSE)
@@ -104,8 +108,10 @@ rjitter <- function(X, ...) {
 rjitter.ppp <- function(X, radius, retry=TRUE, giveup=10000, ...,
                         nsim=1, drop=TRUE) {
   verifyclass(X, "ppp")
-  check.1.integer(nsim)
-  stopifnot(nsim >= 1)
+  if(!missing(nsim)) {
+    check.1.integer(nsim)
+    stopifnot(nsim >= 0)
+  }
   nX <- npoints(X)
   W <- Window(X)
   if(nX == 0) {
@@ -125,7 +131,7 @@ rjitter.ppp <- function(X, radius, retry=TRUE, giveup=10000, ...,
   }
   #'
   result <- vector(mode="list", length=nsim)
-  for(isim in 1:nsim) {
+  for(isim in seq_len(nsim)) {
     if(!retry) {
       ## points outside window are lost
       rD <- radius * sqrt(runif(nX))
