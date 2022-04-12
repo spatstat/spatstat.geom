@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.148 $   $Date: 2022/04/12 08:01:54 $
+#  $Revision: 1.149 $   $Date: 2022/04/12 08:48:08 $
 #
 #  Plotting code for pixel images
 #
@@ -21,7 +21,7 @@ plot.im <- local({
                          addcontour=FALSE, contourargs=list(),
                          args.contour=list(), # legacy - undocumented
                          workaround=FALSE) {
-    aarg <- resolve.defaults(...)
+    aarg <- resolve.defaults(..., list(add=add, show.all=show.all))
     ##
     if(add && show.all) {
       ## set up the window space *with* the main title
@@ -96,7 +96,7 @@ plot.im <- local({
         labels <- paste(levels)
         levels <- log10(levels)
       } else {
-        logra <- range(z)
+        logra <- range(z, finite=TRUE)
         ## default levels commensurate with logarithmic colour scale
         if(diff(logra) > 1.5) {
           wholepowers <- 10^(floor(logra[1]):ceiling(logra[2]))
@@ -578,6 +578,9 @@ plot.im <- local({
           whinge <- paste(whinge, "for images with NA values")
         warning(whinge, call.=FALSE)
     } 
+
+    ## ........ catch old usage (undocumented ) ................
+    contourargs <- resolve.defaults(contourargs, dotargs$args.contour)
     
     ## ........ start plotting .................
 
@@ -592,13 +595,15 @@ plot.im <- local({
       image.doit(imagedata=list(x=cellbreaks(x$xcol, x$xstep),
                                 y=cellbreaks(x$yrow, x$ystep),
                                 z=t(x$v)),
+                 ## formal arguments
+                 add=add, show.all=show.all,
                  W=xbox,
+                 addcontour=addcontour, contourargs=contourargs, 
                  workaround=workaround,
-                 ##
-                 list(axes=FALSE, xlab="",ylab=""), 
-                 list(addcontour=addcontour, contourargs=contourargs),
+                 ## argument lists 
+                 list(axes=FALSE, xlab="",ylab=""),
                  dotargs,
-                 list(useRaster=useRaster, add=add, show.all=show.all),
+                 list(useRaster=useRaster),
                  colourinfo,
                  list(zlim=vrange, asp = 1, main = main),
                  list(values.are.log=do.log))
@@ -675,11 +680,13 @@ plot.im <- local({
     image.doit(imagedata=list(x=cellbreaks(x$xcol, x$xstep),
                               y=cellbreaks(x$yrow, x$ystep),
                               z=t(x$v)),
+               ## formal arguments               
+               add=TRUE, show.all=show.all,
                W=xbox,
+               addcontour=addcontour, contourargs=contourargs,
                workaround=workaround,
-               list(add=TRUE, show.all=show.all),
+               ## argument lists
                list(axes=FALSE, xlab="", ylab=""),
-               list(addcontour=addcontour, contourargs=contourargs),
                dotargs,
                list(useRaster=useRaster),
                colourinfo,
@@ -719,14 +726,15 @@ plot.im <- local({
     image.doit(imagedata=list(x=rib.xcoords,
                               y=rib.ycoords,
                               z=t(rib.z)),
+               ## formal arguments
+               add=TRUE, show.all=show.all,
                W=bb.rib,
+               addcontour=addcontour, contourargs=contourargs,
                workaround=workaround,
-               list(add=TRUE,
-                    show.all=show.all),
+               ## argument lists
                ribargs,
                list(useRaster=rib.useRaster),
                list(main="", sub="", xlab="", ylab=""),
-               list(addcontour=addcontour, contourargs=contourargs),
                dotargs,
                colourinfo,
                list(values.are.log=do.log))
