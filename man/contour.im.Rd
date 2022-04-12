@@ -5,8 +5,9 @@
   Generates a contour plot of a pixel image.
 }
 \usage{
-   \method{contour}{im}(x, \dots, main,
-            axes=FALSE, add=FALSE, col=par("fg"), 
+   \method{contour}{im}(x, \dots, main, axes=FALSE, add=FALSE,
+            nlevels=10, levels=NULL, labels=NULL, log=FALSE, 
+            col=par("fg"), 
             clipwin=NULL, show.all=!add, do.plot=TRUE)
 }
 \arguments{
@@ -16,6 +17,18 @@
   }
   \item{main}{
     Character string to be displayed as the main title.
+  }
+  \item{nlevels,levels}{
+    Arguments passed to \code{\link[graphics]{contour.default}}
+    controlling the choice of contour levels.
+  }
+  \item{labels}{
+    Arguments passed to \code{\link[graphics]{contour.default}}
+    controlling the text labels plotted next to the contour lines.
+  }
+  \item{log}{
+    Logical value. If \code{TRUE}, the contour levels will be
+    evenly-spaced on a logarithmic scale.
   }
   \item{axes}{
     Logical. If \code{TRUE}, coordinate axes are plotted
@@ -89,13 +102,16 @@
   in the colour \code{col(z)} associated with this level in the colour map.
 }
 \value{
-  none.
+  Invisibly, a rectangle (object of class \code{"owin"} specifying a rectangle)
+  containing the plotted region.
 }
 \examples{
    # an image
    Z <- setcov(owin())
    contour(Z, axes=TRUE)
    contour(Z)
+
+   contour(Z+1, log=TRUE, col="white")
 
    co <- colourmap(rainbow(100), range=c(0,1))
    contour(Z, col=co, lwd=2)
@@ -106,13 +122,7 @@
   \code{\link{persp.im}}
 }
 \author{
-  \adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{hplot}

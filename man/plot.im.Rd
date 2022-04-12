@@ -16,7 +16,8 @@
                    ribsep=0.15, ribwid=0.05, ribn=1024,
                    ribscale=1, ribargs=list(), riblab=NULL, colargs=list(),
                    useRaster=NULL, workaround=FALSE, zap=1,
-                   do.plot=TRUE) 
+                   do.plot=TRUE,
+                   addcontour=FALSE, contourargs=list()) 
 
   \method{image}{im}(x, \dots,
                    main,
@@ -28,7 +29,8 @@
                    ribsep=0.15, ribwid=0.05, ribn=1024,
                    ribscale=1, ribargs=list(), riblab=NULL, colargs=list(),
                    useRaster=NULL, workaround=FALSE, zap=1,
-                   do.plot=TRUE) 
+                   do.plot=TRUE,
+                   addcontour=FALSE, contourargs=list())
 }
 \arguments{
   \item{x}{
@@ -142,6 +144,14 @@
     and colour ribbon.
     Setting \code{do.plot=FALSE} will simply return the
     colour map and the bounding box that were chosen for the plot.
+  }
+  \item{addcontour}{
+    Logical value specifying whether to add contour lines to the image
+    plot. The contour lines will also be drawn on the colour ribbon.
+  }
+  \item{contourargs}{
+    Optional list of arguments to be passed to
+    \code{\link[graphics]{contour.default}} to control the contour plot.
   }
 }
 \value{
@@ -336,6 +346,9 @@
   the arguments \code{col} and \code{ribbon} will be ignored,
   and a ribbon will not be plotted.
 
+  If \code{addcontour=TRUE}, contour lines will be superimposed on the
+  image. Lines will also be superimposed on the colour ribbon at the
+  corresponding positions. 
 }
 \section{Complex-valued images}{
   If the pixel values in \code{x} are complex numbers,
@@ -435,6 +448,8 @@
         ribargs=list(col.axis="blue", col.ticks="blue", cex.axis=0.75))
    # add axes and axis labels
    plot(Z, axes=TRUE, ann=TRUE, xlab="Easting", ylab="Northing")
+   # add contour lines
+   plot(Z, addcontour=TRUE, contourargs=list(col="white", drawlabels=FALSE))
    # log scale
    V <- eval.im(exp(exp(Z+2))/1e4)
    plot(V, log=TRUE, main="Log scale")

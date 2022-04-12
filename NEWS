@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.4-0.003
+        CHANGES IN spatstat.geom VERSION 2.4-0.004
 
 OVERVIEW
 
@@ -9,7 +9,15 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o bufftess 
     The result now has attribute 'breaks' which is the vector of
     distance breakpoints.
-   
+
+    o contour.im
+    New argument 'log' specifies whether the contour lines
+    should be equally spaced on a logarithmic scale.
+    
+    o plot.im, image.im
+    New argument 'addcontour' specifies that contour lines should be drawn
+    over the image plot.
+    
 BUG FIXES
 
     o framedist.pixels

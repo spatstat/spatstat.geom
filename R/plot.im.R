@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.145 $   $Date: 2021/11/14 07:41:07 $
+#  $Revision: 1.148 $   $Date: 2022/04/12 08:01:54 $
 #
 #  Plotting code for pixel images
 #
@@ -16,12 +16,12 @@ plot.im <- local({
   ## auxiliary functions
 
   image.doit <- function(imagedata, ...,
+                         add=FALSE, show.all=!add,
                          extrargs=graphicsPars("image"), W,
+                         addcontour=FALSE, contourargs=list(),
+                         args.contour=list(), # legacy - undocumented
                          workaround=FALSE) {
     aarg <- resolve.defaults(...)
-    add      <- resolve.1.default(list(add=FALSE),     aarg)
-    show.all <- resolve.1.default(list(show.all=!add), aarg)
-    addcontour <- isTRUE(aarg$addcontour)
     ##
     if(add && show.all) {
       ## set up the window space *with* the main title
@@ -54,7 +54,8 @@ plot.im <- local({
       do.call(do.contour,
               resolve.defaults(imagedata,
                                list(add=TRUE),
-                               aarg$args.contour,
+                               contourargs,
+                               args.contour,
                                list(col=par('fg')),
                                aarg,
                                .StripNull=TRUE))
@@ -216,7 +217,8 @@ plot.im <- local({
                      ribsep=0.15, ribwid=0.05, ribn=1024,
                      ribscale=1, ribargs=list(), riblab=NULL, colargs=list(),
                      useRaster=NULL, workaround=FALSE, zap=1,
-                     do.plot=TRUE) {
+                     do.plot=TRUE,
+                     addcontour=FALSE, contourargs=list()) {
     if(missing(main)) main <- short.deparse(substitute(x))
     verifyclass(x, "im")
     if(x$type == "complex") {
@@ -594,6 +596,7 @@ plot.im <- local({
                  workaround=workaround,
                  ##
                  list(axes=FALSE, xlab="",ylab=""), 
+                 list(addcontour=addcontour, contourargs=contourargs),
                  dotargs,
                  list(useRaster=useRaster, add=add, show.all=show.all),
                  colourinfo,
@@ -676,6 +679,7 @@ plot.im <- local({
                workaround=workaround,
                list(add=TRUE, show.all=show.all),
                list(axes=FALSE, xlab="", ylab=""),
+               list(addcontour=addcontour, contourargs=contourargs),
                dotargs,
                list(useRaster=useRaster),
                colourinfo,
@@ -722,6 +726,7 @@ plot.im <- local({
                ribargs,
                list(useRaster=rib.useRaster),
                list(main="", sub="", xlab="", ylab=""),
+               list(addcontour=addcontour, contourargs=contourargs),
                dotargs,
                colourinfo,
                list(values.are.log=do.log))
@@ -835,12 +840,19 @@ image.im <- plot.im
 ######################################################################
 
 contour.im <- function (x, ..., main, axes=FALSE, add=FALSE,
+                        nlevels=10, levels=NULL, labels=NULL, log=FALSE, 
                         col=par("fg"), 
                         clipwin=NULL, show.all=!add, do.plot=TRUE)
 {
   defaultmain <- deparse(substitute(x))
   dotargs <- list(...)
   bb <- Frame(x)
+  xtype <- x$type
+  ## contour spacing
+  do.log <- isTRUE(log)
+  if(do.log && !(xtype %in% c("real", "integer")))
+    stop(paste("Log transform is undefined for an image of type",
+               sQuote(xtype)))
   ## return value
   result <- bb
   attr(result, "bbox") <- bb
@@ -901,6 +913,46 @@ contour.im <- function (x, ..., main, axes=FALSE, add=FALSE,
                                      list(col.main=col0)),
                     extrargs=graphicsPars("owin"))
   }
+  ## Determine contour levels
+  if(!do.log) {
+    ## even spacing
+    contourargs <- list(nlevels=nlevels, levels=levels, labels=labels)
+  } else {
+    ## logarithmic spacing
+    rx <- range(x, finite=TRUE)
+    ## take logarithm of pixel data
+    if(all(rx > 0)) {
+      x <- eval.im(log10(x))
+    } else {
+      if(do.plot && any(rx < 0)) 
+        warning(paste("Negative pixel values",
+                      "omitted from logarithmic colour map;",
+                      "range of values =", prange(rx)),
+                call.=FALSE)
+      if(do.plot && !all(rx < 0))
+        warning("Zero pixel values omitted from logarithmic colour map",
+                call.=FALSE)
+      x <- eval.im(log10orNA(x))
+    }
+    ## determine levels
+    if(!is.null(levels)) {
+      levels <- log10(levels)
+      if(is.null(labels)) labels <- paste(levels)
+    } else {
+      logra <- range(x, finite=TRUE)
+      ## default levels commensurate with logarithmic colour scale
+      if(diff(logra) > 1.5 && missing(nlevels)) {
+        wholepowers <- 10^(floor(logra[1]):ceiling(logra[2]))
+        explevels <- sort(as.numeric(outer(wholepowers, c(1,2,5), "*")))
+      } else {
+        explevels <- pretty(10^logra, nlevels)
+      }
+      explevels <- explevels[inside.range(explevels, 10^logra)]
+      levels <- log10(explevels)
+      if(is.null(labels)) labels <- paste(explevels)
+    }
+    contourargs <- list(levels=levels, labels=labels)
+  }
   #' plot contour lines
   xcol <- x$xcol
   yrow <- x$yrow
@@ -910,15 +962,22 @@ contour.im <- function (x, ..., main, axes=FALSE, add=FALSE,
     do.call.plotfun(contour.default,
                     resolve.defaults(list(x=quote(xcol), 
 					  y=quote(yrow), 
-					  z=quote(zmat)),
-                                     list(add=TRUE, col=col),
-                                     list(...)))
+					  z=quote(zmat),
+                                          add=TRUE,
+                                          col=col),
+                                     contourargs,
+                                     list(...),
+                                     .MatchNull=FALSE,
+                                     .StripNULL=TRUE))
   } else {
     clin <- do.call.matched(contourLines,
-                            append(list(x=quote(xcol), 
-					y=quote(yrow), 
-					z=quote(zmat)),
-                                   list(...)))
+                            resolve.defaults(list(x=quote(xcol), 
+                                                  y=quote(yrow), 
+                                                  z=quote(zmat)),
+                                             contourargs,
+                                             list(...),
+                                             .MatchNull=FALSE,
+                                             .StripNULL=TRUE))
     linpar <- graphicsPars("lines")
     for(i in seq_along(clin)) {
       lini <- clin[[i]]
@@ -933,3 +992,11 @@ contour.im <- function (x, ..., main, axes=FALSE, add=FALSE,
   return(invisible(result))
 }
 
+## not exported:
+
+log10orNA <- function(x) {
+  y <- rep(NA_real_, length(x))
+  ok <- !is.na(x) & (x > 0)
+  y[ok] <- log10(x[ok])
+  return(y)
+}
