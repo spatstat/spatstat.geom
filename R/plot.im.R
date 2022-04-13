@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.149 $   $Date: 2022/04/12 08:48:08 $
+#  $Revision: 1.154 $   $Date: 2022/04/13 01:42:02 $
 #
 #  Plotting code for pixel images
 #
@@ -65,7 +65,7 @@ plot.im <- local({
   }
 
   do.contour <- function(x, y, z, ...,
-                         levels=NULL, labels=NULL, drawlabels=TRUE, 
+                         nlevels=10, levels=NULL, labels=NULL, drawlabels=TRUE, 
                          values.are.log=FALSE) {
     nx <- length(x)
     ny <- length(y)
@@ -98,14 +98,38 @@ plot.im <- local({
       } else {
         logra <- range(z, finite=TRUE)
         ## default levels commensurate with logarithmic colour scale
-        if(diff(logra) > 1.5) {
+        dlr <- diff(logra)
+        if(dlr > 1.5) {
           wholepowers <- 10^(floor(logra[1]):ceiling(logra[2]))
-          explevels <- sort(as.numeric(outer(wholepowers, c(1,2,5), "*")))
+          levelsperdecade <- nlevels/max(1, length(wholepowers)-1)
+          if(levelsperdecade >= 1) {
+            ## at least one contour level for every power of 10
+            if(levelsperdecade < 5) {
+              ## use nice leading digits
+              maxbits <- min(3L, max(1L, ceiling(levelsperdecade)))
+              leadingdigits <- c(1,5,2)[1:maxbits]
+            } else {
+              ## use fractional powers of 10, equally spaced on log scale
+              leadingdigits <- 10^seq(0, 1, length.out=ceiling(levelsperdecade)+1)
+              leadingdigits <- leadingdigits[-length(leadingdigits)]
+              leadingdigits <- round(leadingdigits, max(2, ceiling(log10(levelsperdecade))))
+            }
+            explevels <- sort(unique(as.numeric(outer(wholepowers, leadingdigits, "*"))))
+          } else {
+            ## more than one power of 10 between successive contour levels
+            explevels <- wholepowers
+            thinperiod <- max(1L, floor(1/levelsperdecade))
+            if(thinperiod > 1) {
+              i <- floor((thinperiod+1)/2)
+              explevels <- explevels[seq_along(explevels) %% thinperiod == i]
+            }
+          }
         } else {
-          nlevels <- resolve.1.default(list(nlevels=10), list(...))
+          ## Small range: use standard (non-logarithmic scale) values
           explevels <- pretty(10^logra, nlevels)
         }
         explevels <- explevels[inside.range(explevels, 10^logra)]
+        if(length(explevels) == 0) explevels <- 10^mean(logra)
         labels <- paste(explevels)
         levels <- log10(explevels)
       }
