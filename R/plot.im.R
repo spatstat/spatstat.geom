@@ -91,6 +91,7 @@ plot.im <- local({
       }
     }
     if(values.are.log) {
+      ## ................  logarithmic case ........................
       ## z is log10 of actual value
       if(!is.null(levels)) {
         labels <- paste(levels)
@@ -100,14 +101,18 @@ plot.im <- local({
         ## default levels commensurate with logarithmic colour scale
         dlr <- diff(logra)
         if(dlr > 1.5) {
+          ## usual case - data ranges over several powers of 10
           wholepowers <- 10^(floor(logra[1]):ceiling(logra[2]))
           levelsperdecade <- nlevels/max(1, length(wholepowers)-1)
           if(levelsperdecade >= 1) {
-            ## at least one contour level for every power of 10
-            if(levelsperdecade < 5) {
-              ## use nice leading digits
-              maxbits <- min(3L, max(1L, ceiling(levelsperdecade)))
-              leadingdigits <- c(1,5,2)[1:maxbits]
+            ## At least one contour level for every power of 10
+            ## Decide on leading digits
+            if(levelsperdecade < 1.5) {
+              leadingdigits <- 1
+            } else if(levelsperdecade < 2.5) {
+              leadingdigits <- c(1,3)
+            } else if(levelsperdecade < 3.5) {
+              leadingdigits <- c(1,2,5)
             } else {
               ## use fractional powers of 10, equally spaced on log scale
               leadingdigits <- 10^seq(0, 1, length.out=ceiling(levelsperdecade)+1)
@@ -128,15 +133,19 @@ plot.im <- local({
           ## Small range: use standard (non-logarithmic scale) values
           explevels <- pretty(10^logra, nlevels)
         }
+        ## restrict to actual range
         explevels <- explevels[inside.range(explevels, 10^logra)]
         if(length(explevels) == 0) explevels <- 10^mean(logra)
+        ## finally define levels and labels
         labels <- paste(explevels)
         levels <- log10(explevels)
       }
+      ## ................ end logarithmic case ........................
     }
     do.call.matched(contour.default,
                     resolve.defaults(list(x=x, y=y, z=z,
                                           ...,
+                                          nlevels=nlevels,
                                           levels=levels,
                                           labels=labels,
                                           drawlabels=drawlabels),
