@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.37 $  $Date: 2020/01/11 04:45:05 $
+##   $Revision: 1.38 $  $Date: 2022/04/21 04:59:39 $
 ##
 
 symbolmap <- local({
@@ -360,13 +360,20 @@ invoke.symbolmap <- local({
     })
     return(invisible(NULL))
   }
-  
+
   ## main function
+
   invoke.symbolmap <- function(map, values, x=NULL, y=NULL, ...,
-                                 add=FALSE, do.plot=TRUE,
-                                 started = add && do.plot) {
+                               add=FALSE, do.plot=TRUE,
+                               started = add && do.plot) {
     if(!inherits(map, "symbolmap"))
-      stop("map should be an object of class 'symbolmap'")
+      stop("Argument 'map' should be an object of class 'symbolmap'")
+    InvokeSymbolMap(map, values, x=x, y=y, ..., add=add, do.plot=do.plot, started=started)
+  }
+  
+  InvokeSymbolMap <- function(map, values, x=NULL, y=NULL, ...,
+                              change = NULL, 
+                              add=FALSE, do.plot=TRUE, started=FALSE) {
     if(hasxy <- (!is.null(x) || !is.null(y))) {
       xy <- xy.coords(x, y)
       x <- xy$x
@@ -375,8 +382,14 @@ invoke.symbolmap <- local({
     ## function will return maximum size of symbols plotted.
     maxsize <- 0
     if(do.plot && !add) plot(x, y, type="n", ...)
-    force(values)
+    ## map numerical/factor values to graphical parameters
     g <- map(values)
+    ## Override?
+    if(length(change)) {
+      ## Change individual values (Not the same as changing the map)
+      retain <- is.na(match(names(g), names(change)))
+      g <- cbind(g[, retain, drop=FALSE], change)
+    }
     parnames <- colnames(g)
     if(do.plot) {
       xydf <- data.frame(x=x, y=y)
@@ -488,7 +501,7 @@ plot.symbolmap <- function(x, ..., main,
     if(is.null(ylim)) ylim <- usr[3:4]
   } else {
     ## create new plot
-    maxdiam <- invoke.symbolmap(map, vv, do.plot=FALSE, started=FALSE)
+    maxdiam <- invoke.symbolmap(map, vv, do.plot=FALSE, started=FALSE, ...)
     zz <- c(0, max(1, maxdiam))
     if(is.null(xlim) && is.null(ylim)) {
       if(vertical) {
@@ -514,7 +527,7 @@ plot.symbolmap <- function(x, ..., main,
                                           asp=1.0),
                                      list(...)))
   ## maximum symbol diameter
-  maxdiam <- invoke.symbolmap(map, vv, do.plot=FALSE, started=TRUE)
+  maxdiam <- invoke.symbolmap(map, vv, do.plot=FALSE, started=TRUE, ...)
 
   ## .......... plot symbols ....................
   if(type == "constant") {

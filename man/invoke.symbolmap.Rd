@@ -9,7 +9,7 @@
 }
 \usage{
 invoke.symbolmap(map, values, x=NULL, y = NULL, \dots, add = FALSE,
-               do.plot = TRUE, started = add && do.plot)
+                 do.plot = TRUE, started = add && do.plot)
 }
 \arguments{
   \item{map}{
@@ -23,7 +23,7 @@ invoke.symbolmap(map, values, x=NULL, y = NULL, \dots, add = FALSE,
     symbols to be plotted.
   }
   \item{\dots}{
-    Additional graphics parameters.
+    Additional graphics parameters (which will be applied to the entire plot).
   }
   \item{add}{
     Logical value indicating whether to add the symbols to
@@ -47,12 +47,8 @@ invoke.symbolmap(map, values, x=NULL, y = NULL, \dots, add = FALSE,
 \value{
   (Invisibly) the maximum diameter of the symbols, in user coordinate units.
 }
-\author{\adrian
-  
-  ,
-  \rolf
-  
-  and \ege.
+\author{
+  \spatstatAuthors.
 }
 \seealso{
   \code{\link{plot.symbolmap}} to plot the graphics map itself.

@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.99 $	$Date: 2020/12/19 05:25:06 $
+#	$Revision: 1.100 $	$Date: 2022/04/21 05:40:00 $
 #
 #
 #--------------------------------------------------------------------------
@@ -183,7 +183,7 @@ plot.ppp <- local({
              leg.args=list(),
              symap=NULL, maxsize=NULL, meansize=NULL, markscale=NULL, zap=0.01, 
              show.window=show.all, show.all=!add, do.plot=TRUE,
-             multiplot=TRUE)
+             multiplot=TRUE, internal=NULL)
 {
   if(missing(main))
     main <- short.deparse(substitute(x))
@@ -416,7 +416,7 @@ plot.ppp <- local({
 
   if(type != "n") {
     ## plot symbols ##
-    invoke.symbolmap(symap, marx, x, add=TRUE)
+    invoke.symbolmap(symap, marx, x, add=TRUE, change=internal$change)
   }
   
   ## add legend
