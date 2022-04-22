@@ -297,6 +297,7 @@
 \alias{summary.splitppx}
 \alias{superimposeMarks}
 \alias{symbolmapdomain}
+\alias{symbolmapparnames}
 \alias{symbolmaptype}
 \alias{tail.hyperframe}
 \alias{thickSegments}
@@ -646,6 +647,7 @@ store.versionstring.spatstat()
 \method{summary}{splitppx}(object, \dots)
 superimposeMarks(arglist, nobj)
 symbolmapdomain(x)
+symbolmapparnames(x)
 symbolmaptype(x)
 \method{tail}{hyperframe}(x,n,\dots)
 thickSegments(x, widths, \dots,

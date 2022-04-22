@@ -8,7 +8,9 @@
   plot the resulting symbols.
 }
 \usage{
-invoke.symbolmap(map, values, x=NULL, y = NULL, \dots, add = FALSE,
+invoke.symbolmap(map, values, x=NULL, y = NULL, \dots,
+                 angleref=NULL,
+                 add = FALSE,
                  do.plot = TRUE, started = add && do.plot)
 }
 \arguments{
@@ -24,6 +26,11 @@ invoke.symbolmap(map, values, x=NULL, y = NULL, \dots, add = FALSE,
   }
   \item{\dots}{
     Additional graphics parameters (which will be applied to the entire plot).
+  }
+  \item{angleref}{
+    Optional. Reference angle, or vector of reference angles,
+    used when plotting some of the symbols. A numeric value or vector
+    giving angles in degrees between 0 and 360.
   }
   \item{add}{
     Logical value indicating whether to add the symbols to

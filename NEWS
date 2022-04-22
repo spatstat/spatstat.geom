@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.4-0.008
+        CHANGES IN spatstat.geom VERSION 2.4-0.010
 
 OVERVIEW
 
@@ -17,14 +17,16 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.im, image.im
     New argument 'addcontour' specifies that contour lines should be drawn
     over the image plot.
+
+    o invoke.symbolmap
+    New argument 'angleref'.
     
 BUG FIXES
 
     o framedist.pixels
     Result was always a matrix, regardless of the value of 'style'.
     Fixed.
-    
-    
+
         CHANGES IN spatstat.geom VERSION 2.4-0
 
 OVERVIEW

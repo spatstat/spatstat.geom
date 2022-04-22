@@ -15,7 +15,7 @@
                     symap=NULL, maxsize=NULL, meansize=NULL, markscale=NULL,
                     zap=0.01,
                     show.window=show.all, show.all=!add, do.plot=TRUE,
-                    multiplot=TRUE, internal=NULL)
+                    multiplot=TRUE)
 }
 \arguments{
   \item{x}{
@@ -138,7 +138,6 @@
   \item{multiplot}{
     Logical value giving permission to display multiple plots.
   }
-  \item{internal}{Argument for internal use only.}
 }
 \value{
   (Invisible) object of class \code{"symbolmap"}
