@@ -269,6 +269,7 @@ plot.im <- local({
     stopifnot(is.list(ribargs))
     user.ticks <- ribargs$at
     user.nint <- ribargs$nint
+    user.ribbonlabels <- ribargs$labels
     
     if(!is.null(clipwin)) {
       x <- x[as.rectangle(clipwin)]
@@ -431,7 +432,7 @@ plot.im <- local({
                                                          log=do.log,
                                                          nint=user.nint))
              ribbonticks <- Log(nominalmarks/ribscale)
-             ribbonlabels <- paste(nominalmarks)
+             ribbonlabels <- user.ribbonlabels %orifnull% paste(nominalmarks)
            },
            integer = {
              values <- as.vector(x$v)
@@ -451,7 +452,7 @@ plot.im <- local({
                  nominalmarks <- nominalmarks[nominalmarks %% 1 == 0]
                }
                ribbonticks <- Log(nominalmarks/ribscale)
-               ribbonlabels <- paste(nominalmarks)
+               ribbonlabels <- user.ribbonlabels %orifnull% paste(nominalmarks)
                if(!do.log && isTRUE(all.equal(ribbonticks,
                                               vrange[1]:vrange[2]))) {
                  # each possible pixel value will appear in ribbon
@@ -459,7 +460,7 @@ plot.im <- local({
                  imagebreaks <- c(ribbonvalues - 0.5, vrange[2] + 0.5)
                  ribbonrange <- range(imagebreaks)
                  ribbonticks <- ribbonvalues
-                 ribbonlabels <- paste(ribbonticks * ribscale)
+                 ribbonlabels <- user.ribbonlabels %orifnull% paste(ribbonticks * ribscale)
                } else {
                  # not all possible values will appear in ribbon
                  ribn <- min(ribn, diff(vrange)+1)
@@ -488,7 +489,7 @@ plot.im <- local({
              ribbonrange <- range(imagebreaks)
 #             ribbonbreaks <- imagebreaks
              ribbonticks <- user.ticks %orifnull% ribbonvalues
-             ribbonlabels <- c("FALSE", "TRUE")
+             ribbonlabels <- user.ribbonlabels %orifnull% c("FALSE", "TRUE")
              if(!is.null(colmap)) 
                col <- colmap(c(FALSE,TRUE))
            },
@@ -504,7 +505,7 @@ plot.im <- local({
              ribbonrange <- range(imagebreaks)
 #             ribbonbreaks <- imagebreaks
              ribbonticks <- user.ticks %orifnull% ribbonvalues
-             ribbonlabels <- paste(lev)
+             ribbonlabels <- user.ribbonlabels %orifnull% paste(lev)
              vrange <- range(intlev)
              if(!is.null(colmap) && !valuesAreColours) 
                col <- colmap(fac)
@@ -522,7 +523,7 @@ plot.im <- local({
              ribbonrange <- range(imagebreaks)
 #             ribbonbreaks <- imagebreaks
              ribbonticks <- user.ticks %orifnull% ribbonvalues
-             ribbonlabels <- paste(lev)
+             ribbonlabels <- user.ribbonlabels %orifnull% paste(lev)
              vrange <- range(intlev)
              if(!is.null(colmap)) 
                col <- colmap(fac)

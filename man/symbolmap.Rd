@@ -73,9 +73,10 @@ symbolmap(\dots, range = NULL, inputs = NULL)
   \describe{
     \item{shape}{
       The shape of the symbol: currently
-      either \code{"circles"}, \code{"squares"}, \code{"arrows"}
-      or \code{NA}.
+      either \code{"circles"}, \code{"squares"}, \code{"arrows"},
+      \code{"crossticks"} or \code{NA}.
       This parameter takes precedence over \code{pch}.
+      (Crossticks are used only for point patterns on a linear network).
     }
     \item{size}{
       The size of the symbol: a positive number or zero.
@@ -114,7 +115,7 @@ symbolmap(\dots, range = NULL, inputs = NULL)
       specifying which ends of the shaft have arrowheads
       attached (0 means no arrowheads, 1 is an arrowhead at the start
       of the shaft, 2 is an arrowhead at the end of the shaft, and
-      3 is arrowheads at both ends). 
+      3 is arrowheads at both ends).
     }
   }
   A vector of colour values is also acceptable for the arguments

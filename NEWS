@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.4-0.010
+        CHANGES IN spatstat.geom VERSION 2.4-0.011
 
 OVERVIEW
 
@@ -27,6 +27,10 @@ BUG FIXES
     Result was always a matrix, regardless of the value of 'style'.
     Fixed.
 
+    o plot.im
+    Ignored ribargs$labels.
+    Fixed.
+    
         CHANGES IN spatstat.geom VERSION 2.4-0
 
 OVERVIEW

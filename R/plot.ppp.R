@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.101 $	$Date: 2022/04/22 06:03:48 $
+#	$Revision: 1.102 $	$Date: 2022/04/22 07:27:49 $
 #
 #
 #--------------------------------------------------------------------------
@@ -340,12 +340,15 @@ plot.ppp <- local({
     sizeguess <- if(maxsize <= 0) NULL else (1.5 * maxsize)
     leg.args <- append(list(side=leg.side, vertical=vertical), leg.args)
     ## draw up layout
-    legbox <- do.call.matched(plan.legend.layout,
-                              append(list(B=quote(BB), size = sizeguess,
-                                          started=FALSE, map=symap),
-                                     leg.args))
+    layoutboxes <- do.call.matched(plan.legend.layout,
+                                  append(list(B=quote(BB), size = sizeguess,
+                                              started=FALSE, map=symap),
+                                         leg.args))
     ## bounding box for everything
-    BB <- legbox$A
+    BB <- layoutboxes[["A"]]
+    ## bounding box for legend
+    legbox <- layoutboxes[["b"]]
+    attr(symap, "legbox") <- legbox
   }
 
   ## return now if not plotting
@@ -421,13 +424,12 @@ plot.ppp <- local({
   
   ## add legend
   if(legend) {
-    b <- legbox$b
     legendmap <- if(length(leg.args) == 0) symap else 
                  do.call(update, append(list(object=quote(symap)), leg.args))
     dont.complain.about(legendmap)
     do.call(plot,
             append(list(x=quote(legendmap), main="", add=TRUE,
-                        xlim=b$xrange, ylim=b$yrange),
+                        xlim=legbox$xrange, ylim=legbox$yrange),
                    leg.args))
   }
   

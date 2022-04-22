@@ -263,7 +263,7 @@ invoke.symbolmap <- local({
       if(length(lwd) == 1) lwd <- rep(lwd, n)
       if(length(etch) == 1) etch <- rep(etch, n)
       if(length(fg) == 0) fg <- rep(par("col"), n) else if(length(fg) == 1) fg <- rep(fg, n)
-      if(length(angleref == 1)) angleref <- rep(angleref, n)
+      if(length(angleref) == 1) angleref <- rep(angleref, n)
       other <- resolve.defaults(list(...),
                                 list(add=TRUE, inches=FALSE))
       ## infer which arguments are parallelised
