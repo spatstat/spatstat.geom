@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.102 $	$Date: 2022/04/22 07:27:49 $
+#	$Revision: 1.104 $	$Date: 2022/04/23 09:43:12 $
 #
 #
 #--------------------------------------------------------------------------
@@ -28,7 +28,14 @@ plot.ppp <- local({
          spatstat.options("transparent"))
         cols <- rgb(0,0,0, default.transparency(nx))
       if(!is.null(cols) && !is.null(col)) col <- NULL
-      return(symbolmap(..., chars=chars, cols=cols, col=col))
+      symap <- symbolmap(..., chars=chars, cols=cols, col=col)
+      pnames <- symbolmapparnames(symap)
+      if("shape" %in% pnames && !("size" %in% pnames)) {
+        ## symbols require a size parameter
+        m <- mark.scale.default(rep(1, npoints(x)), Window(x), maxsize=maxsize, meansize=meansize)
+        symap <- update(symap, size=m)
+      }
+      return(symap)
     }
     if(!is.null(dim(marx)))
       stop("Internal error: multivariate marks in default.symap.points")

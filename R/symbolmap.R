@@ -255,6 +255,8 @@ invoke.symbolmap <- local({
                          angleref=0,
                          do.plot=TRUE) {
     if(do.plot) {
+      if(is.null(size))
+        stop("parameter 'size' is required", call.=FALSE)
       ## zap tiny sizes
       tiny <- (size < (max(size)/1000))
       size[tiny] <- 0

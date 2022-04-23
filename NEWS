@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.4-0.011
+        CHANGES IN spatstat.geom VERSION 2.4-0.012
 
 OVERVIEW
 
@@ -29,6 +29,11 @@ BUG FIXES
 
     o plot.im
     Ignored ribargs$labels.
+    Fixed.
+
+    o plot.ppp
+    Crashed with an obscure message when argument 'shape' was given,
+    unless argument 'size' was also given.
     Fixed.
     
         CHANGES IN spatstat.geom VERSION 2.4-0
