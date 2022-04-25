@@ -20,7 +20,9 @@
     (object of class \code{"owin"}). Incompatible with other arguments.
   }
   \item{image}{
-    Pixel image which specifies the tessellation.
+    Pixel image
+    (object of class \code{"im"})
+    which specifies the tessellation.
     Incompatible with other arguments.
   }
   \item{window}{
