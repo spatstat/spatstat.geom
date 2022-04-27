@@ -95,6 +95,11 @@
   The defaults for any of the abovementioned arguments
   can be reset using \code{\link{spatstat.options}("par.contour")}.
 
+  If \code{log=TRUE}, the contour lines will be evenly-spaced
+  on a logarithmic scale, provided the range of pixel values
+  is at least 1.5 orders of magnitude (a ratio of at least 32).
+  Otherwise the levels will be evenly-spaced on the original scale.
+
   If \code{col} is a colour map (object of class \code{"colourmap"},
   see \code{\link{colourmap}}) then the contours will be plotted in
   different colours as determined by the colour map.
@@ -111,7 +116,8 @@
    contour(Z, axes=TRUE)
    contour(Z)
 
-   contour(Z+1, log=TRUE, col="white")
+   V <- 100 * Z^2 + 1
+   contour(V, log=TRUE, labcex=1)
 
    co <- colourmap(rainbow(100), range=c(0,1))
    contour(Z, col=co, lwd=2)
