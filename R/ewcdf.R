@@ -13,7 +13,7 @@ ewcdf <- function(x, weights=NULL, normalise=TRUE, adjust=1)
   weighted <- (nw > 0)
 
   if(weighted) {
-    check.nvector(weights, things="entries of x", oneok=TRUE)
+    check.nvector(weights, things="entries of x", oneok=TRUE, vname="weights")
     stopifnot(all(weights >= 0))
     if(nw == 1) 
       weights <- rep(weights, nx)

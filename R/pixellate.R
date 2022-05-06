@@ -52,7 +52,8 @@ pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE,
     k <- 1
     nw <- length(weights)
     if(nw == 0) weights <- NULL else check.nvector(weights, nx,
-                                                   oneok=TRUE, naok=TRUE)
+                                                   oneok=TRUE, naok=TRUE,
+						   vname="weights")
     if(nw == 1) weights <- rep(weights, nx)
   }
 

@@ -1072,7 +1072,7 @@ discs <- function(centres, radii=marks(centres)/2, ...,
   stopifnot(is.ppp(centres))
   n <- npoints(centres)
   if(n == 0) return(emptywindow(Frame(centres)))
-  check.nvector(radii, npoints(centres), oneok=TRUE)
+  check.nvector(radii, npoints(centres), oneok=TRUE, vname="radii")
   stopifnot(all(radii > 0))
   
   if(sameradius <- (length(radii) == 1)) 

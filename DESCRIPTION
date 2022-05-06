@@ -1,6 +1,6 @@
 Package: spatstat.geom
-Version: 2.4-0.014
-Date: 2022-04-27
+Version: 2.4-0.015
+Date: 2022-05-06
 Title: Geometrical Functionality of the 'spatstat' Family 
 Authors@R: c(person("Adrian", "Baddeley", 
                     role = c("aut", "cre"),
@@ -23,7 +23,7 @@ Authors@R: c(person("Adrian", "Baddeley",
 	     person("Rasmus",    "Waagepetersen", role = "ctb"))
 Maintainer: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>
 Depends: R (>= 3.5.0), spatstat.data (>= 2.0-0), stats, graphics, grDevices, utils, methods
-Imports: spatstat.utils (>= 2.2-0), deldir (>= 1.0-2), polyclip (>= 1.10-0)
+Imports: spatstat.utils (>= 2.3-1), deldir (>= 1.0-2), polyclip (>= 1.10-0)
 Suggests: spatstat.core, spatstat.random, spatstat.linnet, maptools (>= 0.9-9), spatial, fftwtools (>= 0.9-8), spatstat (>= 2.0-0)
 Additional_repositories: https://spatstat.r-universe.dev
 Description: Defines spatial data types and supports geometrical operations

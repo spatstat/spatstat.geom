@@ -126,7 +126,7 @@ rjitter.ppp <- function(X, radius, retry=TRUE, giveup=10000, ...,
     sameradius <- TRUE
   } else {
     ## either one radius, or a vector of radii
-    check.nvector(radius, nX, oneok=TRUE)
+    check.nvector(radius, nX, oneok=TRUE, vname="radius")
     sameradius <- (length(radius) == 1)
   }
   #'

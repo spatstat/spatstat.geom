@@ -31,7 +31,7 @@ pointweights <- function(X, ..., weights=NULL, parent=NULL) {
   } else stop(paste("Argument 'weights' should be",
                     "a numeric vector, a function, an image,",
                     "or an expression"), call.=FALSE)
-  check.nvector(weights, nX)
+  check.nvector(weights, nX, vname="weights")
   return(weights)
 }
 

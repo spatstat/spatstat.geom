@@ -678,7 +678,7 @@ intensity.psp <- function(X, ..., weights=NULL) {
   }
   ## weighted case 
   if(is.numeric(weights)) {
-    check.nvector(weights, nsegments(X), things="segments")
+    check.nvector(weights, nsegments(X), things="segments", vname="weights")
   } else if(is.expression(weights)) {
     # evaluate expression in data frame of coordinates and marks
     df <- as.data.frame(X)
@@ -686,7 +686,7 @@ intensity.psp <- function(X, ..., weights=NULL) {
     eval.weights <- try(eval(weights, envir=df, enclos=pf))
     if(inherits(eval.weights, "try-error"))
       stop("Unable to evaluate expression for weights", call.=FALSE)
-    if(!check.nvector(eval.weights, nsegments(X), fatal=FALSE, warn=TRUE))
+    if(!check.nvector(eval.weights, nsegments(X), fatal=FALSE, warn=TRUE, vname="eval(weights)"))
       stop("Result of evaluating the expression for weights has wrong format")
     weights <- eval.weights
   } else stop("Unrecognised format for argument 'weights'")

@@ -43,7 +43,7 @@ intensity.splitppp <- function(X, ..., weights=NULL) {
   if(is.numeric(weights)) {
     fsplit <- attr(X, "fsplit")
     n <- length(fsplit)
-    check.nvector(weights, n)
+    check.nvector(weights, n, vname="weights")
     result <- mapply(intensity.ppp, X, weights=split(weights, fsplit))
     result <- simplify2array(result, higher=FALSE)
     return(result)

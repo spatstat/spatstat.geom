@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.102 $ $Date: 2022/03/11 05:20:12 $
+#   $Revision: 1.104 $ $Date: 2022/05/05 02:09:03 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -127,7 +127,7 @@ print.tess <- function(x, ..., brief=FALSE) {
          rect={
            if(full) {
              unitinfo <- summary(unitname(win))
-             if(equispaced(x$xgrid) && equispaced(x$ygrid)) 
+             if(evenly.spaced(x$xgrid) && evenly.spaced(x$ygrid)) 
                splat("Tiles are equal rectangles, of dimension",
                      signif(mean(diff(x$xgrid)), 5),
                      "x",
@@ -219,7 +219,7 @@ plot.tess <- local({
              vector = {
                #' vector of values.
                #' validate length of vector
-               check.anyvector(values, ntiles, things="tiles")
+               check.anyvector(values, ntiles, things="tiles", vname="values")
              },
              dataframe = {
                #' data frame or matrix of values.

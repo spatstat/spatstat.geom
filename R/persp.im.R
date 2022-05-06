@@ -274,10 +274,10 @@ perspSegments <- local({
 #      nX <- nrow(eX)
     } else {
 #      nX <- length(x0)
-      check.nvector(x0, naok=TRUE)
-      check.nvector(y0, naok=TRUE)
-      check.nvector(x1, naok=TRUE)
-      check.nvector(y1, naok=TRUE)
+      check.nvector(x0, naok=TRUE, vname="x0")
+      check.nvector(y0, naok=TRUE, vname="y0")
+      check.nvector(x1, naok=TRUE, vname="x1")
+      check.nvector(y1, naok=TRUE, vname="y1")
       eX <- cbind(x0, y0, x1, y1)
     }
     if(is.null(V)) {
