@@ -3,7 +3,7 @@
 #
 #   Class of functions of x,y location with a spatial domain
 #
-#   $Revision: 1.20 $   $Date: 2020/11/16 01:32:06 $
+#   $Revision: 1.21 $   $Date: 2022/05/10 04:01:06 $
 #
 
 spatstat.xy.coords <- function(x,y) {
@@ -34,6 +34,7 @@ funxy <- function(f, W=NULL) {
   body(h) <- b
   ## reinstate attributes
   attributes(h) <- attributes(f)
+  unitname(h) <- unitname(W)
   ## stamp it
   class(h) <- c("funxy", class(h))
   attr(h, "W") <- W

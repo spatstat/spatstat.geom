@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.4-0.015
+        CHANGES IN spatstat.geom VERSION 2.4-0.016
 
 OVERVIEW
 
@@ -20,6 +20,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o invoke.symbolmap
     New argument 'angleref'.
+
+    o funxy
+    The result now has a unitname, inherited from the argument W.
     
 BUG FIXES
 

@@ -21,7 +21,7 @@
   }
 }
 \details{
-  This creates an object of class \code{"funxy"}.
+  This command creates an object of class \code{"funxy"}.
   This is a simple mechanism for handling a function
   of spatial location \eqn{f(x,y)} to make it easier to display
   and manipulate.
@@ -45,6 +45,8 @@
   (object of class \code{"ppp"} or \code{"lpp"})
   or a quadrature scheme (class \code{"quad"});
   the function will be evaluated at the points of \code{X}.
+
+  The result also has a \code{\link{unitname}}, inherited from \code{W}.
 }
 \value{
   A \code{function} with the same arguments as \code{f},
