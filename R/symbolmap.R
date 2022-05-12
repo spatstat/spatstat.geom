@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.41 $  $Date: 2022/04/22 06:30:16 $
+##   $Revision: 1.42 $  $Date: 2022/05/12 06:01:44 $
 ##
 
 symbolmap <- local({
@@ -247,6 +247,7 @@ invoke.symbolmap <- local({
     return(max(cex %orifnull% 1))
   }
   ## plot symbols likewise
+  known.shapes <-  c("circles", "squares", "arrows", "crossticks")
   do.symbols <- function(x, y, ..., 
                          shape,
                          size=cex, cex=NULL,
@@ -334,6 +335,16 @@ invoke.symbolmap <- local({
                           lapply(other.vec, "[", i=i),
                           list(lwd=lwd[i], cols=fg[i])),
                         extrargs=c("cols", "col", "lwd", "lty"))
+      if(any(nomatch <- is.na(match(shape, known.shapes)))) {
+        unknown <- unique(shape[nomatch])
+        nun <- length(unknown)
+        warning(paste("Unrecognised",
+                      ngettext(nun, "shape", "shapes"),
+                      paste0(commasep(sQuote(unknown)), ";"),
+                      "recognised values are",
+                      commasep(sQuote(known.shapes))),
+                call.=FALSE)
+      }
     }
     return(max(size))
   }
