@@ -73,6 +73,9 @@
 \alias{equals.quad}          
 \alias{equalsfun.quad}          
 \alias{erodemask}
+\alias{evaluateCovariate}
+\alias{evaluateCovariateAtPoints}
+\alias{evaluateCovariateAtPixels}
 \alias{even.breaks.owin}
 \alias{exactdt}              
 \alias{exactPdt}
@@ -421,6 +424,9 @@ equalpairs.quad(Q)
 equals.quad(Q)          
 equalsfun.quad(Q)
 erodemask(w,r,strict)
+evaluateCovariate(covariate, locations, \dots)
+evaluateCovariateAtPixels(covariate, locations, \dots, types, eps, dimyx)
+evaluateCovariateAtPoints(covariate, locations, \dots, allow.column)
 even.breaks.owin(w)
 exactdt(X, \dots)              
 exactPdt(w)

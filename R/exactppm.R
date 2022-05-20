@@ -8,11 +8,13 @@
 #'  in nonparametric methods such as 'rhohat' to represent the null/reference model,
 #'  so that the code for nonparametric methods does not depend on 'ppm'
 #'
-#'  $Revision: 1.2 $ $Date: 2022/05/19 06:56:34 $
+#'  $Revision: 1.4 $ $Date: 2022/05/20 05:15:48 $
 
 exactppm <- function(X, baseline=NULL, ..., subset=NULL, eps=NULL, dimyx=NULL) {
   stopifnot(inherits(X, c("ppp", "quad")))
   if(is.quad(X)) X <- X$data
+  marx <- marks(X) # may be null
+  lev <- levels(marx) # may be null
   if(is.null(subset)) {
     Xfit <- X
   } else {
@@ -28,14 +30,14 @@ exactppm <- function(X, baseline=NULL, ..., subset=NULL, eps=NULL, dimyx=NULL) {
       denom <- integral(baseline, domain=subset)
     } else if(is.imlist(baseline) &&
               is.multitype(X) &&
-              length(baseline) == length(levels(marks(X)))) {
+              length(baseline) == length(lev)) {
       denom <- sapply(baseline, integral, domain=subset)
     } else if(is.function(baseline)) {
       if(!is.multitype(X) || length(formals(baseline)) == 2) {
         ba <- as.im(baseline, W=Window(X), eps=eps, dimyx=dimyx)
         denom <- integral(ba, domain=subset)
       } else {
-        ba <- lapply(levels(marks(X)),
+        ba <- lapply(lev,
                      function(z) { as.im(baseline, W=Window(X), z, eps=eps, dimyx=dimyx)})
         denom <- sapply(ba, integral, domain=subset)
       }
@@ -47,11 +49,13 @@ exactppm <- function(X, baseline=NULL, ..., subset=NULL, eps=NULL, dimyx=NULL) {
       denom <- integral(ba, domain=subset)
     } else if(is.numeric(baseline) &&
               (length(baseline) == 1 ||
-               is.multitype(X) && length(baseline) == length(levels(marks(X))))) {
+               is.multitype(X) && length(baseline) == length(lev))) {
       denom <- baseline * area(Window(Xfit))
     } else stop("Format of 'baseline' is not understood")
     numer <- if(is.multitype(Xfit)) as.integer(table(marks(Xfit))) else npoints(Xfit)
     beta <- numer/denom
+    if(length(beta) == length(lev))
+      names(beta) <- lev
   }
   model <- list(X=X, baseline=baseline, subset=subset, beta=beta)
   class(model) <- c("exactppm", class(model))
@@ -82,39 +86,36 @@ print.exactppm <- function(x, ...) {
 }
 
 predict.exactppm <- function(object, locations=NULL, ..., eps=NULL, dimyx=NULL) {
-  X <- object$X
-  beta <- object$beta
-  baseline <- object$baseline
-  if(is.null(locations)) locations <- Window(X)
-  locations <- as.mask(locations, eps=eps, dimyx=dimyx)
-  betaimages <- lapply(beta, as.im, W=locations)
+  X        <- object$X
+  beta     <- object$beta # numeric
+  baseline <- object$baseline # covariate or NULL
+  if(is.null(locations))
+    locations <- Window(X)
+  if(length(beta) > 1) {
+    ## Intensities for different types
+    ## Syntax of 'evaluateCovariate' requires a list in this case
+    beta <- as.list(beta)
+  }
+  ## evaluate at desired locations
+  Beta <- evaluateCovariate(beta, locations, eps=eps, dimyx=dimyx)
   if(is.null(baseline)) {
-    lambdaimages <- betaimages
-  } else if(is.im(baseline)) {
-    lambdaimages <- solapply(betaimages, "*", e2=baseline)
-  } else if(is.imlist(baseline)) {
-    lambdaimages <- as.solist(mapply("*", e1=betaimages, e2=baseline, SIMPLIFY=FALSE))
-  } else if(is.function(baseline)) {
-    if(!is.multitype(X) || length(formals(baseline)) == 2) {
-      baz <- as.im(baseline, W=locations, eps=eps, dimyx=dimyx)
-      lambdaimages <- solapply(betaimages, "*", e2=baz)
+    Lambda <- Beta
+  } else {
+    Baseline <- evaluateCovariate(baseline, locations, eps=eps, dimyx=dimyx)
+    if(is.im(Beta) || is.imlist(Beta) || is.im(Baseline) || is.imlist(Baseline)) {
+      Lambda <- imagelistOp(Beta, Baseline, "*")
     } else {
-      baz <- lapply(levels(marks(X)),
-                    function(z) { as.im(baseline, W=locations, z, eps=eps, dimyx=dimyx)})
-      lambdaimages <- as.solist(mapply("*", e1=betaimages, e2=baz, SIMPLIFY=FALSE))
+      Lambda <- Beta * Baseline
     }
-  } else if(identical(baseline, "x")) {
-    bxx <- as.im(function(x,y){x}, W=Window(X), eps=eps, dimyx=dimyx)
-    lambdaimages <- solapply(betaimages, "*", e2=bxx)
-  } else if(identical(baseline, "y")) {
-    byy <- as.im(function(x,y){y}, W=Window(X), eps=eps, dimyx=dimyx)
-    lambdaimages <- solapply(betaimages, "*", e2=byy)
-  } else if(is.numeric(baseline)) {
-    if(length(baseline) == 1) {
-      lambdaimages <- solapply(betaimages, "*", e2=baseline)
-    } else {
-      lambdaimages <- as.solist(mapply("*", e1=betaimages, e2=baseline, SIMPLIFY=FALSE))
+  }
+  ## tidy
+  if(is.imlist(Lambda)) {
+    if(length(Lambda) == 1) { 
+      Lambda <- Lambda[[1]]
+    } else if(length(Lambda) == length(Beta)) {
+      names(Lambda) <- names(beta)
     }
-  } else stop("Format of 'baseline' is not understood")
-  return(if(length(lambdaimages) == 1) lambdaimages[[1]] else lambdaimages)
+  }
+  return(Lambda)
 }
+
