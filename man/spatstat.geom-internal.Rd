@@ -73,13 +73,9 @@
 \alias{equals.quad}          
 \alias{equalsfun.quad}          
 \alias{erodemask}
-\alias{evaluateCovariate}
-\alias{evaluateCovariateAtPoints}
-\alias{evaluateCovariateAtPixels}
 \alias{even.breaks.owin}
 \alias{exactdt}              
 \alias{exactPdt}
-\alias{exactppm}
 \alias{existsSpatstatVariable}
 \alias{expandSpecialLists}
 \alias{fakemaintitle}
@@ -145,7 +141,6 @@
 \alias{plan.legend.layout}
 \alias{pointweights}
 \alias{polytileareaEngine}
-\alias{predict.exactppm}
 \alias{putSpatstatVariable}
 \alias{lookup.im}
 \alias{majorminorversion}
@@ -209,7 +204,6 @@
 \alias{print.colourmap}
 \alias{print.distfun}
 \alias{print.ewcdf}
-\alias{print.exactppm}
 \alias{print.funxy}       
 \alias{print.hyperframe}
 \alias{print.indicfun}       
@@ -424,13 +418,9 @@ equalpairs.quad(Q)
 equals.quad(Q)          
 equalsfun.quad(Q)
 erodemask(w,r,strict)
-evaluateCovariate(covariate, locations, \dots)
-evaluateCovariateAtPixels(covariate, locations, \dots, types, eps, dimyx)
-evaluateCovariateAtPoints(covariate, locations, \dots, allow.column)
 even.breaks.owin(w)
 exactdt(X, \dots)              
 exactPdt(w)
-exactppm(X, baseline, \dots, subset, eps, dimyx)
 existsSpatstatVariable(name)
 expandSpecialLists(x, special)
 fakemaintitle(bb, main, \dots)
@@ -497,7 +487,6 @@ plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
                    started, map)
 pointweights(X, \dots, weights, parent)
 polytileareaEngine(P, xrange, yrange, nx, ny, DivideByPixelArea)
-\method{predict}{exactppm}(object, locations, \dots, eps, dimyx)
 putSpatstatVariable(name, value)
 lookup.im(Z, x, y, naok, strict)
 majorminorversion(v)
@@ -565,7 +554,6 @@ prepareTitle(main)
 \method{print}{colourmap}(x, \dots)
 \method{print}{distfun}(x, \dots)
 \method{print}{ewcdf}(x, digits, \dots)
-\method{print}{exactppm}(x, \dots)
 \method{print}{funxy}(x, \dots)
 \method{print}{hyperframe}(x, \dots)
 \method{print}{indicfun}(x, \dots)
