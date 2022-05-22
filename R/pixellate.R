@@ -1,7 +1,7 @@
 #
 #           pixellate.R
 #
-#           $Revision: 1.29 $    $Date: 2021/03/19 00:55:56 $
+#           $Revision: 1.30 $    $Date: 2022/05/21 09:52:11 $
 #
 #     pixellate            convert an object to a pixel image
 #

@@ -3,7 +3,7 @@
 #
 #    nearest or k-th nearest neighbour of each pixel
 #
-#  $Revision: 1.12 $  $Date: 2021/01/07 01:15:08 $
+#  $Revision: 1.13 $  $Date: 2022/05/21 09:52:11 $
 #
 
 nnmap <- function(X, k=1, what = c("dist", "which"), ...,

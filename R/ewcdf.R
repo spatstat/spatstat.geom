@@ -1,7 +1,7 @@
 #
 #     ewcdf.R
 #
-#     $Revision: 1.23 $  $Date: 2021/09/01 02:41:58 $
+#     $Revision: 1.24 $  $Date: 2022/05/21 09:52:11 $
 #
 #  With contributions from Kevin Ummel
 #

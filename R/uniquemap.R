@@ -4,7 +4,7 @@
 #'   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2019
 #'   Licence: GNU Public Licence >= 2
 #'
-#'   $Revision: 1.17 $  $Date: 2021/01/07 01:15:08 $
+#'   $Revision: 1.18 $  $Date: 2022/05/21 09:52:11 $
 
 uniquemap <- function(x) { UseMethod("uniquemap") }
 

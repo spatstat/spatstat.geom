@@ -1,7 +1,7 @@
 #
 #      distanxD.R
 #
-#      $Revision: 1.17 $     $Date: 2021/09/26 07:00:30 $
+#      $Revision: 1.18 $     $Date: 2022/05/21 09:52:11 $
 #
 #      Interpoint distances for multidimensional points
 #

@@ -2,7 +2,7 @@
 #	exactPdt.R
 #	R function exactPdt() for exact distance transform of binary mask
 #
-#	$Revision: 4.22 $	$Date: 2022/03/26 02:46:53 $
+#	$Revision: 4.23 $	$Date: 2022/05/21 09:52:11 $
 #
 
 "exactPdt"<-

@@ -2,7 +2,7 @@
 #
 #      distmap.R
 #
-#      $Revision: 1.31 $     $Date: 2022/03/26 03:06:43 $
+#      $Revision: 1.32 $     $Date: 2022/05/21 09:52:11 $
 #
 #
 #     Distance transforms

@@ -3,7 +3,7 @@
 ##
 ##  Quasi-random sequence generators
 ##
-##  $Revision: 1.7 $   $Date: 2021/01/07 01:15:08 $
+##  $Revision: 1.8 $   $Date: 2022/05/21 09:52:11 $
 ##
 
 vdCorput <- function(n, base) {

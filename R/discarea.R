@@ -1,7 +1,7 @@
 #
 #    discarea.R
 #
-#  $Revision: 1.22 $  $Date: 2021/01/07 01:15:08 $
+#  $Revision: 1.23 $  $Date: 2022/05/21 09:52:11 $
 #
 #
 #  Compute area of intersection between a disc and a window,

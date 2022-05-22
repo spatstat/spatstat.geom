@@ -1,7 +1,7 @@
 #
 # areadiff.R
 #
-#  $Revision: 1.40 $  $Date: 2021/01/07 01:15:08 $
+#  $Revision: 1.41 $  $Date: 2022/05/21 09:52:11 $
 #
 # Computes sufficient statistic for area-interaction process
 #

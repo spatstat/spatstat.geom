@@ -1,7 +1,7 @@
 #
 # closepairs.R
 #
-#   $Revision: 1.48 $   $Date: 2022/02/18 02:29:50 $
+#   $Revision: 1.49 $   $Date: 2022/05/21 09:52:11 $
 #
 #  simply extract the r-close pairs from a dataset
 # 
