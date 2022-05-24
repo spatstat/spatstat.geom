@@ -21,7 +21,7 @@ harmonize(\dots)
   of \code{\link{compatible}} so that they can be combined or compared.
 
   There are methods for the classes \code{"fv"}
-  (\code{\link[spatstat.core]{harmonise.fv}})
+  (\code{\link[spatstat.explore]{harmonise.fv}})
   and \code{"im"} (\code{\link{harmonise.im}}).
   
   All arguments \code{\dots} must be objects of the same class.
@@ -42,7 +42,7 @@ harmonize(\dots)
 }
 \seealso{
   \code{\link{compatible}},
-  \code{\link[spatstat.core]{harmonise.fv}},
+  \code{\link[spatstat.explore]{harmonise.fv}},
   \code{\link{harmonise.im}}
 }
 \keyword{spatial}

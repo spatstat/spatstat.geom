@@ -80,7 +80,7 @@
 \seealso{
   \code{\link{crossdist}},
   \code{\link{nndist}},
-  \code{\link[spatstat.core]{Kest}},
+  \code{\link[spatstat.explore]{Kest}},
   \code{\link{closepairs}}
 }
 \examples{
@@ -91,12 +91,10 @@
    d <- pairdist(x, y, period=c(1,1))
    d <- pairdist(x, y, squared=TRUE)
 }
-\author{Pavel Grabarnik
-  \email{pavel.grabar@issp.serpukhov.su}
+\author{
+  \pavel
   and 
-  \adrian
-  
-  
+  \adrian.
 }
 \keyword{spatial}
 \keyword{math}

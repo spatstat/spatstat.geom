@@ -71,18 +71,16 @@
   \code{\link{crossdist.psp}},
   \code{\link{pairdist}},
   \code{\link{nndist}},
-  \code{\link[spatstat.core]{Gest}}
+  \code{\link[spatstat.explore]{Gest}}
 }
 \examples{
    d <- crossdist(runif(7), runif(7), runif(12), runif(12))
    d <- crossdist(runif(7), runif(7), runif(12), runif(12), period=c(1,1))
 }
-\author{Pavel Grabarnik
-  \email{pavel.grabar@issp.serpukhov.su}
+\author{
+  \pavel
   and
   \adrian
-  
-  
 }
 \keyword{spatial}
 \keyword{math}

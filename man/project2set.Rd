@@ -54,7 +54,7 @@
   He <- heather$fine[owin(c(2.8, 7.4), c(4.0, 7.8))]
   plot(He, main="project2set")
   W <- erosion(complement.owin(He), 0.2)
-if(require(spatstat.core)) {
+if(require(spatstat.random)) {
   X <- runifpoint(4, W)
 } else {
   X <- ppp(c(6.1, 4.3, 5.7, 4.7), c(5.0, 6.6, 7.5, 4.9), window=W)

@@ -32,7 +32,7 @@ closetriples(X, rmax)
 }
 \seealso{
   \code{\link{closepairs}},
-  \code{\link[spatstat.core]{Tstat}}.
+  \code{\link[spatstat.explore]{Tstat}}.
 }
 \examples{
    closetriples(redwoodfull, 0.02)

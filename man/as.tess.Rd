@@ -53,7 +53,7 @@ in any of several formats, into an object of class \code{"tess"}.
     tessellation.
     \item
     a quadrat test (object of class \code{"quadrattest"})
-    returned by the command \code{\link[spatstat.core]{quadrat.test}}. 
+    returned by the command \code{\link[spatstat.explore]{quadrat.test}}. 
     The quadrats
     used to perform the test will be extracted and returned as a
     tessellation.
@@ -73,15 +73,13 @@ in any of several formats, into an object of class \code{"tess"}.
  levels(v) <- letters[seq(length(levels(v)))]
  as.tess(v)
  # quadrat counts
- data(nztrees)
  qNZ <- quadratcount(nztrees, nx=4, ny=3)
  as.tess(qNZ)
+
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{manip}

@@ -43,7 +43,7 @@ test.selfcrossing.psp(A)
 }
 \examples{
   B <- edges(letterR)
-if(require(spatstat.core)) {
+if(require(spatstat.random)) {
   A <- rpoisline(5, Frame(B))
 } else {
   FB <- Frame(B)

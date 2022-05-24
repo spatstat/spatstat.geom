@@ -79,11 +79,11 @@
   function \code{\link{applynbd}}. For more complex tasks,
   use \code{\link{applynbd}}. 
   To simply tabulate the marks in every \code{R}-neighbourhood, use
-  \code{\link[spatstat.core]{marktable}}.
+  \code{\link[spatstat.explore]{marktable}}.
 }
 \seealso{
   \code{\link{applynbd}},
-  \code{\link[spatstat.core]{marktable}},
+  \code{\link[spatstat.explore]{marktable}},
   \code{\link{ppp.object}},
   \code{\link{apply}}
 }

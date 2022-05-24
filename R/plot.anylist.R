@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.31 $ $Date: 2022/01/04 05:30:06 $
+##  $Revision: 1.32 $ $Date: 2022/05/24 03:51:42 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
@@ -170,8 +170,8 @@ plot.anylist <- plot.solist <- plot.listof <-
       isfv <- unlist(lapply(x, is.fv))
       allfv <- all(isfv)
       somefv <- any(isfv)
-      if(somefv && !requireNamespace("spatstat.core"))
-        stop(paste("Package 'spatstat.core' is required",
+      if(somefv && !requireNamespace("spatstat.explore"))
+        stop(paste("Package 'spatstat.explore' is required",
                    "for plotting objects of class 'fv'"),
              call.=FALSE)
     }

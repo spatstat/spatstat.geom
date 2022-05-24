@@ -194,7 +194,7 @@ in any of several formats, into an object of class \code{"owin"}.
   will be guessed from the data.
 }
 \seealso{
-  \code{\link[spatstat.core]{as.owin.ppm}},
+  \code{\link[spatstat.model]{as.owin.ppm}},
   \code{\link[spatstat.random]{as.owin.rmhmodel}},
   \code{\link[spatstat.linnet]{as.owin.lpp}}.
   

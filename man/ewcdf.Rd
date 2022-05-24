@@ -67,7 +67,7 @@ ewcdf(x, weights = NULL, normalise=TRUE, adjust=1)
   \code{\link{quantile.ewcdf}}, \code{\link{mean.ewcdf}}.
 
   Integrals with respect to the weighted cumulative distribution function
-  can be computed using \code{\link[spatstat.core]{stieltjes}}.
+  can be computed using \code{\link[spatstat.explore]{stieltjes}}.
 }
 \examples{
    x <- rnorm(100)

@@ -17,7 +17,7 @@ cat(paste("--------- Executing",
 ##   Tests of psp class and related code
 ##                      [SEE ALSO: tests/xysegment.R]
 ##
-##  $Revision: 1.32 $  $Date: 2020/12/04 05:26:31 $
+##  $Revision: 1.33 $  $Date: 2022/05/22 08:39:47 $
 
 
 local({

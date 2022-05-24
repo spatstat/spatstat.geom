@@ -74,7 +74,7 @@
   \code{\link{nncross}}
 }
 \examples{
-if(require(spatstat.core)) {
+if(require(spatstat.random)) {
    X <- runifpoint3(30)
 } else {
    X <- osteo$pts[[1]]
@@ -84,10 +84,8 @@ if(require(spatstat.core)) {
 }
 \author{
   \adrian
-  
-  
   based on two-dimensional code by
-  Pavel Grabarnik
+  \pavel.
 }
 \keyword{spatial}
 \keyword{math}

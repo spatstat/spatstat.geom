@@ -132,7 +132,7 @@
                  select=cause:fnl.size)
 
 
-if(require(spatstat.core)) {
+if(require(spatstat.random)) {
  a <- subset(rpoispp3(40), z > 0.5)
 }
 

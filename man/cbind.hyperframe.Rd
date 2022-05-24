@@ -49,9 +49,9 @@
   \code{\link{as.hyperframe}}
 }
 \examples{
-if(require(spatstat.core)) {
+if(require(spatstat.random)) {
   lambda <- runif(5, min=10, max=30)
-  X <- lapply(as.list(lambda), function(x) { rpoispp(x) })
+  X <- solapply(as.list(lambda), rpoispp)
   h <- hyperframe(lambda=lambda, X=X)
   g <- hyperframe(id=letters[1:5], Y=rev(X))
   gh <- cbind(h, g)

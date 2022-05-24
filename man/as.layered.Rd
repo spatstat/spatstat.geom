@@ -57,7 +57,7 @@
   }
 }
 \seealso{
-  \code{\link[spatstat.core]{as.layered.msr}},
+  \code{\link[spatstat.model]{as.layered.msr}},
   \code{\link{layered}},
   \code{\link{split.ppp}}
 }

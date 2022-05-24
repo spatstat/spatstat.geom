@@ -4,7 +4,7 @@
 ##  'persp' method for image objects
 ##      plus annotation
 ##  
-##  $Revision: 1.27 $ $Date: 2021/11/01 07:26:43 $
+##  $Revision: 1.28 $ $Date: 2022/05/23 02:33:06 $
 ##
 
 persp.im <- function(x, ...,

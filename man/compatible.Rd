@@ -27,8 +27,8 @@
   if they are not.
 }
 \seealso{
-  \code{\link[spatstat.core]{compatible.fv}},
-  \code{\link[spatstat.core]{compatible.fasp}},
+  \code{\link[spatstat.explore]{compatible.fv}},
+  \code{\link[spatstat.explore]{compatible.fasp}},
   \code{\link{compatible.im}},
   \code{\link{compatible.unitname}} 
 }

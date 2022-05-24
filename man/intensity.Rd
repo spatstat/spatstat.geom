@@ -32,14 +32,14 @@ intensity(X, ...)
   The theoretical intensity of a stochastic model is the expected density
   (expected  amount of \sQuote{stuff} per unit area or volume).
   The theoretical intensity of a fitted point process model is computed by the
-  method \code{\link[spatstat.core]{intensity.ppm}}.
+  method \code{\link[spatstat.model]{intensity.ppm}}.
 }
 \value{
   Usually a numeric value or vector.
 }
 \seealso{
   \code{\link{intensity.ppp}},
-  \code{\link[spatstat.core]{intensity.ppm}}.
+  \code{\link[spatstat.model]{intensity.ppm}}.
 }
 \author{\adrian
   

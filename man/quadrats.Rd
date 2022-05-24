@@ -76,7 +76,7 @@ quadrats(X, nx = 5, ny = nx, xbreaks = NULL, ybreaks = NULL, keepempty=FALSE)
 \seealso{
   For calculations using quadrats, see
   \code{\link{quadratcount}},
-  \code{\link[spatstat.core]{quadrat.test}},
+  \code{\link[spatstat.explore]{quadrat.test}},
   \code{\link[spatstat.random]{quadratresample}}
 
   For other kinds of tessellations, see 

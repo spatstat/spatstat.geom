@@ -50,10 +50,10 @@
   \code{\link{pairdist}},
   \code{\link{crossdist}},
   \code{\link{nndist}},
-  \code{\link[spatstat.core]{K3est}}
+  \code{\link[spatstat.explore]{K3est}}
 }
 \examples{
-if(require(spatstat.core)) {
+if(require(spatstat.random)) {
    X <- runifpoint3(20)
 } else {
    X <- osteo$pts[[1]]
@@ -64,10 +64,8 @@ if(require(spatstat.core)) {
 }
 \author{
   \adrian
-  
-  
   based on two-dimensional code by 
-  Pavel Grabarnik.
+  \pavel.
 }
 \keyword{spatial}
 \keyword{math}

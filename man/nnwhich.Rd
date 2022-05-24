@@ -159,12 +159,10 @@
    # nearest neighbours of each type
    head(nnwhich(ants, by=marks(ants)))
 }
-\author{Pavel Grabarnik
-  \email{pavel.grabar@issp.serpukhov.su}
+\author{
+  \pavel
   and
   \adrian
-  
-  
 }
 \keyword{spatial}
 \keyword{math}

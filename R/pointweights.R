@@ -10,7 +10,7 @@
 #'        a pixel image
 #'        an expression involving the coordinates and marks
 #' 
-#'  $Revision: 1.2 $ $Date: 2020/01/27 09:08:06 $
+#'  $Revision: 1.3 $ $Date: 2022/05/23 02:33:06 $
 
 pointweights <- function(X, ..., weights=NULL, parent=NULL) {
   if(is.null(weights)) return(NULL)

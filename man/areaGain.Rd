@@ -51,7 +51,7 @@
   that is \emph{not} covered by any of the discs of radius \code{r}
   centred at the points of the pattern \code{X}.
   This area is important in some calculations related to
-  the area-interaction model \code{\link[spatstat.core]{AreaInter}}.
+  the area-interaction model \code{\link[spatstat.model]{AreaInter}}.
 
   If \code{u} is a point pattern and \code{r} is a vector,
   the result is a matrix, with one row for each point in \code{u}
@@ -65,7 +65,7 @@
   inside the window \code{W}. 
 }
 \seealso{
-  \code{\link[spatstat.core]{AreaInter}},
+  \code{\link[spatstat.model]{AreaInter}},
   \code{\link{areaLoss}}
 }
 \examples{

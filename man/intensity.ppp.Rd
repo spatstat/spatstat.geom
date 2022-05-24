@@ -64,7 +64,7 @@
 }
 \seealso{
   \code{\link{intensity}}, 
-  \code{\link[spatstat.core]{intensity.ppm}}
+  \code{\link[spatstat.model]{intensity.ppm}}
 }
 \examples{
   japanesepines

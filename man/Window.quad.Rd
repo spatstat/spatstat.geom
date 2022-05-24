@@ -15,6 +15,7 @@
 \usage{
 
 
+
  \method{Window}{quad}(X, \dots)
 
  \method{Window}{quadratcount}(X, \dots)
@@ -59,5 +60,4 @@
 }
 \keyword{spatial}
 \keyword{manip}
- 
  

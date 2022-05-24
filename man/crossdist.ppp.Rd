@@ -73,19 +73,17 @@
   \code{\link{crossdist.psp}},
   \code{\link{pairdist}},
   \code{\link{nndist}},
-  \code{\link[spatstat.core]{Gest}}
+  \code{\link[spatstat.explore]{Gest}}
 }
 \examples{
    Y <- runifrect(6, Window(cells))
    d <- crossdist(cells, Y)
    d <- crossdist(cells, Y, periodic=TRUE)
 }
-\author{Pavel Grabarnik
-  \email{pavel.grabar@issp.serpukhov.su}
+\author{
+  \pavel
   and
-  \adrian
-  
-  
+  \adrian.
 }
 \keyword{spatial}
 \keyword{math}

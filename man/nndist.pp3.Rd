@@ -77,7 +77,7 @@
 
   To use the nearest neighbour distances for statistical inference,
   it is often advisable to use the edge-corrected empirical distribution,
-  computed by \code{\link[spatstat.core]{G3est}}.
+  computed by \code{\link[spatstat.explore]{G3est}}.
 
   To find the nearest neighbour distances from one point pattern
   to another point pattern, use \code{\link{nncross}}.
@@ -90,7 +90,7 @@
 \seealso{
   \code{\link{nndist}},
   \code{\link{pairdist}},
-  \code{\link[spatstat.core]{G3est}},
+  \code{\link[spatstat.explore]{G3est}},
   \code{\link{nnwhich}}
 }
 \examples{
@@ -111,10 +111,8 @@
 }
 \author{
   \adrian
-  
-  
   based on code for two dimensions by
-  Pavel Grabarnik
+  \pavel.
 }
 \keyword{spatial}
 \keyword{math}

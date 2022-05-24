@@ -162,7 +162,7 @@
  }
 
  # Scramble 60\% of data
-if(require(spatstat.core)) {
+if(require(spatstat.random)) {
  X <- redwood
  modif <- (runif(npoints(X)) < 0.6)
  X[modif] <- runifpoint(ex=X[modif])
@@ -181,7 +181,7 @@ if(require(spatstat.core)) {
   win <- owin(c(0.3, 0.6),c(0.2, 0.5))
   lsub <- lan[win]
 
-if(require(spatstat.core)) {
+if(require(spatstat.random)) {
  # Scramble the locations of trees in subwindow, retaining their marks
   lan[win] <- runifpoint(ex=lsub) \%mark\% marks(lsub)
 }

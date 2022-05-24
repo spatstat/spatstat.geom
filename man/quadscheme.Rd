@@ -32,7 +32,7 @@
 \value{
   An object of class \code{"quad"} describing the quadrature scheme
   (data points, dummy points, and quadrature weights)
-  suitable as the argument \code{Q} of the function \code{\link[spatstat.core]{ppm}()} for
+  suitable as the argument \code{Q} of the function \code{\link[spatstat.model]{ppm}()} for
   fitting a point process model.
 
   The quadrature scheme can be inspected using the
@@ -41,9 +41,9 @@
 }
 \details{
   This is the primary method for producing a quadrature schemes
-  for use by \code{\link[spatstat.core]{ppm}}.
+  for use by \code{\link[spatstat.model]{ppm}}.
   
-  The function \code{\link[spatstat.core]{ppm}} fits a point process model to an
+  The function \code{\link[spatstat.model]{ppm}} fits a point process model to an
   observed point pattern using 
   the Berman-Turner quadrature approximation (Berman and Turner, 1992;
   Baddeley and Turner, 2000) to the pseudolikelihood of the model. 
@@ -106,7 +106,7 @@
 }
 \section{Error Messages}{
   The following error messages need some explanation.
-  (See also the list of error messages in \code{\link[spatstat.core]{ppm.ppp}}).
+  (See also the list of error messages in \code{\link[spatstat.model]{ppm.ppp}}).
   \itemize{
     \item{\dQuote{Some tiles with positive area do not contain any
 	quadrature points: relative error = X\%}}{
@@ -150,7 +150,7 @@
   \emph{Applied Statistics} \bold{41} (1992) 31--38.
 }
 \seealso{
-  \code{\link[spatstat.core]{ppm}},
+  \code{\link[spatstat.model]{ppm}},
   \code{\link{as.ppp}},
   \code{\link{quad.object}},
   \code{\link{gridweights}},

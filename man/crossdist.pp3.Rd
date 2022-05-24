@@ -53,10 +53,10 @@
   \code{\link{crossdist}},
   \code{\link{pairdist}},
   \code{\link{nndist}},
-  \code{\link[spatstat.core]{G3est}}
+  \code{\link[spatstat.explore]{G3est}}
 }
 \examples{
-if(require(spatstat.core)) {
+if(require(spatstat.random)) {
    X <- runifpoint3(20)
    Y <- runifpoint3(30)
 } else {
@@ -69,10 +69,8 @@ if(require(spatstat.core)) {
 }
 \author{
   \adrian
-  
-  
   based on code for two dimensions by 
-  Pavel Grabarnik.
+  \pavel.
 }
 \keyword{spatial}
 \keyword{math}

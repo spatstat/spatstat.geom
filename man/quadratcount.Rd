@@ -90,7 +90,7 @@
   quadrats, annotated by their counts. See the examples.
 
   To perform a chi-squared test based on the quadrat counts,
-  use \code{\link[spatstat.core]{quadrat.test}}.
+  use \code{\link[spatstat.explore]{quadrat.test}}.
   
   To calculate an estimate of intensity based on the quadrat counts,
   use \code{\link{intensity.quadratcount}}.
@@ -112,7 +112,7 @@
 }
 \note{
   To perform a chi-squared test based on the quadrat counts,
-  use \code{\link[spatstat.core]{quadrat.test}}.
+  use \code{\link[spatstat.explore]{quadrat.test}}.
 }
 \section{Warning}{
   If \code{Q} is the result of \code{quadratcount}
@@ -126,11 +126,11 @@
   \code{\link{plot.quadratcount}},
   \code{\link{intensity.quadratcount}},
   \code{\link{quadrats}},
-  \code{\link[spatstat.core]{quadrat.test}},
+  \code{\link[spatstat.explore]{quadrat.test}},
   \code{\link{tess}},
   \code{\link{hextess}},
   \code{\link[spatstat.random]{quadratresample}},
-  \code{\link[spatstat.core]{miplot}}
+  \code{\link[spatstat.explore]{miplot}}
 }
 \references{
   Diggle, P.J. \emph{Statistical analysis of spatial point patterns}.

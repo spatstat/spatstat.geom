@@ -51,7 +51,7 @@
 }
 \seealso{
   \code{\link{is.multitype}},
-  \code{\link[spatstat.core]{is.multitype.ppm}}
+  \code{\link[spatstat.model]{is.multitype.ppm}}
 }
 \examples{
    is.multitype(cells)  #FALSE - no marks

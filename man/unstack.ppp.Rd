@@ -55,7 +55,7 @@
 \seealso{
   \code{\link[utils]{unstack}}
 
-  \code{\link[spatstat.core]{unstack.msr}}
+  \code{\link[spatstat.model]{unstack.msr}}
 
   See also methods for the generic \code{\link[base]{split}} such as
   \code{\link{split.ppp}}.

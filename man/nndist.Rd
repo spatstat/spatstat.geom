@@ -135,7 +135,7 @@
 
   To use the nearest neighbour distances for statistical inference,
   it is often advisable to use the edge-corrected empirical distribution,
-  computed by \code{\link[spatstat.core]{Gest}}.
+  computed by \code{\link[spatstat.explore]{Gest}}.
 
   To find the nearest neighbour distances from one point pattern
   to another point pattern, use \code{\link{nncross}}.
@@ -162,7 +162,7 @@
   \code{\link{nndist.pp3}},
   \code{\link{nndist.ppx}},
   \code{\link{pairdist}},
-  \code{\link[spatstat.core]{Gest}},
+  \code{\link[spatstat.explore]{Gest}},
   \code{\link{nnwhich}},
   \code{\link{nncross}},
   \code{\link{minnndist}}, \code{\link{maxnndist}}.
@@ -201,8 +201,8 @@
    # The mean distance from a Messor nest to
    # the nearest Cataglyphis nest is 59.02549 units
 }
-\author{Pavel Grabarnik
-  \email{pavel.grabar@issp.serpukhov.su}
+\author{
+  \pavel
   and
   \adrian.
 }

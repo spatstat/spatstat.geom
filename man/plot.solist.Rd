@@ -205,7 +205,7 @@
   \code{\link{plot.anylist}},
   \code{\link{contour.listof}},
   \code{\link{image.listof}},
-  \code{\link[spatstat.core]{density.splitppp}}
+  \code{\link[spatstat.explore]{density.splitppp}}
 }
 \section{Error messages}{
   If the error message \sQuote{Figure margins too large}

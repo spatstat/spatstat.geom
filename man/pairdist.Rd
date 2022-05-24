@@ -42,14 +42,12 @@
   \code{\link{pairdist.default}},
   \code{\link{crossdist}},
   \code{\link{nndist}},
-  \code{\link[spatstat.core]{Kest}}
+  \code{\link[spatstat.explore]{Kest}}
 }
-\author{Pavel Grabarnik
-  \email{pavel.grabar@issp.serpukhov.su}
+\author{
+  \pavel
   and 
-  \adrian
-  
-  
+  \adrian.
 }
 \keyword{spatial}
 \keyword{math}

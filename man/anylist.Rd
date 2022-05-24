@@ -51,7 +51,11 @@ as.anylist(x)
   \code{\link{anylapply}}.
 }
 \examples{
-  anylist(cells, intensity(cells))
+  if(require(spatstat.explore)) {
+    anylist(cells, intensity(cells), Kest(cells))
+  } else {
+    anylist(cells, intensity(cells))
+  }
   anylist()
 }
 \keyword{list}

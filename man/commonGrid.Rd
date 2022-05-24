@@ -44,7 +44,7 @@ commonGrid(\dots)
   and \rolf
 }
 \examples{
-if(require(spatstat.core)) {
+if(require(spatstat.random)) {
    A <- setcov(square(1))
    G <- density(runifpoint(42), dimyx=16)
    H <- commonGrid(A, letterR, G)

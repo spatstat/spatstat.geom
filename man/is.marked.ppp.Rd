@@ -44,7 +44,7 @@
 }
 \seealso{
   \code{\link{is.marked}},
-  \code{\link[spatstat.core]{is.marked.ppm}}
+  \code{\link[spatstat.model]{is.marked.ppm}}
 }
 \examples{
    data(cells)

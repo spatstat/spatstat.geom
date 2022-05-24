@@ -55,7 +55,7 @@
   \code{\link[stats]{ecdf}}, \code{\link{ewcdf}}
   to create the cumulative distribution functions.
 
-  \code{\link[spatstat.core]{stieltjes}} for integration with respect to
+  \code{\link[spatstat.explore]{stieltjes}} for integration with respect to
   a cumulative distribution function.
 }
 \examples{

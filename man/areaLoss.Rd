@@ -50,13 +50,13 @@
   other discs of radius \code{r} centred at the points \code{X[j]}
   for \code{j} not equal to \code{i}.
   This area is important in some calculations related to
-  the area-interaction model \code{\link[spatstat.core]{AreaInter}}.
+  the area-interaction model \code{\link[spatstat.model]{AreaInter}}.
 
   The result is a matrix, with one row for each point in \code{X}
   and one column for each entry of \code{r}. 
 }
 \seealso{
-  \code{\link[spatstat.core]{AreaInter}},
+  \code{\link[spatstat.model]{AreaInter}},
   \code{\link{areaGain}},
   \code{\link{dilated.areas}}
 }

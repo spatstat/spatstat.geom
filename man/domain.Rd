@@ -49,6 +49,7 @@
 
 
 
+
 }
 \arguments{
   \item{X}{
@@ -82,7 +83,8 @@
   \spatstatAuthors.
 }
 \seealso{
-  \code{\link[spatstat.core]{domain.ppm}},
+  \code{\link[spatstat.model]{domain.ppm}},
+  \code{\link[spatstat.explore]{domain.quadrattest}},
   \code{\link[spatstat.random]{domain.rmhmodel}},
   \code{\link[spatstat.linnet]{domain.lpp}}.
   \code{\link{Window}},

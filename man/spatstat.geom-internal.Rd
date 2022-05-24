@@ -690,6 +690,8 @@ ZeroValue(x)
 
 
 
+
+
 }
 \details{
   These internal \pkg{spatstat.geom} functions should not be called

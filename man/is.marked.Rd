@@ -39,7 +39,7 @@
 }
 \seealso{
   \code{\link{is.marked.ppp}},
-  \code{\link[spatstat.core]{is.marked.ppm}}
+  \code{\link[spatstat.model]{is.marked.ppm}}
 }
 \author{\adrian
   
