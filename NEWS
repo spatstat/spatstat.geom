@@ -1,14 +1,18 @@
-        CHANGES IN spatstat.geom VERSION 2.4-0.025
+        CHANGES IN spatstat.geom VERSION 2.4-0.026
 
 OVERVIEW
 
-    o Bug fixes and internal improvements.
+    o Minor improvements and bug fixes.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o crosspairs
     New argument 'periodic' specifies whether to use
     periodic (toroidal) distances.
+
+    o crosspairs
+    New arguments 'iX', 'iY' make it possible to eliminate pairs
+    in which the two points are identical.
     
     o bufftess 
     The result now has attribute 'breaks' which is the vector of

@@ -246,6 +246,7 @@
 \alias{recognise.spatstat.type}
 \alias{rectquadrat.breaks}
 \alias{rectquadrat.countEngine}
+\alias{remove.identical.pairs}
 \alias{repair.image.xycoords}
 \alias{resolve.stringsAsFactors}
 \alias{rgbNA}
@@ -596,6 +597,7 @@ rasterfilter(X, f)
 recognise.spatstat.type(x)
 rectquadrat.breaks(xr, yr, nx = 5, ny = nx, xbreaks = NULL, ybreaks = NULL)
 rectquadrat.countEngine(x, y, xbreaks, ybreaks, weights)
+remove.identical.pairs(cl, imap, jmap)
 repair.image.xycoords(x)
 resolve.stringsAsFactors(stringsAsFactors)
 rgbNA(red, green, blue, alpha, maxColorValue)

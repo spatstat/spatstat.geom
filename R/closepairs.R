@@ -1,7 +1,7 @@
 #
 # closepairs.R
 #
-#   $Revision: 1.50 $   $Date: 2022/06/06 06:28:27 $
+#   $Revision: 1.51 $   $Date: 2022/06/06 09:47:07 $
 #
 #  simply extract the r-close pairs from a dataset
 # 
@@ -455,7 +455,8 @@ crosspairs <- function(X, Y, rmax, ...) {
 
 crosspairs.ppp <- function(X, Y, rmax,
                            what=c("all", "indices", "ijd"),
-                           periodic=FALSE, ...) {
+                           periodic=FALSE, ...,
+                           iX=NULL, iY=NULL) {
   verifyclass(X, "ppp")
   verifyclass(Y, "ppp")
   what <- match.arg(what)
@@ -547,6 +548,8 @@ crosspairs.ppp <- function(X, Y, rmax,
                             dy=dy,
                             d=d)
                      })
+    if(!is.null(iX) && !is.null(iY))
+      answer <- remove.identical.pairs(answer, iX, iY)
     return(answer)
   }
   ## .......... Euclidean distance .......................
@@ -710,6 +713,8 @@ crosspairs.ppp <- function(X, Y, rmax,
          ijd = {
            answer <- list(i=i, j=j, d=d)
          })
+  if(!is.null(iX) && !is.null(iY))
+    answer <- remove.identical.pairs(answer, iX, iY)
   return(answer)
 }
 
@@ -856,3 +861,11 @@ tweak.closepairs <- function(cl, rmax, i, deltax, deltay, deltaz) {
   return(cl)
 }
 
+remove.identical.pairs <- function(cl, imap, jmap) {
+  ## 'cl' is the result of crosspairs
+  ## 'imap', 'jmap' map the 'i' and 'j' indices to a common sequence
+  distinct <- (imap[cl$i] != jmap[cl$j])
+  if(!all(distinct))
+    cl <- lapply(cl, "[", i=distinct)
+  return(cl)
+}
