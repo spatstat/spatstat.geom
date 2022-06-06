@@ -94,12 +94,14 @@ local({
   cross.ij <- crosspairs(on, off, r, what="indices")
   cross.ijd <- crosspairs(on, off, r, what="ijd")
   cross.every <- crosspairs(on, off, r, what="all", distinct=FALSE)
+  cross.period <- crosspairs(on, off, r, periodic=TRUE)
 
   ## validate basic format
   checkformat(cross.all, "crosspairs(on, off, r)")
   checkformat(cross.ij, "crosspairs(on, off, r, what='indices')")
   checkformat(cross.ijd, "crosspairs(on, off, r, what='ijd')")
   checkformat(cross.every, "crosspairs(on, off, r, what='all', distinct=FALSE)")
+  checkformat(cross.period, "crosspairs(on, off, r, periodic=TRUE)")
   
   ## test agreement
   stopifnot(identical(cross.ij, cross.all[c("i","j")]))

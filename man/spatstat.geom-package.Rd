@@ -29,7 +29,7 @@
   distances, finding nearest neighbours in a point pattern).
 
   Functions for performing statistical analysis and modelling
-  are in the separate sub-package \pkg{spatstat.core}.
+  are in the separate sub-packages \pkg{spatstat.explore} and \pkg{spatstat.model}.
   
   Functions for linear networks
   are in the separate sub-package \pkg{spatstat.linnet}.
@@ -48,8 +48,12 @@
     \item \pkg{spatstat.sparse} containing linear algebra utilities
     \item \pkg{spatstat.geom} containing geometrical objects
     and geometrical operations
-    \item \pkg{spatstat.core} containing the main functionality
-    for statistical analysis of spatial data
+    \item \pkg{spatstat.random} containing code for generating
+    random spatial patterns
+    \item \pkg{spatstat.explore} containing the main functionality
+    for exploratory and non-parametric analysis of spatial data
+    \item \pkg{spatstat.model} containing the main functionality
+    for statistical modelling and inference for spatial data
     \item \pkg{spatstat.linnet} containing functions for
     spatial data on a linear network
     \item \pkg{spatstat}, which simply loads the other sub-packages
@@ -117,7 +121,7 @@
   \bold{To simulate a random point pattern:}
 
   Most of the methods for generating random data are
-  provided in \pkg{spatstat.core}. The following basic methods
+  provided in \pkg{spatstat.random}. The following basic methods
   are supplied in \pkg{spatstat.geom}:
   
   \tabular{ll}{
@@ -326,8 +330,8 @@
     \bold{Pixel images:}
     An object of class \code{"im"} represents a pixel image. 
     Such objects are returned by some of the functions in
-      \pkg{spatstat} including \code{\link[spatstat.core]{Kmeasure}},
-      \code{\link{setcov}} and \code{\link[spatstat.core]{density.ppp}}. 
+      \pkg{spatstat} including \code{\link[spatstat.explore]{Kmeasure}},
+      \code{\link{setcov}} and \code{\link[spatstat.explore]{density.ppp}}. 
       \tabular{ll}{
 	\code{\link{im}} \tab create a pixel image\cr
 	\code{\link{as.im}} \tab convert other data to a pixel image\cr

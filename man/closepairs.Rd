@@ -19,7 +19,9 @@ closepairs(X, rmax, \dots)
 
 crosspairs(X, Y, rmax, \dots)
 
-\method{crosspairs}{ppp}(X, Y, rmax, what=c("all", "indices", "ijd"), \dots)
+\method{crosspairs}{ppp}(X, Y, rmax,
+                        what=c("all", "indices", "ijd"),
+                        periodic=FALSE, \dots)
 }
 \arguments{
   \item{X,Y}{

@@ -1,7 +1,7 @@
 #
 # closepairs.R
 #
-#   $Revision: 1.49 $   $Date: 2022/05/21 09:52:11 $
+#   $Revision: 1.50 $   $Date: 2022/06/06 06:28:27 $
 #
 #  simply extract the r-close pairs from a dataset
 # 
@@ -453,7 +453,9 @@ crosspairs <- function(X, Y, rmax, ...) {
   UseMethod("crosspairs")
 }
 
-crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
+crosspairs.ppp <- function(X, Y, rmax,
+                           what=c("all", "indices", "ijd"),
+                           periodic=FALSE, ...) {
   verifyclass(X, "ppp")
   verifyclass(Y, "ppp")
   what <- match.arg(what)
@@ -481,8 +483,74 @@ crosspairs.ppp <- function(X, Y, rmax, what=c("all", "indices", "ijd"), ...) {
                         })
   nX <- npoints(X)
   nY <- npoints(Y)
-  if(nX == 0 || nY == 0) return(null.answer)
-  # order patterns by increasing x coordinate
+  nXY <- nX * nY
+  if(nXY == 0) return(null.answer)
+  if(periodic) {
+    ## ............... Periodic distance ..................
+    if(!is.rectangle(Window(Y)))
+      warning("Periodic edge correction applied in non-rectangular window",
+              call.=FALSE)
+    ## Overestimate the number of pairs
+    if(nXY <= 1024) {
+      nsize <- 1024
+    } else {
+      catchfraction <- pi * (rmax^2)/area(Frame(Y))
+      nsize <- ceiling(2 * catchfraction * nXY)
+      nsize <- min(nsize, nXY)
+      nsize <- max(1024, nsize)
+      if(nsize > .Machine$integer.max) {
+        warning(
+          "Estimated number of close pairs exceeds maximum possible integer",
+          call.=FALSE)
+        nsize <- .Machine$integer.max
+      }
+    }
+    # .Call
+    Xx <- X$x
+    Xy <- X$y
+    Yx <- Y$x
+    Yy <- Y$y
+    per <- sidelengths(Frame(Y))
+    r <- rmax
+    ng <- nsize
+    storage.mode(Xx) <- storage.mode(Xy) <- "double"
+    storage.mode(Yx) <- storage.mode(Yy) <- "double"
+    storage.mode(per) <- storage.mode(r) <- "double"
+    storage.mode(ng) <- "integer"
+    z <- .Call(SG_crossPpair,
+               xxA=Xx, yyA=Xy,
+               xxB=Yx, yyB=Yy,
+               pp=per, rr=r, nguess=ng,
+               PACKAGE="spatstat.geom")
+    if(length(z) != 3)
+      stop("Internal error: incorrect format returned from crossPpair")
+    i  <- z[[1L]]  # NB no increment required
+    j  <- z[[2L]]
+    d  <- z[[3L]]
+    answer <- switch(what,
+                     indices = list(i=i, j=j),
+                     ijd =     list(i=i, j=j, d=d),
+                     all = {
+                       xi <- Xx[i]
+                       yi <- Xy[i]
+                       xj <- Yx[j]
+                       yj <- Yy[j]
+                       dx <- xj-xi
+                       dy <- yj-yi
+                       list(i=i,
+                            j=j,
+                            xi=xi, 
+                            yi=yi,
+                            xj=xj,
+                            yj=yj,
+                            dx=dx,
+                            dy=dy,
+                            d=d)
+                     })
+    return(answer)
+  }
+  ## .......... Euclidean distance .......................
+  ## order patterns by increasing x coordinate
   ooX <- fave.order(X$x)
   Xsort <- X[ooX]
   ooY <- fave.order(Y$x)

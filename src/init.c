@@ -119,6 +119,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"cross3IJDpairs",    (DL_FUNC) &cross3IJDpairs,    8},
     {"cross3IJpairs",     (DL_FUNC) &cross3IJpairs,     8},
     {"cross3pairs",       (DL_FUNC) &cross3pairs,       8},
+    {"crossPpair",        (DL_FUNC) &crossPpair,        7},
     {"Cwhist",            (DL_FUNC) &Cwhist,            3},
     {"Cxysegint",         (DL_FUNC) &Cxysegint,         9},
     {"CxysegXint",        (DL_FUNC) &CxysegXint,        5},

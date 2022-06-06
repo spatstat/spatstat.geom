@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.4-0.024
+        CHANGES IN spatstat.geom VERSION 2.4-0.025
 
 OVERVIEW
 
@@ -6,6 +6,10 @@ OVERVIEW
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o crosspairs
+    New argument 'periodic' specifies whether to use
+    periodic (toroidal) distances.
+    
     o bufftess 
     The result now has attribute 'breaks' which is the vector of
     distance breakpoints.
