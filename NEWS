@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.4-0.026
+        CHANGES IN spatstat.geom VERSION 2.4-0.027
 
 OVERVIEW
 
@@ -31,6 +31,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o funxy
     The result now has a unitname, inherited from the argument W.
+
+    o integral.im
+    New argument 'weight' specifies a weight function for the integration.
+    
+    o markstat, applynbd
+    These functions now work for point patterns in three dimensions (class 'pp3')
+    and point patterns on a network (class 'lpp').
     
 BUG FIXES
 

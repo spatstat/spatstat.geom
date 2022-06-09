@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.172 $     $Date: 2022/05/21 09:52:11 $
+#      $Revision: 1.174 $     $Date: 2022/06/09 04:47:04 $
 #
 #      The class "im" of raster images
 #
@@ -1083,8 +1083,13 @@ integral <- function(f, domain=NULL, ...) {
   UseMethod("integral")
 }
 
-integral.im <- function(f, domain=NULL, ...) {
+integral.im <- function(f, domain=NULL, weight=NULL, ...) {
   verifyclass(f, "im")
+  if(!is.null(weight)) {
+    if(is.function(weight))
+      weight <- as.im(weight, W=as.owin(f))
+    f <- f * weight
+  }
   typ <- f$type
   if(!any(typ == c("integer", "real", "complex", "logical")))
     stop(paste("Don't know how to integrate an image of type", sQuote(typ)))

@@ -10,7 +10,7 @@
 \usage{
 integral(f, domain=NULL, \dots)
 
-\method{integral}{im}(f, domain=NULL, \dots)
+\method{integral}{im}(f, domain=NULL, weight=NULL, \dots)
 }
 \arguments{
   \item{f}{
@@ -24,7 +24,12 @@ integral(f, domain=NULL, \dots)
   \item{\dots}{
     Ignored.
   }
-}
+  \item{weight}{
+   Optional. A pixel image (object of class \code{"im"})
+   or a \code{function(x,y)} giving a numerical weight
+   to be applied to the integration.
+  }
+ }
 \details{
   The function \code{integral} is generic, with methods
   for \code{"im"}, \code{"msr"}, \code{"linim"} and \code{"linfun"}.
@@ -46,6 +51,12 @@ integral(f, domain=NULL, \dots)
   will be restricted to this window. If \code{domain} is a tessellation
   (class \code{"tess"}) then the integral of \code{f} in each
   tile of \code{domain} will be computed.
+
+  If \code{weight} is given, it should be a pixel image or a function of
+  coordinates \eqn{x} and \eqn{y} returning numerical values.
+  Then each pixel value of \code{f}
+  will be multiplied by the corresponding value of \code{weight}.
+  Effectively, the result is the integral of \code{weight * f}.
 }
 \value{
   A single numeric or complex value (or a vector of such values
@@ -65,6 +76,9 @@ integral(f, domain=NULL, \dots)
    # integrate over the subset [0.1,0.9] x [0.2,0.8]
    W <- owin(c(0.1,0.9), c(0.2,0.8))
    integral.im(Z, W)
+
+   # weighted integral
+   integral.im(Z, weight=function(x,y){x})
 }
 \author{
 \spatstatAuthors.

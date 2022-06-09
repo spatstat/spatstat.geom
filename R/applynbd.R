@@ -1,6 +1,6 @@
 # 	applynbd.R
 #
-#     $Revision: 1.18 $     $Date: 2022/01/04 05:30:06 $
+#     $Revision: 1.20 $     $Date: 2022/06/09 01:30:00 $
 #
 #  applynbd()
 # For each point, identify either
@@ -19,8 +19,10 @@ applynbd <- function(X, FUN, N=NULL, R=NULL, criterion=NULL, exclude=FALSE, ...)
   if(is.null(N) && is.null(R) && is.null(criterion)) 
     stop(paste("must specify at least one of the arguments",
                commasep(sQuote(c("N","R","criterion")))))
-     
-  X <- as.ppp(X)
+
+  if(!inherits(X, c("ppp", "lpp", "pp3", "ppx")))
+    X <- as.ppp(X)
+  
   npts <- npoints(X)
 
   # compute matrix of pairwise distances
@@ -64,7 +66,7 @@ applynbd <- function(X, FUN, N=NULL, R=NULL, criterion=NULL, exclude=FALSE, ...)
       dranks <- ai[,3L]
       here <- ai[1L,4L]
       fun(Y=Z[which],
-          current=c(x=Z$x[here], y=Z$y[here]),
+          current=as.list(coords(Z[here])),
           dists=distances[which], dranks=dranks[which],
           ...) 
     }
@@ -87,7 +89,8 @@ applynbd <- function(X, FUN, N=NULL, R=NULL, criterion=NULL, exclude=FALSE, ...)
 }
 
 markstat <- function(X, fun, N=NULL, R=NULL, ...) {
-  verifyclass(X, "ppp")
+  if(!inherits(X, c("ppp", "lpp", "pp3", "ppx")))
+    X <- as.ppp(X)
   stopifnot(is.function(fun))
   statfun <- function(Y, current, dists, dranks, func, ...)
     { func(marks(Y, dfok=TRUE), ...) }

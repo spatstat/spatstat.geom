@@ -42,7 +42,7 @@ local({
 ##  tests/closeshave.R
 ## check 'closepairs/crosspairs' code
 ## validity and memory allocation
-## $Revision: 1.28 $ $Date: 2022/02/18 03:06:00 $
+## $Revision: 1.29 $ $Date: 2022/06/06 10:09:56 $
 
 ## ------- All this code must be run on every hardware -------
 local({
@@ -95,6 +95,7 @@ local({
   cross.ijd <- crosspairs(on, off, r, what="ijd")
   cross.every <- crosspairs(on, off, r, what="all", distinct=FALSE)
   cross.period <- crosspairs(on, off, r, periodic=TRUE)
+  cross.exclude <- crosspairs(cells, cells[1:32], 0.1, iX=1:42, iY=1:32)
 
   ## validate basic format
   checkformat(cross.all, "crosspairs(on, off, r)")
@@ -102,6 +103,7 @@ local({
   checkformat(cross.ijd, "crosspairs(on, off, r, what='ijd')")
   checkformat(cross.every, "crosspairs(on, off, r, what='all', distinct=FALSE)")
   checkformat(cross.period, "crosspairs(on, off, r, periodic=TRUE)")
+  checkformat(cross.exclude, "crosspairs(cells, cells[], r, iX, iY)")
   
   ## test agreement
   stopifnot(identical(cross.ij, cross.all[c("i","j")]))
