@@ -8,7 +8,7 @@
 
    Coordinates are NOT assumed to be sorted
    
-   $Revision: 1.5 $ $Date: 2022/06/06 06:34:04 $
+   $Revision: 1.6 $ $Date: 2022/06/12 07:32:56 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -60,6 +60,7 @@ SEXP closePpair(SEXP xx,    /* spatial coordinates */
   PROTECT(rr     = AS_NUMERIC(rr));
   PROTECT(nguess = AS_INTEGER(nguess));
   /* that's 5 protected arguments */
+#undef NINPUTS  
 #define NINPUTS 5
   
   /* Translate arguments from R to C */
@@ -236,6 +237,7 @@ SEXP crossPpair(SEXP xxA,    /* spatial coordinates */
   PROTECT(rr     = AS_NUMERIC(rr));
   PROTECT(nguess = AS_INTEGER(nguess));
   /* that's 7 protected arguments */
+#undef NINPUTS  
 #define NINPUTS 7
   
   /* Translate arguments from R to C */
