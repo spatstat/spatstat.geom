@@ -1,7 +1,7 @@
 #
 # close3Dpairs.R
 #
-#   $Revision: 1.17 $   $Date: 2022/05/21 09:52:11 $
+#   $Revision: 1.18 $   $Date: 2022/06/15 01:29:04 $
 #
 #  extract the r-close pairs from a 3D dataset
 # 
@@ -44,7 +44,7 @@ closepairs.pp3 <- local({
       splat("Using nsize =", nsize)
     } else {
       #' normal usage
-      npairs <- npts^2
+      npairs <- as.double(npts)^2
       if(npairs <= 1024) {
         nsize <- 1024
       } else {
@@ -200,7 +200,7 @@ crosspairs.pp3 <- local({
       splat("Using nsize =", nsize)
     } else {
       #' normal usage
-      nXY <- nX * nY
+      nXY <- as.double(nX) * as.double(nY)
       if(nXY <= 1024) {
         nsize <- 1024
       } else {

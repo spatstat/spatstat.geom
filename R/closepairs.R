@@ -1,7 +1,7 @@
 #
 # closepairs.R
 #
-#   $Revision: 1.51 $   $Date: 2022/06/06 09:47:07 $
+#   $Revision: 1.54 $   $Date: 2022/06/15 01:35:50 $
 #
 #  simply extract the r-close pairs from a dataset
 # 
@@ -67,7 +67,7 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
   } else {
     #' normal usage
     #' calculate a conservative estimate of the number of pairs
-    npairs <- npts^2
+    npairs <- as.double(npts)^2
     if(npairs <= 1024) {
       nsize <- 1024
     } else {
@@ -245,7 +245,7 @@ closepairs.ppp <- function(X, rmax, twice=TRUE,
     }
 
     got.twice <- TRUE
-    nsize <- nsize * 2
+    nsize <- as.integer(min(as.double(nsize) * 2, as.double(.Machine$integer.max)))
     z <-
       .C(SG_Fclosepairs,
          nxy=as.integer(npts),
@@ -484,8 +484,8 @@ crosspairs.ppp <- function(X, Y, rmax,
                         })
   nX <- npoints(X)
   nY <- npoints(Y)
-  nXY <- nX * nY
-  if(nXY == 0) return(null.answer)
+  if(nX == 0 || nY == 0) return(null.answer)
+  nXY <- as.double(nX) * as.double(nY)
   if(periodic) {
     ## ............... Periodic distance ..................
     if(!is.rectangle(Window(Y)))
@@ -561,14 +561,14 @@ crosspairs.ppp <- function(X, Y, rmax,
   if(spatstat.options("crosspairs.newcode")) {
     ## ------------------- use new faster code ---------------------
     ## First (over)estimate the number of pairs
-    nXY <- nX * nY
+    nXY <- as.double(nX) * as.double(nY)
     if(nXY <= 1024) {
       nsize <- 1024
     } else {
       catchfraction <- pi * (rmax^2)/area(Frame(Y))
       nsize <- ceiling(2 * catchfraction * nXY)
       nsize <- min(nsize, nXY)
-      nsize <- max(1024, nsize)
+      nsize <- max(1024L, nsize)
       if(nsize > .Machine$integer.max) {
         warning(
           "Estimated number of close pairs exceeds maximum possible integer",
@@ -738,7 +738,7 @@ closethresh <- function(X, R, S, twice=TRUE, ...) {
   oo <- fave.order(X$x)
   Xsort <- X[oo]
   ## First make an OVERESTIMATE of the number of pairs
-  npairs <- npts * (npts - 1)
+  npairs <- as.double(npts) * (as.double(npts) - 1)
   if(npairs <= 1024) {
     nsize <- 1024
   } else {

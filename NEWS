@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.4-0.028
+        CHANGES IN spatstat.geom VERSION 2.4-0.029
 
 OVERVIEW
 
@@ -52,6 +52,14 @@ BUG FIXES
     o plot.ppp
     Crashed with an obscure message when argument 'shape' was given,
     unless argument 'size' was also given.
+    Fixed.
+
+    o closepairs
+    Crashed if npoints(X)^2 exceeded the largest possible integer.
+    Fixed.
+
+    o crosspairs
+    Crashed if npoints(X) * npoints(Y) exceeded the largest possible integer.
     Fixed.
     
         CHANGES IN spatstat.geom VERSION 2.4-0
