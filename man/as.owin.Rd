@@ -211,7 +211,6 @@ in any of several formats, into an object of class \code{"owin"}.
  w <- as.owin(c(0,1,0,1))
  w <- as.owin(list(xrange=c(0,5),yrange=c(0,10)))
  # point pattern
- data(demopat)
  w <- as.owin(demopat)
  # image
  Z <- as.im(function(x,y) { x + 3}, unit.square())

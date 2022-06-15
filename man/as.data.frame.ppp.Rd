@@ -26,15 +26,11 @@
   A data frame.
 }
 \examples{
-  data(amacrine)
   df <- as.data.frame(amacrine)
   df[1:5,]
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{manip}

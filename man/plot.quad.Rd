@@ -63,7 +63,6 @@
   \code{\link[graphics]{par}}
 }
 \examples{
-   data(nztrees)
    Q <- quadscheme(nztrees)
 
    plot(Q, main="NZ trees: quadrature scheme")
@@ -73,10 +72,7 @@
    par(oldpar)
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
  

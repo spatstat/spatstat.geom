@@ -60,7 +60,6 @@
 }
 \examples{
   # multitype point pattern, broken down by type
-  data(amacrine)
   by(amacrine, FUN=minnndist)
   by(amacrine, FUN=function(x) { intensity(unmark(x)) })
 

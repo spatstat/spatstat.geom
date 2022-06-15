@@ -98,17 +98,12 @@ periodify(X, ...)
   \code{\link{shift}}
 }
 \examples{
-  data(cells)
   plot(periodify(cells))
   a <- lapply(periodify(Window(cells), combine=FALSE),
         plot, add=TRUE,lty=2)
-
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{manip}

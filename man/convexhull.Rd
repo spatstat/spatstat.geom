@@ -28,16 +28,12 @@ convexhull(x)
   \code{\link{is.convex}}
 }
 \examples{
-   data(demopat)
    W <- Window(demopat)
    plot(convexhull(W), col="lightblue", border=NA)
    plot(W, add=TRUE, lwd=2)
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{utilities}

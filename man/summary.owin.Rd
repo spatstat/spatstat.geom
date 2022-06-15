@@ -24,17 +24,13 @@
 \examples{
   summary(owin())  # the unit square
 
-  data(demopat)
   W <- Window(demopat)  # weird polygonal window
   summary(W)           # describes it
 
   summary(as.mask(W))  # demonstrates current pixel resolution
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{methods}

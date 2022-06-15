@@ -37,14 +37,10 @@
   \code{\link{erosion}}
 }
 \examples{
-  data(cells)
   d <- bdist.points(cells)
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{math}

@@ -29,7 +29,6 @@
   \code{\link{as.ppp}}
 }
 \examples{
-  data(simdat)
   Q <- quadscheme(simdat, default.dummy(simdat))
   U <- union.quad(Q)
   # plot(U)
@@ -38,10 +37,7 @@
   U <- as.ppp(Q)
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{manip}

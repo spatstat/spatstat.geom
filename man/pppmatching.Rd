@@ -44,9 +44,7 @@
   the meaning of these parameters.
 }
 \author{
-  Dominic Schuhmacher
-  \email{dominic.schuhmacher@stat.unibe.ch}
-  URL \code{http://dominic.schuhmacher.name/}
+  \dominic.
 }
 \seealso{
   \code{\link{pppmatching.object}}

@@ -48,7 +48,7 @@
 }
 \examples{
 # Bramble Canes data: 1 unit = 9 metres
-  data(bramblecanes)
+  bramblecanes
 # distance transform
   Z <- distmap(bramblecanes)
 # convert to metres
@@ -60,10 +60,7 @@
   Z <- rescale(Zm)
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{math}

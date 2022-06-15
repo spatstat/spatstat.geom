@@ -51,7 +51,6 @@
   \code{\link{shift}}
 }
 \examples{
-  data(swedishpines)
   W <- Window(swedishpines)
   W
 # coordinates are in decimetres (0.1 metre)
@@ -61,10 +60,7 @@
   rescale(W)
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{math}

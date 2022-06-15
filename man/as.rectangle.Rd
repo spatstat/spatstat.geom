@@ -51,17 +51,12 @@
   r <- as.rectangle(w)
   # returns a 10 x 10 rectangle
 
-  data(lansing)
   as.rectangle(lansing)
 
-  data(copper)
   as.rectangle(copper$SouthLines)
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{manip}

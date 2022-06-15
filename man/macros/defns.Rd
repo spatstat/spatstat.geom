@@ -6,6 +6,13 @@
 \newcommand{\spatstatAuthors}{\adrian, \rolf and \ege}
 %% Contributors with emails
 \newcommand{\pavel}{Pavel Grabarnik \email{pavel.grabar@issp.serpukhov.su}}
+\newcommand{\dominic}{Dominic Schuhmacher \email{dominic.schuhmacher@mathematik.uni-goettingen.de}, URL \code{http://dominic.schuhmacher.name/}}
+\newcommand{\wei}{Ang Qi Wei \email{aqw07398@hotmail.com}}
+\newcommand{\colette}{Marie-Colette van Lieshout \email{Marie-Colette.van.Lieshout@cwi.nl}}
+\newcommand{\rasmus}{Rasmus Plenge Waagepetersen \email{rw@math.auc.dk}}
+\newcommand{\abdollah}{Abdollah Jalilian \email{jalilian@razi.ac.ir}}
+\newcommand{\ottmar}{Ottmar Cronie \email{ottmar@chalmers.se}}
+\newcommand{\stephenEglen}{Stephen Eglen \email{S.J.Eglen@damtp.cam.ac.uk}}
 % Names with accents
 \newcommand{\Bogsted}{\ifelse{latex}{\out{B\o gsted}}{Bogsted}}
 \newcommand{\Cramer}{\ifelse{latex}{\out{Cram\'er}}{Cramer}}

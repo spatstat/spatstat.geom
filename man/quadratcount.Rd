@@ -153,7 +153,6 @@
  plot(qX, add=TRUE, col="red", cex=1.5, lty=2)
 
  # irregular window
- data(humberside)
  plot(humberside)
  qH <- quadratcount(humberside, 2, 3)
  plot(qH, add=TRUE, col="blue", cex=1.5, lwd=2)
@@ -168,10 +167,7 @@
  plot(qX, add=TRUE, col="red", cex=1.5, lty=2)
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{math}

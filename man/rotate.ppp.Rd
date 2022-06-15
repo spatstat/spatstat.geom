@@ -38,15 +38,11 @@
   \code{\link{rotate.owin}}
 }
 \examples{
-  data(cells)
   X <- rotate(cells, pi/3)
   # plot(X)
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{math}

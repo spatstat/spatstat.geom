@@ -31,14 +31,10 @@
   \code{\link{split.ppp}}
 }
 \examples{
-  data(amacrine)      # multitype point pattern
   summary(split(amacrine))
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{methods}

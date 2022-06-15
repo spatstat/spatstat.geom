@@ -70,7 +70,6 @@
   \code{\link[spatstat.explore]{Kest}}
 }
 \examples{
-   data(cells)
    d <- pairdist(cells)
    d <- pairdist(cells, periodic=TRUE)
    d <- pairdist(cells, squared=TRUE)

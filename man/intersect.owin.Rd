@@ -71,7 +71,7 @@
    u <- unit.square()
    v <- owin(c(0.5,3.5), c(0.4,2.5))
 # polygon
-   data(letterR)
+   letterR
 # mask
    m <- as.mask(letterR)
 

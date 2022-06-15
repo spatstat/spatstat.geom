@@ -104,7 +104,6 @@
   \code{\link{spokes}}
 }
 \examples{
-  data(simdat)
   P <- simdat
   D <- default.dummy(P, 100)
   \donttest{plot(D)}
@@ -112,10 +111,7 @@
   if(interactive()) {plot(union.quad(Q))}
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{datagen}

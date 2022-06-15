@@ -25,17 +25,13 @@
 \examples{
   owin()  # the unit square
 
-  data(demopat)
   W <- Window(demopat)
   W                    # just says it is polygonal
   as.mask(W)           # just says it is a binary image 
 
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{print}

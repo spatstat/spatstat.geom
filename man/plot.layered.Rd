@@ -86,10 +86,7 @@ Layered Plot
   an attribute \code{"bbox"} giving a bounding box for the entire plot.
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \seealso{
   \code{\link{layered}},
@@ -98,7 +95,6 @@ Layered Plot
   \code{\link{plot}}.
 }
 \examples{
-   data(cells)
    D <- distmap(cells)
    L <- layered(D, cells)
    plot(L)

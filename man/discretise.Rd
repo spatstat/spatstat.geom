@@ -75,7 +75,6 @@
   \code{\link{as.mask}}
 }
 \examples{
-  data(demopat)
   X <- demopat
   plot(X, main="original pattern")
   Y <- discretise(X, dimyx=50)

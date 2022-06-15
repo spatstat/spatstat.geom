@@ -176,9 +176,7 @@
   \emph{IEEE Transactions on Signal Processing} \bold{56}, 3447--3457.
 }
 \author{
-  Dominic Schuhmacher
-  \email{dominic.schuhmacher@mathematik.uni-goettingen.de} \cr
-  URL \code{http://dominic.schuhmacher.name/}
+  \dominic.
 }
 \seealso{
   \code{\link{pppmatching.object}}, \code{\link{matchingdist}},

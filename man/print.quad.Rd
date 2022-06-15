@@ -31,15 +31,11 @@
   \code{\link{summary.quad}}
 }
 \examples{
- data(cells)
  Q <- quadscheme(cells)
  Q
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{print}

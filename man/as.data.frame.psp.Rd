@@ -32,14 +32,10 @@
   A data frame with 4 or 5 columns.
 }
 \examples{
-  data(copper)
   df <- as.data.frame(copper$Lines)
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{manip}

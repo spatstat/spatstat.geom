@@ -233,7 +233,6 @@
   X <- ppp(x, y, window=disc(2))
 
   # copy the window from another pattern
-  data(cells)
   X <- ppp(x, y, window=Window(cells))
 }
 \author{\adrian

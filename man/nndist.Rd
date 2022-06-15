@@ -168,7 +168,6 @@
   \code{\link{minnndist}}, \code{\link{maxnndist}}.
 }
 \examples{
-   data(cells)
    # nearest neighbours
    d <- nndist(cells)
 

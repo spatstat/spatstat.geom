@@ -127,16 +127,8 @@ weights are never used and only appear to be compatible with the class
   \code{\link{as.ppp}}
 }
 \examples{
-  data(simdat)
-
   Q <- quadscheme.logi(simdat)
 }
-\author{\adrian
-  
-  ,
-  \rolf 
-  and \ege
-  .
-}
+\author{\spatstatAuthors.}
 \keyword{spatial}
 \keyword{datagen}

@@ -458,9 +458,7 @@
    plot(Y)
 }
 \references{
-  Baddeley, A., Rubak, E. and Turner, R. (2015)
-  \emph{Spatial Point Patterns: Methodology and Applications with R}.
-  Chapman and Hall/CRC Press.
+  \baddrubaturnbook
 }
 \author{
   \spatstatAuthors.

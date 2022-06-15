@@ -58,7 +58,6 @@
   \code{\link{affine}}
 }
 \examples{
-  data(cells)
   X <- shift(cells, c(2,3))
   # plot(X)
   # no discernible difference except coordinates are different
@@ -68,10 +67,7 @@
   shift(cells, origin="mid")
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{manip}

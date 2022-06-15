@@ -22,23 +22,16 @@
   \code{\link{summary.ppp}}
 }
 \examples{
-  data(cells)      # plain vanilla point pattern
-  cells
+  cells      # plain vanilla point pattern
 
-  data(lansing)    # multitype point pattern
-  lansing          
+  lansing    # multitype point pattern
   
-  data(longleaf)    # numeric marks
-  longleaf          
+  longleaf    # numeric marks
 
-  data(demopat)     # weird polygonal window
-  demopat
+  demopat     # weird polygonal window
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{print}

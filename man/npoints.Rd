@@ -34,14 +34,10 @@
   \code{\link{print.ppx}}.
 }
 \examples{
-   data(cells)
    npoints(cells)
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{manip}

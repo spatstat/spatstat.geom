@@ -54,7 +54,6 @@
    b <- owin(c(-1,2),c(-1,2))
    bmina <- complement.owin(a, frame=b)
    # polygonal
-   data(demopat)
    w <- Window(demopat)
    outside <- complement.owin(w)
    # mask
@@ -62,10 +61,7 @@
    outside <- complement.owin(w)
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{math}

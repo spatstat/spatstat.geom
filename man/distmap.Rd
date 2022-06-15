@@ -44,7 +44,6 @@
   \code{\link{distfun}}
 }
 \examples{
-  data(cells)
   U <- distmap(cells)
   V <- distmap(letterR)
   if(interactive()) {
@@ -53,10 +52,7 @@
   }
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{math}

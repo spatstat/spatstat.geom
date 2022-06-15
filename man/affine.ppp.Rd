@@ -42,7 +42,6 @@
   \code{\link{shift}}
 }
 \examples{
-  data(cells)
   # shear transformation
   X <- affine(cells, matrix(c(1,0,0.6,1),ncol=2))
   if(interactive()) {
@@ -52,10 +51,7 @@
   }
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{math}

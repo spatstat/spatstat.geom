@@ -60,9 +60,7 @@
   Numeric value of the distance associated with the matching.
 }
 \author{
-  Dominic Schuhmacher
-  \email{dominic.schuhmacher@stat.unibe.ch}
-  URL \code{http://dominic.schuhmacher.name/}
+  \dominic.
 }
 \seealso{
   \code{\link{pppdist}}

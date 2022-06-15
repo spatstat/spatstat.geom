@@ -52,7 +52,6 @@
   \code{\link{shift}}
 }
 \examples{
-   data(copper)
    X <- copper$Lines
    X
    # data are in km
@@ -63,10 +62,7 @@
    rescale(X, 1/1000, c("metre", "metres"))
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{math}

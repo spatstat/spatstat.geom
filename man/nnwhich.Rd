@@ -139,7 +139,6 @@
   \code{\link{nncross}}
 }
 \examples{
-   data(cells)
    plot(cells)
    m <- nnwhich(cells)
    m2 <- nnwhich(cells, k=2)

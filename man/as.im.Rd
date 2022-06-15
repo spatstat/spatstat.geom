@@ -307,7 +307,6 @@
   Separate documentation for \code{\link{as.im.ppp}}
 }
 \examples{
-  data(demopat)
   # window object
   W <- Window(demopat)
   plot(W)

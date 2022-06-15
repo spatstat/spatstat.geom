@@ -55,17 +55,13 @@
 }
 \examples{
 # Bramble Canes data: 1 unit = 9 metres
-  data(bramblecanes)
 # convert to metres
   bram <- rescale(bramblecanes, 1/9)
 # or equivalently
   bram <- rescale(bramblecanes)
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{math}

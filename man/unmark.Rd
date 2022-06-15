@@ -39,7 +39,6 @@
   \code{\link{psp.object}}
 }
 \examples{
-  data(lansing)
   hicks <- lansing[lansing$marks == "hickory", ]
 
   # plot(hicks)  # still a marked point pattern, but only 1 value of marks

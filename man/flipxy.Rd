@@ -39,14 +39,10 @@
   \code{\link{shift}}
 }
 \examples{
-  data(cells)
   X <- flipxy(cells)
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{math}

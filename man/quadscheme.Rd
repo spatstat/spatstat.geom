@@ -161,8 +161,6 @@
   \code{\link{spokes}}
 }
 \examples{
-  data(simdat)
-
   # grid weights
   Q <- quadscheme(simdat)
   Q <- quadscheme(simdat, method="grid")
@@ -189,10 +187,7 @@
   
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{datagen}
