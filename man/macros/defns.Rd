@@ -13,6 +13,7 @@
 \newcommand{\abdollah}{Abdollah Jalilian \email{jalilian@razi.ac.ir}}
 \newcommand{\ottmar}{Ottmar Cronie \email{ottmar@chalmers.se}}
 \newcommand{\stephenEglen}{Stephen Eglen \email{S.J.Eglen@damtp.cam.ac.uk}}
+\newcommand{\mehdi}{Mehdi Moradi \email{m2.moradi@yahoo.com}}
 % Names with accents
 \newcommand{\Bogsted}{\ifelse{latex}{\out{B\o gsted}}{Bogsted}}
 \newcommand{\Cramer}{\ifelse{latex}{\out{Cram\'er}}{Cramer}}

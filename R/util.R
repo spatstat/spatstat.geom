@@ -1,7 +1,7 @@
 #
 #    util.R    miscellaneous utilities
 #
-#    $Revision: 1.250 $    $Date: 2021/01/12 01:46:09 $
+#    $Revision: 1.252 $    $Date: 2022/06/16 05:38:12 $
 #
 
 # common invocation of matrixsample
@@ -282,8 +282,8 @@ progressreport <- local({
 
   progressreport
 })
-  
 
+## .... special tweaks .........
 
 multiply.only.finite.entries <- function(x, a) {
   # In ppm a potential value that is -Inf must remain -Inf
@@ -293,8 +293,6 @@ multiply.only.finite.entries <- function(x, a) {
   y[ok] <- a * x[ok]
   return(y)
 }
-
-
  
 ## print names and version numbers of libraries loaded
 
