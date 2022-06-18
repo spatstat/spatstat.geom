@@ -511,6 +511,12 @@ warn.once <- function(key, ...) {
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
        ),
+       check.glmnet.loaded=list(
+         # safety
+         default=TRUE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
+       ),
        check.nleqslv.loaded=list(
          # developmental
          default=TRUE,
