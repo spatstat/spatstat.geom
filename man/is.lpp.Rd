@@ -20,11 +20,9 @@ is.lpp(x)
   \code{TRUE} if \code{x} is a point pattern of class \code{"lpp"},
   otherwise \code{FALSE}.
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \adrian
+  and \rolf.
 }
 \keyword{spatial}
 \keyword{manip}

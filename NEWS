@@ -1,16 +1,21 @@
-        CHANGES IN spatstat.geom VERSION 2.999-999.002
+        CHANGES IN spatstat.geom VERSION 2.999-999.003
 
 OVERVIEW
 
     o Minor improvements and bug fixes.
 
+NEW FUNCTIONS
+
+    o is.linnet
+    Test whether an object is a linear network.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
-    o crosspairs
+    o crosspairs.ppp
     New argument 'periodic' specifies whether to use
     periodic (toroidal) distances.
 
-    o crosspairs
+    o crosspairs.ppp
     New arguments 'iX', 'iY' make it possible to eliminate pairs
     in which the two points are identical.
     
