@@ -7,6 +7,7 @@
 \usage{
   \method{plot}{psp}(x, \dots, main, add=FALSE,
                      show.all=!add, show.window=show.all, do.plot=TRUE,
+                     use.marks=TRUE,
                      which.marks=1,
                      style=c("colour", "width", "none"),
                      col=NULL, 
@@ -51,6 +52,11 @@
   }
   \item{do.plot}{
     Logical value indicating whether to actually perform the plot.
+  }
+  \item{use.marks}{
+    Logical value specifying whether to use the marks
+    attached to the segments (\code{use.marks=TRUE}, the default)
+    or to ignore them (\code{use.marks=FALSE}). 
   }
   \item{which.marks}{
     Index determining which column of marks to use,
@@ -186,7 +192,7 @@
       The width map will be displayed as a vertical stack of lines
       to the right of the plot, if \code{legend=TRUE} (the default).
     }
-    \item{\code{style="none"}:}{
+    \item{\code{style="none"} or \code{use.marks=FALSE}:}{
       Mark information is ignored and the
       segments are plotted as thin lines using \code{\link[graphics]{segments}}.
     }

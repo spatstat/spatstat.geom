@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 2.999-999.003
+        CHANGES IN spatstat.geom VERSION 2.999-999.004
 
 OVERVIEW
 
@@ -8,6 +8,9 @@ NEW FUNCTIONS
 
     o is.linnet
     Test whether an object is a linear network.
+
+    o as.data.frame.ppplist
+    Method for 'as.data.frame' for lists of point patterns.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -41,8 +44,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New argument 'weight' specifies a weight function for the integration.
     
     o markstat, applynbd
-    These functions now work for point patterns in three dimensions (class 'pp3')
-    and point patterns on a network (class 'lpp').
+    These functions now work for point patterns in three dimensions
+    (class 'pp3') and point patterns on a network (class 'lpp').
+
+    o plot.psp
+    New argument 'use.marks', for consistency with other methods.
     
 BUG FIXES
 

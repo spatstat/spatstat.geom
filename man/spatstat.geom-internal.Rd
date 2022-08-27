@@ -20,6 +20,7 @@
 \alias{AsymmDistance.psp}
 \alias{as.breakpts}
 \alias{as.character.unitname}
+\alias{as.data.frame.ppplist}
 \alias{as.double.im}
 \alias{as.imlist}
 \alias{as.linimlist}
@@ -366,6 +367,7 @@ areaLoss.poly(X, r, \dots, W, subset, splitem)
 AsymmDistance.psp(X, Y, metric, method)
 as.breakpts(\dots)
 \method{as.character}{unitname}(x, \dots)
+\method{as.data.frame}{ppplist}(x, row.names, \dots)
 \method{as.double}{im}(x, \dots)
 as.imlist(x, check)
 as.linimlist(x, check)

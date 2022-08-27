@@ -15,7 +15,7 @@ cat(paste("--------- Executing",
 #'
 #'   tests/ppp.R
 #'
-#'   $Revision: 1.12 $ $Date: 2020/12/04 04:43:33 $
+#'   $Revision: 1.14 $ $Date: 2022/08/27 04:49:32 $
 #'
 #'  Untested cases in ppp() or associated code
 
@@ -98,6 +98,12 @@ local({
     W1 <- cobble.xy(xx, yy)
     W2 <- cobble.xy(xx, yy, boundingbox)
     Wnope <- cobble.xy(xx, yy, function(x,y) {cbind(x,y)}, fatal=FALSE)
+
+    ## as.data.frame.ppplist
+    Z <- runifrect(3, nsim=4)
+    Z[[2]] <- Z[[2]][1]
+    Z[[3]] <- Z[[3]][FALSE]
+    d <- as.data.frame(Z)
   }
 })
 

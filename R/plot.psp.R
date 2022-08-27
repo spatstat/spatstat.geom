@@ -3,12 +3,13 @@
 #'
 #'  plot method for segment patterns
 #'
-#'  $Revision: 1.5 $ $Date: 2020/12/19 05:25:06 $
+#'  $Revision: 1.6 $ $Date: 2022/08/06 10:24:57 $
 
 plot.psp <- function(x, ..., main, add=FALSE,
                      show.all=!add, 
                      show.window=show.all,
                      do.plot=TRUE,
+                     use.marks=TRUE,
                      which.marks=1,
                      style=c("colour", "width", "none"),
                      col=NULL,
@@ -29,7 +30,7 @@ plot.psp <- function(x, ..., main, add=FALSE,
   marx <- marks(x)
   #'
   style <- match.arg(style)
-  use.marks <- !is.null(marx) && (n != 0) && (style != "none")
+  use.marks <- use.marks && !is.null(marx) && (n != 0) && (style != "none")
   #'
   if(use.marks && style == "width") {
     #' plot marks as line width

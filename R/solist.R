@@ -7,7 +7,7 @@
 ##
 ## plot.solist is defined in plot.solist.R
 ##
-## $Revision: 1.24 $ $Date: 2020/11/29 10:08:34 $
+## $Revision: 1.28 $ $Date: 2022/08/27 04:11:07 $
 
 anylist <- function(...) {
   x <- list(...)
@@ -168,6 +168,35 @@ print.summary.solist <- function(x, ...) {
 as.layered.solist <- function(X) {
   layered(LayerList=X)
 }
+
+#'  ----- ppplist and imlist methods ----------------------------
+
+as.data.frame.ppplist <- local({
+
+  rnf <- function(x) {
+    n <- nrow(x)
+    if(n > 0) 
+      row.names(x) <- paste("Point", seq_len(n))
+    return(x)
+  }
+  
+  as.data.frame.ppplist <- function(x, row.names = NULL, ...) {
+    y <- lapply(lapply(x, as.data.frame.ppp), rnf)
+    if(is.null(row.names)) {
+      #' work around a quirk of 'rbind'
+      singleton <- (sapply(y, nrow) == 1)
+      if(any(singleton))
+        names(y)[singleton] <- paste0(names(x)[singleton], ".Point 1")
+    }
+    z <- do.call(rbind, y)
+    if(!is.null(row.names)) 
+      row.names(z) <- row.names
+    return(z)
+  }
+
+  as.data.frame.ppplist
+  
+})
 
 #'  ----- ppplist and imlist ----------------------------
 #'  for efficiency only
