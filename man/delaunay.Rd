@@ -12,11 +12,14 @@ delaunay(X)
 }
 \details{
   The Delaunay triangulation of a spatial point pattern \code{X}
-  is defined as follows. First the Dirichlet/Voronoi tessellation of \code{X}
-  computed; see \code{\link{dirichlet}}. Then two points of \code{X}
+  is defined as follows. First the Dirichlet/Voronoi tessellation
+  based on \code{X} is computed; see \code{\link{dirichlet}}. This
+  tessellation is extended to cover the entire two-dimensional plane.
+  Then two points of \code{X}
   are defined to be Delaunay neighbours if their Dirichlet/Voronoi tiles
   share a common boundary. Every pair of Delaunay neighbours is
-  joined by a straight line. The result is a tessellation, consisting of
+  joined by a straight line to make the Delaunay triangulation.
+  The result is a tessellation, consisting of
   disjoint triangles. The union of these triangles is the convex hull of
   \code{X}.
 }
