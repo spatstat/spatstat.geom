@@ -4,7 +4,7 @@
        Distance transform of a discrete binary image
        (8-connected path metric)
        
-       $Revision: 1.9 $ $Date: 2022/10/22 02:44:37 $
+       $Revision: 1.10 $ $Date: 2022/10/22 09:29:51 $
 
        
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
@@ -16,9 +16,11 @@
 #include "raster.h"
 #include <R_ext/Utils.h>
 
-void   dist_to_bdry();
-void   shape_raster();
+void dist_to_bdry(Raster *d);
 
+void shape_raster(Raster *ras, void *data,
+		  double xmin, double ymin, double xmax, double ymax,
+		  int nrow, int ncol, int mrow, int mcol);
 
 void
 distmap_bin(

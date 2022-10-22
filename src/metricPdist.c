@@ -6,7 +6,7 @@
 
   This code #includes metricPdist.h multiple times.
 
-  $Revision: 1.4 $  $Date: 2022/10/21 10:43:01 $
+  $Revision: 1.5 $  $Date: 2022/10/22 09:29:51 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -18,8 +18,10 @@
 #include <math.h>
 #include "raster.h"
 
-void   dist_to_bdry();
-void   shape_raster();
+void dist_to_bdry(Raster *d);
+void shape_raster(Raster *ras, void *data,
+		  double xmin, double ymin, double xmax, double ymax,
+		  int nrow, int ncol, int mrow, int mcol);
 
 #define UNDEFINED -1
 #define Is_Defined(I) (I >= 0)
@@ -52,8 +54,7 @@ void   shape_raster();
 #define MTEMPDECLARE double asp; asp=*aspect
 #define METRIC(X,Y,XX,YY) rectdist(X,Y,XX,YY,asp)
 
-double rectdist(x, y, xx, yy, asp)
-     double x, y, xx, yy, asp;
+double rectdist(double x, double y, double xx, double yy, double asp)
 {
   double dx, dy, d;
   dx = x-xx;
@@ -87,11 +88,15 @@ double rectdist(x, y, xx, yy, asp)
 #define MTEMPDECLARE int Ns; Ns=*ns; 
 #define METRIC(X,Y,XX,YY) convdist(X,Y,XX,YY,Ns,sx,sy)
 
-double convdist(x, y, xx, yy, Ns, sx, sy)
-  double x, y, xx, yy;
-  int Ns;
-  double *sx, *sy;
-{
+double convdist(
+  double x,
+  double y,
+  double xx,
+  double yy,
+  int Ns,
+  double *sx,
+  double *sy
+) {
   int k;
   double dx, dy, dk, d;
   dx = x-xx;

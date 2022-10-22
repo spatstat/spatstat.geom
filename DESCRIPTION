@@ -1,23 +1,25 @@
 Package: spatstat.geom
-Version: 3.0-0
+Version: 3.0-1
 Date: 2022-10-22
 Title: Geometrical Functionality of the 'spatstat' Family 
 Authors@R: c(person("Adrian", "Baddeley", 
-                    role = c("aut", "cre"),
+                    role = c("aut", "cre", "cph"),
        	            email = "Adrian.Baddeley@curtin.edu.au",
 		    comment = c(ORCID="0000-0001-9499-8382")),
 	     person("Rolf", "Turner", 
-                    role = "aut",
+                    role = c("aut", "cph"),
  	            email="r.turner@auckland.ac.nz",
 		    comment=c(ORCID="0000-0001-5521-5218")),
 	     person("Ege",   "Rubak", 
-                    role = "aut",
+                    role = c("aut", "cph"),
 		    email = "rubak@math.aau.dk",
 		    comment=c(ORCID="0000-0002-6675-533X")),
 	     person("Tilman",    "Davies",        role = "ctb"),
 	     person("Ute",       "Hahn",          role = "ctb"),
 	     person("Abdollah",  "Jalilian",      role = "ctb"),
- 	     person("Sebastian", "Meyer",         role = "ctb"),
+ 	     person("Greg",      "McSwiggan",     role = c("ctb", "cph")),
+ 	     person("Sebastian", "Meyer",         role = c("ctb", "cph")),
+	     person("Jens",      "Oehlschlaegel", role = c("ctb", "cph")),
 	     person("Suman",     "Rakshit",       role = "ctb"),
 	     person("Dominic",   "Schuhmacher",   role = "ctb"),
 	     person("Rasmus",    "Waagepetersen", role = "ctb"))

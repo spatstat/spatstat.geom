@@ -3,7 +3,7 @@
 
   Scan transform
 
-  $Revision: 1.5 $ $Date: 2022/10/22 02:51:58 $
+  $Revision: 1.6 $ $Date: 2022/10/22 09:29:51 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -13,7 +13,9 @@
 #include <math.h>
 #include "raster.h"
 
-void shape_raster();
+void shape_raster(Raster *ras, void *data,
+		  double xmin, double ymin, double xmax, double ymax,
+		  int nrow, int ncol, int mrow, int mcol);
 
 void
 Cscantrans(

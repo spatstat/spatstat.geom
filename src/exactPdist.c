@@ -4,7 +4,7 @@
        `Pseudoexact' distance transform of a discrete binary image
        (the closest counterpart to `exactdist.c')
        
-       $Revision: 1.14 $ $Date: 2022/10/21 10:43:01 $
+       $Revision: 1.15 $ $Date: 2022/10/22 09:29:51 $
 
        
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
@@ -15,8 +15,11 @@
 #include <math.h>
 #include "raster.h"
 
-void   dist_to_bdry();
-void   shape_raster();
+void dist_to_bdry(Raster *d);
+
+void shape_raster(Raster *ras, void *data,
+		  double xmin, double ymin, double xmax, double ymax,
+		  int nrow, int ncol, int mrow, int mcol);
 
 void
 ps_exact_dt(

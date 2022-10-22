@@ -9,7 +9,7 @@
   Copyright (C) Adrian Baddeley, Rolf Turner and Ege Rubak 2014
   Licence: GPL >= 2
 
-  $Revision: 1.2 $  $Date: 2014/08/31 06:43:42 $
+  $Revision: 1.3 $  $Date: 2022/10/22 09:29:51 $
 
 
 */
@@ -18,7 +18,7 @@
 #include <R_ext/Utils.h>
 #include <math.h>
 
-double sqrt();
+double sqrt(double x);
 
 #define FNAME fardistgrid
 #undef  SQUARED

@@ -2,7 +2,7 @@
 
   closepair.c
 
-  $Revision: 1.38 $     $Date: 2022/10/22 02:44:48 $
+  $Revision: 1.39 $     $Date: 2022/10/22 09:29:51 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -48,7 +48,7 @@
 #define dblRealloc(PTR, OLDLENGTH, NEWLENGTH) \
   (double *) S_realloc((char *) PTR, NEWLENGTH, OLDLENGTH, sizeof(double))
 
-double sqrt();
+double sqrt(double x);
 
 /* count TOTAL number of close pairs */
 

@@ -8,7 +8,7 @@
 
    Coordinates are NOT assumed to be sorted
    
-   $Revision: 1.6 $ $Date: 2022/06/12 07:32:56 $
+   $Revision: 1.7 $ $Date: 2022/10/22 09:29:51 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -29,7 +29,7 @@
 #define dblRealloc(PTR, OLDLENGTH, NEWLENGTH) \
   (double *) S_realloc((char *) PTR, NEWLENGTH, OLDLENGTH, sizeof(double))
 
-double sqrt();
+double sqrt(double x);
 
 /* counterpart of 'closepairs' */
 

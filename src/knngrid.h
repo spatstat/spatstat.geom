@@ -19,7 +19,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2013
   Licence: GPL >= 2
 
-  $Revision: 1.6 $  $Date: 2016/02/02 01:31:50 $
+  $Revision: 1.7 $  $Date: 2022/10/22 09:16:41 $
 
 
 */
@@ -27,22 +27,26 @@
 
 #undef PRINTALOT
 
-void FNAME(nx, x0, xstep,  
-	   ny, y0, ystep,   /* pixel grid dimensions */
-           np, xp, yp,   /* data points */
-	   kmax,
-	   nnd, nnwhich, 
-	   huge)
-     /* inputs */
-     int *nx, *ny, *np;
-     double *x0, *xstep, *y0, *ystep, *huge;
-     double *xp, *yp;
-     int *kmax;
-     /* outputs */
-     double *nnd;
-     int *nnwhich;
-     /* some inputs + outputs are not used in all functions */
-{ 
+void FNAME(
+  /* pixel grid dimensions */	   
+  int *nx,
+  double *x0,
+  double *xstep,  
+  int *ny,
+  double *y0,
+  double *ystep,
+  /* data points */  
+  int *np,
+  double *xp,
+  double *yp,
+  /* maximum order of neighbours */
+  int *kmax,
+  /* outputs */
+  double *nnd, 
+  int *nnwhich,
+  /* prior upper bound on pairwise distances */
+  double *huge
+) { 
   int Nxcol, Nyrow;
   int i, j, ijpos;
   int Npoints, Nk, Nk1;

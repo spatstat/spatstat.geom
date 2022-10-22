@@ -7,7 +7,7 @@
   in which the pixels are unit squares 
   and the pixel centres start at (0,0)
 
-  $Revision: 1.3 $ $Date: 2022/10/21 10:43:01 $
+  $Revision: 1.5 $ $Date: 2022/10/22 10:09:51 $
 
  */
 
@@ -19,7 +19,8 @@
 #include "chunkloop.h"
 #include "yesno.h"
 
-double sqrt(), fround();
+double sqrt(double x);
+/* fround is defined in Rmath.h */
 
 void 
 nearestvalidpixel(

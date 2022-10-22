@@ -4,7 +4,7 @@
        Exact distance transform of a point pattern
        (used to estimate the empty space function F)
        
-       $Revision: 1.19 $ $Date: 2022/10/21 10:43:01 $
+       $Revision: 1.20 $ $Date: 2022/10/22 09:29:51 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -38,7 +38,9 @@
 #include <R.h>
 #endif
 
-void shape_raster();
+void shape_raster(Raster *ras, void *data,
+		  double xmin, double ymin, double xmax, double ymax,
+		  int nrow, int ncol, int mrow, int mcol);
 
 void
 exact_dt(

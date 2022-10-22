@@ -7,7 +7,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2022
   Licence: GNU Public Licence >= 2
 
-  $Revision: 1.8 $     $Date: 2022/10/22 02:44:26 $
+  $Revision: 1.9 $     $Date: 2022/10/22 09:29:51 $
 
   Function body definition is #included from knngrid.h 
 
@@ -23,7 +23,7 @@
 
 #include "yesno.h"
 
-double sqrt();
+double sqrt(double x);
 
 /* THE FOLLOWING CODE ASSUMES THAT x IS SORTED IN ASCENDING ORDER */
 

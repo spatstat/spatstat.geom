@@ -7,7 +7,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2013
   Licence: GNU Public Licence >= 2
 
-  $Revision: 1.10 $     $Date: 2022/10/22 02:44:32 $
+  $Revision: 1.11 $     $Date: 2022/10/22 09:29:51 $
 
   Function definitions are #included from knndist.h and knnXdist.h
 
@@ -39,7 +39,7 @@
 
 #include "yesno.h"
 
-double sqrt();
+double sqrt(double x);
 
 /* THE FOLLOWING CODE ASSUMES THAT y IS SORTED IN ASCENDING ORDER */
 

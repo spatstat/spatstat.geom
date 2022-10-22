@@ -4,7 +4,7 @@
 
   Distances between pairs of 3D points
 
-  $Revision: 1.7 $     $Date: 2022/10/22 02:44:42 $
+  $Revision: 1.8 $     $Date: 2022/10/22 09:29:51 $
 
   D3pairdist      Pairwise distances
   D3pair2dist     Pairwise distances squared
@@ -25,7 +25,7 @@
 #include <math.h>
 /* #include <stdio.h> */
 
-double sqrt();
+double sqrt(double x);
 
 void D3pairdist(
   /* inputs */

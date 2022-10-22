@@ -4,7 +4,7 @@
 
   Nearest Neighbour Distances in m dimensions
 
-  $Revision: 1.21 $     $Date: 2022/10/22 02:48:55 $
+  $Revision: 1.22 $     $Date: 2022/10/22 09:29:51 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -41,7 +41,7 @@
 
 #include "yesno.h"
 
-double sqrt();
+double sqrt(double x);
 
 void nndMD(
   int *n,        /* number of points */

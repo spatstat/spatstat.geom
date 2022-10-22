@@ -7,7 +7,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2012
   Licence: GNU Public Licence >= 2
 
-  $Revision: 1.22 $     $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.24 $     $Date: 2022/10/22 10:09:51 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -39,7 +39,7 @@
 
 #include "yesno.h"
 
-double sqrt();
+double sqrt(double x);
 
 /* THE FOLLOWING CODE ASSUMES THAT y IS SORTED IN ASCENDING ORDER */
 
@@ -80,48 +80,6 @@ double sqrt();
 #include "nndist.h"
 
 /* --------------- two distinct point patterns X and Y  ----------------- */
-
-/* general interface */
-
-void nnXinterface(n1, x1, y1, id1, 
-		  n2, x2, y2, id2, 
-		  exclude, wantdist, wantwhich,
-		  nnd, nnwhich, 
-		  huge)
-     /* inputs */
-     int *n1, *n2;
-     double *x1, *y1, *x2, *y2, *huge;
-     int *id1, *id2;
-     /* options */
-     int *exclude, *wantdist, *wantwhich;
-     /* outputs */
-     double *nnd;
-     int *nnwhich;
-{
-  void nnX(), nnXdist(), nnXwhich();
-  void nnXE(), nnXEdist(), nnXEwhich();
-  int ex, di, wh;
-  ex = (*exclude != 0);
-  di = (*wantdist != 0);
-  wh = (*wantwhich != 0);
-  if(!ex) {
-    if(di && wh) {
-      nnX(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
-    } else if(di) {
-      nnXdist(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
-    } else if(wh) {
-      nnXwhich(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
-    } 
-  } else {
-    if(di && wh) {
-      nnXE(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
-    } else if(di) {
-      nnXEdist(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
-    } else if(wh) {
-      nnXEwhich(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
-    } 
-  }
-}
 
 
 /* 
@@ -215,4 +173,54 @@ void nnXinterface(n1, x1, y1, id1,
 #define WHICH
 #define EXCLUDE
 #include "nndistX.h"
+
+
+/* general interface */
+
+void nnXinterface(
+   /* first point pattern */
+   int *n1,
+   double *x1,
+   double *y1,
+   int *id1, 
+   /* second point pattern */
+   int *n2,
+   double *x2,
+   double *y2,
+   int *id2, 
+   /* options */
+   int *exclude,
+   int *wantdist,
+   int *wantwhich,
+   /* outputs */
+   double *nnd,
+   int *nnwhich, 
+   /* prior upper bound on pairwise distances */
+   double *huge
+) {
+  /* defined above */
+  /* void nnX(), nnXdist(), nnXwhich(); */
+  /* void nnXE(), nnXEdist(), nnXEwhich(); */
+  int ex, di, wh;
+  ex = (*exclude != 0);
+  di = (*wantdist != 0);
+  wh = (*wantwhich != 0);
+  if(!ex) {
+    if(di && wh) {
+      nnX(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
+    } else if(di) {
+      nnXdist(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
+    } else if(wh) {
+      nnXwhich(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
+    } 
+  } else {
+    if(di && wh) {
+      nnXE(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
+    } else if(di) {
+      nnXEdist(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
+    } else if(wh) {
+      nnXEwhich(n1, x1, y1, id1, n2, x2, y2, id2, nnd, nnwhich, huge);
+    } 
+  }
+}
 

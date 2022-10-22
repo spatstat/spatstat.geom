@@ -9,7 +9,7 @@
        cocoGraph: connected component labels for a discrete graph
                    specified by a list of edges
        
-       $Revision: 1.10 $ $Date: 2022/10/20 10:57:43 $
+       $Revision: 1.11 $ $Date: 2022/10/22 09:29:51 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -23,10 +23,11 @@
 #include <R_ext/Utils.h>
 
 #include "raster.h"
-void   shape_raster();
-
 #include "yesno.h"
 
+void shape_raster(Raster *ras, void *data,
+		  double xmin, double ymin, double xmax, double ymax,
+		  int nrow, int ncol, int mrow, int mcol);
 
 /* workhorse function for cocoImage */
 

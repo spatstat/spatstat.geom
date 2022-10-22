@@ -4,7 +4,7 @@
 
   Distances between pairs of points
 
-  $Revision: 1.33 $     $Date: 2022/10/21 10:43:01 $
+  $Revision: 1.34 $     $Date: 2022/10/22 10:09:51 $
 
   Cpairdist      Pairwise distances
   Cpair2dist     Pairwise distances squared
@@ -24,7 +24,7 @@
 #include <R_ext/Utils.h>
 #include "chunkloop.h"
 
-double sqrt();
+double sqrt(double x);
 
 void Cpairdist(
      /* inputs */

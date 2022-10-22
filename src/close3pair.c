@@ -2,7 +2,7 @@
 
   close3pair.c
 
-  $Revision: 1.3 $     $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.4 $     $Date: 2022/10/22 09:29:51 $
 
   closepairs and crosspairs for 3D
 
@@ -27,7 +27,7 @@
 #define dblRealloc(PTR, OLDLENGTH, NEWLENGTH) \
   (double *) S_realloc((char *) PTR, NEWLENGTH, OLDLENGTH, sizeof(double))
 
-double sqrt();
+double sqrt(double x);
 
 /* .......  define functions, using closefuns.h  ........*/
 

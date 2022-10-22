@@ -24,23 +24,32 @@
    such that
    x1[i], y1[i] and x2[j], y2[j] are the same point iff id1[i] = id2[j].
 
-  $Revision: 1.7 $ $Date: 2021/04/12 08:15:12 $
+  $Revision: 1.8 $ $Date: 2022/10/22 09:22:51 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
 
 */
 
-void FNAME(n1, x1, y1, z1, id1, 
-	   n2, x2, y2, z2, id2,
-	   nnd, nnwhich, huge)
-/* inputs */
-     int *n1, *n2, *id1, *id2;
-     double *x1, *y1, *z1, *x2, *y2, *z2, *huge;
-     /* outputs */
-     double *nnd;
-     int *nnwhich;
-{ 
+void FNAME(
+  /* first point pattern */	   
+  int *n1,
+  double *x1,
+  double *y1,
+  double *z1,
+  int *id1, 
+  /* second point pattern */	   
+  int *n2,
+  double *x2,
+  double *y2,
+  double *z2,
+  int *id2,
+  /* outputs */
+  double *nnd,     /* n.n. distances */
+  int *nnwhich,    /* n.d. identifiers */
+  /* prior upper bound on pairwise distances */
+  double *huge
+) { 
   int npoints1, npoints2, i, j, jwhich, lastjwhich;
   double d2, d2min, x1i, y1i, z1i, dx, dy, dz, dz2, hu, hu2;
 #ifdef EXCLUDE

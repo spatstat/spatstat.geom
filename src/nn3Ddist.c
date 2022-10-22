@@ -4,7 +4,7 @@
 
   Nearest Neighbour Distances in 3D 
 
-  $Revision: 1.14 $     $Date: 2022/10/22 02:46:24 $
+  $Revision: 1.15 $     $Date: 2022/10/22 09:29:51 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -32,7 +32,7 @@
 
 #include "yesno.h"
 
-double sqrt();
+double sqrt(double x);
 
 /* >>>>>>>>>>>> NEAREST NEIGHBOURS <<<<<<<<<<<<<<<<<<<<<<<< */
 
