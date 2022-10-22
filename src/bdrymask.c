@@ -7,7 +7,7 @@
   Copyright (C) Adrian Baddeley, Rolf Turner and Ege Rubak 2014
   Licence: GPL >= 2
 
-  $Revision: 1.3 $  $Date: 2016/02/02 01:29:50 $
+  $Revision: 1.4 $  $Date: 2022/10/20 10:57:43 $
 
 
 */
@@ -16,12 +16,14 @@
 #include <R_ext/Utils.h>
 #include <math.h>
 
-void bdrymask(nx, ny, m, b)
-     /* inputs */
-     int *nx, *ny, *m;
-     /* outputs */
-     int *b;
-{ 
+void bdrymask(
+  /* inputs */
+  int *nx,
+  int *ny,
+  int *m,
+  /* outputs */
+  int *b
+) { 
   int Nxcol, Nyrow, Nx1, Ny1;
   int i, j, mij;
 

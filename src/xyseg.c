@@ -6,7 +6,7 @@
 
   xysegint     compute intersections between line segments
 
-  $Revision: 1.20 $     $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.22 $     $Date: 2022/10/22 02:54:08 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -64,19 +64,28 @@
 */
 	     
 
-void xysegint(na, x0a, y0a, dxa, dya, 
-              nb, x0b, y0b, dxb, dyb, 
-	      eps,
-              xx, yy, ta, tb, ok)
-     /* inputs (vectors of coordinates) */
-     int *na, *nb;
-     double *x0a, *y0a, *dxa, *dya, *x0b, *y0b, *dxb, *dyb;
-     /* input (tolerance for determinant) */
-     double *eps;  
-     /* outputs (matrices) */
-     double *xx, *yy, *ta, *tb;
-     int *ok;
-{ 
+void xysegint(
+  /* first segment pattern */	      
+  int *na,
+  double *x0a,
+  double *y0a,
+  double *dxa,
+  double *dya, 
+  /* second segment pattern */	      
+  int *nb,
+  double *x0b,
+  double *y0b,
+  double *dxb,
+  double *dyb,
+  /* tolerance for determinant */
+  double *eps,
+  /* output matrices */
+  double *xx,
+  double *yy,
+  double *ta,
+  double *tb,
+  int *ok
+) { 
   int i, j, ma, mb, ijpos, maxchunk;
   double determinant, absdet, diffx, diffy, tta, ttb, epsilon;
 
@@ -128,18 +137,24 @@ void xysegint(na, x0a, y0a, dxa, dya,
    Stripped-down version of xysegint that just returns logical matrix 
 */
 
-void xysi(na, x0a, y0a, dxa, dya, 
-              nb, x0b, y0b, dxb, dyb, 
-	      eps,
-              ok)
-     /* inputs (vectors of coordinates) */
-     int *na, *nb;
-     double *x0a, *y0a, *dxa, *dya, *x0b, *y0b, *dxb, *dyb;
-     /* input (tolerance for determinant) */
-     double *eps;  
-     /* outputs (matrices) */
-     int *ok;
-{ 
+void xysi(
+  /* first segment pattern */	      
+  int *na,
+  double *x0a,
+  double *y0a,
+  double *dxa,
+  double *dya, 
+  /* second segment pattern */	      
+  int *nb,
+  double *x0b,
+  double *y0b,
+  double *dxb,
+  double *dyb,
+  /* tolerance for determinant */
+  double *eps,
+  /* output matrix */
+  int *ok
+) { 
   int i, j, ma, mb, ijpos, maxchunk;
   double determinant, absdet, diffx, diffy, tta, ttb, epsilon;
 
@@ -174,18 +189,24 @@ void xysi(na, x0a, y0a, dxa, dya,
    Test whether there is at least one intersection
 */
 
-void xysiANY(na, x0a, y0a, dxa, dya, 
-		nb, x0b, y0b, dxb, dyb, 
-		eps,
-		ok)
-     /* inputs (vectors of coordinates) */
-     int *na, *nb;
-     double *x0a, *y0a, *dxa, *dya, *x0b, *y0b, *dxb, *dyb;
-     /* input (tolerance for determinant) */
-     double *eps;  
-     /* output (single logical value) */
-     int *ok;
-{ 
+void xysiANY(
+  /* first segment pattern */	      
+  int *na,
+  double *x0a,
+  double *y0a,
+  double *dxa,
+  double *dya, 
+  /* second segment pattern */	      
+  int *nb,
+  double *x0b,
+  double *y0b,
+  double *dxb,
+  double *dyb,
+  /* tolerance for determinant */
+  double *eps,
+  /* output (single logical value) */
+  int *ok
+) { 
   int i, j, ma, mb, maxchunk;
   double determinant, absdet, diffx, diffy, tta, ttb, epsilon;
 
@@ -221,19 +242,22 @@ void xysiANY(na, x0a, y0a, dxa, dya,
     when segments in list 'a' are infinite vertical lines
 */
 
-void xysegVslice(na, xa,  
-		 nb, x0b, y0b, dxb, dyb, 
-		 eps,
-		 yy, ok)
-     /* inputs (vectors of coordinates) */
-     int *na, *nb;
-     double *xa, *x0b, *y0b, *dxb, *dyb;
-     /* input (tolerance for determinant) */
-     double *eps;  
-     /* outputs (matrices) */
-     double *yy;
-     int *ok;
-{ 
+void xysegVslice(
+  /* first pattern (vertical lines) */
+  int *na,
+  double *xa,
+  /* second pattern (segments) */	      
+  int *nb,
+  double *x0b,
+  double *y0b,
+  double *dxb,
+  double *dyb,
+  /* tolerance for determinant */
+  double *eps,
+  /* outputs (matrices) */
+  double *yy,
+  int *ok
+) { 
   int i, j, ma, mb, ijpos, maxchunk;
   double diffx0, diffx1, width, abswidth, epsilon;
   int notvertical;
@@ -286,18 +310,22 @@ void xysegVslice(na, xa,
 
 */
 
-void xysegXint(n, x0, y0, dx, dy, 
-	      eps,
-              xx, yy, ti, tj, ok)
-     /* inputs (vectors of coordinates) */
-     int *n;
-     double *x0, *y0, *dx, *dy;
-     /* input (tolerance for determinant) */
-     double *eps;  
-     /* outputs (matrices) */
-     double *xx, *yy, *ti, *tj;
-     int *ok;
-{ 
+void xysegXint(
+  /* segment pattern */
+  int *n,
+  double *x0,
+  double *y0,
+  double *dx,
+  double *dy,
+  /* tolerance for determinant */
+  double *eps,  
+  /* outputs (matrices) */
+  double *xx,
+  double *yy,
+  double *ti,
+  double *tj,
+  int *ok
+) { 
   int i, j, m, mm1, ijpos, jipos, iipos, maxchunk;
   double determinant, absdet, diffx, diffy, tti, ttj, epsilon;
 
@@ -348,17 +376,18 @@ void xysegXint(n, x0, y0, dx, dy,
 
 */
 
-void xysxi(n, x0, y0, dx, dy, 
-	      eps,
-              ok)
-     /* inputs (vectors of coordinates) */
-     int *n;
-     double *x0, *y0, *dx, *dy;
-     /* input (tolerance for determinant) */
-     double *eps;  
-     /* outputs (matrices) */
-     int *ok;
-{ 
+void xysxi(
+  /* segment pattern */
+  int *n,
+  double *x0,
+  double *y0,
+  double *dx,
+  double *dy,
+  /* tolerance for determinant */
+  double *eps,  
+  /* output (matrix) */
+  int *ok
+) { 
   int i, j, m, mm1, ijpos, jipos, iipos, maxchunk;
   double determinant, absdet, diffx, diffy, tti, ttj, epsilon;
 
@@ -409,18 +438,22 @@ void xysxi(n, x0, y0, dx, dy,
 
 */
 
-void Cxypolyselfint(n, x0, y0, dx, dy, 
-	      eps,
-              xx, yy, ti, tj, ok)
-     /* inputs (vectors of coordinates) */
-     int *n;
-     double *x0, *y0, *dx, *dy;
-     /* input (tolerance for determinant) */
-     double *eps;  
-     /* outputs (matrices) */
-     double *xx, *yy, *ti, *tj;
-     int *ok;
-{ 
+void Cxypolyselfint(
+  /* inputs (vectors of coordinates) */
+  int *n,
+  double *x0,
+  double *y0,
+  double *dx,
+  double *dy,
+  /* input (tolerance for determinant) */
+  double *eps,  
+  /* outputs (matrices) */
+  double *xx,
+  double *yy,
+  double *ti,
+  double *tj,
+  int *ok
+) { 
   int i, j, k, m, m2, mm1, mm2, mstop, ijpos, jipos, maxchunk;
   double determinant, absdet, diffx, diffy, tti, ttj, epsilon;
 
@@ -476,19 +509,23 @@ void Cxypolyselfint(n, x0, y0, dx, dy,
 */
 
 
-void xypsi(n, x0, y0, dx, dy, xsep, ysep, eps, proper, answer)
-     /* inputs (vectors of coordinates) */
-     int *n;
-     double *x0, *y0, *dx, *dy;
-     /* inputs (distances beyond which intersection is impossible) */
-     double *xsep, *ysep;
-     /* input (tolerance for determinant) */
-     double *eps;  
-     /* input (flag) */
-     int *proper;
-     /* output */
-     int *answer;
-{ 
+void xypsi(
+  /* segment pattern */
+  int *n,
+  double *x0,
+  double *y0,
+  double *dx,
+  double *dy,
+  /* inputs (distances beyond which intersection is impossible) */
+  double *xsep,
+  double *ysep,
+  /* input (tolerance for determinant) */
+  double *eps,  
+  /* input (flag) */
+  int *proper,
+  /* output */
+  int *answer
+) { 
   int i, j, m, mm1, mm2, mstop, prop, maxchunk;
   double determinant, absdet, diffx, diffy, tti, ttj, epsilon;
   double Xsep, Ysep;

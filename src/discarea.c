@@ -4,7 +4,7 @@
 
   Area of intersection between disc and polygonal window
 
-  $Revision: 1.7 $     $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.8 $     $Date: 2022/10/20 10:57:43 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -24,21 +24,27 @@
 #define PI 3.1415926535898
 #endif
 
+double DiscContrib(double xleft, double yleft,
+		   double xright, double yright,
+		   double eps); /* defined below */
+
 void 
-discareapoly(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, eps, out) 
-     /* inputs */
-     int *nc, *nr, *nseg;
-     double *xc, *yc, *rmat;
-     double *x0, *y0, *x1, *y1;
-     double *eps;
-     /* output */
-     double *out;
-{
+discareapoly(
+  /* inputs */
+  int *nc,
+  double *xc, double *yc,
+  int *nr,
+  double *rmat,
+  int *nseg,
+  double *x0, double *y0, double *x1, double *y1,
+  double *eps,
+  /* output */
+  double *out
+) {
   int n, m, i, j, k, nradperpt;
   double radius, radius2, total, contrib;
   double xx0, xx1, yy0, yy1, xleft, xright, yleft, yright, xcentre, ycentre;
   double epsilon;
-  double DiscContrib();
 
   n = *nc;
   nradperpt = *nr;
@@ -107,9 +113,7 @@ discareapoly(nc, xc, yc, nr, rmat, nseg, x0, y0, x1, y1, eps, out)
 
 #ifdef DEBUG
 #define TRIGBIT(V) trigbit(V)
-double trigbit(v) 
-     double v;
-{
+double trigbit(double v) {
   double zero, result;
   zero = 0.0;
   if(v < -1.0)
@@ -134,11 +138,9 @@ double trigbit(v)
   ASSUMES xleft < xright
 */
 
-double DiscContrib(xleft, yleft, xright, yright, eps) 
-  double xleft, yleft, xright, yright, eps;
-  /* 
-  NOTE: unit disc centred at origin
-  */
+double DiscContrib(double xleft, double yleft,
+		   double xright, double yright,
+		   double eps) /* NOTE: unit disc centred at origin */
 {
   double xlo, xhi, zero, slope, intercept, A, B, C, det;
   double xcut1, xcut2, ycut1, ycut2, xunder1, xunder2, dx, dx2, result;
@@ -268,10 +270,10 @@ double DiscContrib(xleft, yleft, xright, yright, eps)
 #ifdef DEBUG
 /* interface to low level function, for debugging only */
 
-void RDCtest(xleft, yleft, xright, yright, eps, value)
-  double *xleft, *yleft, *xright, *yright, *eps, *value;
+void RDCtest(double *xleft, double *yleft,
+	     double *xright, double *yright,
+	     double *eps, double *value)
 {
-  double DiscContrib();
   *value = DiscContrib(*xleft, *yleft, *xright, *yright, *eps);
 }
 

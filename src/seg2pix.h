@@ -3,7 +3,7 @@
 
   Code template for seg2pix.c
 
-  $Revision: 1.3 $ $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.4 $ $Date: 2022/10/22 02:32:10 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -29,21 +29,23 @@
 #endif
 
 
-void FNAME(ns,x0,y0,x1,y1,
+void FNAME(
+  int *ns,      /* number of segments */
+  double *x0,
+  double *y0,
+  double *x1,
+  double *y1,   /* coordinates of segment endpoints */
 #ifdef SUMUP
-	   w,
+  double *w,    /* weights attached to segments */
 #endif
-	   nx,ny,out)
-     int *ns;  /* number of segments */
-     double *x0,*y0,*x1,*y1; /* coordinates of segment endpoints */
-     int *nx, *ny;  /* dimensions of pixel array (columns, rows) */
+  int *nx,
+  int *ny,      /* dimensions of pixel array (columns, rows) */
 #ifdef SUMUP
-     double *w; /* weights attached to segments */
-     double *out; /* output totals */
+  double *out   /* output totals */
 #else 
-     int *out;     /* output indicators */
+  int *out      /* output indicators */
 #endif
-{
+) {
   int Ns, Nx, Ny, i, j, k, m, m0, m1, mmin, mmax, maxchunk;
   double x0i, x1i, y0i, y1i, dx, dy;
   double leni;

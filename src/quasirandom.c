@@ -6,16 +6,17 @@
   Copyright (C) Adrian Baddeley 2014
   GNU Public Licence version 2 | 3
 
-  $Revision: 1.1 $  $Date: 2014/03/17 03:31:59 $
+  $Revision: 1.3 $  $Date: 2022/10/22 02:51:11 $
 
 */
 
 #include <math.h>
 
-void Corput(base, n, result) 
-     int *base, *n;
-     double *result; 
-{
+void Corput(
+  int *base,
+  int *n,
+  double *result
+) {
   int b, N, i, j;
   register double f, f0, z;
 

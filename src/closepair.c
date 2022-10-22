@@ -2,7 +2,7 @@
 
   closepair.c
 
-  $Revision: 1.35 $     $Date: 2020/11/30 10:59:58 $
+  $Revision: 1.38 $     $Date: 2022/10/22 02:44:48 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -52,14 +52,15 @@ double sqrt();
 
 /* count TOTAL number of close pairs */
 
-void paircount(nxy, x, y, rmaxi, count) 
-     /* inputs */
-     int *nxy;         /* number of (x,y) points */
-     double *x, *y;    /* (x,y) coordinates */
-     double *rmaxi;    /* maximum distance */
-     /* output */
-     int *count;
-{
+void paircount(
+  /* inputs */
+  int *nxy,         /* number of (x,y) points */
+  double *x,
+  double *y,        /* (x,y) coordinates */
+  double *rmaxi,    /* maximum distance */
+  /* output */
+  int *count
+) {
   int n, maxchunk, i, j, counted;
   double xi, yi, rmax, r2max, dx, dy, a;
 
@@ -126,13 +127,18 @@ void paircount(nxy, x, y, rmaxi, count)
 */
 
 
-void crosscount(nn1, x1, y1, nn2, x2, y2, rmaxi, count) 
-     /* inputs */
-     int *nn1, *nn2;
-     double *x1, *y1, *x2, *y2, *rmaxi;
-     /* output */
-     int *count;
-{
+void crosscount(
+  /* inputs */
+  int *nn1,
+  double *x1,
+  double *y1,
+  int *nn2,
+  double *x2,
+  double *y2,
+  double *rmaxi,
+  /* output */
+  int *count
+) {
   int n1, n2, maxchunk, i, j, jleft, counted;
   double x1i, y1i, rmax, r2max, xleft, dx, dy, a;
 
@@ -196,13 +202,14 @@ void crosscount(nn1, x1, y1, nn2, x2, y2, rmaxi, count)
 */
 
 
-void duplicatedxy(n, x, y, out) 
-     /* inputs */
-     int *n;
-     double *x, *y;
-     /* output */
-     int *out;  /* logical vector */
-{
+void duplicatedxy(
+  /* inputs */
+  int *n,
+  double *x,
+  double *y,
+  /* output */
+  int *out  /* logical vector */
+) {
   int m, i, j;
   double xi, yi;
   m = *n;
@@ -219,18 +226,26 @@ void duplicatedxy(n, x, y, out)
 
 /* ............... fixed output length .............. */
 
-void Fclosepairs(nxy, x, y, r, noutmax, 
-	      nout, iout, jout, 
-	      xiout, yiout, xjout, yjout, dxout, dyout, dout,
-	      status)
-     /* inputs */
-     int *nxy, *noutmax;
-     double *x, *y, *r;
-     /* outputs */
-     int *nout, *iout, *jout;
-     double *xiout, *yiout, *xjout, *yjout, *dxout, *dyout, *dout;
-     int *status;
-{
+void Fclosepairs(
+  /* inputs */
+  int *nxy, 
+  double *x,
+  double *y,
+  double *r,
+  int *noutmax,
+  /* outputs */
+  int *nout,
+  int *iout,
+  int *jout,
+  double *xiout,
+  double *yiout,
+  double *xjout,
+  double *yjout,
+  double *dxout,
+  double *dyout,
+  double *dout,
+  int *status
+) {
   int n, k, kmax, maxchunk, i, j;
   double xi, yi, rmax, r2max, dx, dy, dx2, d2;
 
@@ -326,18 +341,29 @@ void Fclosepairs(nxy, x, y, r, noutmax,
   *nout = k;
 }
 
-void Fcrosspairs(nn1, x1, y1, nn2, x2, y2, rmaxi, noutmax, 
-	      nout, iout, jout, 
-	      xiout, yiout, xjout, yjout, dxout, dyout, dout,
-	      status)
-     /* inputs */
-     int *nn1, *nn2, *noutmax;
-     double *x1, *y1, *x2, *y2, *rmaxi;
-     /* outputs */
-     int *nout, *iout, *jout;
-     double *xiout, *yiout, *xjout, *yjout, *dxout, *dyout, *dout;
-     int *status;
-{
+void Fcrosspairs(
+  /* inputs */
+  int *nn1,
+  double *x1,
+  double *y1,
+  int *nn2,
+  double *x2,
+  double *y2,
+  double *rmaxi,
+  int *noutmax,
+  /* outputs */
+  int *nout,
+  int *iout,
+  int *jout,
+  double *xiout,
+  double *yiout,
+  double *xjout,
+  double *yjout,
+  double *dxout,
+  double *dyout,
+  double *dout,
+  int *status
+) {
   int n1, n2, maxchunk, k, kmax, i, j, jleft;
   double x1i, y1i, rmax, r2max, xleft, dx, dy, dx2, d2;
 

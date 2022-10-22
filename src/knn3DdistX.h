@@ -25,7 +25,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2013
   Licence: GPL >= 2
 
-  $Revision: 1.3 $  $Date: 2021/04/12 08:16:35 $
+  $Revision: 1.4 $  $Date: 2022/10/21 10:43:01 $
 
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
@@ -34,21 +34,17 @@
 */
 #endif
 
-void FNAME(n1, x1, y1, z1, id1, 
-           n2, x2, y2, z2, id2, 
-	   kmax,
-	   nnd, nnwhich, 
-	   huge)
-     /* inputs */
-     int *n1, *n2;
-     double *x1, *y1, *z1, *x2, *y2, *z2, *huge;
-     int *id1, *id2;
-     int *kmax;
-     /* output matrices (npoints * kmax) in ROW MAJOR order */
-     double *nnd;
-     int *nnwhich;
-     /* some inputs + outputs are not used in all functions */
-{ 
+void FNAME(
+  /* inputs */
+  int *n1, double *x1, double *y1, double *z1, int *id1,
+  int *n2, double *x2, double *y2, double *z2, int *id2,
+  int *kmax,
+  /* output matrices (n1 * kmax) in ROW MAJOR order */
+  double *nnd,
+  int *nnwhich,
+  double *huge
+  /* some inputs + outputs are not used in all functions */
+) { 
   int npoints1, npoints2, nk, nk1;
   int maxchunk, i, jleft, jright, jwhich, lastjwhich, unsorted, k, k1;
   double d2, d2minK, x1i, y1i, z1i, dx, dy, dz, dz2, hu, hu2, tmp;

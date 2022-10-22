@@ -19,26 +19,30 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2013
   Licence: GPL >= 2
 
-  $Revision: 1.4 $  $Date: 2014/02/18 08:43:29 $
+  $Revision: 1.5 $  $Date: 2022/10/22 02:32:10 $
 
 
 */
 #endif
 
-void FNAME(nx, x0, xstep,  
-	   ny, y0, ystep,   /* pixel grid dimensions */
-           np, xp, yp,   /* data points */
-	   nnd, nnwhich, 
-	   huge)
-     /* inputs */
-     int *nx, *ny, *np;
-     double *x0, *xstep, *y0, *ystep, *huge;
-     double *xp, *yp;
-     /* outputs */
-     double *nnd;
-     int *nnwhich;
-     /* some inputs + outputs are not used in all functions */
-{ 
+void FNAME(
+  /* pixel grid dimensions */
+  int *nx,
+  double *x0,
+  double *xstep,  
+  int *ny,
+  double *y0,
+  double *ystep,
+  /* data points */  
+  int *np,
+  double *xp,
+  double *yp, 
+  /* outputs */
+  double *nnd,
+  int *nnwhich,
+  /* upper bound on pairwise distance */
+  double *huge
+) { 
   int Nxcol, Nyrow, Npoints;
   int i, j, ijpos;
   int mleft, mright, mwhich, lastmwhich;

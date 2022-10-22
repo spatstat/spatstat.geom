@@ -9,7 +9,7 @@
        cocoGraph: connected component labels for a discrete graph
                    specified by a list of edges
        
-       $Revision: 1.9 $ $Date: 2018/12/18 02:43:11 $
+       $Revision: 1.10 $ $Date: 2022/10/20 10:57:43 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -31,8 +31,7 @@ void   shape_raster();
 /* workhorse function for cocoImage */
 
 void
-comcommer(im)
-     Raster  *im;            
+comcommer(Raster  *im)
      /* raster must have been dimensioned by shape_raster() */
      /* Pixel values assumed to be 0 in background, and 
         distinct nonzero integers in foreground */
@@ -84,11 +83,12 @@ comcommer(im)
   }
 }
 
-void cocoImage(mat, nr, nc)
-     int   *mat;        /* input:  binary image */
-     int *nr, *nc;      /* raster dimensions
+void cocoImage(
+  int *mat,        /* input:  binary image */
+  int *nr,
+  int *nc          /* raster dimensions
 			   EXCLUDING margin of 1 on each side */
-{
+) {
   Raster im;
 
   shape_raster( &im, (void *) mat, 
@@ -98,17 +98,18 @@ void cocoImage(mat, nr, nc)
   comcommer(&im);
 }	
 
-void cocoGraph(nv, ne, ie, je, label, status)
+void cocoGraph(
      /* inputs */
-     int *nv;         /* number of graph vertices */
-     int *ne;         /* number of edges */
-     int *ie, *je;    /* vectors of indices of ends of each edge */ 
-     /* output */
-     int *label;      /* vector of component labels for each vertex */
-                      /* Component label is lowest serial number of
-			 any vertex in the connected component */
-     int *status;          /* 0 if OK, 1 if overflow */
-{
+  int *nv,         /* number of graph vertices */
+  int *ne,         /* number of edges */
+  int *ie,
+  int *je,         /* vectors of indices of ends of each edge */ 
+  /* output */
+  int *label,      /* vector of component labels for each vertex */
+                   /* Component label is lowest serial number of
+		        any vertex in the connected component */
+  int *status          /* 0 if OK, 1 if overflow */
+) {
   int Nv, Ne, i, j, k, niter, labi, labj, changed;
   
   Nv = *nv;

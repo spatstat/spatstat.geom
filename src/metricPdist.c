@@ -6,7 +6,7 @@
 
   This code #includes metricPdist.h multiple times.
 
-  $Revision: 1.3 $  $Date: 2021/07/26 08:18:37 $
+  $Revision: 1.4 $  $Date: 2022/10/21 10:43:01 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -31,8 +31,7 @@ void   shape_raster();
 
   For each definition we need the following macros:
   FNAME          Name of the function (that will be called from R)
-  MARGLIST       List of arguments to FNAME specifying the metric
-  MARGDECLARE    Declarations of these function arguments 
+  MARGLIST       List of typed arguments to FNAME specifying the metric
   MTEMPDECLARE   Declaration and initialisation of variables for use by metric
   METRIC         Expression for calculating the metric (x1,y1,x2,y2)
 */
@@ -49,8 +48,7 @@ void   shape_raster();
 */
 
 #define FNAME mdtPOrect
-#define MARGLIST aspect
-#define MARGDECLARE double *aspect
+#define MARGLIST double *aspect
 #define MTEMPDECLARE double asp; asp=*aspect
 #define METRIC(X,Y,XX,YY) rectdist(X,Y,XX,YY,asp)
 
@@ -85,8 +83,7 @@ double rectdist(x, y, xx, yy, asp)
 */
 
 #define FNAME mdtPconv
-#define MARGLIST ns, sx, sy
-#define MARGDECLARE int *ns; double *sx, *sy
+#define MARGLIST int *ns, double *sx, double *sy
 #define MTEMPDECLARE int Ns; Ns=*ns; 
 #define METRIC(X,Y,XX,YY) convdist(X,Y,XX,YY,Ns,sx,sy)
 

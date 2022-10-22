@@ -4,7 +4,7 @@
 
   Nearest Neighbour Distances in 3D 
 
-  $Revision: 1.12 $     $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.14 $     $Date: 2022/10/22 02:46:24 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -33,6 +33,8 @@
 #include "yesno.h"
 
 double sqrt();
+
+/* >>>>>>>>>>>> NEAREST NEIGHBOURS <<<<<<<<<<<<<<<<<<<<<<<< */
 
 /* .......... Single point pattern ...............................*/
 
@@ -70,46 +72,6 @@ double sqrt();
 
 
 /* .......... Two point patterns ...............................*/
-
-/* common interface */
-
-void nnX3Dinterface(n1, x1, y1, z1, id1, 
-		    n2, x2, y2, z2, id2,
-		    exclude, wantdist, wantwhich,
-		    nnd, nnwhich, huge)
-     /* inputs */
-     int *n1, *n2, *id1, *id2;
-     double *x1, *y1, *z1, *x2, *y2, *z2, *huge;
-     /* options */
-     int *exclude, *wantdist, *wantwhich;
-     /* outputs */
-     double *nnd;
-     int *nnwhich;
-{
-  void nnXdw3D(), nnXd3D(), nnXw3D();
-  void nnXEdw3D(), nnXEd3D(), nnXEw3D();
-  int ex, di, wh;
-  ex = (*exclude != 0);
-  di = (*wantdist != 0);
-  wh = (*wantwhich != 0);
-  if(!ex) {
-    if(di && wh) {
-      nnXdw3D(n1, x1, y1, z1, id1, n2, x2, y2, z2, id2, nnd, nnwhich, huge);
-    } else if(di) {
-      nnXd3D(n1, x1, y1, z1, id1, n2, x2, y2, z2, id2, nnd, nnwhich, huge);
-    } else if(wh) {
-      nnXw3D(n1, x1, y1, z1, id1, n2, x2, y2, z2, id2, nnd, nnwhich, huge);
-    } 
-  } else {
-    if(di && wh) {
-      nnXEdw3D(n1, x1, y1, z1, id1, n2, x2, y2, z2, id2, nnd, nnwhich, huge);
-    } else if(di) {
-      nnXEd3D(n1, x1, y1, z1, id1, n2, x2, y2, z2, id2, nnd, nnwhich, huge);
-    } else if(wh) {
-      nnXEw3D(n1, x1, y1, z1, id1, n2, x2, y2, z2, id2, nnd, nnwhich, huge);
-    } 
-  }
-}
 
 /* 
    nnXdw3D:  for TWO point patterns X and Y,
@@ -209,6 +171,48 @@ void nnX3Dinterface(n1, x1, y1, z1, id1,
 #undef WHICH
 #undef EXCLUDE
 
+/* COMMON INTERFACE */
+/* common interface for nearest neighbours of two point patterns */
+
+void nnX3Dinterface(
+  /* inputs */
+  int *n1, double *x1, double *y1, double *z1, int *id1,
+  int *n2, double *x2, double *y2, double *z2, int *id2,
+  /* options */
+  int *exclude,
+  int *wantdist,
+  int *wantwhich,
+  /* outputs */
+  double *nnd,
+  int *nnwhich,
+  /* upper bound on pairwise distance */
+  double *huge
+) {
+  int ex, di, wh;
+  ex = (*exclude != 0);
+  di = (*wantdist != 0);
+  wh = (*wantwhich != 0);
+  if(!ex) {
+    if(di && wh) {
+      nnXdw3D(n1, x1, y1, z1, id1, n2, x2, y2, z2, id2, nnd, nnwhich, huge);
+    } else if(di) {
+      nnXd3D(n1, x1, y1, z1, id1, n2, x2, y2, z2, id2, nnd, nnwhich, huge);
+    } else if(wh) {
+      nnXw3D(n1, x1, y1, z1, id1, n2, x2, y2, z2, id2, nnd, nnwhich, huge);
+    } 
+  } else {
+    if(di && wh) {
+      nnXEdw3D(n1, x1, y1, z1, id1, n2, x2, y2, z2, id2, nnd, nnwhich, huge);
+    } else if(di) {
+      nnXEd3D(n1, x1, y1, z1, id1, n2, x2, y2, z2, id2, nnd, nnwhich, huge);
+    } else if(wh) {
+      nnXEw3D(n1, x1, y1, z1, id1, n2, x2, y2, z2, id2, nnd, nnwhich, huge);
+    } 
+  }
+}
+
+/* >>>>>>>>>>>>>> K-th NEAREST NEIGHBOURS <<<<<<<<<<<<<<<<<<<<< */
+
 /* .......... Single point pattern ...............................*/
 /* .......... k-th nearest neighbours ...............................*/
 
@@ -259,51 +263,6 @@ void nnX3Dinterface(n1, x1, y1, z1, id1,
 
 /* .......... Two point patterns ...............................*/
 /* .......... k-th nearest neighbours ...............................*/
-
-/* general interface */
-
-void knnX3Dinterface(n1, x1, y1, z1, id1, 
-		     n2, x2, y2, z2, id2, 
-		     kmax,
-		     exclude, wantdist, wantwhich,
-		     nnd, nnwhich, 
-		     huge)
-     /* inputs */
-     int *n1, *n2;
-     double *x1, *y1, *z1, *x2, *y2, *z2, *huge;
-     int *id1, *id2;
-     int *kmax;
-     /* options */
-     int *exclude, *wantdist, *wantwhich;
-     /* output matrices (npoints * kmax) in ROW MAJOR order */
-     double *nnd;
-     int *nnwhich;
-     /* some inputs + outputs are not used in all functions */
-{
-  void knnXdw3D(), knnXd3D(), knnXw3D();
-  void knnXEdw3D(), knnXEd3D(), knnXEw3D();
-  int ex, di, wh;
-  ex = (*exclude != 0);
-  di = (*wantdist != 0);
-  wh = (*wantwhich != 0);
-  if(!ex) {
-    if(di && wh) {
-      knnXdw3D(n1,x1,y1,z1,id1,n2,x2,y2,z2,id2,kmax,nnd,nnwhich,huge);
-    } else if(di) {
-      knnXd3D(n1,x1,y1,z1,id1,n2,x2,y2,z2,id2,kmax,nnd,nnwhich,huge);
-    } else if(wh) {
-      knnXw3D(n1,x1,y1,z1,id1,n2,x2,y2,z2,id2,kmax,nnd,nnwhich,huge);
-    } 
-  } else {
-    if(di && wh) {
-      knnXEdw3D(n1,x1,y1,z1,id1,n2,x2,y2,z2,id2,kmax,nnd,nnwhich,huge);
-    } else if(di) {
-      knnXEd3D(n1,x1,y1,z1,id1,n2,x2,y2,z2,id2,kmax,nnd,nnwhich,huge);
-    } else if(wh) {
-      knnXEw3D(n1,x1,y1,z1,id1,n2,x2,y2,z2,id2,kmax,nnd,nnwhich,huge);
-    } 
-  }
-}
 
 #undef FNAME
 #undef DIST
@@ -419,4 +378,46 @@ void knnX3Dinterface(n1, x1, y1, z1, id1,
 #undef DIST
 #undef WHICH
 #undef EXCLUDE
+
+/* GENERAL INTERFACE */
+/* general interface for k-nearest neighbours of two point patterns */
+
+void knnX3Dinterface(
+     /* inputs */
+  int *n1,  double *x1, double *y1, double *z1, int *id1, 
+  int *n2,  double *x2, double *y2, double *z2, int *id2,
+  int *kmax,
+  /* options */
+  int *exclude,
+  int *wantdist,
+  int *wantwhich,
+  /* output matrices (n1 * kmax) in ROW MAJOR order */
+  double *nnd,
+  int *nnwhich,
+  /* upper bound on pairwise distance */
+  double *huge
+  /* some inputs + outputs are not used in all functions */
+) {
+  int ex, di, wh;
+  ex = (*exclude != 0);
+  di = (*wantdist != 0);
+  wh = (*wantwhich != 0);
+  if(!ex) {
+    if(di && wh) {
+      knnXdw3D(n1,x1,y1,z1,id1,n2,x2,y2,z2,id2,kmax,nnd,nnwhich,huge);
+    } else if(di) {
+      knnXd3D(n1,x1,y1,z1,id1,n2,x2,y2,z2,id2,kmax,nnd,nnwhich,huge);
+    } else if(wh) {
+      knnXw3D(n1,x1,y1,z1,id1,n2,x2,y2,z2,id2,kmax,nnd,nnwhich,huge);
+    } 
+  } else {
+    if(di && wh) {
+      knnXEdw3D(n1,x1,y1,z1,id1,n2,x2,y2,z2,id2,kmax,nnd,nnwhich,huge);
+    } else if(di) {
+      knnXEd3D(n1,x1,y1,z1,id1,n2,x2,y2,z2,id2,kmax,nnd,nnwhich,huge);
+    } else if(wh) {
+      knnXEw3D(n1,x1,y1,z1,id1,n2,x2,y2,z2,id2,kmax,nnd,nnwhich,huge);
+    } 
+  }
+}
 

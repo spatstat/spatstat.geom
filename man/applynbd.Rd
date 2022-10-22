@@ -129,7 +129,8 @@
 
   The format of the argument \code{current} is as follows.
   If \code{X} is an unmarked point pattern, then \code{current} is a
-  vector of length 2 containing the coordinates of the current point.
+  list of length 2 with entries \code{current$x} and \code{current$y}
+  containing the coordinates of the current point.
   If \code{X} is marked, then \code{current} is a point pattern
   containing exactly one point, so that \code{current$x} is its
   \eqn{x}-coordinate and \code{current$marks} is its mark value.

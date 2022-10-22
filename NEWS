@@ -1,9 +1,11 @@
-        CHANGES IN spatstat.geom VERSION 2.999-999.006
+        CHANGES IN spatstat.geom VERSION 3.0-0
 
 OVERVIEW
 
     o Minor improvements and bug fixes.
 
+    o Changes to package dependence
+    
 NEW FUNCTIONS
 
     o is.linnet
@@ -14,6 +16,10 @@ NEW FUNCTIONS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o Package dependence
+    spatstat.geom now suggests the new packages spatstat.explore and
+    spatstat.model, which have replaced spatstat.core.
+    
     o crosspairs.ppp
     New argument 'periodic' specifies whether to use
     periodic (toroidal) distances.

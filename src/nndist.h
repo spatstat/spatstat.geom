@@ -15,29 +15,22 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2012
   Licence: GPL >= 2
 
-  $Revision: 1.2 $  $Date: 2012/03/14 02:37:27 $
+  $Revision: 1.3 $  $Date: 2022/10/21 10:43:01 $
 
 */
 
-void FNAME(n, x, y, 
+void FNAME(
+  int *n,
+  double *x,
+  double *y, 
 #ifdef DIST
-	   nnd,
+  double *nnd,
 #endif
 #ifdef WHICH
-	   nnwhich, 
+  int *nnwhich, 
 #endif
-           huge)
-     /* inputs */
-     int *n;
-     double *x, *y, *huge;
-     /* outputs */
-#ifdef DIST
-     double *nnd;
-#endif
-#ifdef WHICH
-     int *nnwhich;
-#endif
-{ 
+  double *huge
+) { 
   int npoints, i, maxchunk, left, right;
   double d2, d2min, xi, yi, dx, dy, dy2, hu, hu2;
 #ifdef WHICH

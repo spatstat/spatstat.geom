@@ -8,7 +8,7 @@
   DTYPE   declaration for distance values ('double' or 'int')
   FLOATY  (DTYPE == 'double')
 
-  $Revision: 1.4 $   $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.5 $   $Date: 2022/10/20 10:57:43 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -25,14 +25,15 @@
 #define INFIN -1
 #define FINITE(X) ((X) >= 0)
 
-void FNAME(nv, d, adj, dpath, tol, niter, status) 
-  int *nv;     /* number of vertices */
-  DTYPE *d;  /* matrix of edge lengths */
-  int *adj;   /* 0/1 edge matrix of graph */
-  DTYPE *tol;  /* tolerance threshold (ignored in integer case) */
-  DTYPE *dpath; /* output - shortest path distance matrix */
-  int *niter, *status; /* status = 0 for convergence */
-{
+void FNAME(
+  int *nv,       /* number of vertices */
+  DTYPE *d,      /* matrix of edge lengths */
+  int *adj,      /* 0/1 edge matrix of graph */
+  DTYPE *dpath,  /* output - shortest path distance matrix */
+  DTYPE *tol,    /* tolerance threshold (ignored in integer case) */
+  int *niter,    /* number of iterations taken */
+  int *status    /* status = 0 for convergence */
+) {
   int i, j, k, n, iter, maxiter, changed;
   DTYPE dij, dik, dkj, dikj;
 #ifdef FLOATY

@@ -4,7 +4,7 @@
 
   Nearest Neighbour Distances in m dimensions
 
-  $Revision: 1.18 $     $Date: 2019/10/21 11:12:32 $
+  $Revision: 1.21 $     $Date: 2022/10/22 02:48:55 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -43,13 +43,13 @@
 
 double sqrt();
 
-void nndMD(n, m, x, nnd, huge)
-/* inputs */
-     int *n, *m;
-     double *x, *huge;
-     /* output */
-     double *nnd;
-{ 
+void nndMD(
+  int *n,        /* number of points */
+  int *m,        /* spatial dimension */
+  double *x,     /* coordinates (matrix m by n) */
+  double *nnd,   /* output */
+  double *huge   /* upper bound on pairwise distance */
+) { 
   int npoints, mdimen, i, j, left, right, leftpos, rightpos, maxchunk;
   double d2, d2min, hu, hu2, xi0, dx0, dxj;
   double *xi;
@@ -149,14 +149,14 @@ void nndMD(n, m, x, nnd, huge)
    but also returns id of nearest neighbour 
 */
 
-void nnwMD(n, m, x, nnd, nnwhich, huge)
-/* inputs */
-     int *n, *m;
-     double *x, *huge;
-     /* output */
-     double *nnd;
-     int *nnwhich;
-{ 
+void nnwMD(
+  int *n,          /* number of points */
+  int *m,          /* spatial dimension */
+  double *x,       /* coordinates (matrix m by n) */
+  double *nnd,     /* output n.n. distances */
+  int *nnwhich,    /* output n.n. identifiers */
+  double *huge     /* upper bound on pairwise distance */
+) {
   int npoints, mdimen, i, j, left, right, leftpos, rightpos, which, maxchunk;
   double d2, d2min, hu, hu2, xi0, dx0, dxj;
   double *xi;
@@ -249,14 +249,16 @@ void nnwMD(n, m, x, nnd, nnwhich, huge)
    Requires both patterns to be sorted in order of increasing first coord
 */
 
-void nnXwMD(m, n1, x1, n2, x2, nnd, nnwhich, huge)
-/* inputs */
-     int *m, *n1, *n2;
-     double *x1, *x2, *huge;
-     /* outputs */
-     double *nnd;
-     int *nnwhich;
-{ 
+void nnXwMD(
+   int *m,       /* spatial dimension */
+   int *n1,      /* number of points in first pattern */
+   double *x1,   /* coordinates of first pattern (matrix m by n1) */
+   int *n2,      /* number of points in second pattern */
+   double *x2,   /* coordinates of second pattern (matrix m by n2) */
+   double *nnd,  /* output n.n. distances */
+   int *nnwhich, /* output n.n. identifiers */
+   double *huge  /* upper bound on pairwise distance */
+) { 
   int mdimen, npoints1, npoints2, i, ell, jleft, jright, jwhich, lastjwhich;
   double d2, d2min, x1i0, dx0, dxell, hu, hu2;
   double *x1i;
@@ -341,15 +343,18 @@ void nnXwMD(m, n1, x1, n2, x2, nnd, nnwhich, huge)
    Requires both patterns to be sorted in order of increasing first coord
 */
 
-void nnXxMD(m, n1, x1, id1, n2, x2, id2, nnd, nnwhich, huge)
-/* inputs */
-     int *m, *n1, *n2;
-     double *x1, *x2, *huge;
-     int *id1, *id2;
-     /* outputs */
-     double *nnd;
-     int *nnwhich;
-{ 
+void nnXxMD(
+   int *m,       /* spatial dimension */
+   int *n1,      /* number of points in first pattern */
+   double *x1,   /* coordinates of first pattern (matrix m by n1) */
+   int *id1,     /* code numbers for first pattern */
+   int *n2,      /* number of points in second pattern */
+   double *x2,   /* coordinates of second pattern (matrix m by n2) */
+   int *id2,     /* code numbers for second pattern */
+   double *nnd,  /* output n.n. distances */
+   int *nnwhich, /* output n.d. identifiers */
+   double *huge  /* upper bound on pairwise distances */
+){ 
   int mdimen, npoints1, npoints2, i, ell, jleft, jright, jwhich, lastjwhich, id1i;
   double d2, d2min, x1i0, dx0, dxell, hu, hu2;
   double *x1i;
@@ -436,13 +441,14 @@ void nnXxMD(m, n1, x1, id1, n2, x2, id2, nnd, nnwhich, huge)
 
 */
 
-void knndMD(n, m, kmax, x, nnd, huge)
-/* inputs */
-     int *n, *m, *kmax;
-     double *x, *huge;
-     /* output matrix (kmax * npoints) */
-     double *nnd;
-{ 
+void knndMD(
+  int *n,      /* number of points */
+  int *m,      /* spatial dimension */
+  int *kmax,   /* maximum order of neighbours */
+  double *x,   /* coordinates (matrix m by n) */
+  double *nnd, /* output n.n. distances (matrix kmax by n) */
+  double *huge /* prior upper bound on pairwise distances */
+) { 
   int npoints, mdimen, nk, nk1, i, j, k, k1, left, right, unsorted, maxchunk;
   double d2, d2minK, xi0, dx0, dxj, hu, hu2, tmp;
   double *d2min, *xi;
@@ -632,14 +638,15 @@ void knndMD(n, m, kmax, x, nnd, huge)
 */
 
 
-void knnwMD(n, m, kmax, x, nnd, nnwhich, huge)
-/* inputs */
-     int *n, *m, *kmax;
-     double *x, *huge;
-     /* output matrix (kmax * npoints) */
-     double *nnd;
-     int *nnwhich;
-{ 
+void knnwMD(
+   int *n,       /* number of points */
+   int *m,       /* spatial dimension */
+   int *kmax,    /* maximum order of neighbours */
+   double *x,    /* coordinates (matrix m by n) */
+   double *nnd,  /* output n.n. distances (matrix kmax by n) */
+   int *nnwhich, /* output n.n. identifiers (matrix kmax by n) */
+   double *huge  /* prior upper bound on pairwise distance */
+) { 
   int npoints, mdimen, nk, nk1, i, j, k, k1, left, right, unsorted, itmp;
   double d2, d2minK, xi0, dx0, dxj, hu, hu2, tmp;
   double *d2min, *xi;
@@ -859,14 +866,17 @@ void knnwMD(n, m, kmax, x, nnd, nnwhich, huge)
 */
 
 
-void knnXwMD(m, n1, x1, n2, x2, kmax, nnd, nnwhich, huge)
-  /* inputs */
-  int *m, *n1, *n2, *kmax;
-  double *x1, *x2, *huge;
-  /* output matrix (kmax * n1) */
-  double *nnd;
-  int *nnwhich;
-{ 
+void knnXwMD(
+  int *m,         /* spatial dimension */
+  int *n1,        /* number of points in first pattern */
+  double *x1,     /* coordinates of first pattern (matrix m by n1) */
+  int *n2,        /* number of points in second pattern */
+  double *x2,     /* coordinates of second pattern (matrix m by n2) */
+  int *kmax,      /* maximum order of neighbours */
+  double *nnd,    /* output n.n. distances (matrix kmax by n1) */
+  int *nnwhich,   /* output n.n. identifiers (matrix kmax by n1) */
+  double *huge    /* prior upper bound on pairwise distances */
+) { 
   int mdimen, npoints1, npoints2, nk, nk1;
   int i, ell, jleft, jright, jwhich, lastjwhich;
   int k, k1, unsorted, itmp;
@@ -1100,15 +1110,19 @@ void knnXwMD(m, n1, x1, n2, x2, kmax, nnd, nnwhich, huge)
 */
 
 
-void knnXxMD(m, n1, x1, id1, n2, x2, id2, kmax, nnd, nnwhich, huge)
-  /* inputs */
-  int *m, *n1, *n2, *kmax;
-  double *x1, *x2, *huge;
-  int *id1, *id2;
-  /* output matrix (kmax * n1) */
-  double *nnd;
-  int *nnwhich;
-{ 
+void knnXxMD(
+  int *m,         /* spatial dimension */
+  int *n1,        /* number of points in first pattern */
+  double *x1,     /* coordinates of first pattern (matrix m by n1) */
+  int *id1,       /* code numbers for first pattern */
+  int *n2,        /* number of points in second pattern */
+  double *x2,     /* coordinates of second pattern (matrix m by n2) */
+  int *id2,       /* code numbers for second pattern */
+  int *kmax,      /* maximum order of neighbours */
+  double *nnd,    /* output n.n. distances (matrix kmax by n1) */
+  int *nnwhich,   /* output n.n. identifiers (matrix kmax by n1) */
+  double *huge    /* prior upper bound on pairwise distances */
+) { 
   int mdimen, npoints1, npoints2, nk, nk1;
   int i, ell, jleft, jright, jwhich, lastjwhich;
   int k, k1, unsorted, itmp, id1i;

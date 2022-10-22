@@ -4,7 +4,7 @@
   table(x) or tapply(x, w, sum)
   where x is numeric and we are given the sorted unique values
 
-  $Revision: 1.4 $ $Date: 2019/03/12 09:34:33 $
+  $Revision: 1.5 $ $Date: 2022/10/22 02:32:10 $
 
 */
 
@@ -12,13 +12,13 @@
 #include <R_ext/Utils.h>
 #include "chunkloop.h"
 
-void tabnum(nx, x, nv, v, z)
-     int *nx; 
-     double *x;  /* values (sorted) */
-     int *nv; 
-     double *v;  /* unique values (sorted) */
-     double *z;  /* output */
-{ 
+void tabnum(
+  int *nx, 
+  double *x,  /* values (sorted) */
+  int *nv, 
+  double *v,  /* unique values (sorted) */
+  double *z   /* output */
+) { 
   int i, j, Nx, Nv, maxchunk; 
   double xi;
   
@@ -41,14 +41,14 @@ void tabnum(nx, x, nv, v, z)
   }
 }
 
-void tabsumweight(nx, x, w, nv, v, z)
-     int *nx; 
-     double *x;  /* values */
-     double *w;  /* weights */
-     int *nv; 
-     double *v;  /* unique values (sorted) */
-     double *z;  /* output */
-{ 
+void tabsumweight(
+     int *nx, 
+     double *x,  /* values */
+     double *w,  /* weights */
+     int *nv, 
+     double *v,  /* unique values (sorted) */
+     double *z   /* output */
+) { 
   int i, j, Nx, Nv, maxchunk; 
   double xi;
   

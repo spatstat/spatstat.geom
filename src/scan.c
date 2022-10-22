@@ -3,7 +3,7 @@
 
   Scan transform
 
-  $Revision: 1.3 $ $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.5 $ $Date: 2022/10/22 02:51:58 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -16,12 +16,13 @@
 void shape_raster();
 
 void
-Cscantrans(x, y, npt, R, out)
-	double	*x, *y;		/* data points */
-	int	npt;
-	double  R;             /* radius */
-	Raster	*out;	       /* scan image */
-{
+Cscantrans(
+  double *x,
+  double *y,	/* data points */
+  int	npt,
+  double  R,    /* radius */
+  Raster *out	/* scan image */
+) {
   int	i,j,k,l,m;
   double  d2, R2;
   int   rmin, rmax, cmin, cmax, Rrow, Rcol, lmin, lmax, mmin, mmax;
@@ -66,19 +67,20 @@ Cscantrans(x, y, npt, R, out)
 
 /* R interface */
 
-void scantrans(x, y, n,
-	       xmin, ymin, xmax, ymax,
-	       nr, nc, R,
-	       counts)
-	double *x, *y;		/* input data points */
-	int	*n;
-	double *xmin, *ymin,
-               *xmax, *ymax;  	/* guaranteed bounding box */
-	int *nr, *nc;		/* desired raster dimensions */
-	double *R;              /* radius */
-	     /* output array */
-	int *counts;	        /* number of R-close points */
-{
+void scantrans(
+  double *x,
+  double *y,		/* input data points */
+  int	*n,
+  double *xmin,
+  double *ymin,
+  double *xmax,
+  double *ymax,  	/* guaranteed bounding box */
+  int *nr,
+  int *nc,		/* desired raster dimensions */
+  double *R,            /* radius */
+  /* output array */
+  int *counts	        /* number of R-close points */
+) {
   Raster out;
   int nrow, ncol, npoints;
   double r;

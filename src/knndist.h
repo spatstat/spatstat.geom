@@ -12,32 +12,28 @@
 	WHICH     #defined if function returns id of nearest neighbour
   Either or both DIST and WHICH may be defined.
 
-  Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2012
+  Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2022
   Licence: GPL >= 2
 
-  $Revision: 1.3 $  $Date: 2013/05/27 02:09:10 $
+  $Revision: 1.4 $  $Date: 2022/10/21 10:43:01 $
 
 */
 
-void FNAME(n, kmax, x, y, 
-#ifdef DIST 
-	   nnd, 
-#endif
-#ifdef WHICH
-	   nnwhich, 
-#endif
-	   huge)
-     /* inputs */
-     int *n, *kmax;
-     double *x, *y, *huge;
-     /* output matrices (npoints * kmax) in ROW MAJOR order */
+void FNAME(
+  /* inputs */
+  int *n,
+  int *kmax,
+  double *x, double *y, 
+  /* output matrices (n * kmax) in ROW MAJOR order */
 #ifdef DIST
-     double *nnd;
+  double *nnd,
 #endif
 #ifdef WHICH
-     int    *nnwhich;
+  int    *nnwhich,
 #endif
-{ 
+  /* input - upper bound on pairwise distance */
+  double *huge
+) { 
   int npoints, maxchunk, nk, nk1, i, k, k1, left, right, unsorted;
   double d2, d2minK, xi, yi, dx, dy, dy2, hu, hu2, tmp;
   double *d2min; 

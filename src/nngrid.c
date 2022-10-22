@@ -7,7 +7,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2013
   Licence: GNU Public Licence >= 2
 
-  $Revision: 1.4 $     $Date: 2013/11/03 03:41:23 $
+  $Revision: 1.5 $     $Date: 2022/10/22 02:32:10 $
 
   Function body definition is #included from nngrid.h 
 
@@ -26,39 +26,6 @@
 double sqrt();
 
 /* THE FOLLOWING CODE ASSUMES THAT x IS SORTED IN ASCENDING ORDER */
-
-/* general interface */
-
-void nnGinterface(nx, x0, xstep,  
-		  ny, y0, ystep,   /* pixel grid dimensions */
-		  np, xp, yp,   /* data points */
-		  wantdist, wantwhich, /* options */
-		  nnd, nnwhich, 
-		  huge)
-     /* inputs */
-     int *nx, *ny, *np;
-     double *x0, *xstep, *y0, *ystep, *huge;
-     double *xp, *yp;
-     /* options */
-     int *wantdist, *wantwhich;
-     /* outputs */
-     double *nnd;
-     int *nnwhich;
-     /* some inputs + outputs are not used in all functions */
-{
-  void nnGdw(), nnGd(), nnGw();
-  int di, wh;
-  di = (*wantdist != 0);
-  wh = (*wantwhich != 0);
-  if(di && wh) {
-    nnGdw(nx, x0, xstep, ny, y0, ystep, np, xp, yp, nnd, nnwhich, huge);
-  } else if(di) {
-    nnGd(nx, x0, xstep, ny, y0, ystep, np, xp, yp, nnd, nnwhich, huge);
-  } else if(wh) {
-    nnGw(nx, x0, xstep, ny, y0, ystep, np, xp, yp, nnd, nnwhich, huge);
-  }
-}
-
 
 #undef FNAME
 #undef DIST
@@ -106,4 +73,39 @@ void nnGinterface(nx, x0, xstep,
 #undef FNAME
 #undef DIST
 #undef WHICH
+
+/* general interface */
+
+void nnGinterface(
+  /* pixel grid dimensions */
+  int *nx,
+  double *x0,
+  double *xstep,  
+  int *ny,
+  double *y0,
+  double *ystep,
+  /* data points */
+  int *np,
+  double *xp,
+  double *yp,
+  /* options */  
+  int *wantdist,
+  int *wantwhich, 
+  /* outputs */
+  double *nnd,
+  int *nnwhich,
+  /* upper bound on pairwise distance */
+  double *huge
+) {
+  int di, wh;
+  di = (*wantdist != 0);
+  wh = (*wantwhich != 0);
+  if(di && wh) {
+    nnGdw(nx, x0, xstep, ny, y0, ystep, np, xp, yp, nnd, nnwhich, huge);
+  } else if(di) {
+    nnGd(nx, x0, xstep, ny, y0, ystep, np, xp, yp, nnd, nnwhich, huge);
+  } else if(wh) {
+    nnGw(nx, x0, xstep, ny, y0, ystep, np, xp, yp, nnd, nnwhich, huge);
+  }
+}
 

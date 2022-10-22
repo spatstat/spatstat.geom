@@ -16,7 +16,7 @@
   THE FOLLOWING CODE ASSUMES THAT THE POINT PATTERN IS SORTED
   IN ASCENDING ORDER OF THE z COORDINATE
 
-  $Revision: 1.6 $ $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.7 $ $Date: 2022/10/21 10:43:01 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -24,15 +24,16 @@
 */
 
   
-void FNAME(n, x, y, z, 
-	   nnd, nnwhich, huge)
-/* inputs */
-     int *n;
-     double *x, *y, *z, *huge;
-     /* outputs */
-     double *nnd; 
-     int *nnwhich;
-{ 
+void FNAME(
+  /* inputs */
+  int *n,
+  double *x, double *y, double *z,
+  /* outputs */
+  double *nnd,
+  int *nnwhich,
+  /* upper bound on distance */
+  double *huge
+) { 
   int npoints, i, j, maxchunk;
   double d2, d2min, xi, yi, zi, dx, dy, dz, dz2, hu, hu2;
 #ifdef WHICH

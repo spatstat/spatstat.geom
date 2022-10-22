@@ -7,7 +7,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2013
   Licence: GNU Public Licence >= 2
 
-  $Revision: 1.8 $     $Date: 2013/12/10 03:29:45 $
+  $Revision: 1.10 $     $Date: 2022/10/22 02:44:32 $
 
   Function definitions are #included from knndist.h and knnXdist.h
 
@@ -98,51 +98,6 @@ double sqrt();
 #include "knndist.h"
 
 /* --------------- two distinct point patterns X and Y --------------- */
-
-/* general interface */
-
-void knnXinterface(n1, x1, y1, id1, 
-		   n2, x2, y2, id2, 
-		   kmax,
-		   exclude, wantdist, wantwhich,
-		   nnd, nnwhich, 
-		   huge)
-     /* inputs */
-     int *n1, *n2;
-     double *x1, *y1, *x2, *y2, *huge;
-     int *id1, *id2;
-     int *kmax;
-     /* options */
-     int *exclude, *wantdist, *wantwhich;
-     /* outputs */
-     double *nnd;
-     int *nnwhich;
-     /* some inputs + outputs are not used in all functions */
-{
-  void knnX(), knnXdist(), knnXwhich();
-  void knnXE(), knnXEdist(), knnXEwhich();
-  int ex, di, wh;
-  ex = (*exclude != 0);
-  di = (*wantdist != 0);
-  wh = (*wantwhich != 0);
-  if(!ex) {
-    if(di && wh) {
-      knnX(n1, x1, y1, id1, n2, x2, y2, id2, kmax, nnd, nnwhich, huge);
-    } else if(di) {
-      knnXdist(n1, x1, y1, id1, n2, x2, y2, id2, kmax, nnd, nnwhich, huge);
-    } else if(wh) {
-      knnXwhich(n1, x1, y1, id1, n2, x2, y2, id2, kmax, nnd, nnwhich, huge);
-    } 
-  } else {
-    if(di && wh) {
-      knnXE(n1, x1, y1, id1, n2, x2, y2, id2, kmax, nnd, nnwhich, huge);
-    } else if(di) {
-      knnXEdist(n1, x1, y1, id1, n2, x2, y2, id2, kmax, nnd, nnwhich, huge);
-    } else if(wh) {
-      knnXEwhich(n1, x1, y1, id1, n2, x2, y2, id2, kmax, nnd, nnwhich, huge);
-    } 
-  }
-}
 
 /* Turn off the debugging tracer in knnXdist.h */
 #undef TRACER
@@ -243,4 +198,49 @@ void knnXinterface(n1, x1, y1, id1,
 #define WHICH
 #define EXCLUDE
 #include "knnXdist.h"
+
+
+/* >>>>>>>>> GENERAL INTERFACE <<<<<<<<<<<<<<<< */
+
+/* general interface for two patterns */
+
+void knnXinterface(
+  /* inputs */
+  int *n1, double *x1, double *y1, int *id1,
+  int *n2, double *x2, double *y2, int *id2,
+  int *kmax,
+  /* options */
+  int *exclude,
+  int *wantdist,
+  int *wantwhich,
+  /* outputs */
+  double *nnd,
+  int *nnwhich,
+  /* input (upper bound) */
+  double *huge
+     /* some inputs + outputs are not used in all functions */
+) {
+  int ex, di, wh;
+  ex = (*exclude != 0);
+  di = (*wantdist != 0);
+  wh = (*wantwhich != 0);
+  if(!ex) {
+    if(di && wh) {
+      knnX(n1, x1, y1, id1, n2, x2, y2, id2, kmax, nnd, nnwhich, huge);
+    } else if(di) {
+      knnXdist(n1, x1, y1, id1, n2, x2, y2, id2, kmax, nnd, nnwhich, huge);
+    } else if(wh) {
+      knnXwhich(n1, x1, y1, id1, n2, x2, y2, id2, kmax, nnd, nnwhich, huge);
+    } 
+  } else {
+    if(di && wh) {
+      knnXE(n1, x1, y1, id1, n2, x2, y2, id2, kmax, nnd, nnwhich, huge);
+    } else if(di) {
+      knnXEdist(n1, x1, y1, id1, n2, x2, y2, id2, kmax, nnd, nnwhich, huge);
+    } else if(wh) {
+      knnXEwhich(n1, x1, y1, id1, n2, x2, y2, id2, kmax, nnd, nnwhich, huge);
+    } 
+  }
+}
+
 

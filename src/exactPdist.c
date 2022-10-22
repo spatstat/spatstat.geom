@@ -4,7 +4,7 @@
        `Pseudoexact' distance transform of a discrete binary image
        (the closest counterpart to `exactdist.c')
        
-       $Revision: 1.13 $ $Date: 2018/12/18 02:43:11 $
+       $Revision: 1.14 $ $Date: 2022/10/21 10:43:01 $
 
        
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
@@ -19,14 +19,14 @@ void   dist_to_bdry();
 void   shape_raster();
 
 void
-ps_exact_dt(in, dist, row, col)
-        Raster  *in;            /* input:  binary image */
-	Raster	*dist;		/* output: exact distance to nearest point */
-	Raster	*row;		/* output: row index of closest point */
-	Raster	*col;		/* output: column index of closest point */
-	/* rasters must have been dimensioned by shape_raster()
-	   and must all have identical dimensions and margins */
-{
+ps_exact_dt(
+    Raster  *in,            /* input:  binary image */
+    Raster *dist,		/* output: exact distance to nearest point */
+    Raster  *row,		/* output: row index of closest point */
+    Raster  *col		/* output: column index of closest point */
+    /* rasters must have been dimensioned by shape_raster()
+       and must all have identical dimensions and margins */
+){
 	int	j,k;
 	double	d, x, y;
 	int	r, c;
@@ -111,19 +111,24 @@ ps_exact_dt(in, dist, row, col)
 
 /* R interface */
 
-void ps_exact_dt_R(xmin, ymin, xmax, ymax, nr, nc, mr, mc, 
-	   inp, distances, rows, cols, boundary)
-	double *xmin, *ymin, *xmax, *ymax;  	  /* x, y dimensions */
-	int *nr, *nc;	 	                  /* raster dimensions
-				                     EXCLUDING margins */
-	int *mr, *mc;                             /* margins */
-	int   *inp;              /* input:  binary image */
-	double *distances;	/* output: distance to nearest point */
-	int   *rows;	        /* output: row of nearest point (start= 0) */
-	int   *cols;	        /* output: column of nearest point (start = 0) */
-	double *boundary;       /* output: distance to boundary of rectangle */
-	/* all images must have identical dimensions including a margin of 1 on each side */
-{
+void ps_exact_dt_R(
+  double *xmin,
+  double *ymin,
+  double *xmax,
+  double *ymax,  	  /* x, y dimensions */
+  int *nr,
+  int *nc,	         /* raster dimensions
+			    EXCLUDING margins */
+  int *mr,
+  int *mc,               /* margins */
+  int *inp,              /* input:  binary image */
+  double *distances,	/* output: distance to nearest point */
+  int   *rows,	        /* output: row of nearest point (start= 0) */
+  int   *cols,	        /* output: column of nearest point (start = 0) */
+  double *boundary       /* output: distance to boundary of rectangle */
+  /* all images must have identical dimensions
+     including a margin of 1 on each side */
+) {
 	Raster data, dist, row, col, bdist;
 	int mrow, mcol, nrow, ncol;
 

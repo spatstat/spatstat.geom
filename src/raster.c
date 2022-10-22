@@ -4,7 +4,7 @@
 
   shape_raster()     initialise a Raster structure
   
-  $Revision: 1.1 $ $Date: 2020/11/30 11:19:18 $
+  $Revision: 1.2 $ $Date: 2022/10/22 02:32:10 $
 
 */
 
@@ -12,14 +12,23 @@
 #include "raster.h"
 
 void 
-shape_raster(ras,data,xmin,ymin,xmax,ymax,nrow,ncol,mrow,mcol)
-     Raster          *ras;           /* the raster structure to be initialised */
-     void		*data;
-     int 	        nrow, ncol;  /* absolute dimensions of storage array */
-     int 		mrow, mcol;  /* margins for working */
-     double		xmin, ymin,  /* range of GRID COORDS excluding margin */
-		        xmax, ymax;     
-{
+shape_raster(
+  /* the raster structure to be initialised */
+  Raster *ras,      
+ /* pointer to data storage for pixel values */
+  void *data,
+  /* range of GRID COORDS excluding margin */  
+  double xmin,
+  double ymin,
+  double xmax,
+  double ymax,
+  /* absolute dimensions of storage array */  
+  int nrow,
+  int ncol,
+  /* margins for working */
+  int mrow,
+  int mcol  
+) {
 	ras->data	= data;
 	ras->nrow 	= nrow;
 	ras->ncol 	= ncol;

@@ -16,21 +16,26 @@
   THE FOLLOWING CODE ASSUMES THAT THE POINT PATTERN IS SORTED
   IN ASCENDING ORDER OF THE z COORDINATE
 
-  $Revision: 1.4 $ $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.5 $ $Date: 2022/10/21 10:43:01 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
 
 */
 
-void FNAME(n, kmax, x, y, z, nnd, nnwhich, huge)
-/* inputs */
-     int *n, *kmax;
-     double *x, *y, *z, *huge;
-     /* output matrices (npoints * kmax) in ROW MAJOR order */
-     double *nnd;
-     int    *nnwhich;
-{ 
+void FNAME(
+  /* inputs */
+  int *n,        /* number of points */
+  int *kmax,     /* maximum order of neighbours (1=nearest) */
+  double *x,
+  double *y,
+  double *z,
+  /* output matrices (n * kmax) in ROW MAJOR order */
+  double *nnd,
+  int    *nnwhich,
+  /* upper bound on the distance between any pair of points */
+  double *huge
+) { 
   int npoints, nk, nk1, i, j, k, k1, unsorted, maxchunk;
   double d2, d2minK, xi, yi, zi, dx, dy, dz, dz2, hu, hu2, tmp;
   double *d2min; 

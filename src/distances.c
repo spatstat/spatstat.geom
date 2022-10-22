@@ -4,7 +4,7 @@
 
   Distances between pairs of points
 
-  $Revision: 1.32 $     $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.33 $     $Date: 2022/10/21 10:43:01 $
 
   Cpairdist      Pairwise distances
   Cpair2dist     Pairwise distances squared
@@ -26,15 +26,17 @@
 
 double sqrt();
 
-void Cpairdist(n, x, y, squared, d) 
+void Cpairdist(
      /* inputs */
-     int *n;
-     double *x, *y;
-     int *squared;
+     int *n,
+     double *x,
+     double *y,
+     int *squared,
      /* output */
-     double *d;
-{
-  void Cpair1dist(), Cpair2dist();
+     double *d
+) {
+  void Cpair1dist(int *n, double *x, double *y, double *d); 
+  void Cpair2dist(int *n, double *x, double *y, double *d); 
   if(*squared == 0) {
     Cpair1dist(n, x, y, d);
   } else {
@@ -43,13 +45,14 @@ void Cpairdist(n, x, y, squared, d)
 }
 
 
-void Cpair1dist(n, x, y, d)
+void Cpair1dist(
      /* inputs */
-     int *n;
-     double *x, *y;
+     int *n,
+     double *x,
+     double *y,
      /* output */
-     double *d;
-{ 
+     double *d
+) { 
   int i, j, npoints, maxchunk; 
   double *dp;
   double xi, yi, dx, dy, dist;
@@ -85,13 +88,14 @@ void Cpair1dist(n, x, y, d)
 
 /* squared distances */
 
-void Cpair2dist(n, x, y, d)
+void Cpair2dist(
      /* inputs */
-     int *n;
-     double *x, *y;
+     int *n,
+     double *x,
+     double *y,
      /* output */
-     double *d;
-{ 
+     double *d
+) { 
   int i, j, npoints, maxchunk; 
   double *dp;
   double xi, yi, dx, dy, dist;
@@ -125,15 +129,22 @@ void Cpair2dist(n, x, y, d)
   }
 }
 
-void Ccrossdist(nfrom, xfrom, yfrom, nto, xto, yto, squared, d)
-     /* inputs */
-     int *nto, *nfrom;
-     double *xfrom, *yfrom, *xto, *yto;
-     int *squared;
-     /* output */
-     double *d;
-{
-  void Ccross1dist(), Ccross2dist();
+void Ccrossdist(
+  /* inputs */
+  int *nfrom,
+  double *xfrom,
+  double *yfrom,
+  int *nto,
+  double *xto,
+  double *yto,
+  int *squared,
+  /* output */
+  double *d
+) {
+  void Ccross1dist(int *nfrom, double *xfrom, double *yfrom,
+		   int *nto, double *xto, double *yto, double *d);
+  void Ccross2dist(int *nfrom, double *xfrom, double *yfrom,
+		   int *nto, double *xto, double *yto, double *d);
   if(*squared == 0) {
     Ccross1dist(nfrom, xfrom, yfrom, nto, xto, yto, d);
   } else {
@@ -142,13 +153,17 @@ void Ccrossdist(nfrom, xfrom, yfrom, nto, xto, yto, squared, d)
 }
 		      
 
-void Ccross1dist(nfrom, xfrom, yfrom, nto, xto, yto, d)
-     /* inputs */
-     int *nto, *nfrom;
-     double *xfrom, *yfrom, *xto, *yto;
-     /* output */
-     double *d;
-{ 
+void Ccross1dist(
+  /* inputs */
+  int *nfrom,
+  double *xfrom,
+  double *yfrom,
+  int *nto,
+  double *xto,
+  double *yto,
+  /* output */
+  double *d
+) {
   int i, j, nf, nt, maxchunk; 
   double *dptr;
   double xj, yj, dx, dy;
@@ -175,13 +190,17 @@ void Ccross1dist(nfrom, xfrom, yfrom, nto, xto, yto, d)
 
 /* squared distances */
 
-void Ccross2dist(nfrom, xfrom, yfrom, nto, xto, yto, d)
-     /* inputs */
-     int *nto, *nfrom;
-     double *xfrom, *yfrom, *xto, *yto;
-     /* output */
-     double *d;
-{ 
+void Ccross2dist(
+  /* inputs */
+  int *nfrom,
+  double *xfrom,
+  double *yfrom,
+  int *nto,
+  double *xto,
+  double *yto,
+  /* output */
+  double *d
+) {
   int i, j, nf, nt, maxchunk; 
   double *dptr;
   double xj, yj, dx, dy;
@@ -208,30 +227,40 @@ void Ccross2dist(nfrom, xfrom, yfrom, nto, xto, yto, d)
 
 /* distances with periodic correction */
 
-void CpairPdist(n, x, y, xwidth, yheight, squared, d)
-     /* inputs */
-     int *n;
-     double *x, *y, *xwidth, *yheight;
-     int *squared;
-     /* output */
-     double *d;
-{ 
-  void CpairP1dist(), CpairP2dist();
+void CpairPdist(
+  /* inputs */
+  int *n,
+  double *x,
+  double *y,
+  double *xwidth,
+  double *yheight,
+  int *squared,
+  /* output */
+  double *d
+) { 
+  void CpairP1dist(int *n, double *x, double *y,
+		   double *xwidth, double *yheight, double *d); 
+  void CpairP2dist(int *n, double *x, double *y,
+		   double *xwidth, double *yheight, double *d); 
   if(*squared == 0) {
     CpairP1dist(n, x, y, xwidth, yheight, d);
   } else {
     CpairP2dist(n, x, y, xwidth, yheight, d);
   }
 }
+ 
 
-void CpairP1dist(n, x, y, xwidth, yheight, d)
-     /* inputs */
-     int *n;
-     double *x, *y, *xwidth, *yheight;
-     /* output */
-     double *d;
-{ 
-  int i, j, npoints, maxchunk; 
+void CpairP1dist(
+  /* inputs */
+  int *n,
+  double *x,
+  double *y,
+  double *xwidth,
+  double *yheight,
+  /* output */
+  double *d
+) { 
+ int i, j, npoints, maxchunk; 
   double *dp;
   double xi, yi, dx, dy, dx2, dy2, dx2p, dy2p, dist, wide, high;
 
@@ -278,13 +307,16 @@ void CpairP1dist(n, x, y, xwidth, yheight, d)
 
 /* same function without the sqrt */
 
-void CpairP2dist(n, x, y, xwidth, yheight, d)
-     /* inputs */
-     int *n;
-     double *x, *y, *xwidth, *yheight;
-     /* output */
-     double *d;
-{ 
+void CpairP2dist(
+  /* inputs */
+  int *n,
+  double *x,
+  double *y,
+  double *xwidth,
+  double *yheight,
+  /* output */
+  double *d
+) { 
   int i, j, npoints, maxchunk; 
   double *dp;
   double xi, yi, dx, dy, dx2, dy2, dx2p, dy2p, dist, wide, high;
@@ -330,16 +362,28 @@ void CpairP2dist(n, x, y, xwidth, yheight, d)
   }
 }
 
-void CcrossPdist(nfrom, xfrom, yfrom, nto, xto, yto, xwidth, yheight, 
-		 squared, d)
-     /* inputs */
-     int *nto, *nfrom;
-     double *xfrom, *yfrom, *xto, *yto, *xwidth, *yheight;
-     int *squared;
-     /* output */
-     double *d;
-{ 
-  void CcrossP1dist(), CcrossP2dist();
+void CcrossPdist(
+  /* inputs */
+  int *nfrom,
+  double *xfrom,
+  double *yfrom,
+  int *nto,
+  double *xto,
+  double *yto,
+  double *xwidth,
+  double *yheight,
+  int *squared,
+  /* output */
+  double *d
+) { 
+  void CcrossP1dist(int *nfrom, double *xfrom, double *yfrom,
+		    int *nto,   double *xto,   double *yto,
+		    double *xwidth, double *yheight,
+		    double *d);
+  void CcrossP2dist(int *nfrom, double *xfrom, double *yfrom,
+		    int *nto,   double *xto,   double *yto,
+		    double *xwidth, double *yheight,
+		    double *d);
   if(*squared == 0) {
     CcrossP1dist(nfrom, xfrom, yfrom, nto, xto, yto, xwidth, yheight, d);
   } else {
@@ -347,13 +391,20 @@ void CcrossPdist(nfrom, xfrom, yfrom, nto, xto, yto, xwidth, yheight,
   }
 }
 
-void CcrossP1dist(nfrom, xfrom, yfrom, nto, xto, yto, xwidth, yheight, d)
-     /* inputs */
-     int *nto, *nfrom;
-     double *xfrom, *yfrom, *xto, *yto, *xwidth, *yheight;
-     /* output */
-     double *d;
-{ 
+
+void CcrossP1dist(
+  /* inputs */
+  int *nfrom,
+  double *xfrom,
+  double *yfrom,
+  int *nto,
+  double *xto,
+  double *yto,
+  double *xwidth,
+  double *yheight,
+  /* output */
+  double *d
+) { 
   int i, j, nf, nt, maxchunk; 
   double *dptr;
   double xj, yj, dx, dy, dx2, dy2, dx2p, dy2p, wide, high;
@@ -389,13 +440,19 @@ void CcrossP1dist(nfrom, xfrom, yfrom, nto, xto, yto, xwidth, yheight, d)
   }
 }
 
-void CcrossP2dist(nfrom, xfrom, yfrom, nto, xto, yto, xwidth, yheight, d)
-     /* inputs */
-     int *nto, *nfrom;
-     double *xfrom, *yfrom, *xto, *yto, *xwidth, *yheight;
-     /* output */
-     double *d;
-{ 
+void CcrossP2dist(
+  /* inputs */
+  int *nfrom,
+  double *xfrom,
+  double *yfrom,
+  int *nto,
+  double *xto,
+  double *yto,
+  double *xwidth,
+  double *yheight,
+  /* output */
+  double *d
+) { 
   int i, j, nf, nt, maxchunk; 
   double *dptr;
   double xj, yj, dx, dy, dx2, dy2, dx2p, dy2p, wide, high;

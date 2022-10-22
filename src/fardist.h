@@ -11,22 +11,25 @@
   Copyright (C) Adrian Baddeley, Rolf Turner and Ege Rubak 2014
   Licence: GPL >= 2
 
-  $Revision: 1.3 $  $Date: 2014/08/31 06:42:50 $
+  $Revision: 1.4 $  $Date: 2022/10/21 10:43:01 $
 
 
 */
 
-void FNAME(nx, x0, xstep,  
-	   ny, y0, ystep,   /* pixel grid dimensions */
-	   np, xp, yp,   /* data points */
-	   dfar) /* output grid */
-     /* inputs */
-     int *nx, *ny, *np;
-     double *x0, *xstep, *y0, *ystep;
-     double *xp, *yp;
-     /* outputs */
-     double *dfar;
-{ 
+void FNAME(
+  /* inputs */
+  int *nx,
+  double *x0,
+  double *xstep,   /* pixel grid dimensions */
+  int *ny,
+  double *y0,
+  double *ystep,    /* pixel grid dimensions */
+  int *np,
+  double *xp,
+  double *yp,      /* data points */
+  /* outputs */
+  double *dfar     /* output grid */
+) { 
   int Nxcol, Nyrow, Npoints;
   int i, j, k, ijpos;
   double  X0, Y0, Xstep, Ystep, yi, xj;

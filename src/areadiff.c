@@ -7,7 +7,7 @@
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
 
-  $Revision: 1.15 $ $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.16 $ $Date: 2022/10/20 06:36:12 $
 
   A(x,r) = area of disc b(0,r) not covered by discs b(x_i,r) for x_i in x
   
@@ -36,15 +36,16 @@
 */
 
 void
-areadiff(rad,x,y,nn,ngrid,answer) 
-     /* inputs */
-     double *rad;      /* radius */
-     double *x, *y;    /* coordinate vectors for point pattern */
-     int    *nn;       /* length of vectors x and y */
-     int    *ngrid;    /* dimensions of point-counting grid */
-     /* output */
-     double *answer;   /* computed area */
-{
+areadiff(
+  /* inputs */
+  double *rad,      /* radius */
+  double *x,
+  double *y,    /* coordinate vectors for point pattern */
+  int    *nn,       /* length of vectors x and y */
+  int    *ngrid,    /* dimensions of point-counting grid */
+  /* output */
+  double *answer   /* computed area */
+) {
   double dx, dy, xg, yg, r, r2, a2, b2, xdif, ydif;
   int i, j, k, m, n, count, covered;
   r  = *rad;
@@ -107,16 +108,17 @@ areadiff(rad,x,y,nn,ngrid,answer)
 /* similar function, handles multiple values of 'r' */
 
 void
-areadifs(rad,nrads,x,y,nxy,ngrid,answer) 
-     /* inputs */
-     double *rad;      /* vector of radii */
-     int    *nrads;     /* length of 'rads' */
-     double *x, *y;    /* coordinate vectors for point pattern */
-     int    *nxy;       /* length of vectors x and y */
-     int    *ngrid;    /* dimensions of point-counting grid */
-     /* output */
-     double *answer;   /* computed areas (vector of length 'nrads') */
-{
+areadifs(
+  /* inputs */
+  double *rad,      /* vector of radii */
+  int    *nrads,     /* length of 'rads' */
+  double *x,
+  double *y,    /* coordinate vectors for point pattern */
+  int    *nxy,       /* length of vectors x and y */
+  int    *ngrid,    /* dimensions of point-counting grid */
+  /* output */
+  double *answer   /* computed areas (vector of length 'nrads') */
+) {
   double dx, dy, xg, yg, r, r2, a2, b2, xdif, ydif;
   int i, j, k, l, m, n, nr, m0, count, covered, maxchunk;
 
@@ -199,17 +201,21 @@ areadifs(rad,nrads,x,y,nxy,ngrid,answer)
 */
 
 void
-areaBdif(rad,nrads,x,y,nxy,ngrid,x0,y0,x1,y1,answer) 
+areaBdif(
      /* inputs */
-     double *rad;      /* vector of radii */
-     int    *nrads;     /* length of 'rads' */
-     double *x, *y;    /* coordinate vectors for point pattern */
-     int    *nxy;       /* length of vectors x and y */
-     int    *ngrid;    /* dimensions of point-counting grid */
-     double *x0,*y0,*x1,*y1;  /* constraint rectangle */
-     /* output */
-     double *answer;   /* computed areas (vector of length 'nrads') */
-{
+  double *rad,      /* vector of radii */
+  int    *nrads,     /* length of 'rads' */
+  double *x,
+  double *y,    /* coordinate vectors for point pattern */
+  int    *nxy,       /* length of vectors x and y */
+  int    *ngrid,    /* dimensions of point-counting grid */
+  double *x0,
+  double *y0,
+  double *x1,
+  double *y1,  /* constraint rectangle */
+  /* output */
+  double *answer   /* computed areas (vector of length 'nrads') */
+) {
   double dx, dy, xg, yg, r, r2, a, a2, b2, xdif, ydif;
   double xleft, xright, ylow, yhigh;
   double xmin, ymin, xmax, ymax;

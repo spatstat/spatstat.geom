@@ -6,23 +6,20 @@
 
   Fill binary mask with discs with given centres and radii
 
-  $Revision: 1.5 $  $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.6 $  $Date: 2022/10/20 10:57:43 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
 
 */
 
-void discs2grid(nx, x0, xstep,  
-		ny, y0, ystep,   /* pixel grid dimensions */
-		nd, xd, yd, rd,  /* disc parameters */
-		out)
-     /* inputs */
-     int *nx, *ny, *nd;
-     double *x0, *xstep, *y0, *ystep;
-     double *xd, *yd, *rd;
-     /* output */
-     int *out;
+void discs2grid(
+    /* inputs */
+    int *nx, double *x0, double *xstep,
+    int *ny, double *y0, double *ystep,   /* pixel grid dimensions */
+    int *nd, double *xd, double *yd, double *rd,  /* disc parameters */
+    /* output */
+    int *out)
 { 
   int Nxcol, Nyrow, Ndiscs;
   double  X0, Y0, Xstep, Ystep;

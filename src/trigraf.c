@@ -4,7 +4,7 @@
 
   Form list of all triangles in a planar graph, given list of edges
   
-  $Revision: 1.15 $     $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.17 $     $Date: 2022/10/22 02:52:44 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -47,17 +47,20 @@
 
 #undef DEBUGTRI
 
-void trigraf(nv, ne, ie, je, ntmax, nt, it, jt, kt, status)
-     /* inputs */
-     int *nv;         /* number of graph vertices */
-     int *ne;         /* number of edges */
-     int *ie, *je;    /* vectors of indices of ends of each edge */ 
-     int *ntmax;      /* length of storage space for triangles */
-     /* output */
-     int *nt;              /* number of triangles (<= *ntmax) */
-     int *it, *jt, *kt;    /* vectors of indices of vertices of triangles */ 
-     int *status;          /* 0 if OK, 1 if overflow */
-{
+void trigraf(
+  /* inputs */
+  int *nv,         /* number of graph vertices */
+  int *ne,         /* number of edges */
+  int *ie,
+  int *je,         /* vectors of indices of ends of each edge */ 
+  int *ntmax,      /* length of storage space for triangles */
+  /* output */
+  int *nt,         /* number of triangles (<= *ntmax) */
+  int *it,
+  int *jt,
+  int *kt,         /* vectors of indices of vertices of triangles */ 
+  int *status      /* 0 if OK, 1 if overflow */
+) {
   int Nv, Ne, Ntmax;
   int Nt, Nj, m, i, j, k, mj, mk, maxchunk;
   int *jj;
@@ -154,17 +157,20 @@ void trigraf(nv, ne, ie, je, ntmax, nt, it, jt, kt, status)
 	          that is, je[ie[]=i] is in ascending order for each fixed i
 */
 
-void trigrafS(nv, ne, ie, je, ntmax, nt, it, jt, kt, status)
-     /* inputs */
-     int *nv;         /* number of graph vertices */
-     int *ne;         /* number of edges */
-     int *ie, *je;    /* vectors of indices of ends of each edge */ 
-     int *ntmax;      /* length of storage space for triangles */
-     /* output */
-     int *nt;              /* number of triangles */
-     int *it, *jt, *kt;    /* vectors of indices of vertices of triangles */ 
-     int *status;          /* 0 if OK, 1 if overflow */
-{
+void trigrafS(
+  /* inputs */
+  int *nv,         /* number of graph vertices */
+  int *ne,         /* number of edges */
+  int *ie,
+  int *je,         /* vectors of indices of ends of each edge */ 
+  int *ntmax,      /* length of storage space for triangles */
+  /* output */
+  int *nt,         /* number of triangles */
+  int *it,
+  int *jt,
+  int *kt,         /* vectors of indices of vertices of triangles */ 
+  int *status      /* 0 if OK, 1 if overflow */
+) {
   int Ne, Nt, Ntmax;
   int m, i, j, k, mj, mk;
   int firstedge, lastedge;

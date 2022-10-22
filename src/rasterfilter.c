@@ -7,7 +7,7 @@
   Copyright (C) Adrian Baddeley, Rolf Turner and Ege Rubak 2017
   Licence: GPL >= 2
 
-  $Revision: 1.6 $  $Date: 2017/11/18 05:14:53 $
+  $Revision: 1.7 $  $Date: 2022/10/22 02:32:10 $
 
 
 */
@@ -16,12 +16,13 @@
 #include <R_ext/Utils.h>
 #include <math.h>
 
-void raster3filter(nx, ny, a, w, b)
-     int *nx, *ny; /* raster dimensions */
-     double *a;  /* input image */
-     double *w;  /* 3x3 filter coefficients */
-     double *b;  /* output image */
-{ 
+void raster3filter(
+ int *nx,
+ int *ny,    /* raster dimensions */
+ double *a,  /* input image */
+ double *w,  /* 3x3 filter coefficients */
+ double *b   /* output image */
+) { 
   int Nxcol, Nyrow, Nx1, Ny1;
   int i, j;
   double value;

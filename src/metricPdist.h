@@ -6,12 +6,11 @@
        
        Code template which is #included several times in metricPdist.c
 
-       $Revision: 1.6 $ $Date: 2022/03/15 01:37:36 $
+       $Revision: 1.7 $ $Date: 2022/10/21 10:43:01 $
 
        Uses the following definitions
        FNAME          Function name (called from R)
        MARGLIST       List of function arguments specifying the metric
-       MARGDECLARE    Declarations of function arguments specifying the metric
        MTEMPDECLARE   Declaration and initialisation of variables for metric
        METRIC         Expression for calculating the metric (x1,y1,x2,y2)
 
@@ -22,27 +21,25 @@
 
 */
 
-void FNAME(xmin, ymin, xmax, ymax,
-	   nr, nc, mr, mc, 
-	   inp,
-	   MARGLIST,
-	   npasses,
-	   distances, rows, cols
-	   )
-	double *xmin, *ymin, *xmax, *ymax; /* range of coords of grid points */
-        /* WARNING: the enclosing frame is larger than xmin, xmax, ymin, ymax */
-	int *nr, *nc;	 	                  /* raster dimensions
-				                     EXCLUDING margins */
-	int *mr, *mc;                             /* margins */
-	int   *inp;            /* input:  binary image */
-        MARGDECLARE;
-	int *npasses;          /* number of passes over raster */
-	double *distances;     /* output: distance to nearest point */
-	int   *rows;	       /* output: row of nearest point (start= 0) */
-	int   *cols;	       /* output: column of nearest point (start = 0) */
-	/* all images must have identical dimensions 
-	   including a margin of 1 on each side */
-{
+void FNAME(
+  double *xmin,
+  double *ymin,
+  double *xmax,
+  double *ymax, /* range of coords of grid points */
+  /* WARNING: the enclosing frame is larger than xmin, xmax, ymin, ymax */
+  int *nr,
+  int *nc,      /* raster dimensions EXCLUDING margins */
+  int *mr,
+  int *mc,      /* margins */
+  int *inp,            /* input:  binary image */
+  MARGLIST,
+  int *npasses,          /* number of passes over raster */
+  double *distances,     /* output: distance to nearest point */
+  int   *rows,	       /* output: row of nearest point (start= 0) */
+  int   *cols	       /* output: column of nearest point (start = 0) */
+  /* all images must have identical dimensions 
+     including a margin of 1 on each side */
+) {
   Raster data, dist, row, col;
   int mrow, mcol, nrow, ncol;
 

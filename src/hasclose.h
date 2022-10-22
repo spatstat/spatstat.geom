@@ -16,33 +16,26 @@
 
   BUG        debugger flag
 
-  $Revision: 1.11 $ $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.12 $ $Date: 2022/10/21 10:43:01 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
 
 */
 
-void CLOSEFUN(n,
-	      x,
-	      y,
+void CLOSEFUN(
+  int *n,
+  double *x,
+  double *y,
 #ifdef ZCOORD
-	      z,
+  double *z,
 #endif
-	      r,  /* distance deemed 'close' */
+  double *r,    /* distance deemed 'close' */
 #ifdef TORUS
-	      b,  /* box dimensions */
+  double *b,    /* box dimensions */
 #endif
-	      t)  /* result: true/false */
-     int *n, *t;
-     double *x, *y, *r;
-#ifdef ZCOORD
-     double *z;
-#endif
-#ifdef TORUS
-     double *b;
-#endif
-{
+  int *t        /* result: true/false */
+) {
   double xi, yi, rmax, r2max, rmaxplus, dx, dy, d2minr2;
 #ifdef ZCOORD
   double zi, dz;
@@ -157,32 +150,25 @@ void CLOSEFUN(n,
 
 /* ........................................................ */
 
-void CROSSFUN(n1,
-	      x1,
-	      y1,
+void CROSSFUN(
+  int *n1,
+  double *x1,
+  double *y1,
 #ifdef ZCOORD
-	      z1,
+  double *z1,
 #endif
-	      n2,
-	      x2,
-	      y2,
+  int *n2,
+  double *x2,
+  double *y2,
 #ifdef ZCOORD
-	      z2,
+  double *z2,
 #endif
-	      r,
+  double *r,
 #ifdef TORUS
-	      b,  /* box dimensions (same for both patterns!!) */
+  double *b,    /* box dimensions (same for both patterns!!) */
 #endif
-	      t)
-     int *n1, *n2, *t;
-     double *x1, *y1, *x2, *y2, *r;
-#ifdef ZCOORD
-     double *z1, *z2;
-#endif
-#ifdef TORUS
-     double *b;
-#endif
-{
+  int *t
+) {
   /* lengths */
   int N1, N2, maxchunk;
   /* distance parameter */

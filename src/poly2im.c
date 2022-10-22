@@ -7,7 +7,7 @@
 
   poly2imA     pixel value = area of intersection between pixel and polygon
 
-  $Revision: 1.10 $ $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.13 $ $Date: 2022/10/22 02:50:20 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -22,12 +22,17 @@
 #include "chunkloop.h"
 
 void 
-poly2imI(xp, yp, np, nx, ny, out) 
-     double *xp, *yp; /* polygon vertices, anticlockwise, CLOSED  */
-     int *np; 
-     int *nx, *ny; /* INTEGER raster points from (0,0) to (nx-1, ny-1) */
-     int *out;  /* output matrix [ny, nx], byrow=FALSE, initialised to 0 */
-{
+poly2imI(
+  /* polygon vertices, anticlockwise, CLOSED  */	 
+  double *xp,
+  double *yp,  
+  int *np,
+  /* INTEGER raster points from (0,0) to (nx-1, ny-1) */  
+  int *nx,
+  int *ny,
+  /* output matrix [ny, nx], byrow=FALSE, initialised to 0 */  
+  int *out     
+) {
   int Np, Nx, Ny, Np1, maxchunk, mstart, mend;
   int j, k, m;
   double x0, y0, x1, y1, xleft, xright, yleft, yright;
@@ -100,14 +105,18 @@ poly2imI(xp, yp, np, nx, ny, out)
 #define ABOVE 1
 
 void 
-poly2imA(ncol, nrow, xpoly, ypoly, npoly, out, status)
-     int *ncol, *nrow; /* pixels are unit squares from (0,0) to (ncol,nrow) */
-     double *xpoly, *ypoly; /* vectors of coordinates of polygon vertices */
-     int *npoly;
-     double *out;  /* double array [nrow, ncol] of pixel areas,
-		    byrow=TRUE, initialised to 0 */
-     int *status;
-{
+poly2imA(
+  /* pixels are unit squares from (0,0) to (ncol,nrow) */	 
+  int *ncol,
+  int *nrow,
+  /* vectors of coordinates of polygon vertices */  
+  double *xpoly,
+  double *ypoly,
+  int *npoly,
+  /* output array [nrow, ncol] of pixel areas, byrow=TRUE, initialised to 0 */
+  double *out,
+  int *status
+) {
   double *xp, *yp;
   int nx, ny, nxy, np, np1, maxchunk; 
   int i, j, k;

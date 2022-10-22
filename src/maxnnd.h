@@ -12,19 +12,21 @@
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
 
-  $Revision: 1.3 $     $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.5 $     $Date: 2022/10/22 02:44:15 $
 
 */
 
 /* THE FOLLOWING CODE ASSUMES THAT y IS SORTED IN ASCENDING ORDER */
 
-void FNAME(n, x, y, huge, result) 
-     /* inputs */
-     int *n;
-     double *x, *y, *huge;
-     /* outputs */
-     double *result;
-{ 
+void FNAME(
+  /* inputs */
+  int *n,
+  double *x,
+  double *y,
+  double *huge,
+  /* outputs */
+  double *result
+) { 
   int npoints, i, maxchunk, left, right;
   double d2, d2mini, d2max, xi, yi, dx, dy, dy2, hu, hu2;
 

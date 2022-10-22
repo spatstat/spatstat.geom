@@ -30,9 +30,11 @@
 
 #define V(I,J) out[(I) + (J) * (Ny)]
 
-int clamp(k, n0, n1) 
-     int k, n0, n1;
-{
+int clamp(
+     int k,
+     int n0,
+     int n1
+) {
   int m;
   m = k;
   if(m < n0) m = n0; 
@@ -59,13 +61,19 @@ int clamp(k, n0, n1)
    the other one is anomalous...
 */
 
-void seg2pixL(ns,x0,y0,x1,y1,weights,pixwidth,pixheight,nx,ny,out)
-     int *ns;
-     double *x0,*y0,*x1,*y1,*weights; /* segment coordinates and weights */
-     double *pixwidth, *pixheight;  /* original pixel dimensions */
-     int *nx, *ny;
-     double *out;  /* output matrix */
-{
+void seg2pixL(
+  int *ns,
+  double *x0,
+  double *y0,
+  double *x1,
+  double *y1,
+  double *weights, /* segment coordinates and weights */
+  double *pixwidth,
+  double *pixheight,  /* original pixel dimensions */
+  int *nx,
+  int *ny,
+  double *out  /* output matrix */
+) {
   int Ns, Nx, Ny, i, j, k, m, mmin, mmax, maxchunk;
   double x0i, x1i, y0i, y1i;
   double leni;

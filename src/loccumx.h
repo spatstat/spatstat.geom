@@ -6,7 +6,7 @@
 
   grid-to-data or data-cross-data functions
 
-  $Revision: 1.6 $ $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.7 $ $Date: 2022/10/21 10:43:01 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -19,18 +19,15 @@
 
 */
 
-void FNAME(ntest, xtest, ytest, 
-	   ndata, xdata, ydata, vdata,
-	   nr, rmax, 
-	   ans)
-     /* inputs */
-     int *ntest, *ndata, *nr;
-     double *xtest, *ytest, *xdata, *ydata, *vdata;
-     double *rmax;
-     /* output */
-     double *ans;  /* matrix of column vectors of functions 
-		      for each point of first pattern */
-{
+void FNAME(
+  /* inputs */
+  int *ntest, double *xtest, double *ytest, 
+  int *ndata, double *xdata, double *ydata, double *vdata,
+  int *nr, double *rmax, 
+  /* output */
+  double *ans  /* matrix of column vectors of functions 
+		  for each point of first pattern */
+) {
   int Ntest, Ndata, Nr, Nans;
   double Rmax;
 

@@ -5,7 +5,7 @@
 
   data-to-data functions
 
-  $Revision: 1.6 $ $Date: 2018/12/18 02:43:11 $
+  $Revision: 1.7 $ $Date: 2022/10/21 10:43:01 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -18,16 +18,17 @@
 
 */
 
-void FNAME(n, x, y, v,
-	   nr, rmax, 
-	   ans)
-     /* inputs */
-     int *n, *nr;
-     double *x, *y, *v;
-     double *rmax;
-     /* output */
-     double *ans;  /* matrix of column vectors of functions for each point */
-{
+void FNAME(
+  /* inputs */
+  int *n,
+  double *x,
+  double *y,
+  double *v,
+  int *nr,
+  double *rmax, 
+  /* output */
+  double *ans  /* matrix of column vectors of functions for each point */
+) {
   int N, Nr, Nans;
   double Rmax;
 

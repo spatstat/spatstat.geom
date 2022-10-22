@@ -4,7 +4,7 @@
        Exact distance transform of a point pattern
        (used to estimate the empty space function F)
        
-       $Revision: 1.18 $ $Date: 2022/03/15 02:44:29 $
+       $Revision: 1.19 $ $Date: 2022/10/21 10:43:01 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
@@ -41,12 +41,13 @@
 void shape_raster();
 
 void
-exact_dt(x, y, npt, dist, index)
-	double	*x, *y;		/* data points */
-	int	npt;
-	Raster	*dist;		/* exact distance to nearest point */
-	Raster	*index;		/* which point x[i],y[i] is closest */
-{
+exact_dt(
+  double *x,
+  double *y,		/* data points */
+  int	npt,
+  Raster *dist,		/* exact distance to nearest point */
+  Raster *index		/* which point x[i],y[i] is closest */
+) {
 	int	i,j,k,l,m;
 	double	d;
 	int	ii;
@@ -150,9 +151,10 @@ exact_dt(x, y, npt, dist, index)
 
 #define MIN(A,B) (((A) < (B)) ? (A) : (B))
 
+/* distance to frame boundary from each raster point */
+
 void
-dist_to_bdry(d)	    /* distance to frame boundary from each raster point */
-     Raster *d;
+dist_to_bdry(Raster *d)
 {
   int j, k;
   double x, y, xd, yd, Xmin, Xmax, Ymin, Ymax;
@@ -186,22 +188,24 @@ dist_to_bdry(d)	    /* distance to frame boundary from each raster point */
 
 /* R interface */
 
-void exact_dt_R(x, y, npt,
-		xmin, ymin, xmax, ymax,
-		nr, nc, mr, mc, 
-		distances, indices, boundary)
-	double *x, *y;		/* input data points */
-	int	*npt;
-	double *xmin, *ymin,
-		*xmax, *ymax;  	/* guaranteed bounding box */
-	int *nr, *nc;		/* desired raster dimensions
-				   EXCLUDING margins */
-	int *mr, *mc;           /* margins */
-	     /* output arrays */
-	double *distances;	/* distance to nearest point */
-	int   *indices;	        /* index to nearest point */
-	double	*boundary;	/* distance to boundary */
-{
+void exact_dt_R(
+  double *x,
+  double *y,		/* input data points */
+  int	*npt,
+  double *xmin,
+  double *ymin,
+  double *xmax,
+  double *ymax,  	/* guaranteed bounding box */
+  int *nr,
+  int *nc,		/* desired raster dimensions
+			   EXCLUDING margins */
+  int *mr,
+  int *mc,           /* margins */
+  /* output arrays */
+  double *distances,	/* distance to nearest point */
+  int   *indices,	        /* index to nearest point */
+  double *boundary	/* distance to boundary */
+) {
 	Raster dist, index, bdist;
 	int mrow, mcol, nrow, ncol;
 
