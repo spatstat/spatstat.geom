@@ -24,10 +24,16 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2012
   Licence: GPL >= 2
 
-  $Revision: 1.7 $  $Date: 2022/10/21 10:43:01 $
+  $Revision: 1.8 $  $Date: 2022/10/23 05:21:52 $
 
 
 */
+#endif
+
+#undef USEJ
+
+#if ((defined WHICH) | (!defined EXCLUDE))
+#define USEJ
 #endif
 
 void FNAME(
@@ -38,9 +44,11 @@ void FNAME(
   double *huge
   /* some inputs + outputs are not used in all functions */
 ) { 
-  int npoints1, npoints2, maxchunk, i, jleft, jright, jwhich, lastjwhich;
+  int npoints1, npoints2, maxchunk, i, jleft, jright, lastjwhich;
   double d2, d2min, x1i, y1i, dx, dy, dy2, hu, hu2;
-  
+#ifdef USEJ
+  int jwhich;
+#endif  
 #ifdef EXCLUDE
   int id1i;
 #endif
@@ -69,11 +77,13 @@ void FNAME(
     for(; i < maxchunk; i++) {
 
       d2min = hu2;
-      jwhich = -1;
       x1i = x1[i];
       y1i = y1[i];
 #ifdef EXCLUDE
       id1i = id1[i];
+#endif
+#ifdef USEJ
+      jwhich = -1;
 #endif
 
       if(lastjwhich < npoints2) {  /* always true if EXCLUDE is defined */
@@ -92,7 +102,9 @@ void FNAME(
 	      d2 =  dx * dx + dy2;
 	      if (d2 < d2min) {
 		d2min = d2;
+#ifdef USEJ	
 		jwhich = jright;
+#endif		
 	      }
 #ifdef EXCLUDE
 	    }
@@ -116,7 +128,9 @@ void FNAME(
 	      d2 =  dx * dx + dy2;
 	      if (d2 < d2min) {
 		d2min = d2;
+#ifdef USEJ	
 		jwhich = jleft;
+#endif		
 	      }
 #ifdef EXCLUDE
 	    }

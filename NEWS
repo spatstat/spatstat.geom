@@ -1,8 +1,14 @@
+        CHANGES IN spatstat.geom VERSION 3.0-3
+
+OVERVIEW
+
+    o Minor internal changes to satisfy package checker.
+
         CHANGES IN spatstat.geom VERSION 3.0-2
 
 OVERVIEW
 
-    o Minor internal changes.
+    o Minor internal changes to satisfy package checker.
 
         CHANGES IN spatstat.geom VERSION 3.0-1
 
@@ -16,7 +22,7 @@ OVERVIEW
 
     o Minor improvements and bug fixes.
 
-    o Changes to package dependence
+    o Changes to package dependence.
     
 NEW FUNCTIONS
 

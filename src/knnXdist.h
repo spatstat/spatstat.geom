@@ -31,6 +31,11 @@
 */
 #endif
 
+#undef USEJ
+#ifndef EXCLUDE
+#define USEJ
+#endif
+
 void FNAME(
   /* inputs */
   int *n1, double *x1, double *y1, int *id1,
@@ -44,7 +49,10 @@ void FNAME(
   /* some inputs + outputs are not used in all functions */
 ) { 
   int npoints1, npoints2, nk, nk1;
-  int maxchunk, i, jleft, jright, jwhich, lastjwhich, unsorted, k, k1;
+  int maxchunk, i, jleft, jright, lastjwhich, unsorted, k, k1;
+#ifdef USEJ
+  int jwhich;
+#endif
   double d2, d2minK, x1i, y1i, dx, dy, dy2, hu, hu2, tmp;
   double *d2min; 
 #ifdef WHICH
@@ -94,7 +102,9 @@ void FNAME(
 
       /* initialise nn distances and indices */
       d2minK = hu2;
+#ifdef USEJ
       jwhich = -1;
+#endif      
       for(k = 0; k < nk; k++) {
 	d2min[k] = hu2;
 #ifdef WHICH
@@ -151,9 +161,11 @@ void FNAME(
 			d2min[nk1], d2);
 #endif
 		d2min[nk1] = d2;
+#ifdef USEJ
 		jwhich = jright;
+#endif		
 #ifdef WHICH
-		which[nk1] = jwhich;
+		which[nk1] = jright;
 #endif
 		/* bubble sort */
 		unsorted = YES;
@@ -231,9 +243,11 @@ void FNAME(
 			d2min[nk1], d2);
 #endif
 		d2min[nk1] = d2;
+#ifdef USEJ
 		jwhich = jleft;
+#endif		
 #ifdef WHICH
-		which[nk1] = jwhich;
+		which[nk1] = jleft;
 #endif
 		/* bubble sort */
 		unsorted = YES;
