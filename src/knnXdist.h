@@ -25,7 +25,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2013
   Licence: GPL >= 2
 
-  $Revision: 1.12 $  $Date: 2022/10/21 10:43:01 $
+  $Revision: 1.13 $  $Date: 2022/10/23 00:23:50 $
 
 
 */
@@ -153,7 +153,7 @@ void FNAME(
 		d2min[nk1] = d2;
 		jwhich = jright;
 #ifdef WHICH
-		which[nk1] = jright;
+		which[nk1] = jwhich;
 #endif
 		/* bubble sort */
 		unsorted = YES;
@@ -233,7 +233,7 @@ void FNAME(
 		d2min[nk1] = d2;
 		jwhich = jleft;
 #ifdef WHICH
-		which[nk1] = jleft;
+		which[nk1] = jwhich;
 #endif
 		/* bubble sort */
 		unsorted = YES;

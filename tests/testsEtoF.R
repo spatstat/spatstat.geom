@@ -77,7 +77,7 @@ local({
 #
 #  tests/func.R
 #
-#   $Revision: 1.8 $   $Date: 2020/12/03 03:28:44 $
+#   $Revision: 1.9 $   $Date: 2022/10/23 00:48:40 $
 #
 #  Tests of 'funxy' infrastructure etc
 
@@ -87,6 +87,29 @@ local({
   W <- square(1)
   f1a <- function(x, y) sqrt(x^2 + y^2)
   F1a <- funxy(f1a, W)
+  f1b <- function(x, y) { sqrt(x^2 + y^2) }
+  f2a <- function(x, y) sin(x)
+  f2b <- function(x, y) { sin(x) } 
+  f3a <- function(x, y) sin(x) + cos(x) 
+  f3b <- function(x, y) { sin(x) + cos(x) } 
+  f4a <- function(x, y) { z <- x + y ; z }
+  f4b <- function(x, y) { x + y }
+  F1b <- funxy(f1b, W)
+  F2a <- funxy(f2a, W)
+  F2b <- funxy(f2b, W)
+  F3a <- funxy(f3a, W)
+  F3b <- funxy(f3b, W)
+  F4a <- funxy(f4a, W)
+  F4b <- funxy(f4b, W)
+  stopifnot(identical(F1a(cells), F1b(cells)))
+  stopifnot(identical(F2a(cells), F2b(cells)))
+  stopifnot(identical(F3a(cells), F3b(cells)))
+  stopifnot(identical(F4a(cells), F4b(cells)))
+  ## check coordinate extraction from objects
+  X <- runifrect(9)
+  Q <- quadscheme(X)
+  a <- F1a(X)
+  d <- F1a(Q)
 })
 }
 

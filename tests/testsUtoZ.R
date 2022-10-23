@@ -214,8 +214,29 @@ reset.spatstat.options()
 ##
 ##    Test weird problems and boundary cases for line segment code
 ##
-##    $Version$ $Date: 2020/11/02 07:11:48 $ 
+##    $Version$ $Date: 2022/10/23 01:21:09 $ 
 ##
 
+local({
+  if(FULLTEST) {
+    ## segment of length zero
+    B <- psp(1/2, 1/2, 1/2, 1/2, window=square(1))
+    BB <- angles.psp(B)
+    A <- runifrect(3)
+    AB <- project2segment(A,B)
+
+    ## mark inheritance
+    X <- psp(runif(10), runif(10), runif(10), runif(10), window=owin())
+    marks(X) <- 1:10
+    Y <- selfcut.psp(X)
+    marks(X) <- data.frame(A=1:10, B=factor(letters[1:10]))
+    Z <- selfcut.psp(X)
+    #' psp class support
+    S <- unmark(X)
+    marks(S) <- sample(factor(c("A","B")), nobjects(S), replace=TRUE)
+    intensity(S)
+    intensity(S, weights=runif(nsegments(S)))
+  }
+})
 
 

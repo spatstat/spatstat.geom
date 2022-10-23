@@ -251,15 +251,49 @@ reset.spatstat.options()
 #'   Tests of "click*" functions
 #'   using queueing feature of spatstatLocator
 #'
-#'   $Revision: 1.7 $ $Date: 2020/11/02 06:53:30 $
+#'   $Revision: 1.8 $ $Date: 2022/10/23 00:45:36 $
 
 local({
+  #' clickppp
+  if(ALWAYS) {
+    spatstat.utils::queueSpatstatLocator(runif(5), runif(5))
+    XA <- clickppp(hook=square(0.5))
+  }
+  if(FULLTEST) {
+    spatstat.utils::queueSpatstatLocator(runif(6), runif(6))
+    XB <- clickppp(n=3, types=c("a", "b"))
+  }
+  if(ALWAYS) {
+    #' clickbox
+    spatstat.utils::queueSpatstatLocator(runif(2), runif(2))
+    BB <- clickbox()
+    #' clickdist
+    spatstat.utils::queueSpatstatLocator(runif(2), runif(2))
+    dd <- clickdist()
+    #' clickpoly
+    hex <- vertices(disc(radius=0.4, centre=c(0.5, 0.5), npoly=6))
+    spatstat.utils::queueSpatstatLocator(hex)
+    PA <- clickpoly()
+  }
+  if(FULLTEST) {
+    holy <- vertices(disc(radius=0.2, centre=c(0.5, 0.5), npoly=6))
+    holy <- lapply(holy, rev)
+    spatstat.utils::queueSpatstatLocator(concatxy(hex, holy))
+    PB <- clickpoly(np=2, nv=6)
+  }
+  if(ALWAYS) {
+    #' identify.psp
+    E <- edges(letterR)[c(FALSE, TRUE)]
+    Z <- ppp(c(2.86, 3.65, 3.15), c(1.69, 1.98, 2.56), window=Frame(letterR))
+    spatstat.utils::queueSpatstatLocator(Z)
+    identify(E)
+  }
 })
 ## tests/colour.R
 ##
 ##  Colour value manipulation and colour maps
 ##
-## $Revision: 1.8 $ $Date: 2020/04/28 08:27:38 $
+## $Revision: 1.10 $ $Date: 2022/10/23 00:37:44 $
 ##
 
 local({
@@ -326,12 +360,12 @@ local({
     plot(niets)
   }
 
-  if(ALWAYS) {
+  if(FULLTEST) {
     #' interpolation - of transparent colours
     co <- colourmap(inputs=c(0, 0.5, 1),
                     rgb(red=c(1,0,0), green=c(0,1,0), blue=c(0,0,1),
                         alpha=c(0.3, 0.6, 0.9)))
-    plot(interp.colourmap(co))
+    tco <- interp.colourmap(co)
   }
 })
 

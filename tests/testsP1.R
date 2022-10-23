@@ -40,7 +40,7 @@ local({
 ## tests/pixelgripes.R
 ##     Problems related to pixellation of windows
 ##
-## $Revision: 1.5 $ $Date: 2020/04/30 05:23:52 $
+## $Revision: 1.7 $ $Date: 2022/10/23 01:17:00 $
 
 if(FULLTEST) {
 local({
