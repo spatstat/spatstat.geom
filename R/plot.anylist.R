@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.32 $ $Date: 2022/05/24 03:51:42 $
+##  $Revision: 1.33 $ $Date: 2022/11/03 11:08:33 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
@@ -441,6 +441,7 @@ plot.anylist <- plot.solist <- plot.listof <-
     ## .... plot banner
     if(banner) {
       opa <- par(mar=rep.int(0,4), xpd=TRUE)
+      on.exit(par(opa))
       plot(numeric(0),numeric(0),type="n",ann=FALSE,axes=FALSE,
            xlim=c(-1,1),ylim=c(-1,1))
       cex <- resolve.1.default(list(cex.title=1.5), list(...))/par('cex')
@@ -448,7 +449,7 @@ plot.anylist <- plot.solist <- plot.listof <-
     }
     ## plot panels
     npa <- par(mar=mar.panel)
-    if(!banner) opa <- npa
+    if(!banner) on.exit(par(npa))
     result <- vector(mode="list", length=n)
     for(i in 1:n) {
       xi <- x[[i]]
@@ -477,7 +478,6 @@ plot.anylist <- plot.solist <- plot.listof <-
     }
     ## revert
     layout(1)
-    par(opa)
     return(invisible(result))
   }
 
@@ -564,8 +564,8 @@ plot.imlist <- local({
       ## bespoke function executed to plot colour ribbon
       do.ribbon <- function() {
         opa <- par(mar=ribmar)
+        on.exit(par(opa))
         do.call(plot, ribstuff)
-        par(opa)
       }
       ## ribbon plot function encoded as 'adorn' argument
       ribadorn <- list(adorn=do.ribbon, adorn.size=ribwid)

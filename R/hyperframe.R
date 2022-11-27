@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.78 $  $Date: 2020/11/16 02:30:29 $
+# $Revision: 1.79 $  $Date: 2022/11/03 11:08:33 $
 #
 
 hyperframe <- local({
@@ -567,6 +567,7 @@ plot.hyperframe <-
   # plot banner
   if(banner) {
     opa <- par(mar=rep.int(0,4), xpd=TRUE)
+    on.exit(par(opa))
     plot(numeric(0),numeric(0),type="n",ann=FALSE,axes=FALSE,
          xlim=c(-1,1),ylim=c(-1,1))
     cex <- resolve.defaults(list(...), list(cex.title=2))$cex.title
@@ -574,11 +575,10 @@ plot.hyperframe <-
   }
   # plot panels
   npa <- do.call(par, parargs)
-  if(!banner) opa <- npa
+  if(!banner) on.exit(par(npa))
   with(x, ee=ee)
   # revert
   layout(1)
-  par(opa)
   return(invisible(NULL))
 }
 
