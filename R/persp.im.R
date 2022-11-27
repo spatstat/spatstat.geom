@@ -237,21 +237,23 @@ perspVisible <- function(x, y, z, M) {
   return(V)
 }
 
-perspPoints <- function(x, y=NULL, ..., Z, M) {
+perspPoints <- function(x, y=NULL, ..., Z, M, occluded=TRUE) {
   xy <- xy.coords(x, y)
   stopifnot(is.im(Z))
   X <- as.ppp(xy, W=Frame(Z))
   if(!(is.matrix(M) && all(dim(M) == 4)))
     stop("M should be a 4 x 4 matrix, returned from persp()")
-  V <- attr(M, "visible")
-  if(is.null(V)) {
-    warning(paste("M does not contain visibility information;",
-               "it should be recomputed by persp() with visible=TRUE"))
-  } else {
-    ## restrict to visible points
-    VX <- V[X, drop=FALSE]
-    VX[is.na(VX)] <- FALSE
-    X <- X[VX]
+  if(occluded) {
+    V <- attr(M, "visible")
+    if(is.null(V)) {
+      warning(paste("M does not contain visibility information;",
+                    "it should be recomputed by persp() with visible=TRUE"))
+    } else {
+      ## restrict to visible points
+      VX <- V[X, drop=FALSE]
+      VX[is.na(VX)] <- FALSE
+      X <- X[VX]
+    }
   }
   #' determine heights
   ZX <- Z[X, drop=FALSE] # may contain NA
@@ -260,14 +262,17 @@ perspPoints <- function(x, y=NULL, ..., Z, M) {
 }
 
 perspSegments <- local({
-  perspSegments <- function(x0, y0=NULL, x1=NULL, y1=NULL, ..., Z, M) {
+  perspSegments <- function(x0, y0=NULL, x1=NULL, y1=NULL, ...,
+                            Z, M, occluded=TRUE) {
     stopifnot(is.im(Z))
     if(!(is.matrix(M) && all(dim(M) == 4)))
       stop("M should be a 4 x 4 matrix, returned from persp()")
-    V <- attr(M, "visible")
-    if(is.null(V))
-      warning(paste("M does not contain visibility information;",
-                 "it should be recomputed by persp() with visible=TRUE"))
+    if(occluded) {
+      V <- attr(M, "visible")
+      if(is.null(V))
+        warning(paste("M does not contain visibility information;",
+                      "it should be recomputed by persp() with visible=TRUE"))
+    }
     
     if(is.psp(X <- x0) && is.null(y0) && is.null(x1) && is.null(y1)) {
       eX <- X$ends
@@ -280,7 +285,8 @@ perspSegments <- local({
       check.nvector(y1, naok=TRUE, vname="y1")
       eX <- cbind(x0, y0, x1, y1)
     }
-    if(is.null(V)) {
+    if(!occluded || is.null(V)) {
+      ## no segments will be occluded
       Y <- eX
     } else {
       ## chop each segment to length of single pixel along either axis
@@ -317,21 +323,22 @@ perspSegments <- local({
   perspSegments
 })
 
-perspLines <- function(x, y=NULL, ..., Z, M) {
+perspLines <- function(x, y=NULL, ..., Z, M, occluded=TRUE) {
   xy <- xy.coords(x, y)
   n <- length(xy$x)
-  perspSegments(x[-n], y[-n], x[-1], y[-1], Z=Z, M=M, ...)
+  perspSegments(x[-n], y[-n], x[-1], y[-1], Z=Z, M=M, ..., occluded=occluded)
 }
 
 perspContour <- function(Z, M, ...,
-                         nlevels=10, levels=pretty(range(Z), nlevels)) {
+                         nlevels=10, levels=pretty(range(Z), nlevels),
+                         occluded=TRUE) {
   cl <- contourLines(x=Z$xcol,
                      y=Z$yrow,
                      z=t(Z$v),
                      nlevels=nlevels, levels=levels)
   for(i in seq_along(cl)) {
     cli <- cl[[i]]
-    perspLines(cli$x, cli$y, ..., Z=Z, M=M)
+    perspLines(cli$x, cli$y, ..., Z=Z, M=M, occluded=occluded)
   }
   invisible(NULL)
 }
