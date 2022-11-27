@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.104 $	$Date: 2022/04/23 09:43:12 $
+#	$Revision: 1.105 $	$Date: 2022/11/27 10:21:45 $
 #
 #
 #--------------------------------------------------------------------------
@@ -434,7 +434,7 @@ plot.ppp <- local({
     legendmap <- if(length(leg.args) == 0) symap else 
                  do.call(update, append(list(object=quote(symap)), leg.args))
     dont.complain.about(legendmap)
-    do.call(plot,
+    do.call(plot.symbolmap,
             append(list(x=quote(legendmap), main="", add=TRUE,
                         xlim=legbox$xrange, ylim=legbox$yrange),
                    leg.args))

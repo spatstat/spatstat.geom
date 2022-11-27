@@ -12,7 +12,7 @@
                          vertical = FALSE,
                          side = c("bottom", "left", "top", "right"),
                          annotate = TRUE, labelmap = NULL, add = FALSE,
-                         nsymbols = NULL)
+                         nsymbols = NULL, warn = TRUE)
 } 
 \arguments{
   \item{x}{
@@ -49,16 +49,32 @@
     current plot (\code{add=TRUE}) or to initialise a new plot.
   }
   \item{nsymbols}{
-    Optional. The number of symbols that should be displayed.
-    (This may not be exactly obeyed.)
+    Optional. The maximum number of symbols that should be displayed.
+  }
+  \item{warn}{
+    Logical value specifying whether to issue a warning
+    when the plotted symbol map does not represent every possible
+    discrete value.
   }
 }
 \details{
-  A graphics symbol map is
-  an association between data values and graphical symbols. 
-
+  A graphics symbol map (object of class \code{"symbolmap"})
+  is an association between data values and graphical symbols. 
+  
   This command plots the graphics symbol map itself,
   in the style of a plot legend.
+
+  For a map of continuous values (a symbol map which represents a range
+  of numerical values) the plot will select about \code{nsymbols}
+  different values within this range, and plot their graphical
+  representations.
+
+  For a map of discrete inputs (a symbol map which represents a finite
+  set of elements, such as categorical values) the plot will try to
+  display the graphical representation of every possible input,
+  up to a maximum of \code{nsymbols} items. If there are more than
+  \code{nsymbols} possible inputs, a warning will be issued (if
+  \code{warn=TRUE}, the default).
 }
 \value{
   None.

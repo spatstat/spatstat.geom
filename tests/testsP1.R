@@ -40,10 +40,11 @@ local({
 ## tests/pixelgripes.R
 ##     Problems related to pixellation of windows
 ##
-## $Revision: 1.7 $ $Date: 2022/10/23 01:17:00 $
+## $Revision: 1.8 $ $Date: 2022/10/23 06:21:10 $
 
 if(FULLTEST) {
-local({
+  local({
+    
 
   ## pixellate.ppp includes mapping from (x,y) to (row, col)
   Z <- pixellate(cells, savemap=TRUE)

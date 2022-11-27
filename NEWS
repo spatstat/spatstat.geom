@@ -1,3 +1,37 @@
+        CHANGES IN spatstat.geom VERSION 3.0-4.001
+
+OVERVIEW
+
+    o Minor improvements.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o plot.ppp
+    For multitype point patterns, a warning is issued if 
+    the plot legend does not represent every possible type of point
+    due to space restrictions.
+
+    o plot.symbolmap
+    New argument 'warn'.
+
+    o plot.symbolmap
+    Issues a warning if the plot of a discrete symbol map does not
+    represent every possible input value, due to space restrictions.
+
+
+        CHANGES IN spatstat.geom VERSION 3.0-4
+
+OVERVIEW
+
+    o Improvements to perspective plots.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o perspPoints, perspLines, perspSegments, perspContour
+    New argument 'occluded' specifies whether the surface
+    should be treated as opaque or transparent.
+
+
         CHANGES IN spatstat.geom VERSION 3.0-3
 
 OVERVIEW

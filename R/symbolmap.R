@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.42 $  $Date: 2022/05/12 06:01:44 $
+##   $Revision: 1.43 $  $Date: 2022/11/27 10:19:52 $
 ##
 
 symbolmap <- local({
@@ -479,7 +479,7 @@ plot.symbolmap <- function(x, ..., main,
                            vertical=FALSE,
                            side=c("bottom", "left", "top", "right"),
                            annotate=TRUE, labelmap=NULL, add=FALSE,
-                           nsymbols=NULL) {
+                           nsymbols=NULL, warn=TRUE) {
   if(missing(main))
     main <- short.deparse(substitute(x))
   miss.side <- missing(side)
@@ -515,8 +515,14 @@ plot.symbolmap <- function(x, ..., main,
              vv <- signif(vv, 4)
          },
          discrete = {
-           vv <- if(is.null(nsymbols)) prettydiscrete(stuff$inputs) else
-                 prettydiscrete(stuff$inputs, n = nsymbols)
+           dd <- stuff$inputs
+           vv <- if(is.null(nsymbols)) prettydiscrete(dd) else
+                 prettydiscrete(dd, n = nsymbols)
+           if(warn && (length(vv) < length(dd))) {
+             warning(paste("Only", length(vv), "out of", length(dd),
+                           "symbols are shown in the symbol map"),
+                     call.=FALSE)
+           }
            if(vertical) vv <- rev(vv)
          })
   nn <- length(vv)
