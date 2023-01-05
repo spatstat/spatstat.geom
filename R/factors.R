@@ -3,7 +3,7 @@
 #'
 #'  Tools for manipulating factors and factor-valued things
 #'
-#'  $Revision: 1.4 $  $Date: 2016/04/25 02:34:40 $
+#'  $Revision: 1.6 $  $Date: 2023/01/05 02:16:41 $
 
 relevel.im <- function(x, ref, ...) {
   if(x$type != "factor")
@@ -61,4 +61,37 @@ levelsAsFactor <- function(x) {
   lev <- levels(x)
   if(is.null(lev)) return(NULL)
   return(factor(lev, levels=lev))
+}
+
+harmoniseLevels <- function(...) {
+  x <- list(...)
+  if(length(x) == 1) {
+    x <- x[[1L]]
+    if(!is.null(levels(x))) return(x) ## single factor or object
+  }
+  ## extract factor levels for each factor
+  levlist <- lapply(x, levels)
+  if(any(sapply(levlist, is.null)))
+    stop("Some of the arguments do not have factor levels")
+  if(length(unique(levlist)) == 1)
+    return(x) # levels are already identical
+  ## pool factor levels of all factors
+  pooledlevels <- unique(unlist(levlist))
+  matchlist <- lapply(levlist, match, table=pooledlevels)
+  if(anyNA(unlist(matchlist)))
+    stop("Unable to harmonise levels")
+  ## map each factor to the pooled levels
+  xentries <- lapply(x, "[")
+  oldcodelist <- lapply(xentries, as.integer)
+  newcodelist <- mapply("[", matchlist, oldcodelist, SIMPLIFY=FALSE)
+  newfactors <- lapply(newcodelist, factor,
+                       levels=seq_along(pooledlevels),
+                       labels=pooledlevels)
+  isim <- sapply(x, is.im)
+  xnew <- newfactors
+  xnew[isim] <- mapply("[<-", x=x[isim], value=newfactors, SIMPLIFY=FALSE)
+  names(xnew) <- names(x)
+  if(is.solist(x) || all(isim))
+    xnew <- as.solist(x)
+  return(xnew)
 }

@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.33 $ $Date: 2022/11/03 11:08:33 $
+##  $Revision: 1.36 $ $Date: 2023/01/05 02:12:32 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
@@ -530,11 +530,29 @@ plot.imlist <- local({
     stopifnot(is.list(ribargs))
     if(!is.null(ribsep))
       warning("Argument ribsep is not yet implemented for image arrays")
-    ## determine range of values
-    if(is.null(zlim))
-      zlim <- range(unlist(lapply(x, range)))
-    ## determine common colour map
-    imcolmap <- plot.im(x[[1L]], do.plot=FALSE, zlim=zlim, ..., ribn=ribn)
+    ## ascertain types of pixel values
+    xtypes <- sapply(x, getElement, name="type")
+    ischar <- (xtypes == "character")
+    if(any(ischar)) {
+      ## convert character-valued images to factor-valued
+      strings <- unique(unlist(lapply(x[ischar], "[")))
+      x[ischar] <- lapply(x[ischar], factorimage, levels=strings)
+      xtypes[ischar] <- "factor"
+    }
+    isfactor <- xtypes == "factor"
+    isnumeric <- xtypes %in% c("real", "integer", "logical")
+    if(all(isnumeric)) {
+      ## determine range of values for colour map
+      if(is.null(zlim))
+        zlim <- range(unlist(lapply(x, range)))
+      ## determine common colour map based on zlim
+      imcolmap <- plot.im(x[[1L]], do.plot=FALSE, zlim=zlim, ..., ribn=ribn)
+    } else if(all(isfactor)) {
+      x <- harmoniseLevels(x)
+      ## determine common colour map based on factor levels
+      imcolmap <- plot.im(x[[1L]], do.plot=FALSE, ..., ribn=ribn)
+    } else warning("Could not determine a common colour map for these images",
+                   call.=FALSE)
     ## plot ribbon?
     if(!ribbon) {
       ribadorn <- list()
@@ -583,6 +601,10 @@ plot.imlist <- local({
     return(invisible(result))
   }
 
+  factorimage <- function(X, levels=NULL) {
+    eval.im(factor(X, levels=levels))
+  }
+  
   plot.imlist
 })
 

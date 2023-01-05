@@ -1,9 +1,15 @@
-        CHANGES IN spatstat.geom VERSION 3.0-4.001
+        CHANGES IN spatstat.geom VERSION 3.0-4.002
 
 OVERVIEW
 
-    o Minor improvements.
+    o Improvements to plot code.
 
+NEW FUNCTIONS
+
+    o harmoniseLevels
+    Given several factors or factor-valued pixel images,
+    convert them all to have the same set of factor levels.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.ppp
@@ -18,6 +24,17 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Issues a warning if the plot of a discrete symbol map does not
     represent every possible input value, due to space restrictions.
 
+    o plot.solist
+    When equal.ribbon=TRUE, the images may now be factor-valued
+    or character-valued. Character-valued images will be converted
+    to factor-valued images. The common colour map will combine the
+    levels of all the factor images. 
+    
+BUG FIXES
+
+    o "[<-.im"
+    Errors occurred in x[] <- v when x and v were both factor-valued
+    but with different sets of levels.
 
         CHANGES IN spatstat.geom VERSION 3.0-4
 
