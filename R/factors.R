@@ -3,7 +3,7 @@
 #'
 #'  Tools for manipulating factors and factor-valued things
 #'
-#'  $Revision: 1.6 $  $Date: 2023/01/05 02:16:41 $
+#'  $Revision: 1.7 $  $Date: 2023/01/05 23:33:47 $
 
 relevel.im <- function(x, ref, ...) {
   if(x$type != "factor")
@@ -92,6 +92,6 @@ harmoniseLevels <- function(...) {
   xnew[isim] <- mapply("[<-", x=x[isim], value=newfactors, SIMPLIFY=FALSE)
   names(xnew) <- names(x)
   if(is.solist(x) || all(isim))
-    xnew <- as.solist(x)
+    xnew <- as.solist(xnew)
   return(xnew)
 }

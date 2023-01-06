@@ -38,5 +38,9 @@ harmoniseLevels(...)
   (a <- factor(sample(letters[1:3], 10, replace=TRUE)))
   (b <- factor(sample(LETTERS[1:4], 7, replace=TRUE)))
   harmoniseLevels(a,b)
+
+  (A <- gorillas.extra$vegetation)
+  (B <- gorillas.extra$slopetype)
+  harmoniseLevels(A,B)
 }
 \keyword{manip}
