@@ -89,5 +89,9 @@ rjitter(X, \dots)
 \author{
   \spatstatAuthors.
 }
+\seealso{
+  \code{\link{rexplode}}
+}
 \keyword{spatial}
 \keyword{datagen}
+\keyword{manip}

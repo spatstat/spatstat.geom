@@ -1,10 +1,12 @@
-        CHANGES IN spatstat.geom VERSION 3.0-4.004
+        CHANGES IN spatstat.geom VERSION 3.0-4.005
 
 OVERVIEW
 
     o Convert several factors or factor-valued images to a common set of levels.
     
-    o Extension to rjitter.
+    o Extension to rjitter
+
+    o Alternative to rjitter
 
     o Improvements to plot code.
 
@@ -13,6 +15,11 @@ NEW FUNCTIONS
     o harmoniseLevels
     Given several factors or factor-valued pixel images,
     convert them all to have the same set of factor levels.
+
+    o rexplode
+    'Explode' a point pattern by randomly displacing each
+    group of duplicated points to make a circular pattern
+    around the original location. An alternative to 'rjitter'.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -45,6 +52,10 @@ BUG FIXES
     Errors occurred in x[] <- v when x and v were both factor-valued
     but with different sets of levels.
 
+    o rjitter
+    If retry=FALSE, marks were ignored.
+    Fixed.
+    
         CHANGES IN spatstat.geom VERSION 3.0-4
 
 OVERVIEW

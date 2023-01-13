@@ -7,7 +7,7 @@
 #'    rsyst()           systematic random (randomly-displaced grid)
 #'    rjitter()         random perturbation
 #'
-#'   $Revision: 1.12 $  $Date: 2023/01/13 07:44:02 $
+#'   $Revision: 1.14 $  $Date: 2023/01/13 09:10:36 $
 
 
 simulationresult <- function(resultlist, nsim=length(resultlist), drop=TRUE, NameBase="Simulation") {
@@ -141,15 +141,15 @@ rjitter.ppp <- function(X, radius, retry=TRUE, giveup=10000, trim=FALSE, ...,
   }
   #'
   result <- vector(mode="list", length=nsim)
+  Xshift <- X
   for(isim in seq_len(nsim)) {
     if(!retry) {
       ## points outside window are lost
       rD <- radius * sqrt(runif(nX))
       aD <- runif(nX, max= 2 * pi)
-      xnew <- X$x + rD * cos(aD)
-      ynew <- X$y + rD * sin(aD)
-      ok <- inside.owin(xnew, ynew, W)
-      result[[isim]] <- ppp(xnew[ok], ynew[ok], window=W, check=FALSE)
+      Xshift$x <- X$x + rD * cos(aD)
+      Xshift$y <- X$y + rD * sin(aD)
+      result[[isim]] <- Xshift[W]
     } else {
       ## retry = TRUE: condition on points being inside window
       undone <- rep.int(TRUE, nX)
@@ -180,3 +180,77 @@ rjitter.ppp <- function(X, radius, retry=TRUE, giveup=10000, trim=FALSE, ...,
   result <- simulationresult(result, nsim, drop)
   return(result)
 }
+
+## rexplode
+
+rexplode <- function(X, ...) {
+  UseMethod("rexplode")
+}
+
+rexplode.ppp <- function(X, radius, ..., nsim=1, drop=TRUE) {
+  verifyclass(X, "ppp")
+  if(!missing(nsim)) {
+    check.1.integer(nsim)
+    stopifnot(nsim >= 0)
+  }
+  nX <- npoints(X)
+  W <- Window(X)
+  if(nX == 0) {
+    result <- rep(list(X), nsim)
+    result <- simulationresult(result, nsim, drop)
+    return(result)
+  }
+  if(missing(radius) || is.null(radius)) {
+    ## Stoyan rule of thumb
+    bws <- 0.15/sqrt(5 * nX/area(W))
+    radius <- min(bws, shortside(Frame(W)))
+  } else {
+    ## either one radius, or a vector of radii
+    check.nvector(radius, nX, oneok=TRUE, vname="radius")
+    check.finite(radius)
+    if(min(radius) < 0) {
+      warning("Negative values of jitter radius were set to zero")
+      radius <- pmax(0, radius)
+    }
+  }
+  radius <- pmin(radius, bdist.points(X))
+  #'
+  un <- uniquemap(unmark(X))
+  if(all(un == seq_along(un))) {
+    #' no duplicated locations
+    return(rjitter(X, radius, nsim=nsim, drop=drop))
+  }
+  #' group the duplicated locations
+  f <- factor(un)
+  groupindex <- as.integer(f)
+  #' multiplicity of each group
+  mt <- as.integer(table(f))
+  ngroup <- length(mt)
+  #' angular spacing of each group
+  deltagroup <- 2 * pi/as.double(mt)
+  deltaeach <- deltagroup[groupindex]
+  #' serial number (0, 1, ..) of individual element within each group
+  k <- integer(nX)
+  split(k, f) <- lapply(split(k,f), function(z) { seq_along(z) - 1L })
+  #' start simulatin'
+  Xshift <- X
+  Xx <- X$x
+  Xy <- X$y
+  result <- vector(mode="list", length=nsim)
+  for(isim in seq_len(nsim)) {
+    #' generate random start angle for each group
+    startanglegroup <- runif(ngroup, max=deltagroup)
+    #' generate radius deflation factor for each group
+    deflategroup <- sqrt(runif(ngroup))
+    #' periodic
+    angle <- startanglegroup[groupindex] + deltaeach * k
+    #' displacement
+    rad <- radius * deflategroup[groupindex]
+    Xshift$x <- Xx + rad * cos(angle)
+    Xshift$y <- Xy + rad * sin(angle)
+    result[[isim]] <- Xshift
+  } 
+  result <- simulationresult(result, nsim, drop)
+  return(result)
+}
+
