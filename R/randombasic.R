@@ -7,7 +7,7 @@
 #'    rsyst()           systematic random (randomly-displaced grid)
 #'    rjitter()         random perturbation
 #'
-#'   $Revision: 1.11 $  $Date: 2022/05/23 02:33:06 $
+#'   $Revision: 1.12 $  $Date: 2023/01/13 07:44:02 $
 
 
 simulationresult <- function(resultlist, nsim=length(resultlist), drop=TRUE, NameBase="Simulation") {
@@ -105,7 +105,7 @@ rjitter <- function(X, ...) {
   UseMethod("rjitter")
 }
 
-rjitter.ppp <- function(X, radius, retry=TRUE, giveup=10000, ...,
+rjitter.ppp <- function(X, radius, retry=TRUE, giveup=10000, trim=FALSE, ...,
                         nsim=1, drop=TRUE) {
   verifyclass(X, "ppp")
   if(!missing(nsim)) {
@@ -127,7 +127,17 @@ rjitter.ppp <- function(X, radius, retry=TRUE, giveup=10000, ...,
   } else {
     ## either one radius, or a vector of radii
     check.nvector(radius, nX, oneok=TRUE, vname="radius")
+    check.finite(radius)
+    if(min(radius) < 0) {
+      warning("Negative values of jitter radius were set to zero")
+      radius <- pmax(0, radius)
+    }
     sameradius <- (length(radius) == 1)
+  }
+  #'
+  if(isTRUE(trim)) {
+    radius <- pmin(radius, bdist.points(X))
+    sameradius <- FALSE
   }
   #'
   result <- vector(mode="list", length=nsim)
@@ -170,4 +180,3 @@ rjitter.ppp <- function(X, radius, retry=TRUE, giveup=10000, ...,
   result <- simulationresult(result, nsim, drop)
   return(result)
 }
-

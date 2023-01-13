@@ -9,7 +9,8 @@
 
 rjitter(X, \dots)
 
-\method{rjitter}{ppp}(X, radius, retry=TRUE, giveup = 10000, \dots, nsim=1, drop=TRUE)
+\method{rjitter}{ppp}(X, radius, retry=TRUE, giveup = 10000, trim=FALSE,
+        \dots, nsim=1, drop=TRUE)
 }
 \arguments{
   \item{X}{
@@ -32,6 +33,12 @@ rjitter(X, \dots)
   }
   \item{giveup}{
     Maximum number of unsuccessful attempts.
+  }
+  \item{trim}{
+    Logical value. If \code{TRUE}, the displacement radius
+    for each data point will be constrained to be less than or equal to
+    the distance from the data point to the window boundary.
+    This ensures that all displaced points will fall inside the window.
   }
   \item{\dots}{Ignored.}
   \item{nsim}{Number of simulated realisations to be generated.}
@@ -64,12 +71,20 @@ rjitter(X, \dots)
   attempts have been made. In the latter case, any unresolved points
   will be included without any perturbation. The return value will
   always be a point pattern with the same number of points as \code{X}.
+
+  If \code{trim=TRUE}, then the displacement radius for each data point
+  will be constrained to be less than or equal to 
+  the distance from the data point to the window boundary.
+  This ensures that the randomly displaced points will
+  always fall inside the window; no displaced points will be lost and no
+  retrying will be required.
 }
 \examples{
    X <- rsyst(owin(), 10, 10)
    Y <- rjitter(X, 0.02)
    plot(Y)
    Z <- rjitter(X)
+   U <- rjitter(X, 0.025, trim=TRUE)
 }
 \author{
   \spatstatAuthors.

@@ -1,6 +1,10 @@
-        CHANGES IN spatstat.geom VERSION 3.0-4.003
+        CHANGES IN spatstat.geom VERSION 3.0-4.004
 
 OVERVIEW
+
+    o Convert several factors or factor-valued images to a common set of levels.
+    
+    o Extension to rjitter.
 
     o Improvements to plot code.
 
@@ -12,6 +16,11 @@ NEW FUNCTIONS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o rjitter.ppp
+    If 'trim=TRUE', the displacement radius will be constrained
+    to be less than or equal to the distance from the data point
+    to the window boundary. 
+    
     o plot.ppp
     For multitype point patterns, a warning is issued if 
     the plot legend does not represent every possible type of point
