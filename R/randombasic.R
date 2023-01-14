@@ -7,7 +7,7 @@
 #'    rsyst()           systematic random (randomly-displaced grid)
 #'    rjitter()         random perturbation
 #'
-#'   $Revision: 1.15 $  $Date: 2023/01/13 12:48:04 $
+#'   $Revision: 1.16 $  $Date: 2023/01/14 08:19:51 $
 
 
 simulationresult <- function(resultlist, nsim=length(resultlist), drop=TRUE, NameBase="Simulation") {
@@ -215,22 +215,24 @@ rexplode.ppp <- function(X, radius, ..., nsim=1, drop=TRUE) {
   }
   radius <- pmin(radius, bdist.points(X))
   #'
-  un <- uniquemap(unmark(X))
-  isunique <- (un == seq_along(un))
-  if(all(isunique)) {
+  U <- unmark(X)
+  #'
+  if(!anyDuplicated(U)) {
     #' no duplicated locations
-    return(rjitter(X, radius, nsim=nsim, drop=drop))
+    return(rjitter(X, radius, nsim=nsim, drop=drop, trim=TRUE))
   }
-  if(any(isunique)) {
-    #' points that are not duplicates will not be displaced
-    radius[isunique] <- 0
-  }
+  #'
+  un <- uniquemap(U)
   #' group the duplicated locations
   f <- factor(un)
   groupindex <- as.integer(f)
   #' multiplicity of each group
   mt <- as.integer(table(f))
   ngroup <- length(mt)
+  #' do not displace points which are unique
+  singleton <- (mt == 1)
+  if(any(singleton))
+    radius[singleton[groupindex]] <- 0
   #' angular spacing of displaced points in each group
   deltagroup <- 2 * pi/as.double(mt)
   deltaeach <- deltagroup[groupindex]

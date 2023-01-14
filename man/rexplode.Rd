@@ -80,7 +80,12 @@ rexplode(X, \dots)
    X <- runifrect(5) \%mark\% letters[1:5]
    X <- X[rep(1:5, 1 + rpois(5, 2))]
    ## explode it
-   plot(rexplode(X, 0.05))
+   Y <- rexplode(X, 0.05)
+   ## display
+   if(interactive()) {
+       plot(solist(X=X, 'explode(X)'=Y),
+       main="", cols=2:6, cex=1.25, leg.side="bottom")
+   }
 }
 \keyword{spatial}
 \keyword{manip}
