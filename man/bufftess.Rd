@@ -104,9 +104,16 @@ bufftess(X, breaks, W = Window(X), \dots, polygonal = TRUE)
   \code{\link[spatstat.random]{rpoislinetess}}.
 }
 \examples{
-  X <- cells[c(FALSE,FALSE,FALSE,TRUE)] 
-  b <- c(0, 0.05, 0.1, 0.15, 0.2, Inf)
-  plot(bufftess(X, b), do.col=TRUE, col=1:5)
+  X <- cells[c(FALSE,FALSE,FALSE,TRUE)]
+  if(interactive()) {
+    b <- c(0, 0.05, 0.1, 0.15, 0.2, Inf)
+    n <- 5
+  } else {
+    ## simpler data for testing
+    b <- c(0, 0.1, 0.2, Inf)
+    n <- 3
+  }
+  plot(bufftess(X, b), do.col=TRUE, col=1:n)
 }
 \keyword{spatial}
 \keyword{manip}

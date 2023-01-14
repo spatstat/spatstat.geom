@@ -54,11 +54,8 @@
   An object of class \code{owin} (either of type \dQuote{polygonal}
   or of type \dQuote{mask}) specifying an elliptical window.
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \adrian and \rolf.
 }
 \seealso{
   \code{\link{disc}},
@@ -69,7 +66,7 @@
 \examples{
   W <- ellipse(a=5,b=2,centre=c(5,1),phi=pi/6)
   plot(W,lwd=2,border="red")
-  WM <- ellipse(a=5,b=2,centre=c(5,1),phi=pi/6,mask=TRUE,dimyx=512)
+  WM <- ellipse(a=5,b=2,centre=c(5,1),phi=pi/6,mask=TRUE,dimyx=64)
   plot(WM,add=TRUE,box=FALSE)
 }
 \keyword{spatial}

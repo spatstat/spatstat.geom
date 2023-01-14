@@ -63,17 +63,21 @@
   \code{\link{reflect}}
 }
 \examples{
-  X <- as.im(letterR)
-  Y <- as.im(square(1))
+  if(interactive()) {
+    X <- as.im(letterR)
+    Y <- as.im(square(1))
+  } else {
+    ## coarser image for testing
+    X <- as.im(letterR, dimyx=32)
+    Y <- as.im(square(1), dimyx=32)
+  }
   plot(convolve.im(X, Y))
   plot(convolve.im(X, Y, reflectX=TRUE))
   plot(convolve.im(X))
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{math}
