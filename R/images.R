@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.176 $     $Date: 2023/01/05 01:30:44 $
+#      $Revision: 1.177 $     $Date: 2023/01/15 02:01:31 $
 #
 #      The class "im" of raster images
 #
@@ -1080,6 +1080,12 @@ quantile.im <- function(x, ...) {
   return(q)
 }
 
+quantilefun.im <- function(x, ..., type=1) {
+  verifyclass(x, "im")
+  f <- ecdf(as.numeric(x[]))
+  quantilefun(f, type=type)
+}
+  
 integral <- function(f, domain=NULL, ...) {
   UseMethod("integral")
 }

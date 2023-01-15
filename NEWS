@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.0-4.007
+        CHANGES IN spatstat.geom VERSION 3.0-4.008
 
 OVERVIEW
 
@@ -7,6 +7,8 @@ OVERVIEW
     o Extension to rjitter
 
     o Alternative to rjitter
+
+    o Quantile function as a function
 
     o Improvements to plot code.
 
@@ -20,6 +22,9 @@ NEW FUNCTIONS
     'Explode' a point pattern by randomly displacing each
     group of duplicated points to make a circular pattern
     around the original location. An alternative to 'rjitter'.
+
+    o quantilefun
+    Return a function that computes any quantiles of a given dataset.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

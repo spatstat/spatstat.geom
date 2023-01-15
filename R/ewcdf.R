@@ -1,7 +1,7 @@
 #
 #     ewcdf.R
 #
-#     $Revision: 1.24 $  $Date: 2022/05/21 09:52:11 $
+#     $Revision: 1.26 $  $Date: 2023/01/15 02:01:42 $
 #
 #  With contributions from Kevin Ummel
 #
@@ -176,3 +176,26 @@ mean.ecdf <- mean.ewcdf <- function(x, trim=0, ...) {
   sum(xx * dF)/sum(dF)
 }
 
+quantilefun <- function(x, ...) {
+  UseMethod("quantilefun")
+}
+
+quantilefun.ewcdf <- quantilefun.ecdf <- function(x, ..., type=1) {
+  ## inverse CDF
+  trap.extra.arguments(..., .Context="quantile.ewcdf")
+  if(!(type %in% c(1,2)))
+    stop("Only quantiles of type 1 and 2 are implemented", call.=FALSE)
+  env <- environment(x)
+  qq <- get("x", envir=env)
+  pp <- get("y", envir=env)
+  ok <- !duplicated(pp)
+  qq <- qq[ok]
+  pp <- pp[ok]
+  if(length(pp) == 1) {
+    pp <- c(0,pp)
+    qq <- rep(qq, 2)
+  } 
+  f <- switch(type, 0, 1/2)
+  xinverse <- approxfun(pp, qq, f=f, rule=2)
+  return(xinverse)
+}
