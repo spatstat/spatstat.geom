@@ -243,6 +243,7 @@
 \alias{putlastshift}
 \alias{qtPrepareCoordinate}
 \alias{quad}
+\alias{quantilefun.interpolatedCDF}
 \alias{rasterfilter}
 \alias{recognise.spatstat.type}
 \alias{rectquadrat.breaks}
@@ -595,6 +596,7 @@ project3Dhom(xyz, eye, org, vert)
 putlastshift(X, vec)
 qtPrepareCoordinate(covname, W, origin)
 quad(data, dummy, w, param)
+\method{quantilefun}{interpolatedCDF}(x, \dots, type)
 rasterfilter(X, f)
 recognise.spatstat.type(x)
 rectquadrat.breaks(xr, yr, nx = 5, ny = nx, xbreaks = NULL, ybreaks = NULL)

@@ -1,7 +1,7 @@
 #
 #     ewcdf.R
 #
-#     $Revision: 1.26 $  $Date: 2023/01/15 02:01:42 $
+#     $Revision: 1.27 $  $Date: 2023/01/15 02:56:05 $
 #
 #  With contributions from Kevin Ummel
 #
@@ -180,9 +180,9 @@ quantilefun <- function(x, ...) {
   UseMethod("quantilefun")
 }
 
-quantilefun.ewcdf <- quantilefun.ecdf <- function(x, ..., type=1) {
+quantilefun.ewcdf <- quantilefun.ecdf <- quantilefun.interpolatedCDF <- function(x, ..., type=1) {
   ## inverse CDF
-  trap.extra.arguments(..., .Context="quantile.ewcdf")
+  trap.extra.arguments(..., .Context="quantilefun")
   if(!(type %in% c(1,2)))
     stop("Only quantiles of type 1 and 2 are implemented", call.=FALSE)
   env <- environment(x)
@@ -199,3 +199,4 @@ quantilefun.ewcdf <- quantilefun.ecdf <- function(x, ..., type=1) {
   xinverse <- approxfun(pp, qq, f=f, rule=2)
   return(xinverse)
 }
+
