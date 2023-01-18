@@ -37,10 +37,19 @@
     Only this subset of the image will be displayed.
   }
   \item{chars}{
-    plotting character(s) used to plot points.
+    the plotting character(s) used to plot points.
+    Either a single character, an integer,
+    or a vector of single characters or integers.
+    Ignored if \code{symap} is given.
   }
   \item{cols}{
     the colour(s) used to plot points.
+    Either an integer index from 1 to 8 (indexing the standard colour
+    palette), a character string giving the name of a colour,
+    or a string giving the hexadecimal representation of a colour,
+    or a vector of such integers or strings.
+    See the section on \emph{Colour Specification} in the help for \code{\link[graphics]{par}}.
+    Ignored if \code{symap} is given.
   }
   \item{use.marks}{
     logical flag; if \code{TRUE}, plot points using a different
@@ -89,7 +98,7 @@
     of the relevant dimension (width or height) of the main plot.
   }
   \item{symap}{
-    Optional. The graphical symbol map to be applied to the marks.
+    The graphical symbol map to be applied to the marks.
     An object of class \code{"symbolmap"}; see
     \code{\link{symbolmap}}.
   }
@@ -209,61 +218,72 @@
   Their plotting behaviour may be modified through the \code{...}
   arguments.
 
-  The argument \code{chars} determines the plotting character
-  or characters used to display the points (in all cases except
-  for the case of continuous marks). For an unmarked point pattern,
-  this should be a single integer or character determining a
-  plotting character (see \code{par("pch")}).
-  For a multitype point pattern, \code{chars} should be a vector
-  of integers or characters, of the same length
-  as \code{levels(x$marks)}, and then the \eqn{i}th level or type 
-  will be plotted using character \code{chars[i]}.
+  If the argument \code{symap} is given, then it determines the
+  graphical display of the points. It should be a symbol map
+  (object of class \code{"symbolmap"}) created by the function
+  \code{\link{symbolmap}}.
 
-  If \code{chars} is absent, but there is an extra argument
-  \code{pch}, then this will determine the plotting character for
-  all points.
-  
-  The argument \code{cols} determines the colour or colours used to
-  display the points. For an unmarked point pattern,
-  \code{cols} should be a character string
-  determining a colour. For a multitype point pattern, \code{cols}
-  should be a character vector, of the same length
-  as \code{levels(marks(x))}: that is, there is one colour for each
-  possible mark value. The \eqn{i}th level or type will
-  be plotted using colour \code{cols[i]}. For a point pattern with
-  continuous marks, \code{cols} can be either a character string
-  or a character vector specifying colour values: the range of mark
-  values will be mapped to the specified colours.
+  If \code{symap} is not given, then the
+  following arguments can be used to specify how the points are plotted:
+  \itemize{
+    \item
+    The argument \code{chars} determines the plotting character
+    or characters used to display the points (in all cases except
+    for the case of continuous marks). For an unmarked point pattern,
+    this should be a single integer or character determining a
+    plotting character (see \code{par("pch")}).
+    For a multitype point pattern, \code{chars} should be a vector
+    of integers or characters, of the same length
+    as \code{levels(x$marks)}, and then the \eqn{i}th level or type 
+    will be plotted using character \code{chars[i]}.
+    \item
+    If \code{chars} is absent, but there is an extra argument
+    \code{pch}, then this will determine the plotting character for
+    all points.
+    \item
+    The argument \code{cols} determines the colour or colours used to
+    display the points. For an unmarked point pattern,
+    \code{cols} should be a character string
+    determining a colour. For a multitype point pattern, \code{cols}
+    should be a character vector, of the same length
+    as \code{levels(marks(x))}: that is, there is one colour for each
+    possible mark value. The \eqn{i}th level or type will
+    be plotted using colour \code{cols[i]}. For a point pattern with
+    continuous marks, \code{cols} can be either a character string
+    or a character vector specifying colour values: the range of mark
+    values will be mapped to the specified colours.
+    \item
+    If \code{cols} is absent, the colours used to plot the
+    points may be determined by the extra argument \code{fg}
+    (for multitype point patterns) or the extra argument \code{col}
+    (for all other cases). Note that specifying \code{col} will also
+    apply this colour to the window itself.
+    \item
+    The default colour for the points is a semi-transparent grey,
+    if this is supported by the plot device. This behaviour can be
+    suppressed (so that the default colour is non-transparent)
+    by setting \code{spatstat.options(transparent=FALSE)}.
+    \item 
+    The arguments \code{maxsize}, \code{meansize} and \code{markscale} 
+    are incompatible with each other (and incompatible with \code{symap}).
+    They control the physical size of the circles and
+    squares which represent the marks in a point pattern with continuous
+    marks. The size of a circle is defined as its \emph{diameter};
+    the size of a square is its side length.
+    If \code{markscale} is given, then a mark value of \code{m}
+    is plotted as a circle of diameter \code{m * markscale}
+    (if \code{m} is positive) or a square of side \code{abs(m) * markscale}
+    (if \code{m} is negative). If \code{maxsize} is given, then the
+    largest mark in absolute value, \code{mmax=max(abs(marks(x)))},
+    will be scaled to have physical size \code{maxsize}.
+    If \code{meansize} is given, then the
+    average absolute mark value, \code{mmean=mean(abs(marks(x)))},
+    will be scaled to have physical size \code{meansize}.
+    \item
+    The user can set the default values of these plotting parameters
+    using \code{\link{spatstat.options}("par.points")}.
+  }
 
-  If \code{cols} is absent, the colours used to plot the
-  points may be determined by the extra argument \code{fg}
-  (for multitype point patterns) or the extra argument \code{col}
-  (for all other cases). Note that specifying \code{col} will also
-  apply this colour to the window itself.
-
-  The default colour for the points is a semi-transparent grey,
-  if this is supported by the plot device. This behaviour can be
-  suppressed (so that the default colour is non-transparent)
-  by setting \code{spatstat.options(transparent=FALSE)}.
-
-  The arguments \code{maxsize}, \code{meansize} and \code{markscale} 
-  incompatible. They control the physical size of the circles and
-  squares which represent the marks in a point pattern with continuous
-  marks. The size of a circle is defined as its \emph{diameter};
-  the size of a square is its side length.
-  If \code{markscale} is given, then a mark value of \code{m}
-  is plotted as a circle of diameter \code{m * markscale}
-  (if \code{m} is positive) or a square of side \code{abs(m) * markscale}
-  (if \code{m} is negative). If \code{maxsize} is given, then the
-  largest mark in absolute value, \code{mmax=max(abs(marks(x)))},
-  will be scaled to have physical size \code{maxsize}.
-  If \code{meansize} is given, then the
-  average absolute mark value, \code{mmean=mean(abs(marks(x)))},
-  will be scaled to have physical size \code{meansize}.
-
-  The user can set the default values of these plotting parameters
-  using \code{\link{spatstat.options}("par.points")}.
-  
   To zoom in (to view only a subset of the point pattern at higher
   magnification), use the graphical arguments
   \code{xlim} and \code{ylim} to specify the rectangular field of view.
@@ -291,6 +311,29 @@
   for more control over the placement and style of axes,
   use the graphics commands
   \code{\link[graphics]{axis}} and \code{\link[graphics]{mtext}}.
+}
+\section{The Symbol Map}{
+  The behaviour of \code{plot.ppp} is different from the
+  behaviour of the base \R graphics functions
+  \code{\link[graphics]{points}} and \code{\link[graphics]{symbols}}.
+
+  In the base graphics functions \code{\link[graphics]{points}} and \code{\link[graphics]{symbols}},
+  arguments such as \code{col}, \code{pch} and \code{cex}
+  can be vectors which specify the \emph{representation of each successive point}.
+  For example \code{col[3]} would specify the colour of the third point
+  in the sequence of points.  If there are 100 points then
+  \code{col} should be a vector of length 100.
+
+  In the \pkg{spatstat} function \code{plot.ppp},
+  arguments such as \code{col}, \code{pch} and \code{cex} specify
+  the \emph{mapping from point characteristics to graphical parameters}
+  (called the symbol map).
+  For example \code{col[3]} specifies the colour of the third \bold{type of point} in a
+  pattern of points of different types. If there are 4 types of points
+  then \code{col} should be a vector of length 4.
+  
+  To modify a symbol map, for example to change the colours used
+  without changing anything else, use \code{\link{update.symbolmap}}.
 }
 \seealso{
   \code{\link{ppp.object}},

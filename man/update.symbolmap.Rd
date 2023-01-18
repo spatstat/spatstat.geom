@@ -32,13 +32,7 @@
 \value{
   Another object of class \code{"symbolmap"}.
 }
-\author{\adrian
-  
-  ,
-  \rolf
-  
-  and \ege.
-}
+\author{\spatstatAuthors.}
 \seealso{
   \code{\link{symbolmap}} to create a graphics symbol map.
 }

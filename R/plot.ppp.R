@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.105 $	$Date: 2022/11/27 10:21:45 $
+#	$Revision: 1.107 $	$Date: 2023/01/18 08:17:07 $
 #
 #
 #--------------------------------------------------------------------------
@@ -247,7 +247,8 @@ plot.ppp <- local({
                      resolve.defaults(list(x=quote(y), main=main,
                                            show.window=show.window && !clipped,
                                            do.plot=do.plot,
-                                           type=type),
+                                           type=type,
+                                           symap=symap),
                                       list(...),
                                       list(equal.scales=TRUE),
                                       list(panel.end=clippy),
@@ -305,7 +306,6 @@ plot.ppp <- local({
                                     markscale=markscale,
                                     ...)
   }
-#  gtype <- symbolmaptype(symap)
 
   ## Determine bounding box for main plot
   BB <- as.rectangle(x)
