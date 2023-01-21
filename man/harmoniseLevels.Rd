@@ -32,7 +32,8 @@ harmoniseLevels(...)
   \adrian.
 }
 \seealso{
-  \code{\link{levels}}, \code{\link{levels.im}}
+  \code{\link{levels}}, \code{\link{levels.im}},
+  \code{\link[spatstat.geom]{mergeLevels}}.
 }
 \examples{
   (a <- factor(sample(letters[1:3], 10, replace=TRUE)))

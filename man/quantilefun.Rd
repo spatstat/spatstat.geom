@@ -39,7 +39,7 @@
   the quantiles of a dataset corresponding to desired probabilities
   \eqn{p}, the command \code{quantilefun}
   returns a function which can be used to compute any quantiles of the
-  dataset.
+  dataset. 
 
   If \code{f <- quantilefun(x)} then \code{f} is a function such that
   \code{f(p)} is the quantile associated with any given probability \code{p}.
@@ -64,10 +64,24 @@
   \code{\link[stats]{quantile}}
 }
 \examples{
+  ## numeric data
   z <- rnorm(50)
   FZ <- ecdf(z)
   QZ <- quantilefun(FZ)
-  if(interactive()) plot(QZ, xlim=c(0,1), xlab="probability", ylab="quantile")
+  QZ(0.5) # median value of z
+  if(interactive()) plot(QZ, xlim=c(0,1), xlab="probability",
+                     ylab="quantile of z")
+  ## image data
+  Z <- bei.extra$elev
+  if(require(spatstat.explore)) {
+    FE <- spatialcdf(Z, normalise=TRUE)
+  } else {
+    FE <- ecdf(Z[])
+  }
+  QE <- quantilefun(FE)
+  QE(0.5) # median elevation
+  if(interactive()) plot(QE, xlim=c(0,1),
+     xlab="probability", ylab="quantile of elevation")
 }
 \author{
   \spatstatAuthors.
