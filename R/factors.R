@@ -3,7 +3,7 @@
 #'
 #'  Tools for manipulating factors and factor-valued things
 #'
-#'  $Revision: 1.7 $  $Date: 2023/01/05 23:33:47 $
+#'  $Revision: 1.8 $  $Date: 2023/01/30 00:34:27 $
 
 relevel.im <- function(x, ref, ...) {
   if(x$type != "factor")
@@ -65,7 +65,10 @@ levelsAsFactor <- function(x) {
 
 harmoniseLevels <- function(...) {
   x <- list(...)
-  if(length(x) == 1) {
+  n <- length(x)
+  if(n == 0) 
+    return(x)
+  if(n == 1) {
     x <- x[[1L]]
     if(!is.null(levels(x))) return(x) ## single factor or object
   }
@@ -87,9 +90,16 @@ harmoniseLevels <- function(...) {
   newfactors <- lapply(newcodelist, factor,
                        levels=seq_along(pooledlevels),
                        labels=pooledlevels)
+  ## assign results
+  xnew <- vector(mode="list", length=n)
   isim <- sapply(x, is.im)
-  xnew <- newfactors
-  xnew[isim] <- mapply("[<-", x=x[isim], value=newfactors, SIMPLIFY=FALSE)
+  if(any(flat <- !isim))
+    xnew[flat] <- newfactors[flat]
+  if(any(isim)) 
+    xnew[isim] <- mapply("[<-", x=x[isim],
+                         value=newfactors[isim],
+                         SIMPLIFY=FALSE)
+  ## format
   names(xnew) <- names(x)
   if(is.solist(x) || all(isim))
     xnew <- as.solist(xnew)

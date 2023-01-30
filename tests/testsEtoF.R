@@ -40,7 +40,7 @@ local({
 #
 # check for various bugs related to factor conversions
 #
-#    $Revision: 1.6 $  $Date: 2020/12/03 03:26:25 $
+#    $Revision: 1.8 $  $Date: 2023/01/30 00:51:42 $
 #
 
 if(ALWAYS) {
@@ -62,16 +62,23 @@ local({
   ##  and apply quadratcount
   V <- tess(image = Z)
   quadratcount(X, tess=V)
-  ## (d) pad image
+  ## Pad image
   Y <- padimage(Z, factor("b", levels=levels(Z)))
   stopifnot(Y$type == "factor")
   U <- padimage(Z, "b")
   stopifnot(U$type == "factor")
-  ## (e) manipulate levels
+  ## Manipulate factor levels
   Zb <- relevel(Z, "b")
   Zv <- mergeLevels(Z, vowel="a", consonant=c("b","c","d"))
   P <- X %mark% Z[X]
   Pv <- mergeLevels(P, vowel="a", consonant=c("b","c","d"))
+  ## Harmonise factor levels - cases not covered 
+  Flat <- factor(sample(letters[1:3], 10, replace=TRUE))
+  Image <- gorillas.extra$slopetype
+  oo <- harmoniseLevels()
+  oo <- harmoniseLevels(Flat)
+  oo <- harmoniseLevels(A=Image)
+  oo <- harmoniseLevels(A=Flat,B=Image)
 })
 }
 #
