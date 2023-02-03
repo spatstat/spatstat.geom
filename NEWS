@@ -1,3 +1,14 @@
+        CHANGES IN spatstat.geom VERSION 3.0-6.001
+
+OVERVIEW
+
+    o Minor improvements.
+    
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o "[.hyperframe", "[<-.hyperframe"
+    Improved error message when the format of index i or j is not supported.
+    
         CHANGES IN spatstat.geom VERSION 3.0-6
 
 OVERVIEW

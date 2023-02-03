@@ -4,12 +4,14 @@
 ##
 ##  subset operations for hyperframes
 ##
-##  $Revision: 1.28 $    $Date: 2019/08/17 13:48:03 $
+##  $Revision: 1.29 $    $Date: 2023/02/03 00:45:34 $
 ##
 
 "[.hyperframe" <- function(x, i, j, drop=FALSE, strip=drop, ...) {
   x <- unclass(x)
   if(!missing(i)) {
+    if(length(dim(i)) > 1)
+      stop("Matrix index i is not supported in '[.hyperframe'", call.=FALSE)
     y <- x
     y$df     <- x$df[i, , drop=FALSE]
     y$ncases <- nrow(y$df)
@@ -17,6 +19,8 @@
     x <- y
   }
   if(!missing(j)) {
+    if(length(dim(j)) > 1)
+      stop("Matrix index j is not supported in '[.hyperframe'", call.=FALSE)
     y <- x
     patsy <- seq_len(y$nvars)
     names(patsy) <- y$vname
@@ -49,12 +53,12 @@
       n <- x$nvars
       y <- vector(mode="list", length=n)
       names(y) <- nama <- x$vname
-      for(i in seq_len(n)) {
-        nami <- nama[i]
-        y[[i]] <- switch(as.character(x$vtype[i]),
-                         dfcolumn = x$df[ , nami, drop=TRUE],
-                         hyperatom = x$hyperatoms[[nami]],
-                         hypercolumn = (x$hypercolumns[[nami]])[[1L]]
+      for(k in seq_len(n)) {
+        namk <- nama[k]
+        y[[k]] <- switch(as.character(x$vtype[k]),
+                         dfcolumn = x$df[ , namk, drop=TRUE],
+                         hyperatom = x$hyperatoms[[namk]],
+                         hypercolumn = (x$hypercolumns[[namk]])[[1L]]
                          )
       }
       return(as.solist(y, demote=TRUE))
@@ -119,15 +123,27 @@ function (x, i, j, value)
   dimx <- sumry$dim
   igiven <- !missing(i)
   jgiven <- !missing(j)
-  if(!igiven) i <- seq_len(dimx[1L])
-  if(!jgiven) j <- seq_len(dimx[2L])
-  singlerow    <- ((is.integer(i) && length(i) == 1 && i > 0)
-                   || (is.character(i) && length(i) == 1)
-                   || (is.logical(i) && sum(i) == 1))
-  singlecolumn <- ((is.integer(j) && length(j) == 1 && j > 0)
-                   || (is.character(j) && length(j) == 1)
-                   || (is.logical(j) && sum(j) == 1))
-  
+  if(igiven) {
+    if(length(dim(i)) > 1)
+      stop("Matrix index i is not supported in '[<-.hyperframe'", call.=FALSE)
+    singlerow    <- ((is.integer(i) && length(i) == 1 && i > 0)
+                    || (is.character(i) && length(i) == 1)
+                    || (is.logical(i) && sum(i) == 1))
+  } else {
+    i <- seq_len(dimx[1L])
+    singlerow <- FALSE
+  }
+  if(jgiven) {
+    if(length(dim(j)) > 1)
+      stop("Matrix index j is not supported in '[<-.hyperframe'", call.=FALSE)
+    singlecolumn <- ((is.integer(j) && length(j) == 1 && j > 0)
+                    || (is.character(j) && length(j) == 1)
+                    || (is.logical(j) && sum(j) == 1))
+  } else {
+    j <- seq_len(dimx[2L])
+    singlecolumn <- FALSE
+  }
+    
   if(!igiven && jgiven) {
     # x[, j] <- value
     if(singlecolumn) {
