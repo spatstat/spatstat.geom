@@ -3,6 +3,8 @@
 \alias{[<-.hyperframe}
 \alias{$.hyperframe}
 \alias{$<-.hyperframe}
+\alias{[[.hyperframe}
+\alias{[[<-.hyperframe}
 \title{Extract or Replace Subset of Hyperframe}
 \description{
   Extract or replace a subset of a hyperframe.
@@ -12,6 +14,8 @@
   \method{[}{hyperframe}(x, i, j) <- value
   \method{$}{hyperframe}(x, name)
   \method{$}{hyperframe}(x, name) <- value
+  \method{[[}{hyperframe}(x, \dots)
+  \method{[[}{hyperframe}(x, i, j) <- value
 }
 \arguments{
   \item{x}{
@@ -26,7 +30,9 @@
      See Details.
   }
   \item{\dots}{
-    Ignored. 
+    Indices specifying elements to extract by \code{[[.hyperframe}.
+    Ignored by \code{[.hyperframe}.
+    
   }
   \item{name}{
     Name of a column of the hyperframe.
@@ -93,6 +99,23 @@
   The function \code{$<-.hyperframe} is a method for \code{\link{$<-}}
   for hyperframes. It replaces the relevant column of the hyperframe.
   The replacement value should be a list of the appropriate length.
+
+  The functions \code{[[.hyperframe} and \code{[[<-.hyperframe}
+  are methods for \code{\link{[[}} and \code{[[<-.hyperframe}
+  for hyperframes. They are analogous to \code{\link{[[.data.frame}}
+  and \code{[[<-.data.frame} in that they can be used in different ways:
+  \itemize{
+    \item when \code{[[.hyperframe} or \code{[[<-.hyperframe}
+    are used with a single index,
+    as in \code{x[[n]]} or \code{x[[n]] <- value},
+    they index the hyperframe as if it were a list,
+    extracting or replacing a column of the hyperframe.
+    \item when \code{[[.hyperframe} or \code{[[<-.hyperframe}
+    are used with two indices,
+    as in \code{x[[i,j]]} or \code{x[[i,j]] <- value},
+    they index the hyperframe as if it were a
+    matrix, and can only be used to extract or replace one element. 
+  }
 }
 \seealso{
   \code{\link{hyperframe}}
@@ -114,6 +137,9 @@
   h$Y <- list(cells, cells)
   # add new column
   h$Z <- list(cells, cells)
+  #
+  h[[2,1]]
+  h[[2,1]] <- square(3)
 }
 \author{
   \spatstatAuthors

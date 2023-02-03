@@ -207,6 +207,131 @@ function (x, i, j, value)
   return(y)
 }
 
+"[[.hyperframe" <-
+function(x, ...)
+{
+  rr <- as.data.frame(row(x))
+  cc <- as.data.frame(col(x))
+  dimnames(rr) <- dimnames(cc) <- dimnames(x)
+  chosen.rows <- unique(as.integer(rr[[...]]))
+  chosen.cols <- unique(as.integer(cc[[...]]))
+  nr <- length(chosen.rows)
+  nc <- length(chosen.cols)
+  if(nc == 0 || nr == 0) {
+    ## should never be reached
+    stop("No data selected", call.=FALSE)
+  } else if(nc > 1) {
+    ## should never be reached
+    stop("More than one item (or column) of data selected", call.=FALSE)
+  }
+  if(nr == 1) {
+    ## single item
+    result <- x[chosen.rows, chosen.cols, drop=TRUE, strip=TRUE]
+  } else if(length(chosen.rows) == nrow(rr)) {
+    ## column
+    result <- x[,chosen.cols, drop=TRUE, strip=FALSE]
+  } else {
+    ## subset of a column
+    stop("Cannot select part of a column in '[['", call.=FALSE)
+  }
+  return(result)
+}
+                            
+"[[<-.hyperframe" <-
+function(x, i, j, value)
+{
+  ## detect 'blank' arguments like second argument in x[i, ] 
+  ngiven <- length(sys.call())
+  nmatched <- length(match.call())
+  nblank <- ngiven - nmatched
+  itype <- if(missing(i)) "absent" else "given"
+  jtype <- if(missing(j)) "absent" else "given"
+  if(nblank == 1) {
+    if(!missing(i)) jtype <- "blank"
+    if(!missing(j)) itype <- "blank"
+  } else if(nblank == 2) {
+    itype <- jtype <- "blank"
+  }
+  ## detect idiom x[[ ]] or x[[ , ]]
+  if(itype != "given" && jtype != "given" && prod(dim(x)) > 1)
+    stop("More than one cell or column of cells selected", call.=FALSE)
+  ## find selected rows and columns
+  rr <- as.data.frame(row(x))
+  cc <- as.data.frame(col(x))
+  dimnames(rr) <- dimnames(cc) <- dimnames(x)
+  switch(paste0(itype, jtype),
+         givengiven = {
+           chosen.rows <- rr[[i, j]]
+           chosen.cols <- cc[[i, j]]
+         },
+         givenabsent = {
+           chosen.rows <- rr[[i]]
+           chosen.cols <- cc[[i]]
+         },
+         givenblank = {
+           chosen.rows <- rr[[i, ]]
+           chosen.cols <- cc[[i, ]]
+         },
+         absentgiven = {
+           ## cannot occur
+           chosen.rows <- rr[[, j]]
+           chosen.cols <- cc[[, j]]
+         },
+         absentabsent = {
+           chosen.rows <- rr[[ ]]
+           chosen.cols <- cc[[ ]]
+         },
+         absentblank = {
+           ## cannot occur
+           chosen.rows <- rr[[ , ]]
+           chosen.cols <- cc[[ , ]]
+         },
+         blankgiven = {
+           chosen.rows <- rr[[, j]]
+           chosen.cols <- cc[[, j]]
+         },
+         blankabsent = {
+           ## cannot occur
+           chosen.rows <- rr[[]]
+           chosen.cols <- cc[[]]
+         },
+         blankblank = {
+           chosen.rows <- rr[[ , ]]
+           chosen.cols <- cc[[ , ]]
+         })
+  chosen.rows <- unique(as.integer(chosen.rows))
+  chosen.cols <- unique(as.integer(chosen.cols))
+  nr <- length(chosen.rows)
+  nc <- length(chosen.cols)
+  if(nc == 0 || nr == 0) {
+    ## should never be reached
+    stop("No cells selected", call.=FALSE)
+  } else if(nc > 1) {
+    ## should never be reached
+    stop("More than one cell or column of cells selected", call.=FALSE)
+  }
+  if(nr == 1) {
+    ## single item
+    xj <- x[[chosen.cols]]
+    if(!is.atomic(xj)) {
+      ## check class of replacement value
+      vcj <- unclass(x)$vclass[[chosen.cols]]
+      if(!inherits(value, vcj))
+        stop(paste("Replacement value does not have required class",
+                   sQuote(vcj)),
+             call.=FALSE)
+    }
+    xj[[chosen.rows]] <- value
+    x[,chosen.cols] <- xj
+  } else if(length(chosen.rows) == nrow(rr)) {
+    ## column
+    x[,chosen.cols] <- value
+  } else {
+    ## subset of a column
+    stop("Cannot assign part of a column in '[[<-'", call.=FALSE)
+  }
+  return(x)
+}
 
 split.hyperframe <- local({
 

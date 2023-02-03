@@ -1,8 +1,15 @@
-        CHANGES IN spatstat.geom VERSION 3.0-6.001
+        CHANGES IN spatstat.geom VERSION 3.0-6.002
 
 OVERVIEW
 
+    o Methods for "[[" and "[[<-" for hyperframes.
+    
     o Minor improvements.
+
+NEW FUNCTIONS
+
+    o "[[.hyperframe", "[[<-.hyperframe"
+    Methods for "[[" and "[[<-" for hyperframes.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
