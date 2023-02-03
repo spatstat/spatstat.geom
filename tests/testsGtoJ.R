@@ -17,7 +17,7 @@ cat(paste("--------- Executing",
 #
 # test "[.hyperframe" etc
 #
-#  $Revision: 1.9 $  $Date: 2020/12/03 03:32:13 $
+#  $Revision: 1.11 $  $Date: 2023/02/03 06:17:16 $
 #
 
 if(FULLTEST) {
@@ -64,6 +64,19 @@ local({
   G <- split(H, f)
   G[["a"]]$B <- 42
   split(H, f) <- G
+
+  #' [[ and [[<-
+  junk <- pyramidal
+  a <- junk[["group"]]
+  junk[["group"]] <- sample(a)
+  a <- junk[[2]]
+  a <- junk[[15,2]]
+  junk[[15,2]] <- "schizoaffective"
+  junk[[15,2]] <- "z" # Warning given.
+  a <- junk[[2]] # The warned-about NA appears as entry 15.
+  junk[[10,1]] <- cells
+  a <- junk[[10,1]]
+  a <- junk[[10,"Neurons"]] 
 })
 }
 #

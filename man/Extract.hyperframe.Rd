@@ -136,8 +136,9 @@
   # replace existing column
   h$Y <- list(cells, cells)
   # add new column
-  h$Z <- list(cells, cells)
+  h$Z <- list(tan, exp)
   #
+  h[["Y"]]
   h[[2,1]]
   h[[2,1]] <- square(3)
 }

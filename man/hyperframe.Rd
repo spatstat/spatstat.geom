@@ -56,7 +56,9 @@
 \section{Methods for Hyperframes}{
   There are methods for
   \code{print}, \code{plot}, \code{summary}, \code{with}, \code{split},
-  \code{[}, \code{[<},\code{$}, \code{$<-},
+  \code{[}, \code{[<-},
+  \code{[[}, \code{[[<-},
+  \code{$}, \code{$<-},
   \code{names}, \code{as.data.frame} \code{as.list},
   \code{cbind} and \code{rbind} for the class of hyperframes. There is also
   \code{is.hyperframe} and \code{\link{as.hyperframe}}.
@@ -122,6 +124,8 @@ if(require(spatstat.random)) {
   h$lambda2 <- lambda^2
   h[, "lambda3"] <- lambda^3
   h[, "Y"] <- X
+
+  h[[2, "lambda3"]]
 }
 \keyword{spatial}
 \keyword{manip}
