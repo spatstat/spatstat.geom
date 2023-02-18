@@ -21,6 +21,7 @@ unnormdensity(x, ..., weights = NULL, defaults)
   }`
   \item{weights}{
     Optional numeric vector of weights for the data.
+    The default is equivalent to assuming a weight of 1 for each observation.
   }
   \item{defaults}{
     Optional, named list of arguments passed to
@@ -50,7 +51,8 @@ unnormdensity(x, ..., weights = NULL, defaults)
   weights.
 
   The argument \code{weights} should be a numeric vector of the same
-  length as \code{x}, or a single numeric value.
+  length as \code{x}, or a single numeric value. The default is to
+  assume a weight of 1 for each observation in \code{x}.
   
   The algorithm first selects the kernel bandwidth by
   applying \code{\link[stats]{density.default}} to the data
@@ -65,6 +67,15 @@ unnormdensity(x, ..., weights = NULL, defaults)
   i.e. in the form (\code{name=value}). Arguments that do not match
   an argument of \code{\link[stats]{density.default}} will be ignored
   \emph{silently}.
+}
+\section{Warning}{
+  If \code{weights} is not specified,
+  the default is to assign a weight \eqn{w_i=1}{w[i]=1} to each
+  observation \eqn{x_i}{x[i]}.
+
+  This is not the same behaviour as in \code{\link{density.default}} which
+  effectively assumes a weight of \eqn{1/n} for each observation \eqn{x_i}{x[i]}
+  where \code{n=length(x)}.
 }
 \value{
   Object of class \code{"density"} as described in

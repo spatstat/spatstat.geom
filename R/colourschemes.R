@@ -1,7 +1,7 @@
 #
 #  colourschemes.R
 #
-#  $Revision: 1.5 $  $Date: 2019/12/15 05:25:53 $
+#  $Revision: 1.6 $  $Date: 2023/02/18 03:50:13 $
 #
 
 beachcolourmap <- function(range, ...) {
@@ -55,4 +55,42 @@ beachcolours <- function(range, sealevel = 0, monochrome=FALSE,
   if(nland > 0)  colours <- c(colours,
                               rev(rainbow(nland, start=0, end=1/6)))  # red/yellow
   return(colours)
+}
+
+
+phcolourfun <- function(pH) {
+  ## Defined mapping from pH values to hues
+  ## rescale to [0,1]
+  ff <- pH/14
+  bad <- (ff < 0) | (ff > 1)
+  ff <- pmax(0, pmin(1, ff))
+  ## contract towards 0.5
+  ee <- 2*ff - 1
+  tt <- 0.5 + 0.5 * sign(ee) * sqrt(abs(ee))
+  tt <- pmax(0, pmin(1, tt)) * 2/3
+  hu <- hsv(h=tt)
+  hu[bad] <- NA
+  return(hu)
+}
+
+pHcolourmap <- function(range=c(0, 14), ..., n=256, step=FALSE) {
+  check.range(range)
+  if(!step) {
+    ## continuous colours
+    xx <- seq.int(from=range[1], to=range[2], length.out=n)
+    co <- phcolourfun(xx)
+    phmap <- colourmap(co, range=range)
+  } else {
+    ## colours jump at integer pH
+    ## first make a map with integer range
+    intbreaks <- (floor(range[1])):(ceiling(range[2]))
+    midvals <- intbreaks[-1] - 0.5
+    midcols <- phcolourfun(midvals)
+    phmap <- colourmap(midcols, breaks=intbreaks)
+    ## now trim the range
+    if(any(range %% 1 != 0)) {
+      phmap <- restrict.colourmap(phmap, range=range)
+    }
+  }
+  return(phmap)
 }

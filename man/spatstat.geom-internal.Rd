@@ -139,6 +139,7 @@
 \alias{packupNNdata}
 \alias{parbreak}
 \alias{perspVisible}
+\alias{phcolourfun}
 \alias{plan.legend.layout}
 \alias{pointweights}
 \alias{polytileareaEngine}
@@ -487,6 +488,7 @@ markvaluetype(x)
 packupNNdata(NND, NNW, what, k)
 parbreak(terse)
 perspVisible(x, y, z, M)
+phcolourfun(pH)
 plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
                    started, map)
 pointweights(X, \dots, weights, parent)

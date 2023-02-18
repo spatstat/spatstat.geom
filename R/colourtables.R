@@ -584,3 +584,62 @@ colouroutputs <- function(x) {
   return(x)
 }
 
+restrict.colourmap <- function(x, ..., range=NULL, breaks=NULL, inputs=NULL) {
+  stopifnot(inherits(x, "colourmap"))
+  given <- c(!is.null(range), !is.null(breaks), !is.null(inputs))
+  names(given) <- nama <- c("range", "breaks", "inputs")
+  ngiven <- sum(given)
+  if(ngiven == 0L)
+    return(x)
+  if(ngiven > 1L) {
+    offending <- nama[given]
+    stop(paste("The arguments",
+               commasep(sQuote(offending)),
+               "are incompatible"))
+  }
+  stuff <- attr(x, "stuff")
+  if(!is.null(inputs)) {
+    ## discrete colour map
+    if(!stuff$discrete) 
+      stop("Cannot update 'inputs'; the existing colour map is not discrete",
+           call.=FALSE)
+    oldinputs <- stuff$inputs
+    oldoutputs <- stuff$outputs
+    m <- match(inputs, oldinputs)
+    if(any(is.na(m)))
+      stop("New inputs are not a subset of the old inputs", call.=FALSE)
+    result <- colourmap(oldoutputs[m], inputs=inputs)
+  } else if(!is.null(range)) {
+    ## colour map for continuous domain
+    ## range specified
+    if(stuff$discrete) 
+      stop("Cannot update 'range'; the existing colour map is discrete",
+           call.=FALSE)
+    check.range(range)
+    oldbreaks <- stuff$breaks
+    if(!all(inside.range(range, range(oldbreaks))))
+      stop("new range of values is not a subset of current range")
+    ## restrict existing breaks to new range
+    newbreaks <- pmax(range[1], pmin(range[2], oldbreaks))
+    newbreaks <- unique(newbreaks)
+    ## evaluate current colour at midpoint of each new interval
+    newmid <- newbreaks[-length(newbreaks)] + diff(newbreaks)/2
+    newout <- x(newmid)
+    result <- colourmap(newout, breaks=newbreaks)
+  } else {
+    ## colour map for continuous domain
+    ## breaks specified
+    if(stuff$discrete) 
+      stop("Cannot update 'breaks'; the existing colour map is discrete",
+           call.=FALSE)
+    oldbreaks <- stuff$breaks
+    if(!all(inside.range(breaks, range(oldbreaks))))
+      stop("new range of 'breaks' is not a subset of current range of 'breaks'",
+           call.=FALSE)
+    newmid <- breaks[-length(breaks)] + diff(breaks)/2
+    newout <- x(newmid)
+    result <- colourmap(newout, breaks=breaks)
+  }
+  return(result)
+}
+

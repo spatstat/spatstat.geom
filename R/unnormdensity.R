@@ -1,80 +1,97 @@
 #
 #  unnormdensity.R
 #
-#  $Revision: 1.9 $  $Date: 2022/03/24 01:24:57 $
+#  $Revision: 1.12 $  $Date: 2023/02/18 04:58:05 $
 #
 
 unnormdensity <- function(x, ..., weights=NULL, defaults=list()) {
   if(any(!nzchar(names(list(...)))))
     stop("All arguments must be named (tag=value)")
   if(is.null(weights)) {
-    out <- do.call.matched(density.default, c(list(x=x), list(...), defaults))
+    out <- do.call.matched(density.default, c(list(x=quote(x)), list(...), defaults))
     out$y <- length(x) * out$y
   } else if(length(weights) == 1) {
     ## all weights are equal
-    out <- do.call.matched(density.default, c(list(x=x), list(...), defaults))
-    out$y <- weights[1] * out$y
+    out <- do.call.matched(density.default, c(list(x=quote(x)), list(...), defaults))
+    out$y <- weights[1] * length(x) * out$y
   } else if(length(weights) != length(x)) {
     stop("'x' and 'weights' have unequal length")
   } else if(all(weights == 0)) {
     ## result is zero
-    out <- do.call.matched(density.default, c(list(x=x), list(...), defaults))
+    out <- do.call.matched(density.default, c(list(x=quote(x)), list(...), defaults))
     out$y <- 0 * out$y
   } else if(all(weights >= 0)) {
     # all masses are nonnegative, some are positive
-    w <- weights
-    totmass <- sum(w)
     out <- do.call.matched(density.default,
-                           c(list(x=x),
+                           c(list(x=quote(x), weights=quote(weights), subdensity=TRUE),
                              list(...),
-                             list(weights=w/totmass),
                              defaults))
-    out$y <- out$y * totmass
   } else if(all(weights <= 0)) {
     # all masses are nonpositive, some are negative
     w <- (- weights)
-    totmass <- sum(w)
     out <- do.call.matched(density.default,
-                           c(list(x=x),
+                           c(list(x=quote(x), weights=w, subdensity=TRUE),
                              list(...),
-                             list(weights=w/totmass),
                              defaults))
-    out$y <- out$y * (- totmass)
+    out$y <- (- out$y)
   } else {
     # mixture of positive and negative masses
     w <- weights
     wabs <- abs(w)
     wpos <- pmax.int(0, w)
     wneg <- - pmin.int(0, w)
-    ## determine bandwidth using absolute masses
-    dabs <- do.call.matched(density.default,
-                            c(list(x=x),
+    ## determine bandwidth value
+    bw <- list(...)$bw  # could be NULL
+    if(is.numeric(bw)) {
+      ## bandwidth is given, as a numeric value
+      ## adjust by factor 'adjust'
+      adjust <- list(...)$adjust %orifnull% 1
+      bw <- bw * adjust
+    } else {
+      ## compute bandwidth by applying a rule, using absolute masses
+      dabs <- do.call.matched(density.default,
+                            c(list(x=quote(x), weights=wabs, subdensity=TRUE),
                               list(...),
-                              list(weights=wabs/sum(wabs)),
                               defaults))
-    bw <- dabs$bw
+      bw <- dabs$bw
+    }
     ## compute densities for positive and negative masses separately
-    sumwpos <- sum(wpos)
-    sumwneg <- sum(wneg)
     outpos <- do.call.matched(density.default,
                               resolve.defaults(list(x=quote(x)),
                                                list(bw=bw, adjust=1),
-                                               list(weights=wpos/sumwpos),
+                                               list(weights=wpos, subdensity=TRUE),
                                                list(...),
                                                defaults,
                                                .StripNull=TRUE))
     outneg <- do.call.matched(density.default,
                               resolve.defaults(list(x=quote(x)),
                                                list(bw=bw, adjust=1),
-                                               list(weights=wneg/sumwneg),
+                                               list(weights=wneg, subdensity=TRUE),
                                                list(...),
                                                defaults,
                                                .StripNull=TRUE))
     ## combine
     out <- outpos
-    out$y <- sumwpos * outpos$y - sumwneg * outneg$y
+    out$y <- outpos$y - outneg$y
   }
   out$call <- match.call()
   return(out)
 }
 
+integral.density <- function(f, domain=NULL, weight=NULL, ...) {
+  x <- f$x
+  y <- f$y
+  if(!is.null(domain)) {
+    check.range(domain)
+    retain <- inside.range(x, domain)
+    x <- x[retain]
+    y <- y[retain]
+  }
+  if(!is.null(weight)) {
+    stopifnot(is.function(weight))
+    y <- y * weight(x)
+  }
+  dx <- diff(x)
+  ybar <- (y[-1] + y[-length(y)])/2
+  sum(dx * ybar)
+}
