@@ -1,5 +1,6 @@
 \name{pHcolourmap}
 \alias{pHcolourmap}
+\alias{pHcolour}
 \title{
   Colour Map for pH Values
 }
@@ -8,6 +9,7 @@
 }
 \usage{
  pHcolourmap(range = c(0, 14), ..., n=256, step = FALSE)
+ pHcolour(pH)
 }
 \arguments{
   \item{n}{
@@ -25,15 +27,26 @@
     \eqn{pH} values.
   }
   \item{\dots}{Ignored.}
+  \item{pH}{
+    Numerical value or numeric vector of values of \eqn{pH}.
+  }
 }
 \details{
   In chemistry the hydrogen potential \eqn{pH} measures how acidic or basic
-  a solution is. This function produces colour maps for numerical values
-  of \eqn{pH}, always using the same consistent mapping of \eqn{pH}
-  values to colours: neutral \eqn{pH=7} is green,
+  a solution is.
+
+  The function \code{pHcolour} calculates the colour associated with
+  a given value of \eqn{pH}, according to a standard mapping in which
+  neutral \eqn{pH=7} is green,
   acidic values \eqn{pH < 7} are yellow or red,
   and basic values \eqn{pH > 7} are blue.
-
+  The function \code{pHcolour} takes a numerical value or vector of
+  values of \eqn{pH} and returns a character vector containing the
+  corresponding colours.
+  
+  The function \code{pHcolourmap} produces a colour map for numerical values
+  of \eqn{pH}, using the same consistent mapping of \eqn{pH}
+  values to colours.
   The argument \code{range} specifies the range of \eqn{pH} values that
   will be mapped by the resulting colour map. It should be a numeric
   vector of length 2 giving the minimum and maximum values of \eqn{pH}
@@ -52,7 +65,11 @@
   same colour.
 }
 \value{
-  A colour map (object of class \code{"colourmap"}).
+  The return value of \code{pHcolour} is a character string or
+  a vector of character strings representing colours.
+
+  The return value of \code{pHcolourmap}
+  is a colour map (object of class \code{"colourmap"}).
 }
 
 \author{
@@ -62,6 +79,8 @@
   \code{\link{colourmap}}
 }
 \examples{
+  pHcolour(7)
+
   plot(pHcolourmap())
   plot(pHcolourmap(step=TRUE))
   plot(pHcolourmap(c(3, 8)))

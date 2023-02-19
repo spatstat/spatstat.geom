@@ -58,9 +58,9 @@ beachcolours <- function(range, sealevel = 0, monochrome=FALSE,
 }
 
 
-phcolourfun <- function(pH) {
+pHcolour <- function(pH) {
   ## Defined mapping from pH values to hues
-  ## rescale to [0,1]
+  ## rescale pH from [0, 14] to [0,1]
   ff <- pH/14
   bad <- (ff < 0) | (ff > 1)
   ff <- pmax(0, pmin(1, ff))
@@ -78,14 +78,14 @@ pHcolourmap <- function(range=c(0, 14), ..., n=256, step=FALSE) {
   if(!step) {
     ## continuous colours
     xx <- seq.int(from=range[1], to=range[2], length.out=n)
-    co <- phcolourfun(xx)
+    co <- pHcolour(xx)
     phmap <- colourmap(co, range=range)
   } else {
     ## colours jump at integer pH
     ## first make a map with integer range
     intbreaks <- (floor(range[1])):(ceiling(range[2]))
     midvals <- intbreaks[-1] - 0.5
-    midcols <- phcolourfun(midvals)
+    midcols <- pHcolour(midvals)
     phmap <- colourmap(midcols, breaks=intbreaks)
     ## now trim the range
     if(any(range %% 1 != 0)) {
