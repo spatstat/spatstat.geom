@@ -12,7 +12,7 @@
                          vertical = FALSE,
                          side = c("bottom", "left", "top", "right"),
                          annotate = TRUE, labelmap = NULL, add = FALSE,
-                         nsymbols = NULL, warn = TRUE)
+                         nsymbols = NULL, warn = TRUE, colour.only=FALSE)
 } 
 \arguments{
   \item{x}{
@@ -55,6 +55,13 @@
     Logical value specifying whether to issue a warning
     when the plotted symbol map does not represent every possible
     discrete value.
+  }
+  \item{colour.only}{
+    Logical value. If \code{TRUE}, the colour map information will be
+    extracted from the symbol map, and only this colour map will be
+    plotted. If \code{FALSE} (the default) the entire symbol map is
+    plotted, including information about symbol shape and size as well
+    as colour.
   }
 }
 \details{

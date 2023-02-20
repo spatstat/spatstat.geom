@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.47 $ $Date: 2020/07/03 03:21:28 $
+# $Revision: 1.48 $ $Date: 2023/02/20 02:13:39 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
@@ -219,6 +219,17 @@ plot.colourmap <- local({
     if(dw == 0) 1 else (dw * (if(separate) (n + (n-1)*gap) else 10))
   }
 
+  sideCode <- function(side) {
+    if(is.numeric(side)) {
+      stopifnot(side %in% 1:4)
+      sidecode <- side
+    } else if(is.character(side)) {
+      stopifnot(side %in% c("bottom", "left", "top", "right"))
+      sidecode <- match(side, c("bottom", "left", "top", "right"))
+    } else stop("Unrecognised format for 'side'")
+    return(sidecode)
+  }
+    
   plot.colourmap <- function(x, ..., main,
                              xlim=NULL, ylim=NULL, vertical=FALSE, axis=TRUE,
                              labelmap=NULL, gap=0.25, add=FALSE,
@@ -393,7 +404,8 @@ plot.colourmap <- local({
         if(reverse)
           at <- rev(at)
         # default axis position is below the ribbon (side=1)
-        sidecode <- resolve.1.default("side", list(...), list(side=1L))
+        side <- resolve.1.default("side", list(...), list(side=1L))
+        sidecode <- sideCode(side)
         if(!(sidecode %in% c(1L,3L)))
           warning(paste("side =", sidecode,
                         "is not consistent with horizontal orientation"))
@@ -420,7 +432,8 @@ plot.colourmap <- local({
         if(reverse)
           at <- rev(at)
         # default axis position is to the right of ribbon (side=4)
-        sidecode <- resolve.1.default("side", list(...), list(side=4))
+        side <- resolve.1.default("side", list(...), list(side=4))
+        sidecode <- sideCode(side)
         if(!(sidecode %in% c(2L,4L)))
           warning(paste("side =", sidecode,
                         "is not consistent with vertical orientation"))

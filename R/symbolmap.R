@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.43 $  $Date: 2022/11/27 10:19:52 $
+##   $Revision: 1.45 $  $Date: 2023/02/20 02:21:11 $
 ##
 
 symbolmap <- local({
@@ -479,12 +479,39 @@ plot.symbolmap <- function(x, ..., main,
                            vertical=FALSE,
                            side=c("bottom", "left", "top", "right"),
                            annotate=TRUE, labelmap=NULL, add=FALSE,
-                           nsymbols=NULL, warn=TRUE) {
+                           nsymbols=NULL, warn=TRUE,
+                           colour.only=FALSE) {
   if(missing(main))
     main <- short.deparse(substitute(x))
   miss.side <- missing(side)
   side <- match.arg(side)
-  
+
+  if(colour.only) {
+    ## extract only the colour map and plot it
+    parlist <- attr(x, "stuff")$parlist
+    iscol <- sapply(parlist, inherits, what="colourmap")
+    nc <- sum(iscol)
+    if(nc == 0) {
+      warning("No colour map information was detected", call.=FALSE)
+    } else {
+      used <- which(iscol)[[1L]]
+      cmap <- parlist[[used]]
+      if(nc > 1) 
+        warning(paste("More than one colour map was detected;",
+                      "using the colour map for",
+                      sQuote(names(parlist)[used])),
+                call.=FALSE)
+      if(miss.side)
+        side <- if(vertical) "right" else "bottom"
+      if(!is.numeric(side))
+        side <- match(side, c("bottom", "left", "top", "right"))
+      result <- plot.colourmap(cmap, ..., main=main,
+                               xlim=xlim, ylim=ylim, vertical=vertical,
+                               side=side, labelmap=labelmap, add=add)
+      return(result)
+    }
+  }
+    
   type <- symbolmaptype(x)
   map <- x
   stuff <- attr(map, "stuff")

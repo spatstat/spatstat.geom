@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.0-6.005
+        CHANGES IN spatstat.geom VERSION 3.0-6.006
 
 OVERVIEW
 
@@ -28,6 +28,10 @@ NEW FUNCTIONS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o plot.symbolmap
+    New argument colour.only makes it possible to display only the
+    colour map information in a symbolmap.
+    
     o "[.hyperframe", "[<-.hyperframe"
     Improved error message when the format of index i or j is not supported.
 
