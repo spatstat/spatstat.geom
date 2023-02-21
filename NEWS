@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.0-6.006
+        CHANGES IN spatstat.geom VERSION 3.0-6.007
 
 OVERVIEW
 
@@ -25,6 +25,9 @@ NEW FUNCTIONS
 
     o integral.density
     Compute the integral of a one-dimensional kernel density estimate.
+
+    o as.colourmap
+    Extract colour information from an object.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

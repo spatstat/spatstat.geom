@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.45 $  $Date: 2023/02/20 02:21:11 $
+##   $Revision: 1.46 $  $Date: 2023/02/21 08:09:47 $
 ##
 
 symbolmap <- local({
@@ -488,19 +488,8 @@ plot.symbolmap <- function(x, ..., main,
 
   if(colour.only) {
     ## extract only the colour map and plot it
-    parlist <- attr(x, "stuff")$parlist
-    iscol <- sapply(parlist, inherits, what="colourmap")
-    nc <- sum(iscol)
-    if(nc == 0) {
-      warning("No colour map information was detected", call.=FALSE)
-    } else {
-      used <- which(iscol)[[1L]]
-      cmap <- parlist[[used]]
-      if(nc > 1) 
-        warning(paste("More than one colour map was detected;",
-                      "using the colour map for",
-                      sQuote(names(parlist)[used])),
-                call.=FALSE)
+    cmap <- as.colourmap(x)
+    if(inherits(cmap, "colourmap")) {
       if(miss.side)
         side <- if(vertical) "right" else "bottom"
       if(!is.numeric(side))
@@ -744,6 +733,23 @@ plan.legend.layout <- function(B,
               iside=iside, side=side, size=size, charsize=charsize, sep=sep))
 }
 
-         
-  
-  
+
+as.colourmap.symbolmap <- function(x, ...) {
+  ## extract only the colour map and plot it
+  parlist <- attr(x, "stuff")$parlist
+  iscol <- sapply(parlist, inherits, what="colourmap")
+  nc <- sum(iscol)
+  if(nc == 0) {
+    warning("No colour map information was detected", call.=FALSE)
+    return(NULL)
+  }
+  used <- which(iscol)[[1L]]
+  cmap <- parlist[[used]]
+  if(nc > 1) 
+    warning(paste("More than one colour map was detected;",
+                  "using the colour map for",
+                  sQuote(names(parlist)[used])),
+            call.=FALSE)
+  return(cmap)
+}
+

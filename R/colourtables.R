@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.48 $ $Date: 2023/02/20 02:13:39 $
+# $Revision: 1.49 $ $Date: 2023/02/21 08:20:14 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
@@ -655,4 +655,10 @@ restrict.colourmap <- function(x, ..., range=NULL, breaks=NULL, inputs=NULL) {
   }
   return(result)
 }
+
+as.colourmap <- function(x, ...) {
+  UseMethod("as.colourmap")
+}
+
+as.colourmap.colourmap <- function(x, ...) { x }
 
