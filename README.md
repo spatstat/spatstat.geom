@@ -2,7 +2,7 @@
 
 ## Spatial data classes and geometrical functionality for the spatstat family
 
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.geom)](http://cran.r-project.org/web/packages/spatstat.geom) 
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/spatstat.geom)](http://CRAN.R-project.org/package=spatstat.geom) 
 [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.geom)](https://github.com/spatstat/spatstat.geom)
 
 The original `spatstat` package has been split into
