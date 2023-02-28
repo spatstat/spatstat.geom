@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.0-6.007
+        CHANGES IN spatstat.geom VERSION 3.0-6.008
 
 OVERVIEW
 
@@ -47,6 +47,12 @@ BUG FIXES
     If 'weights' was a single numerical value 'w', the calculation incorrectly
     assigned the weight for each observation to be 'w/n' where 'n=length(x)'.
     Fixed.
+
+    o unnormdensity
+    A crash could occur if 'x' was a very long vector,
+    with an error message originating from 'deparse1'.
+    Fixed.
+
     
         CHANGES IN spatstat.geom VERSION 3.0-6
 

@@ -6,7 +6,7 @@
 #
 #	even.breaks()
 #
-#	$Revision: 1.26 $	$Date: 2022/05/23 02:33:06 $
+#	$Revision: 1.27 $	$Date: 2023/02/28 01:57:26 $
 #
 #
 #       Other functions in this directory use the standard Splus function
@@ -203,7 +203,7 @@ check.finespacing <- function(r, eps=NULL, win=NULL,
                               context="",
                               action=c("fatal", "warn", "silent"),
                               rname) {
-  if(missing(rname)) rname <- deparse(substitute(r))
+  if(missing(rname)) rname <- short.deparse(substitute(r))
   action <- match.arg(action)
   if(is.null(eps)) {
     b <- handle.r.b.args(window=win, rmaxdefault=rmaxdefault)

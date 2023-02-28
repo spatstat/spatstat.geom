@@ -1,37 +1,45 @@
 #
 #  unnormdensity.R
 #
-#  $Revision: 1.12 $  $Date: 2023/02/18 04:58:05 $
+#  $Revision: 1.13 $  $Date: 2023/02/28 02:37:33 $
 #
 
 unnormdensity <- function(x, ..., weights=NULL, defaults=list()) {
   if(any(!nzchar(names(list(...)))))
     stop("All arguments must be named (tag=value)")
   if(is.null(weights)) {
-    out <- do.call.matched(density.default, c(list(x=quote(x)), list(...), defaults))
+    ## all weights are 1 (not 1/n)
+    out <- do.call.matched(density.default,
+                           c(list(x=quote(x), ...), defaults))
     out$y <- length(x) * out$y
   } else if(length(weights) == 1) {
     ## all weights are equal
-    out <- do.call.matched(density.default, c(list(x=quote(x)), list(...), defaults))
+    out <- do.call.matched(density.default,
+                           c(list(x=quote(x), ...), defaults))
     out$y <- weights[1] * length(x) * out$y
   } else if(length(weights) != length(x)) {
     stop("'x' and 'weights' have unequal length")
   } else if(all(weights == 0)) {
     ## result is zero
-    out <- do.call.matched(density.default, c(list(x=quote(x)), list(...), defaults))
+    out <- do.call.matched(density.default,
+                           c(list(x=quote(x), ...), defaults))
     out$y <- 0 * out$y
   } else if(all(weights >= 0)) {
     # all masses are nonnegative, some are positive
     out <- do.call.matched(density.default,
-                           c(list(x=quote(x), weights=quote(weights), subdensity=TRUE),
-                             list(...),
+                           c(list(x=quote(x),
+                                  weights=quote(weights),
+                                  subdensity=TRUE,
+                                  ...),
                              defaults))
   } else if(all(weights <= 0)) {
     # all masses are nonpositive, some are negative
     w <- (- weights)
     out <- do.call.matched(density.default,
-                           c(list(x=quote(x), weights=w, subdensity=TRUE),
-                             list(...),
+                           c(list(x=quote(x),
+                                  weights=quote(w),
+                                  subdensity=TRUE,
+                                  ...),
                              defaults))
     out$y <- (- out$y)
   } else {
@@ -50,24 +58,30 @@ unnormdensity <- function(x, ..., weights=NULL, defaults=list()) {
     } else {
       ## compute bandwidth by applying a rule, using absolute masses
       dabs <- do.call.matched(density.default,
-                            c(list(x=quote(x), weights=wabs, subdensity=TRUE),
-                              list(...),
-                              defaults))
+                              c(list(x=quote(x),
+                                     weights=quote(wabs),
+                                     subdensity=TRUE,
+                                     ...),
+                                defaults))
       bw <- dabs$bw
     }
     ## compute densities for positive and negative masses separately
     outpos <- do.call.matched(density.default,
-                              resolve.defaults(list(x=quote(x)),
-                                               list(bw=bw, adjust=1),
-                                               list(weights=wpos, subdensity=TRUE),
-                                               list(...),
+                              resolve.defaults(list(x=quote(x),
+                                                    bw=bw,
+                                                    adjust=1,
+                                                    weights=quote(wpos),
+                                                    subdensity=TRUE,
+                                                    ...),
                                                defaults,
                                                .StripNull=TRUE))
     outneg <- do.call.matched(density.default,
-                              resolve.defaults(list(x=quote(x)),
-                                               list(bw=bw, adjust=1),
-                                               list(weights=wneg, subdensity=TRUE),
-                                               list(...),
+                              resolve.defaults(list(x=quote(x),
+                                                    bw=bw,
+                                                    adjust=1,
+                                                    weights=quote(wneg),
+                                                    subdensity=TRUE,
+                                                    ...),
                                                defaults,
                                                .StripNull=TRUE))
     ## combine

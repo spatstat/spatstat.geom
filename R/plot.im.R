@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.155 $   $Date: 2022/05/23 02:33:06 $
+#  $Revision: 1.156 $   $Date: 2023/02/28 01:34:40 $
 #
 #  Plotting code for pixel images
 #
@@ -886,7 +886,7 @@ contour.im <- function (x, ..., main, axes=FALSE, add=FALSE,
                         col=par("fg"), 
                         clipwin=NULL, show.all=!add, do.plot=TRUE)
 {
-  defaultmain <- deparse(substitute(x))
+  defaultmain <- if(missing(main)) short.deparse(substitute(x)) else NULL
   dotargs <- list(...)
   bb <- Frame(x)
   xtype <- x$type

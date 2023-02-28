@@ -4,13 +4,13 @@
 ##  'persp' method for image objects
 ##      plus annotation
 ##  
-##  $Revision: 1.28 $ $Date: 2022/05/23 02:33:06 $
+##  $Revision: 1.29 $ $Date: 2023/02/28 01:53:02 $
 ##
 
 persp.im <- function(x, ...,
                      colmap=NULL, colin=x, apron=FALSE,
                      visible=FALSE) {
-  xname <- deparse(substitute(x))
+  xname <- short.deparse(substitute(x))
   xinfo <- summary(x)
   if(xinfo$type == "factor")
     stop("Perspective plot is inappropriate for factor-valued image")

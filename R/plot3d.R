@@ -1,17 +1,17 @@
 #'  perspective plot of 3D 
 #'
-#'  $Revision: 1.7 $ $Date: 2019/10/22 07:53:14 $
+#'  $Revision: 1.9 $ $Date: 2023/02/28 01:54:11 $
 #'
 
 
 project3Dhom <- local({
 
   check3dvector <- function(x) {
-    xname <- deparse(substitute(x))
-    if(!(is.numeric(x) && length(x) == 3))
-      stop(paste(xname, "should be a numeric vector of length 3"),
-           call.=FALSE)
-    return(NULL)
+    if(is.numeric(x) && length(x) == 3)
+      return(NULL)
+    xname <- short.deparse(substitute(x))
+    stop(paste(xname, "should be a numeric vector of length 3"),
+         call.=FALSE)
   }
 
   normalise <- function(x) {
