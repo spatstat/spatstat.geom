@@ -8,7 +8,6 @@ unnormdensity <- function(x, ..., weights=NULL, defaults=list()) {
   if(any(!nzchar(names(list(...)))))
     stop("All arguments must be named (tag=value)")
   envir.here <- sys.frame(sys.nframe())
-  force(x)
   if(is.null(weights)) {
     ## all weights are 1 (not 1/n)
     out <- do.call.matched(density.default,

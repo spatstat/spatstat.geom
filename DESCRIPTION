@@ -1,5 +1,5 @@
 Package: spatstat.geom
-Version: 3.0-6.009
+Version: 3.0-6.010
 Date: 2023-02-28
 Title: Geometrical Functionality of the 'spatstat' Family 
 Authors@R: c(person("Adrian", "Baddeley", 
@@ -27,7 +27,6 @@ Maintainer: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>
 Depends: R (>= 3.5.0), spatstat.data (>= 3.0), stats, graphics, grDevices, utils, methods
 Imports: spatstat.utils (>= 3.0), deldir (>= 1.0-2), polyclip (>= 1.10-0)
 Suggests: spatstat.random, spatstat.explore, spatstat.model, spatstat.linnet, maptools (>= 0.9-9), spatial, fftwtools (>= 0.9-8), spatstat (>= 2.0-0)
-Additional_repositories: https://spatstat.r-universe.dev
 Description: Defines spatial data types and supports geometrical operations
 	     on them. Data types include point patterns, windows (domains),
 	     pixel images, line segment patterns, tessellations and hyperframes.
