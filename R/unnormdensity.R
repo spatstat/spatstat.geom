@@ -7,22 +7,27 @@
 unnormdensity <- function(x, ..., weights=NULL, defaults=list()) {
   if(any(!nzchar(names(list(...)))))
     stop("All arguments must be named (tag=value)")
+  envir.here <- sys.frame(sys.nframe())
+  force(x)
   if(is.null(weights)) {
     ## all weights are 1 (not 1/n)
     out <- do.call.matched(density.default,
-                           c(list(x=quote(x), ...), defaults))
+                           c(list(x=quote(x), ...), defaults),
+                           envir=envir.here)
     out$y <- length(x) * out$y
   } else if(length(weights) == 1) {
     ## all weights are equal
     out <- do.call.matched(density.default,
-                           c(list(x=quote(x), ...), defaults))
+                           c(list(x=quote(x), ...), defaults),
+                           envir=envir.here)
     out$y <- weights[1] * length(x) * out$y
   } else if(length(weights) != length(x)) {
     stop("'x' and 'weights' have unequal length")
   } else if(all(weights == 0)) {
     ## result is zero
     out <- do.call.matched(density.default,
-                           c(list(x=quote(x), ...), defaults))
+                           c(list(x=quote(x), ...), defaults),
+                           envir=envir.here)
     out$y <- 0 * out$y
   } else if(all(weights >= 0)) {
     # all masses are nonnegative, some are positive
@@ -31,7 +36,8 @@ unnormdensity <- function(x, ..., weights=NULL, defaults=list()) {
                                   weights=quote(weights),
                                   subdensity=TRUE,
                                   ...),
-                             defaults))
+                             defaults),
+                           envir=envir.here)
   } else if(all(weights <= 0)) {
     # all masses are nonpositive, some are negative
     w <- (- weights)
@@ -40,7 +46,8 @@ unnormdensity <- function(x, ..., weights=NULL, defaults=list()) {
                                   weights=quote(w),
                                   subdensity=TRUE,
                                   ...),
-                             defaults))
+                             defaults),
+                           envir=envir.here)
     out$y <- (- out$y)
   } else {
     # mixture of positive and negative masses
@@ -62,7 +69,8 @@ unnormdensity <- function(x, ..., weights=NULL, defaults=list()) {
                                      weights=quote(wabs),
                                      subdensity=TRUE,
                                      ...),
-                                defaults))
+                                defaults),
+                              envir=envir.here)
       bw <- dabs$bw
     }
     ## compute densities for positive and negative masses separately
@@ -74,7 +82,8 @@ unnormdensity <- function(x, ..., weights=NULL, defaults=list()) {
                                                     subdensity=TRUE,
                                                     ...),
                                                defaults,
-                                               .StripNull=TRUE))
+                                               .StripNull=TRUE),
+                              envir=envir.here)
     outneg <- do.call.matched(density.default,
                               resolve.defaults(list(x=quote(x),
                                                     bw=bw,
@@ -83,7 +92,8 @@ unnormdensity <- function(x, ..., weights=NULL, defaults=list()) {
                                                     subdensity=TRUE,
                                                     ...),
                                                defaults,
-                                               .StripNull=TRUE))
+                                               .StripNull=TRUE),
+                              envir=envir.here)
     ## combine
     out <- outpos
     out$y <- outpos$y - outneg$y
