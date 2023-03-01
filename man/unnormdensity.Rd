@@ -9,7 +9,8 @@
   The weights may be positive, negative or zero.
 }
 \usage{
-unnormdensity(x, ..., weights = NULL, defaults)
+unnormdensity(x, ..., weights = NULL, defaults,
+                      weightrange=range(weights))
 }
 \arguments{
   \item{x}{
@@ -27,6 +28,9 @@ unnormdensity(x, ..., weights = NULL, defaults)
     Optional, named list of arguments passed to
     \code{\link[stats]{density.default}}. These will be overridden by
     arguments in \code{\dots}.
+  }
+  \item{weightrange}{
+    Range of values of \code{weights}, if already known.
   }
 }
 \details{

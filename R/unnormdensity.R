@@ -1,10 +1,11 @@
 #
 #  unnormdensity.R
 #
-#  $Revision: 1.13 $  $Date: 2023/02/28 02:37:33 $
+#  $Revision: 1.16 $  $Date: 2023/03/01 13:10:34 $
 #
 
-unnormdensity <- function(x, ..., weights=NULL, defaults=list()) {
+unnormdensity <- function(x, ..., weights=NULL, defaults=list(),
+                          weightrange=range(weights)) {
   if(any(!nzchar(names(list(...)))))
     stop("All arguments must be named (tag=value)")
   envir.here <- sys.frame(sys.nframe())
@@ -22,14 +23,14 @@ unnormdensity <- function(x, ..., weights=NULL, defaults=list()) {
     out$y <- weights[1] * length(x) * out$y
   } else if(length(weights) != length(x)) {
     stop("'x' and 'weights' have unequal length")
-  } else if(all(weights == 0)) {
+  } else if(all(weightrange == 0)) {  # 'weightrange' is computed now
     ## result is zero
     out <- do.call.matched(density.default,
                            c(list(x=quote(x), ...), defaults),
                            envir=envir.here)
     out$y <- 0 * out$y
-  } else if(all(weights >= 0)) {
-    # all masses are nonnegative, some are positive
+  } else if(all(weightrange >= 0)) {
+    ## all masses are nonnegative, some are positive
     out <- do.call.matched(density.default,
                            c(list(x=quote(x),
                                   weights=quote(weights),
@@ -37,8 +38,8 @@ unnormdensity <- function(x, ..., weights=NULL, defaults=list()) {
                                   ...),
                              defaults),
                            envir=envir.here)
-  } else if(all(weights <= 0)) {
-    # all masses are nonpositive, some are negative
+  } else if(all(weightrange <= 0)) {
+    ## all masses are nonpositive, some are negative
     w <- (- weights)
     out <- do.call.matched(density.default,
                            c(list(x=quote(x),
@@ -49,7 +50,7 @@ unnormdensity <- function(x, ..., weights=NULL, defaults=list()) {
                            envir=envir.here)
     out$y <- (- out$y)
   } else {
-    # mixture of positive and negative masses
+    ## mixture of positive and negative masses
     w <- weights
     wabs <- abs(w)
     wpos <- pmax.int(0, w)
@@ -72,7 +73,8 @@ unnormdensity <- function(x, ..., weights=NULL, defaults=list()) {
                               envir=envir.here)
       bw <- dabs$bw
     }
-    ## compute densities for positive and negative masses separately
+    ## Bandwidth is now determined as a numeric value.
+    ## Compute densities for positive and negative masses separately
     outpos <- do.call.matched(density.default,
                               resolve.defaults(list(x=quote(x),
                                                     bw=bw,
