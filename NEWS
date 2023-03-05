@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.0-6.013
+        CHANGES IN spatstat.geom VERSION 3.0-6.014
 
 OVERVIEW
 
@@ -40,6 +40,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o unnormdensity
     Computation accelerated.
+
+    o unnormdensity
+    Handles datasets containing fewer than 2 values.
 
 BUG FIXES
 
