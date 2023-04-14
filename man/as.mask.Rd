@@ -76,7 +76,18 @@
   \code{\link{as.polygonal}} will compute a polygonal approximation
   of a binary mask.
 }
+\section{Discretisation rule}{
+  The rule used in \code{as.mask} is that a pixel belongs to the
+  discretised window if and only if the centre of the pixel falls in the
+  original window. This is usually sufficient for most purposes,
+  and is fast to compute.
+
+  Other discretisation rules are possible; they are available using the
+  function \code{\link{owin2mask}}.
+}
 \seealso{
+  \code{\link{owin2mask}}.
+  
   \code{\link{owin.object}},
   \code{\link{as.rectangle}},
   \code{\link{as.polygonal}},
