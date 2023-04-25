@@ -1,8 +1,17 @@
-        CHANGES IN spatstat.geom VERSION 3.1-0.001
+        CHANGES IN spatstat.geom VERSION 3.1-0.002
 
 OVERVIEW
 
+    o More options for converting polygons to a binary mask.
+
     o Minor tweaks to package documentation.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o owin2mask
+    New options op="majority" and op="minority".
+    If op="majority", a pixel belongs to the resulting mask if
+    at least half of the pixel area is covered by the window.
     
         CHANGES IN spatstat.geom VERSION 3.1-0
 

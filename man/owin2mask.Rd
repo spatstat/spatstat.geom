@@ -13,7 +13,9 @@
 owin2mask(W,
          op = c("sample", "notsample",
                 "cover", "inside",
-                "uncover", "outside", "boundary"),
+                "uncover", "outside",
+                "boundary",
+                "majority", "minority"),
          \dots)
 }
 \arguments{
@@ -59,7 +61,35 @@ owin2mask(W,
     \item 
     If \code{op="boundary"}, the mask consists of all pixels which
     overlap the boundary of the window \code{W}.
+    \item 
+    If \code{op="majority"}, the mask consists of all pixels in which
+    at least half of the pixel area is covered by the window \code{W}.
+    \item 
+    If \code{op="minority"}, the mask consists of all pixels in which
+    less than half of the pixel area is covered by the window \code{W}.
   }
+  These operations are complementary pairs as follows:
+  \tabular{lll}{
+    \code{"notsample"} \tab is the complement of \tab \code{"sample"} \cr
+    \code{"uncover"} \tab is the complement of \tab \code{"inside"} \cr
+    \code{"outside"} \tab is the complement of \tab \code{"cover"} \cr
+    \code{"minority"} \tab is the complement of \tab \code{"majority"}
+  }
+  They also satisfy the following set relations:
+  \tabular{lll}{
+    \code{"inside"} \tab is a subset of \tab \code{"cover"} \cr
+    \code{"outside"} \tab is a subset of \tab \code{"uncover"} \cr
+    \code{"boundary"} \tab is a subset of \tab \code{"cover"} \cr
+    \code{"boundary"} \tab is a subset of \tab \code{"uncover"}
+  }
+  The results of \code{"inside"}, \code{"boundary"} and \code{"outside"}
+  are disjoint and their union is the entire frame.
+
+  Theoretically \code{"sample"} should be a subset of \code{"cover"},
+  \code{"notsample"} should be a subset of \code{"uncover"},
+  \code{"inside"} should be a subset of \code{"majority"}
+  and \code{"outside"} should be a subset of \code{"minority"},
+  but these could be false due to numerical error in computational geometry.
 }
 \value{
   A mask (object of class \code{"owin"} of type \code{"mask"}
@@ -73,23 +103,27 @@ owin2mask(W,
 }
 \examples{
   W <- Window(chorley)
-  opa <- par(mfrow=c(2,4))
-  plot(as.mask(W, dimyx=16), col="grey", main="as.mask")
+  opa <- par(mfrow=c(2,5))
+  plot(as.mask(W, dimyx=10), col="grey", main="sample")
   plot(W, add=TRUE, lwd=3, border="red")  
-  plot(owin2mask(W, "i", dimyx=16), col="grey", main="inside")
+  plot(owin2mask(W, "ma", dimyx=10), col="grey", main="majority")
   plot(W, add=TRUE, lwd=3, border="red")
-  plot(owin2mask(W, "c", dimyx=16), col="grey", main="cover")
+  plot(owin2mask(W, "i", dimyx=10), col="grey", main="inside")
   plot(W, add=TRUE, lwd=3, border="red")
-  plot(owin2mask(W, "b", dimyx=16), col="grey", main="boundary")
+  plot(owin2mask(W, "c", dimyx=10), col="grey", main="cover")
   plot(W, add=TRUE, lwd=3, border="red")
-  plot(as.mask(complement.owin(W), dimyx=16), col="grey",
-       main="as.mask(complement.owin)")
+  plot(owin2mask(W, "b", dimyx=10), col="grey", main="boundary")
+  plot(W, add=TRUE, lwd=3, border="red")
+  plot(as.mask(complement.owin(W), dimyx=10), col="grey",
+       main="notsample")
   plot(W, add=TRUE, lwd=3, border="red")  
-  plot(owin2mask(W, "o", dimyx=16), col="grey", main="outside")
+  plot(owin2mask(W, "mi", dimyx=10), col="grey", main="minority")
   plot(W, add=TRUE, lwd=3, border="red")
-  plot(owin2mask(W, "u", dimyx=16), col="grey", main="uncover")
+  plot(owin2mask(W, "o", dimyx=10), col="grey", main="outside")
   plot(W, add=TRUE, lwd=3, border="red")
-  plot(owin2mask(W, "b", dimyx=16), col="grey", main="boundary")
+  plot(owin2mask(W, "u", dimyx=10), col="grey", main="uncover")
+  plot(W, add=TRUE, lwd=3, border="red")
+  plot(owin2mask(W, "b", dimyx=10), col="grey", main="boundary")
   plot(W, add=TRUE, lwd=3, border="red")
   par(opa)
 }
