@@ -1232,15 +1232,19 @@ as.data.frame.owin <- function(x, ..., drop=TRUE) {
   return(df)
 }
 
-discretise <- function(X, eps=NULL, dimyx=NULL, xy=NULL, move.points=FALSE) {
+discretise <- function(X, eps=NULL, dimyx=NULL, xy=NULL,
+                       move.points=FALSE,
+                       frame.rule=c("fixed", "grow", "shrink")) {
   verifyclass(X,"ppp")
   W <- X$window
   ok <- inside.owin(X$x,X$y,W)
   if(!all(ok))
     stop("There are points of X outside the window of X")
   new.grid <- !is.null(eps) || !is.null(dimyx) || !is.null(xy)
-  new.mask <- new.grid || !is.mask(W) 
-  WM <- if(new.mask) as.mask(W,eps=eps,dimyx=dimyx,xy=xy) else W
+  if(new.grid) frame.rule <- match.arg(frame.rule)
+  new.mask <- new.grid || !is.mask(W)
+  WM <- if(!new.mask) W else as.mask(W,
+                             eps=eps,dimyx=dimyx,xy=xy,frame.rule=frame.rule) 
   if(move.points) {
     ## move points to pixel centres 
     if(new.mask) X$window <- WM

@@ -20,20 +20,24 @@
 
   \method{as.im}{im}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
+        frame.rule=c("fixed", "grow", "shrink"),
         na.replace=NULL)
 
   \method{as.im}{owin}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
+        frame.rule=c("fixed", "grow", "shrink"),
         na.replace=NULL, value=1)
 
   \method{as.im}{matrix}(X, W=NULL, \dots)
 
   \method{as.im}{tess}(X, W=NULL, \dots, 
         eps=NULL, dimyx=NULL, xy=NULL,
+        frame.rule=c("fixed", "grow", "shrink"),
         na.replace=NULL)
 
   \method{as.im}{function}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
+        frame.rule=c("fixed", "grow", "shrink"),
         na.replace=NULL,
         stringsAsFactors=NULL,
         strict=FALSE, drop=TRUE)
@@ -44,16 +48,19 @@
 
   \method{as.im}{distfun}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
+        frame.rule=c("fixed", "grow", "shrink"),
         na.replace=NULL, approx=TRUE)
 
   \method{as.im}{nnfun}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
+        frame.rule=c("fixed", "grow", "shrink"),
         na.replace=NULL, approx=TRUE)
 
   \method{as.im}{data.frame}(X, \dots, step, fatal=TRUE, drop=TRUE)
 
   \method{as.im}{default}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
+        frame.rule=c("fixed", "grow", "shrink"),
         na.replace=NULL)
 
 
@@ -65,7 +72,7 @@
   }
   \item{\dots}{Additional arguments passed to \code{X} when \code{X}
     is a function.}
-  \item{eps,dimyx,xy}{
+  \item{eps,dimyx,xy,frame.rule}{
     Optional parameters passed to \code{\link{as.mask}}
     which determine the pixel array geometry.
     See \code{\link{as.mask}}.

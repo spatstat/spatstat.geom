@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.104 $ $Date: 2022/05/05 02:09:03 $
+#   $Revision: 1.105 $ $Date: 2023/05/01 09:02:34 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -592,21 +592,25 @@ tile.areas <- function(x) {
          
 as.im.tess <- function(X, W=NULL, ...,
                        eps=NULL, dimyx=NULL, xy=NULL,
+                       frame.rule=c("fixed", "grow", "shrink"),
                        na.replace=NULL) {
-  # if W is present, it may have to be converted
+  frame.rule <- match.arg(frame.rule)
+  ## if W is present, it may have to be converted
   if(!is.null(W)) {
     stopifnot(is.owin(W))
-    if(W$type != "mask")
-      W <- as.mask(W, eps=eps, dimyx=dimyx, xy=xy)
+    if(W$type != "mask") 
+      W <- as.mask(W, eps=eps, dimyx=dimyx, xy=xy, frame.rule=frame.rule)
   } 
   switch(X$type,
          image={
            out <- as.im(X$image, W=W, eps=eps, dimyx=dimyx, xy=xy,
+                        frame.rule=frame.rule,
                         na.replace=na.replace)
          },
          tiled={
            if(is.null(W))
-             W <- as.mask(as.owin(X), eps=eps, dimyx=dimyx, xy=xy)
+             W <- as.mask(as.owin(X), eps=eps, dimyx=dimyx, xy=xy,
+                          frame.rule=frame.rule)
            til <- X$tiles
            ntil <- length(til)
            nama <- names(til)
@@ -628,10 +632,9 @@ as.im.tess <- function(X, W=NULL, ...,
            unitname(out) <- unitname(W)
          },
          rect={
-           if(is.null(W))
-             out <- as.im(as.rectangle(X), eps=eps, dimyx=dimyx, xy=xy)
-           else
-             out <- as.im(W)
+           out <- as.im(W %orifnull% as.rectangle(X),
+                        eps=eps, dimyx=dimyx, xy=xy,
+                        frame.rule=frame.rule)
            xg <- X$xgrid
            yg <- X$ygrid
            nrows <- length(yg) - 1

@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.1-0.003
+        CHANGES IN spatstat.geom VERSION 3.1-0.004
 
 OVERVIEW
 
@@ -6,19 +6,33 @@ OVERVIEW
 
     o More options for converting polygons to a binary mask.
 
+    o More options for controlling pixel size.
+    
     o Minor tweaks to package documentation.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
-    o as.mask
-    New argument 'frame.rule' specifies what to do when the
-    desired pixel size is not a divisor of the frame size.
-    
     o owin2mask
     New options op="majority" and op="minority".
     If op="majority", a pixel belongs to the resulting mask if
     at least half of the pixel area is covered by the window.
     
+    o as.mask
+    New argument 'frame.rule' specifies what to do when the
+    desired pixel size is not a divisor of the frame size.
+
+    o as.im
+    Many methods for 'as.im' now have argument 'frame.rule'.
+
+    o discretise
+    New argument 'frame.rule'
+
+    o distfun
+    New argument 'frame.rule'
+
+    o nnfun
+    New argument 'frame.rule'
+
         CHANGES IN spatstat.geom VERSION 3.1-0
 
 OVERVIEW

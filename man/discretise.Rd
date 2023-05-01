@@ -10,7 +10,8 @@
   by moving them to the nearest pixel centres.
 }
 \usage{
-  discretise(X, eps = NULL, dimyx = NULL, xy = NULL, move.points=FALSE)
+  discretise(X, eps = NULL, dimyx = NULL, xy = NULL, move.points=FALSE,
+             frame.rule=c("fixed", "grow", "shrink"))
 }
 \arguments{
   \item{X}{A point pattern (object of class \code{"ppp"}) to be converted.}
@@ -18,7 +19,12 @@
   \item{dimyx}{(optional) pixel array dimensions}
   \item{xy}{(optional) pixel coordinates}
   \item{move.points}{Logical value specifying whether the points should
-    also be discretised by moving each point to the nearest pixel centre.}
+    also be discretised by moving each point to the nearest pixel
+    centre.}
+  \item{frame.rule}{
+    Argument passed to \code{\link[spatstat.geom]{as.mask}}
+    controlling the discretisation.
+  }
 }
 \details{
   This function modifies the point pattern \code{X} by converting its
@@ -52,7 +58,7 @@
 
   See \code{\link{as.mask}} for further details
   about the arguments \code{eps}, \code{dimyx},
-  and \code{xy}, and the process of converting
+  \code{xy} and \code{frame.rule}, and the process of converting
   a window to one of type \code{mask}.
 }
 \section{Error checking}{

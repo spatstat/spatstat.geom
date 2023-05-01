@@ -14,9 +14,12 @@ as.im <- function(X, ...) {
 
 as.im.im <- function(X, W=NULL, ...,
                      eps=NULL, dimyx=NULL, xy=NULL,
+                     frame.rule=c("fixed", "grow", "shrink"),
                      na.replace=NULL) {
   X <- repair.old.factor.image(X)
   nopar <- is.null(eps) && is.null(dimyx) && is.null(xy)
+  if(!nopar)
+    frame.rule <- match.arg(frame.rule)
   if(is.null(W)) {
     if(nopar) {
       X <- repair.image.xycoords(X)
@@ -24,12 +27,13 @@ as.im.im <- function(X, W=NULL, ...,
       return(X)
     }
     # pixel raster determined by dimyx etc
-    W <- as.mask(as.rectangle(X), eps=eps, dimyx=dimyx, xy=xy)
+    W <- as.mask(as.rectangle(X),
+                 eps=eps, dimyx=dimyx, xy=xy, frame.rule=frame.rule)
     # invoke as.im.owin
     Y <- as.im(W)
   } else if(is.mask(W) || is.im(W) || !nopar) {
     #' raster information is present in { W, eps, dimyx, xy }
-    Y <- as.im(W, eps=eps, dimyx=dimyx, xy=xy)
+    Y <- as.im(W, eps=eps, dimyx=dimyx, xy=xy, frame.rule=frame.rule)
   } else {
     #' use existing raster information in X
     return(X[W, drop=FALSE, tight=TRUE])
@@ -41,11 +45,13 @@ as.im.im <- function(X, W=NULL, ...,
 
 as.im.owin <- function(X, W=NULL, ...,
                        eps=NULL, dimyx=NULL, xy=NULL,
+                       frame.rule=c("fixed", "grow", "shrink"),
                        na.replace=NULL, value=1) {
   if(!(is.null(eps) && is.null(dimyx) && is.null(xy))) {
     ## raster dimensions determined by dimyx etc
-    ## convert X to a mask 
-    M <- as.mask(X, eps=eps, dimyx=dimyx, xy=xy)
+    ## convert X to a mask
+    frame.rule <- match.arg(frame.rule)
+    M <- as.mask(X, eps=eps, dimyx=dimyx, xy=xy, frame.rule=frame.rule)
     ## convert mask to image
     d <- M$dim
     v <- matrix(value, d[1L], d[2L])
@@ -110,6 +116,7 @@ as.im.funxy <- function(X, W=Window(X), ...) {
 
 as.im.function <- function(X, W=NULL, ...,
                            eps=NULL, dimyx=NULL, xy=NULL,
+                           frame.rule=c("fixed", "grow", "shrink"),
                            na.replace=NULL,
                            stringsAsFactors=NULL,
                            strict=FALSE, drop=TRUE) {
@@ -118,7 +125,8 @@ as.im.function <- function(X, W=NULL, ...,
     stop("A window W is required")
   stringsAsFactors <- resolve.stringsAsFactors(stringsAsFactors)
   W <- as.owin(W)
-  W <- as.mask(W, eps=eps, dimyx=dimyx, xy=xy)
+  frame.rule <- match.arg(frame.rule)
+  W <- as.mask(W, eps=eps, dimyx=dimyx, xy=xy, frame.rule=frame.rule)
   m <- W$m
   funnywindow <- !all(m)
 
@@ -204,13 +212,15 @@ as.im.matrix <- function(X, W=NULL, ...) {
 
 as.im.default <- function(X, W=NULL, ...,
                           eps=NULL, dimyx=NULL, xy=NULL,
+                          frame.rule=c("fixed", "grow", "shrink"),
                           na.replace=NULL) {
-
+  frame.rule <- match.arg(frame.rule)
   if((is.vector(X) || is.factor(X)) && length(X) == 1) {
     # numerical value: interpret as constant function
     xvalue <- X
     X <- function(xx, yy, ...) { rep.int(xvalue, length(xx)) }
-    return(as.im(X, W, ..., eps=eps, dimyx=dimyx, xy=xy, na.replace=na.replace))
+    return(as.im(X, W, ..., eps=eps, dimyx=dimyx, xy=xy,
+                 frame.rule=frame.rule, na.replace=na.replace))
   }
   
   if(is.list(X) && checkfields(X, c("x","y","z"))) {
@@ -236,9 +246,9 @@ as.im.default <- function(X, W=NULL, ...,
     out <- im(t(z), x, y)
     # now apply W and dimyx if present
     if(is.null(W) && !(is.null(eps) && is.null(dimyx) && is.null(xy)))
-      out <- as.im(out, eps=eps, dimyx=dimyx, xy=xy)
+      out <- as.im(out, eps=eps, dimyx=dimyx, xy=xy, frame.rule=frame.rule)
     else if(!is.null(W))
-      out <- as.im(out, W=W, eps=eps, dimyx=dimyx, xy=xy)
+      out <- as.im(out, W=W, eps=eps, dimyx=dimyx, xy=xy, frame.rule=frame.rule)
     return(na.handle.im(out, na.replace))
   }
   stop("Can't convert X to a pixel image")
@@ -313,8 +323,11 @@ as.im.data.frame <- function(X, ..., step, fatal=TRUE, drop=TRUE) {
 
 do.as.im <- function(x, action, ...,
                      W = NULL, eps = NULL, dimyx = NULL, xy = NULL, 
+                     frame.rule=c("fixed", "grow", "shrink"),
                      na.replace = NULL) {
-  Z <- as.im(x, W=W, eps=eps, dimyx=dimyx, xy=xy, na.replace=na.replace)
+  frame.rule <- match.arg(frame.rule)
+  Z <- as.im(x, W=W, eps=eps, dimyx=dimyx, xy=xy,
+             frame.rule=frame.rule, na.replace=na.replace)
   Y <- do.call(action, list(Z, ...))
   return(Y)
 }
