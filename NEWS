@@ -1,6 +1,8 @@
-        CHANGES IN spatstat.geom VERSION 3.1-0.002
+        CHANGES IN spatstat.geom VERSION 3.1-0.003
 
 OVERVIEW
+
+    o We thank Warick Brown for suggestions.
 
     o More options for converting polygons to a binary mask.
 
@@ -8,6 +10,10 @@ OVERVIEW
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o as.mask
+    New argument 'frame.rule' specifies what to do when the
+    desired pixel size is not a divisor of the frame size.
+    
     o owin2mask
     New options op="majority" and op="minority".
     If op="majority", a pixel belongs to the resulting mask if

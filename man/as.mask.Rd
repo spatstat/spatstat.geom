@@ -5,14 +5,32 @@
   Obtain a discrete (pixel image) approximation of a given window
 }
 \usage{
- as.mask(w, eps=NULL, dimyx=NULL, xy=NULL)
+ as.mask(w, eps=NULL, dimyx=NULL, xy=NULL,
+         frame.rule=c("fixed", "grow", "shrink"))
 }
 \arguments{
-  \item{w}{A window (object of class \code{"owin"}) or data acceptable
-    to \code{\link{as.owin}}.}
-  \item{eps}{(optional) width and height of pixels.}
-  \item{dimyx}{(optional) pixel array dimensions}
-  \item{xy}{(optional) data containing pixel coordinates}
+  \item{w}{
+    A window (object of class \code{"owin"}) or data acceptable
+    to \code{\link{as.owin}}.
+  }
+  \item{eps}{
+    (optional) width and height of pixels.
+    A single number, or a numeric vector of length 2.
+  }
+  \item{dimyx}{
+    (optional) pixel array dimensions.
+    A single integer, or an integer vector of length 2
+    giving dimensions in the \emph{y} and \emph{x} directions.
+  }
+  \item{xy}{
+    (optional) data containing pixel coordinates,
+    such as a pixel image (object of class \code{"im"}),
+    or a window of type \code{"mask"}. See Details.
+  }
+  \item{frame.rule}{
+    Character string (partially matched) specifying what to do when
+    \code{eps} is not a divisor of the frame size. See Details.
+  }
 }
 \value{
   A window (object of class \code{"owin"})
@@ -34,15 +52,37 @@
 
   The grid spacing and location are controlled by the
   arguments \code{eps}, \code{dimyx} and \code{xy},
-  which are mutually incompatible.
+  which are mutually incompatible. 
 
-  If \code{eps} is given, then it determines the grid spacing.
-  If \code{eps} is a single number,
-  then the grid spacing will be approximately \code{eps}
-  in both the \eqn{x} and \eqn{y} directions. If \code{eps} is a
-  vector of length 2, then the grid spacing will be approximately
+  If \code{eps} is given, then it specifies the desired grid spacing,
+  that is, the size of the pixels. If \code{eps} is a single number,
+  it specifies that the grid spacing should be \code{eps}
+  in both the \eqn{x} and \eqn{y} directions, that is, the pixels are
+  squares with side length \code{eps}. If \code{eps} is a
+  vector of length 2, it specifies that the grid spacing
+  should be
   \code{eps[1]} in the \eqn{x} direction and 
-  \code{eps[2]} in the \eqn{y} direction.
+  \code{eps[2]} in the \eqn{y} direction. That is, the pixels are
+  rectangles of width \code{eps[1]} and height \code{eps[2]}.
+
+  The argument \code{frame.rule} specifies what to do if pixels
+  of the desired size would not fit exactly into the
+  rectangular frame of \code{w}.
+  \itemize{
+    \item
+    if \code{frame.rule="fixed"} (the default),
+    the rectangular frame will remain unchanged, and
+    the grid spacing (pixel size) \code{eps} will be adjusted slightly
+    so that an integer number of pixels fits exactly into the frame.
+    \item if \code{frame.rule="grow"},
+    the grid spacing (pixel size) \code{eps} will remain unchanged,
+    and the rectangular frame will be expanded slightly
+    so that an integer number of pixels fits exactly into the frame.
+    \item if \code{frame.rule="shrink"},
+    the grid spacing (pixel size) \code{eps} will remain unchanged,
+    and the rectangular frame will be contracted slightly
+    so that an integer number of pixels fits exactly into the frame.
+  }
 
   If \code{dimyx} is given, then the pixel grid will be an
   \eqn{m \times n}{m * n} rectangular grid
@@ -104,11 +144,8 @@
   y <- seq(0.25, 9.75, by=0.5)
   m <- as.mask(w, xy=list(x=x, y=y))
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \spatstatAuthors.
 }
 \keyword{spatial}
 \keyword{manip}

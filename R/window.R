@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.196 $	$Date: 2022/03/31 23:55:46 $
+#	$Revision: 4.200 $	$Date: 2023/05/01 07:12:54 $
 #
 #
 #	A window may be either
@@ -540,52 +540,90 @@ as.rectangle <- function(w, ...) {
 #
 #-----------------------------------------------------------------------------
 #
-as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL) {
-#	eps:		   grid mesh (pixel) size
-#	dimyx:		   dimensions of pixel raster
-#       xy:                coordinates of pixel raster
-  nonamedargs <- is.null(eps) && is.null(dimyx) && is.null(xy)
-  uname <- as.unitname(NULL)
-  if(!missing(w) && !is.null(w)) {
-    if(is.data.frame(w)) return(owin(mask=w, xy=xy))
+as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL,
+                    frame.rule=c("fixed", "grow", "shrink")) {
+  ## 	  eps:		   grid mesh (pixel) size
+  ##	dimyx:		   dimensions of pixel raster
+  ##       xy:             coordinates of pixel raster
+  ## framerule:            rule for adjusting frame when 'eps' is given
+  ###########################
+  ##  First determine window
+  ###########################
+  w.absent <- missing(w) || is.null(w)
+  if(w.absent) {
+    ## w is not given
+    ## Ensure there is some window information
+    if(is.null(xy)) 
+      stop("If w is missing, xy is required")
+    uname <- unitname(xy) # could be null
+  } else {
+    ## w is given, but may require conversion
+    ## Handle cases where w contains pixel data
+    if(is.data.frame(w))
+      return(owin(mask=w, xy=xy))
     if(is.matrix(w)) {
       w <- as.data.frame(w)
       colnames(w) <- c("x", "y")
       return(owin(mask=w, xy=xy))
     }
+    ## Handle cases where w can be converted to a window
     w <- as.owin(w)
+    ## Already a mask?
+    if(is.mask(w) && is.null(eps) && is.null(dimyx) && is.null(xy)) {
+      ## w contained raster data, and no further raster data is provided
+      return(w)
+    }
     uname <- unitname(w)
-  } else {
-    if(is.null(xy)) 
-      stop("If w is missing, xy is required")
+    xrange <- w$xrange
+    yrange <- w$yrange
   }
-  # If it's already a mask, and no other arguments specified,
-  # just return it.
-  if(!missing(w) && w$type == "mask" && nonamedargs)
-    return(w)
-  
-##########################
-#  First determine pixel coordinates
-##########################
+
+  #####################################
+  ##  Next determine pixel coordinates
+  #####################################
   if(is.null(xy)) {
-# Pixel coordinates to be computed from other dimensions
-# First determine row & column dimensions
+    ## Pixel coordinates to be computed from other dimensions
+    ## First determine row & column dimensions
     if(!is.null(dimyx)) {
+      ## Pixel dimensions are given
       dimyx <- ensure2vector(dimyx)
       nr <- dimyx[1L]
       nc <- dimyx[2L]
     } else {
-    # use pixel size 'eps'
+      ## use pixel size 'eps'
       if(!is.null(eps)) {
         eps <- ensure2vector(eps)
-        nc <- diff(w$xrange)/eps[1L]
-        nr <- diff(w$yrange)/eps[2L]
-        if(nr < 1 || nc < 1)
-          warning("pixel size parameter eps > size of window")
-        nr <- ceiling(nr)
-        nc <- ceiling(nc)
+        width <- diff(xrange)
+        height <- diff(yrange)
+        nc <- width/eps[1L]
+        nr <- height/eps[2L]
+        frame.rule <- match.arg(frame.rule)
+        switch(frame.rule,
+               fixed = {
+                 ## Frame size is fixed; pixel size will be adjusted
+                 nr <- ceiling(nr)
+                 nc <- ceiling(nc)
+                 eps <- c(width/nc, height/nr)
+               },
+               grow = {
+                 ## Pixel size is fixed; frame will be expanded
+                 nr <- ceiling(nr)
+                 nc <- ceiling(nc)
+                 xrange <- mean(xrange) + c(-1,1) * nc * eps[1L]/2
+                 yrange <- mean(yrange) + c(-1,1) * nr * eps[2L]/2
+               },
+               shrink = {
+                 ## Pixel size is fixed; frame will be contracted
+                 nr <- floor(nr)
+                 nc <- floor(nc)
+                 if(nr <= 0 || nc <= 0)
+                   stop(paste("pixel size argument eps exceeds frame size;",
+                              "unable to shrink frame"))
+                 xrange <- mean(xrange) + c(-1,1) * nc * eps[1L]/2
+                 yrange <- mean(yrange) + c(-1,1) * nr * eps[2L]/2
+               })
       } else {
-    # use spatstat defaults
+        ## use spatstat default dimensions
         np <- spatstat.options("npixel")
         if(length(np) == 1)
           nr <- nc <- np[1L]
@@ -604,8 +642,6 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL) {
       warning(whinge, call.=FALSE)
     }
     ## Initialise mask with all entries TRUE
-    xrange <- w$xrange
-    yrange <- w$yrange
     nowidth  <- (diff(xrange) < .Machine$double.eps)
     noheight <- (diff(yrange) < .Machine$double.eps)
     if(nowidth || noheight) {
@@ -622,10 +658,9 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL) {
     }
     rasta <- owin(xrange, yrange, mask=matrix(TRUE, nr, nc))
   } else {
-# 
-# Pixel coordinates given explicitly:
-#    xy is an image, a mask, or a list(x,y)
-#
+    ## 
+    ## Pixel coordinates given explicitly:
+    ##    xy is an image, a mask, or a list(x,y)
     if(is.im(xy)) {
       rasta <- as.owin(xy)
       rasta$m[] <- TRUE
@@ -640,10 +675,10 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL) {
                    "should be a list containing two vectors x and y"))
       x <- sortunique(xy$x)
       y <- sortunique(xy$y)
-      # derive other parameters
+      ## derive other parameters
       nr <- length(y)
       nc <- length(x)
-      # check size
+      ## check size
       if((mpix <- (nr * nc)/1048576) >= 10) {
         whinge <- paste("Creating",
                         articlebeforenumber(mpix),
@@ -652,7 +687,7 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL) {
         message(whinge)
         warning(whinge, call.=FALSE)
       }
-      # x and y pixel sizes
+      ## x and y pixel sizes
       dx <- diff(x)
       if(diff(range(dx)) > 0.01 * mean(dx))
         stop("x coordinates must be evenly spaced")
@@ -665,7 +700,7 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL) {
       yr <- range(y)
       xrange <-  xr + xstep * c(-1,1)/2
       yrange <-  yr + ystep * c(-1,1)/2
-      # initialise mask with all entries TRUE
+      ## initialise mask with all entries TRUE
       rasta <- list(type     = "mask",
                     xrange   = xrange,
                     yrange   = yrange,
@@ -679,8 +714,8 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL) {
                     units   = uname)
       class(rasta) <- "owin"
     }
-    if(missing(w)) {
-      # No more window information
+    if(w.absent) {
+      ## No more window information
       out <- rasta
       if(!(identical(x, xy$x) && identical(y, xy$y))) {
         ## xy is an enumeration of the TRUE pixels
@@ -692,30 +727,28 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL) {
     }
   }
 
-################################  
-# Second, mask pixel raster with existing window
-################################  
+  ####################################################
+  ## Finally, mask pixel raster with existing window
+  #################################################### 
   switch(w$type,
          rectangle = {
            out <- rasta
-           if(!all(w$xrange == rasta$xrange)
-              || !all(w$yrange == rasta$yrange)) {
+           if(!all(xrange == rasta$xrange)
+              || !all(yrange == rasta$yrange)) {
              xcol <- rasta$xcol
              yrow <- rasta$yrow
-             wx <- w$xrange
-             wy <- w$yrange
-             badrow <- which(yrow > wy[2L] | yrow < wy[1L])
-             badcol <- which(xcol > wx[2L] | xcol < wx[1L])
+             badrow <- which(yrow > yrange[2L] | yrow < yrange[1L])
+             badcol <- which(xcol > xrange[2L] | xcol < xrange[1L])
              out$m[badrow , ] <- FALSE
              out$m[ , badcol] <- FALSE
            }
          },
          mask = {
-           # resample existing mask on new raster
+           ## resample existing mask on new raster
            out <- rastersample(w, rasta)
          },
          polygonal = {
-           # use C code
+           ## use C code
            out <- owinpoly2mask(w, rasta, FALSE)
          })
 
