@@ -3,7 +3,7 @@
 #
 #   Class of functions of x,y location with a spatial domain
 #
-#   $Revision: 1.23 $   $Date: 2023/05/01 09:09:35 $
+#   $Revision: 1.24 $   $Date: 2023/05/02 04:47:26 $
 #
 
 spatstat.xy.coords <- function(x,y) {
@@ -160,7 +160,7 @@ hist.funxy <- function(x, ..., xname) {
                        list(X=x, ...),
                        c("X", "W",
 		         "dimyx", "eps", "xy",
-                         "frame.rule",
+                         "rule.eps",
    		         "na.replace", "strict"),
 		       sieve=TRUE)
   Z <- a$result

@@ -11,7 +11,7 @@
 }
 \usage{
   discretise(X, eps = NULL, dimyx = NULL, xy = NULL, move.points=FALSE,
-             frame.rule=c("fixed", "grow", "shrink"))
+             rule.eps=c("adjust.eps", "grow.frame", "shrink.frame"))
 }
 \arguments{
   \item{X}{A point pattern (object of class \code{"ppp"}) to be converted.}
@@ -21,7 +21,7 @@
   \item{move.points}{Logical value specifying whether the points should
     also be discretised by moving each point to the nearest pixel
     centre.}
-  \item{frame.rule}{
+  \item{rule.eps}{
     Argument passed to \code{\link[spatstat.geom]{as.mask}}
     controlling the discretisation.
   }
@@ -48,7 +48,7 @@
     pattern).
   }
 
-  The arguments \code{eps}, \code{dimyx} and \code{xy}
+  The arguments \code{eps}, \code{dimyx}, \code{xy} and \code{rule.eps}
   control the fineness of the pixel array. They are passed to
   \code{\link{as.mask}}.
   
@@ -58,7 +58,7 @@
 
   See \code{\link{as.mask}} for further details
   about the arguments \code{eps}, \code{dimyx},
-  \code{xy} and \code{frame.rule}, and the process of converting
+  \code{xy} and \code{rule.eps}, and the process of converting
   a window to one of type \code{mask}.
 }
 \section{Error checking}{

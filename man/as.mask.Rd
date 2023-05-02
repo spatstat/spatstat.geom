@@ -6,7 +6,7 @@
 }
 \usage{
  as.mask(w, eps=NULL, dimyx=NULL, xy=NULL,
-         frame.rule=c("fixed", "grow", "shrink"))
+         rule.eps=c("adjust.eps", "grow.frame", "shrink.frame"))
 }
 \arguments{
   \item{w}{
@@ -27,9 +27,10 @@
     such as a pixel image (object of class \code{"im"}),
     or a window of type \code{"mask"}. See Details.
   }
-  \item{frame.rule}{
+  \item{rule.eps}{
     Character string (partially matched) specifying what to do when
-    \code{eps} is not a divisor of the frame size. See Details.
+    \code{eps} is not a divisor of the frame size.
+    Ignored if \code{eps} is missing or null. See Details.
   }
 }
 \value{
@@ -65,20 +66,20 @@
   \code{eps[2]} in the \eqn{y} direction. That is, the pixels are
   rectangles of width \code{eps[1]} and height \code{eps[2]}.
 
-  The argument \code{frame.rule} specifies what to do if pixels
+  The argument \code{rule.eps} specifies what to do if pixels
   of the desired size would not fit exactly into the
   rectangular frame of \code{w}.
   \itemize{
     \item
-    if \code{frame.rule="fixed"} (the default),
+    if \code{rule.eps="adjust.eps"} (the default),
     the rectangular frame will remain unchanged, and
-    the grid spacing (pixel size) \code{eps} will be adjusted slightly
+    the grid spacing (pixel size) \code{eps} will be reduced slightly
     so that an integer number of pixels fits exactly into the frame.
-    \item if \code{frame.rule="grow"},
+    \item if \code{rule.eps="grow.frame"},
     the grid spacing (pixel size) \code{eps} will remain unchanged,
     and the rectangular frame will be expanded slightly
     so that an integer number of pixels fits exactly into the frame.
-    \item if \code{frame.rule="shrink"},
+    \item if \code{rule.eps="shrink.frame"},
     the grid spacing (pixel size) \code{eps} will remain unchanged,
     and the rectangular frame will be contracted slightly
     so that an integer number of pixels fits exactly into the frame.
@@ -143,6 +144,11 @@
   x <- 1:9
   y <- seq(0.25, 9.75, by=0.5)
   m <- as.mask(w, xy=list(x=x, y=y))
+
+  B <- square(1)
+  as.mask(B, eps=0.3)
+  as.mask(B, eps=0.3, rule.eps="g")
+  as.mask(B, eps=0.3, rule.eps="s")
 }
 \author{
   \spatstatAuthors.

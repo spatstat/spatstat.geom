@@ -541,11 +541,11 @@ as.rectangle <- function(w, ...) {
 #-----------------------------------------------------------------------------
 #
 as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL,
-                    frame.rule=c("fixed", "grow", "shrink")) {
+                    rule.eps=c("adjust.eps", "grow.frame", "shrink.frame")) {
   ## 	  eps:		   grid mesh (pixel) size
   ##	dimyx:		   dimensions of pixel raster
   ##       xy:             coordinates of pixel raster
-  ## framerule:            rule for adjusting frame when 'eps' is given
+  ## rule.eps:             rule for adjusting frame when 'eps' is given
   ###########################
   ##  First determine window
   ###########################
@@ -597,22 +597,22 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL,
         height <- diff(yrange)
         nc <- width/eps[1L]
         nr <- height/eps[2L]
-        frame.rule <- match.arg(frame.rule)
-        switch(frame.rule,
-               fixed = {
+        rule.eps <- match.arg(rule.eps)
+        switch(rule.eps,
+               adjust.eps = {
                  ## Frame size is fixed; pixel size will be adjusted
                  nr <- ceiling(nr)
                  nc <- ceiling(nc)
                  eps <- c(width/nc, height/nr)
                },
-               grow = {
+               grow.frame = {
                  ## Pixel size is fixed; frame will be expanded
                  nr <- ceiling(nr)
                  nc <- ceiling(nc)
                  xrange <- mean(xrange) + c(-1,1) * nc * eps[1L]/2
                  yrange <- mean(yrange) + c(-1,1) * nr * eps[2L]/2
                },
-               shrink = {
+               shrink.frame = {
                  ## Pixel size is fixed; frame will be contracted
                  nr <- floor(nr)
                  nc <- floor(nc)
@@ -1234,17 +1234,17 @@ as.data.frame.owin <- function(x, ..., drop=TRUE) {
 
 discretise <- function(X, eps=NULL, dimyx=NULL, xy=NULL,
                        move.points=FALSE,
-                       frame.rule=c("fixed", "grow", "shrink")) {
+                       rule.eps=c("adjust.eps", "grow.frame", "shrink.frame")) {
   verifyclass(X,"ppp")
   W <- X$window
   ok <- inside.owin(X$x,X$y,W)
   if(!all(ok))
     stop("There are points of X outside the window of X")
   new.grid <- !is.null(eps) || !is.null(dimyx) || !is.null(xy)
-  if(new.grid) frame.rule <- match.arg(frame.rule)
+  if(new.grid) rule.eps <- match.arg(rule.eps)
   new.mask <- new.grid || !is.mask(W)
   WM <- if(!new.mask) W else as.mask(W,
-                             eps=eps,dimyx=dimyx,xy=xy,frame.rule=frame.rule) 
+                             eps=eps,dimyx=dimyx,xy=xy,rule.eps=rule.eps) 
   if(move.points) {
     ## move points to pixel centres 
     if(new.mask) X$window <- WM

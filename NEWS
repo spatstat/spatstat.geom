@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.1-0.004
+        CHANGES IN spatstat.geom VERSION 3.1-0.005
 
 OVERVIEW
 
@@ -18,20 +18,20 @@ SIGNIFICANT USER-VISIBLE CHANGES
     at least half of the pixel area is covered by the window.
     
     o as.mask
-    New argument 'frame.rule' specifies what to do when the
+    New argument 'rule.eps' specifies what to do when the
     desired pixel size is not a divisor of the frame size.
 
     o as.im
-    Many methods for 'as.im' now have argument 'frame.rule'.
+    Many methods for 'as.im' now have argument 'rule.eps'.
 
     o discretise
-    New argument 'frame.rule'
+    New argument 'rule.eps'
 
     o distfun
-    New argument 'frame.rule'
+    New argument 'rule.eps'
 
     o nnfun
-    New argument 'frame.rule'
+    New argument 'rule.eps'
 
         CHANGES IN spatstat.geom VERSION 3.1-0
 
