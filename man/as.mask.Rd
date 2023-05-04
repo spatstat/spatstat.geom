@@ -118,7 +118,7 @@
   of a binary mask.
 }
 \section{Discretisation rule}{
-  The rule used in \code{as.mask} is that a pixel belongs to the
+  The rule used in \code{as.mask} is that a pixel is part of the
   discretised window if and only if the centre of the pixel falls in the
   original window. This is usually sufficient for most purposes,
   and is fast to compute.
