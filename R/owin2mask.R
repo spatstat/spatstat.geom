@@ -4,7 +4,7 @@
 #'    Mask approximations which are guaranteed to be entirely inside
 #'    or entirely covering the original window.
 #'
-#'    $Revision: 1.7 $  $Date: 2023/04/25 08:32:13 $
+#'    $Revision: 1.8 $  $Date: 2023/05/04 00:58:17 $
 #'
 
 owin2mask <- function(W, 
@@ -44,7 +44,7 @@ owin2mask <- function(W,
          boundary = {
            ## convert the boundary to a mask
            P <- as.polygonal(W)
-           B <- as.mask.psp(edges(P), xy=M)
+           B <- psp2mask(edges(P), xy=M)
          },
          majority = ,
          minority = {

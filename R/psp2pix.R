@@ -1,11 +1,11 @@
 #
 # psp2pix.R
 #
-#  $Revision: 1.15 $  $Date: 2022/05/21 09:52:11 $
+#  $Revision: 1.16 $  $Date: 2023/05/04 00:58:27 $
 #
 #
 
-as.mask.psp <- function(x, W=NULL, ...) {
+psp2mask <- as.mask.psp <- function(x, W=NULL, ...) {
   L <- as.psp(x)
   if(is.null(W))
     W <- as.owin(L)

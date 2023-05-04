@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.177 $     $Date: 2023/01/15 02:01:31 $
+#      $Revision: 1.178 $     $Date: 2023/05/04 00:58:05 $
 #
 #      The class "im" of raster images
 #
@@ -311,7 +311,7 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
         if(jtype == "given")
           warning("Argument j ignored")
         W <- raster %orifnull% as.owin(x)
-        M <- as.mask.psp(as.psp(i), W=W, ...)
+        M <- psp2mask(as.psp(i), W=W, ...)
         xM <- x[M, drop=drop]
         if(is.im(xM)) xM <- spatstat.linnet::linim(i, xM)
         return(xM)

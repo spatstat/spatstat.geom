@@ -1,14 +1,21 @@
-        CHANGES IN spatstat.geom VERSION 3.1-0.005
+        CHANGES IN spatstat.geom VERSION 3.1-0.006
 
 OVERVIEW
 
-    o We thank Warick Brown for suggestions.
+    o We thank Warick Brown and Tilman Davies for suggestions.
 
     o More options for converting polygons to a binary mask.
 
     o More options for controlling pixel size.
     
     o Minor tweaks to package documentation.
+
+NEW FUNCTIONS
+
+    o psp2mask
+    Function 'as.mask.psp' has been renamed 'psp2mask'.
+    The old function 'as.mask.psp' still exists, but it will
+    soon be deprecated, and ultimately removed.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

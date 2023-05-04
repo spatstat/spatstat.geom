@@ -327,7 +327,7 @@ convexmetric <- local({
         },
         distmap.psp=function(X, ...) {
           warn.unsupported.args(list(extras=TRUE, clip=FALSE), ...)
-          w <- do.call.matched(as.mask.psp, list(x=quote(X), ...),
+          w <- do.call.matched(psp2mask, list(x=quote(X), ...),
                                extrargs=names(formals(as.mask))[-1])
           convexdistmapmask(w, spK)
         },

@@ -67,9 +67,9 @@
 \seealso{
   \code{\link{pixellate}},
   \code{\link{as.mask}},
-  \code{\link{as.mask.psp}}.
+  \code{\link{psp2mask}}.
   
-  Use \code{\link{as.mask.psp}} if you only want to know
+  Use \code{\link{psp2mask}} if you only want to know
   which pixels are intersected by lines.
 }
 \examples{
