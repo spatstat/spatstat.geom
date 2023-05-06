@@ -12,7 +12,9 @@ progressreport(i, n,
                charsperline = getOption("width"),
                style = spatstat.options("progress"),
                showtime = NULL,
-               state=NULL)
+               state=NULL,
+               exponent=1,
+               savehistory=FALSE)
 }
 \arguments{
   \item{i}{
@@ -46,6 +48,14 @@ progressreport(i, n,
   }
   \item{state}{
     Optional. A list containing the internal data.
+  }
+  \item{exponent}{
+    Optional. A positive number. Used in calculating the time remaining.
+    See Details.
+  }
+  \item{savehistory}{
+    Optional. Logical value indicating whether to save the 
+    elapsed times at which \code{progressreport} was called.
   }
 }
 \details{
@@ -84,6 +94,15 @@ progressreport(i, n,
     iterations are slow (defined as: the estimated time remaining
     is longer than 3 minutes, or the average time per iteration is
     longer than 20 seconds).
+
+    The estimated time remaining is calculated
+    by assuming that the total time taken to calculate the first
+    \code{k} iterations was proportional to \code{k^exponent}. The
+    default \code{exponent=1} is equivalent to assuming that each
+    iteration takes approximately the same amount of time to compute. Setting
+    \code{exponent > 1} would imply that successive iterations
+    take longer and longer to compute; setting \code{exponent < 1} implies
+    that successive iterations take progressively less time to compute.
   }
   
   It is optional, but strongly advisable, to use the argument \code{state}

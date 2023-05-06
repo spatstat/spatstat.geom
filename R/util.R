@@ -1,7 +1,7 @@
 #
 #    util.R    miscellaneous utilities
 #
-#    $Revision: 1.252 $    $Date: 2022/06/16 05:38:12 $
+#    $Revision: 1.255 $    $Date: 2023/05/06 12:55:01 $
 #
 
 # common invocation of matrixsample
@@ -129,11 +129,15 @@ progressreport <- local({
                              charsperline=getOption("width"),
                              style=spatstat.options("progress"),
                              showtime=NULL,
-                             state=NULL) {
+                             state=NULL,
+                             exponent=1,
+                             savehistory=FALSE) {
     missevery <- missing(every)
     nperline.fixed <- !is.null(nperline)
     showtime.optional <- is.null(showtime)
     if(showtime.optional) showtime <- FALSE # initialise only
+    check.1.real(exponent)
+    stopifnot(exponent > 0)
     if(i > n) {
       warning(paste("progressreport called with i =", i, "> n =", n))
       return(invisible(NULL))
@@ -145,6 +149,19 @@ progressreport <- local({
     if(is.null(state) && style != "tty")
       stop(paste("Argument 'state' is required when style =",sQuote(style)),
            call.=FALSE)
+    ## get current time
+    if(savehistory || style == "tty")
+      now <- proc.time()
+    if(savehistory) {
+      if(i == 1) {
+        state <- Put("History", data.frame(i=i, time=now), state)
+      } else {
+        history <- Get("History", state)
+        history <- rbind(history, data.frame(i=i, time=now))
+        state <- Put("History", history, state)
+      }
+    }
+    ## display progress
     switch(style,
            txtbar={
              if(i == 1) {
@@ -184,7 +201,6 @@ progressreport <- local({
              }
            },
            tty={
-             now <- proc.time()
              if(i == 1 || is.null(state)) {
                ## Initialise stuff
                if(missevery && every > 1 && n > 10) 
@@ -221,19 +237,21 @@ progressreport <- local({
                    starttime <- pd$starttime
                    elapsed <- now - starttime
                    elapsed <- unname(elapsed[3])
-                   rate <- elapsed/(i-1)
-                   remaining <- rate * (n-i)
+                   ratecoef <- elapsed/((i-1)^exponent)
+                   remaining <- ratecoef * (n^exponent - i^exponent)
                    if(!showtime) {
-                     ## show time remaining if..
-                     if(rate > 20) {
-                       ## .. rate is very slow
+                     ## Currently not showing the time remaining.
+                     currentrate <- ratecoef * (i^exponent - (i-1)^exponent)
+                     ## Change this if:
+                     if(currentrate > 20) {
+                       ## .. more than 20 seconds until next iteration
                        showtime <- TRUE
                        showevery <- 1
                      } else if(remaining > 180) {
                        ## ... more than 3 minutes remaining
                        showtime <- TRUE
                        showevery <- every
-                       aminute <- ceiling(60/rate)
+                       aminute <- ceiling(60/currentrate)
                        if(aminute < showevery) 
                          showevery <- min(niceround(aminute), showevery)
                      }

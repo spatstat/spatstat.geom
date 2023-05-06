@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.1-0.007
+        CHANGES IN spatstat.geom VERSION 3.1-0.008
 
 OVERVIEW
 
@@ -7,6 +7,8 @@ OVERVIEW
     o More options for converting polygons to a binary mask.
 
     o More options for controlling pixel size.
+
+    o Improvement to progress reports.
     
     o Minor tweaks to package documentation.
 
@@ -40,6 +42,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o nnfun
     New argument 'rule.eps'
 
+    o progressreport
+    New argument 'exponent' controls the calculation of time remaining.
+    
+    o progressreport
+    New argument 'savehistory' specifies whether to save the elapsed times
+    when the function was called.
+    
         CHANGES IN spatstat.geom VERSION 3.1-0
 
 OVERVIEW
