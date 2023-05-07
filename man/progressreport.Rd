@@ -13,7 +13,7 @@ progressreport(i, n,
                style = spatstat.options("progress"),
                showtime = NULL,
                state=NULL,
-               exponent=1,
+               formula = (time ~ i),
                savehistory=FALSE)
 }
 \arguments{
@@ -49,9 +49,10 @@ progressreport(i, n,
   \item{state}{
     Optional. A list containing the internal data.
   }
-  \item{exponent}{
-    Optional. A positive number. Used in calculating the time remaining.
-    See Details.
+  \item{formula}{
+    Optional. A model formula expressing the expected relationship between
+    the iteration number \code{i} and the clock time \code{time}. Used for
+    predicting the time remaining. 
   }
   \item{savehistory}{
     Optional. Logical value indicating whether to save the 
@@ -95,14 +96,17 @@ progressreport(i, n,
     is longer than 3 minutes, or the average time per iteration is
     longer than 20 seconds).
 
-    The estimated time remaining is calculated
-    by assuming that the total time taken to calculate the first
-    \code{k} iterations was proportional to \code{k^exponent}. The
-    default \code{exponent=1} is equivalent to assuming that each
-    iteration takes approximately the same amount of time to compute. Setting
-    \code{exponent > 1} would imply that successive iterations
-    take longer and longer to compute; setting \code{exponent < 1} implies
-    that successive iterations take progressively less time to compute.
+    By default, the estimated time remaining is calculated 
+    by assuming that each iteration takes the same amount of time,
+    and extrapolating.
+    Alternatively, if the argument \code{formula} is given,
+    then it should be a model formula, stating the expected relationship
+    between the iteration number \code{i} and the clock time
+    \code{time}. This model will be fitted to the history of clock times
+    recorded so far, and used to predict the time remaining.
+    (The default formula states that clock time is a linear function of the
+    iteration number, which is equivalent to assuming that each
+    iteration takes the same amount of time.)
   }
   
   It is optional, but strongly advisable, to use the argument \code{state}

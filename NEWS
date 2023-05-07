@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.1-0.008
+        CHANGES IN spatstat.geom VERSION 3.1-0.009
 
 OVERVIEW
 
@@ -43,7 +43,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New argument 'rule.eps'
 
     o progressreport
-    New argument 'exponent' controls the calculation of time remaining.
+    New argument 'formula' controls the calculation of estimated time remaining.
     
     o progressreport
     New argument 'savehistory' specifies whether to save the elapsed times

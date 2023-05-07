@@ -1,7 +1,7 @@
 #
 #    util.R    miscellaneous utilities
 #
-#    $Revision: 1.255 $    $Date: 2023/05/06 12:55:01 $
+#    $Revision: 1.258 $    $Date: 2023/05/07 04:02:48 $
 #
 
 # common invocation of matrixsample
@@ -97,6 +97,15 @@ progressreport <- local({
     }
     return(value)
   }
+  Exists <- function(name, state) {
+    if(is.null(state)) {
+      answer <- existsSpatstatVariable(paste0("Spatstat.", name))
+    } else {
+      answer <- name %in% names(state)
+    }
+    return(answer)
+  }
+ 
 
   IterationsPerLine <- function(charsperline, n, every, tick,
                                 showtime, showevery) {
@@ -130,14 +139,12 @@ progressreport <- local({
                              style=spatstat.options("progress"),
                              showtime=NULL,
                              state=NULL,
-                             exponent=1,
+                             formula=(time ~ i),
                              savehistory=FALSE) {
     missevery <- missing(every)
     nperline.fixed <- !is.null(nperline)
     showtime.optional <- is.null(showtime)
     if(showtime.optional) showtime <- FALSE # initialise only
-    check.1.real(exponent)
-    stopifnot(exponent > 0)
     if(i > n) {
       warning(paste("progressreport called with i =", i, "> n =", n))
       return(invisible(NULL))
@@ -149,19 +156,30 @@ progressreport <- local({
     if(is.null(state) && style != "tty")
       stop(paste("Argument 'state' is required when style =",sQuote(style)),
            call.=FALSE)
+    ## determine model for extrapolation of time
+    if(missing(formula)) formula <- NULL
+    linear <- is.null(formula)
+    if(!linear) {
+      if(!inherits(formula, "formula"))
+        stop(paste("Argument", sQuote("formula"), "should be a model formula"),
+             call.=FALSE)
+      savehistory <- TRUE
+    }
     ## get current time
     if(savehistory || style == "tty")
       now <- proc.time()
     if(savehistory) {
+      ahora <- as.numeric(now[3])
       if(i == 1) {
-        state <- Put("History", data.frame(i=i, time=now), state)
+        state <- Put("History", data.frame(i=i, time=ahora), state)
       } else {
         history <- Get("History", state)
-        history <- rbind(history, data.frame(i=i, time=now))
+        history <- rbind(history, data.frame(i=i, time=ahora))
         state <- Put("History", history, state)
       }
     }
     ## display progress
+    fallback <- FALSE
     switch(style,
            txtbar={
              if(i == 1) {
@@ -201,7 +219,7 @@ progressreport <- local({
              }
            },
            tty={
-             if(i == 1 || is.null(state)) {
+             if(i == 1 || !Exists("ProgressData", state)) {
                ## Initialise stuff
                if(missevery && every > 1 && n > 10) 
                  every <- niceround(every)
@@ -237,13 +255,33 @@ progressreport <- local({
                    starttime <- pd$starttime
                    elapsed <- now - starttime
                    elapsed <- unname(elapsed[3])
-                   ratecoef <- elapsed/((i-1)^exponent)
-                   remaining <- ratecoef * (n^exponent - i^exponent)
+                   if(linear) {
+                     rate <- elapsed/(i-1)
+                     remaining <- rate * (n-i)
+                   } else {
+                     fit <- try(lm(formula, data=history))
+                     ok <- !inherits(fit, "try-error") && !anyNA(coef(fit))
+                     if(ok) {
+                       pred <- suppressWarnings(
+                         predict(fit, newdata=data.frame(i=c(i, i+1, n)))
+                       )
+                       ok <- all(diff(pred) >= 0)
+                     }
+                     if(ok) {
+                       ## predictions of model 
+                       remaining <- pred[3] - pred[1]
+                       rate <- pred[2] - pred[1]
+                     } else {
+                       ## linear extrapolation
+                       fallback <- TRUE
+                       rate <- elapsed/(i-1)
+                       remaining <- rate * (n-i)
+                     }
+                   }
                    if(!showtime) {
                      ## Currently not showing the time remaining.
-                     currentrate <- ratecoef * (i^exponent - (i-1)^exponent)
                      ## Change this if:
-                     if(currentrate > 20) {
+                     if(rate > 20) {
                        ## .. more than 20 seconds until next iteration
                        showtime <- TRUE
                        showevery <- 1
@@ -251,7 +289,7 @@ progressreport <- local({
                        ## ... more than 3 minutes remaining
                        showtime <- TRUE
                        showevery <- every
-                       aminute <- ceiling(60/currentrate)
+                       aminute <- ceiling(60/rate)
                        if(aminute < showevery) 
                          showevery <- min(niceround(aminute), showevery)
                      }
@@ -286,8 +324,9 @@ progressreport <- local({
                if(i %% nperline == 0)
                  cat("\n")
              }
-             if(i < n && showtime && (i %% showevery == 0)) {
-               st <- paste("etd", codetime(round(remaining)))
+             if(showtime && i > 1 && i < n && (i %% showevery == 0)) {
+               etdname <- paste0("etd", if(fallback) "(linear)" else "")
+               st <- paste(etdname, codetime(round(remaining)))
                st <- paren(st, "[")
                cat(paste("", st, ""))
              }
