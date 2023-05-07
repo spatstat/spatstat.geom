@@ -13,6 +13,28 @@ cat(paste("--------- Executing",
           if(FULLTEST) "** ALL **" else "**RESTRICTED** subset of",
           "test code -----------\n"))
 #
+# tests/utils.R
+#
+# Tests of miscellaneous utilities 
+#
+#  $Revision: 1.1 $  $Date: 2023/05/07 08:59:32 $
+
+local({
+  if(FULLTEST) {
+    ## test code blocks in 'progressreport'
+    pstate <- list()
+    for(i in 1:10) {
+      Sys.sleep(1)
+      pstate <- progressreport(i, 10,
+                               formula = (time ~ i + I(i^2) + I(i^3)),
+                               showtime=TRUE,
+                               savehistory=TRUE,
+                               state=pstate)
+    }
+  }
+})
+
+#
 # tests/windows.R
 #
 # Tests of owin geometry code
