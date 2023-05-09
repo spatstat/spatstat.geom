@@ -24,12 +24,18 @@
    such that
    x1[i], y1[i] and x2[j], y2[j] are the same point iff id1[i] = id2[j].
 
-  $Revision: 1.8 $ $Date: 2022/10/22 09:22:51 $
+  $Revision: 1.9 $ $Date: 2023/05/09 04:54:10 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
   Licence: GNU Public Licence >= 2
 
 */
+
+#if (defined WHICH || !defined EXCLUDE)
+#define USEJWHICH
+#else
+#undef USEJWHICH
+#endif
 
 void FNAME(
   /* first point pattern */	   
@@ -50,12 +56,15 @@ void FNAME(
   /* prior upper bound on pairwise distances */
   double *huge
 ) { 
-  int npoints1, npoints2, i, j, jwhich, lastjwhich;
+  int npoints1, npoints2, i, j, lastjwhich;
   double d2, d2min, x1i, y1i, z1i, dx, dy, dz, dz2, hu, hu2;
 #ifdef EXCLUDE
   int id1i;
 #endif
-
+#ifdef USEJWHICH
+  int jwhich;
+#endif
+  
   hu = *huge;
   hu2 = hu * hu;
 
@@ -72,14 +81,16 @@ void FNAME(
     R_CheckUserInterrupt();
     
     d2min = hu2;
-    jwhich = -1;
     x1i = x1[i];
     y1i = y1[i];
     z1i = z1[i];
 #ifdef EXCLUDE
     id1i = id1[i];
 #endif
-
+#ifdef USEJWHICH
+    jwhich = -1;
+#endif
+    
     /* search backward from previous nearest neighbour */
     if(lastjwhich > 0) {  /* always true if EXCLUDE is defined */
       for(j = lastjwhich - 1; j >= 0; --j) {
@@ -96,7 +107,9 @@ void FNAME(
 	  d2 =  dx * dx + dy * dy + dz2;
 	  if (d2 < d2min) {
 	    d2min = d2;
+#ifdef USEJWHICH
 	    jwhich = j;
+#endif	    
 	  }
 #ifdef EXCLUDE
 	}
@@ -120,7 +133,9 @@ void FNAME(
 	  d2 =  dx * dx + dy * dy + dz2;
 	  if (d2 < d2min) {
 	    d2min = d2;
+#ifdef USEJWHICH    
 	    jwhich = j;
+#endif	    
 	  }
 #ifdef EXCLUDE
 	}
@@ -139,3 +154,5 @@ void FNAME(
 #endif    
   }
 }
+
+#undef USEJWHICH

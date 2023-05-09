@@ -1,5 +1,4 @@
-\name{Window.quad}
-\alias{Window.quad}
+\name{Window.tess}
 \alias{Window.quadratcount}
 \alias{Window.tess}
 \alias{Window.layered}
@@ -15,8 +14,6 @@
 \usage{
 
 
-
- \method{Window}{quad}(X, \dots)
 
  \method{Window}{quadratcount}(X, \dots)
 

@@ -1,3 +1,11 @@
+        CHANGES IN spatstat.geom VERSION 3.2-1
+
+OVERVIEW
+
+    o Fixed errors and omissions in documentation.
+
+    o Minor improvements in C code.
+
         CHANGES IN spatstat.geom VERSION 3.2-0
 
 OVERVIEW

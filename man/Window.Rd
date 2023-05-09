@@ -3,6 +3,8 @@
 \alias{Window<-}
 \alias{Window.ppp}
 \alias{Window<-.ppp}
+\alias{Window.quad}
+\alias{Window<-.quad}
 \alias{Window.psp}
 \alias{Window<-.psp}
 \alias{Window.im}
@@ -23,6 +25,10 @@
    \method{Window}{ppp}(X, \dots)
 
    \method{Window}{ppp}(X, \dots) <- value
+
+   \method{Window}{quad}(X, \dots)
+
+   \method{Window}{quad}(X, \dots) <- value
 
    \method{Window}{psp}(X, \dots)
 
@@ -55,13 +61,21 @@
   to the new window \code{W}, and \emph{discards any data outside} \code{W}.
   In particular:
   \itemize{
-    \item If \code{X} is a point pattern (object of class \code{"ppp"})
+    \item
+    If \code{X} is a point pattern (object of class \code{"ppp"})
     then \code{Window(X) <- W} discards any points of \code{X} which
     fall outside \code{W}.
-    \item If \code{X} is a line segment pattern (object of class
+    \item
+    If \code{X} is a quadrature scheme (object of class \code{"quad"})
+    then \code{Window(X) <- W} discards any points of \code{X} which
+    fall outside \code{W}, and discards the corresponding quadrature
+    weights.
+    \item
+    If \code{X} is a line segment pattern (object of class
     \code{"psp"}) then \code{Window(X) <- W} clips the segments of \code{X}
     to the boundaries of \code{W}.
-    \item If \code{X} is a pixel image (object of class \code{"im"})
+    \item
+    If \code{X} is a pixel image (object of class \code{"im"})
     then \code{Window(X) <- W} has the effect that pixels
     lying outside \code{W} are retained but their pixel values
     are set to \code{NA}.
@@ -69,7 +83,7 @@
 
   Many other classes of spatial object have a method
   for \code{Window}, but not \code{Window<-}.
-  See \code{\link[spatstat.model]{Window.ppm}}.
+  See \code{\link[spatstat.geom]{Window.tess}}.
 }
 \value{
   The result of \code{Window} is a window (object of class

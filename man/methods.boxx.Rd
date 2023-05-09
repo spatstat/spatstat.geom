@@ -1,7 +1,6 @@
 \name{methods.boxx}
 \Rdversion{1.1}
 \alias{methods.boxx}  %DoNotExport
-\alias{is.boxx}
 \alias{print.boxx}
 \alias{unitname.boxx}
 \alias{unitname<-.boxx}
@@ -13,7 +12,6 @@
   Methods for class \code{"boxx"}.
 }
 \usage{
-  \method{is}{boxx}(x)
   \method{print}{boxx}(x, ...)
   \method{unitname}{boxx}(x)
   \method{unitname}{boxx}(x) <- value
@@ -36,11 +34,11 @@
 }
 \details{
   These are methods for the generic functions
-  \code{\link{is}}, \code{\link{print}}, \code{\link{unitname}},
+  \code{\link{print}}, \code{\link{unitname}},
   \code{\link{unitname<-}} and \code{\link[base]{scale}}
   for the class \code{"boxx"} of multi-dimensional boxes.
 
-  The \code{is} method checks that the object is of class \code{"boxx"}, the
+  The 
   \code{print} method prints a description of the box,
   the \code{unitname} method extracts the name of the unit of
   length in which the box coordinates are expressed, while the assignment method
@@ -49,7 +47,6 @@
   The \code{scale} method rescales each spatial coordinate of \code{x}.
 }
 \value{
-  For \code{is.boxx} the value is a logical.
   For \code{print.boxx} the value is \code{NULL}.
   For \code{unitname.boxx} an object of class \code{"units"}.
   For \code{unitname<-.boxx} and
@@ -60,19 +57,19 @@
 }
 \seealso{
   \code{\link{boxx}},
-  \code{\link{is}},
+  \code{\link{is.boxx}},
   \code{\link{print}},
   \code{\link{unitname}},
   \code{\link[base]{scale}}
 }
 \examples{
-   X <- boxx(c(0,10),c(0,10),c(0,5),c(0,1), unitname=c("metre", "metres"))
-   X
-   is.boxx(X)
-   unitname(X)
+   B <- boxx(c(0,10),c(0,10),c(0,5),c(0,1), unitname=c("metre", "metres"))
+   B
+   is.boxx(B)
+   unitname(B)
    # Northern European usage
-   unitname(X) <- "meter"
-   scale(X)
+   unitname(B) <- "meter"
+   scale(B)
 }
 \keyword{spatial}
 \keyword{methods}

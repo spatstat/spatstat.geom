@@ -31,6 +31,7 @@
 \alias{avenndist}
 \alias{bbEngine}
 \alias{bdry.mask}
+\alias{boundingbox.list}
 \alias{bounding.box3}
 \alias{break.holes}
 \alias{breakpts}
@@ -379,6 +380,7 @@ as.unitname(s)
 avenndist(X)
 bbEngine(\dots)
 bdry.mask(W)
+\method{boundingbox}{list}(\dots)
 bounding.box3(\dots)
 break.holes(x, splitby, depth, maxdepth)
 breakpts(val, maxi, even = FALSE, npos = NULL, step = NULL)

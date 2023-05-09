@@ -25,7 +25,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2013
   Licence: GPL >= 2
 
-  $Revision: 1.4 $  $Date: 2022/10/21 10:43:01 $
+  $Revision: 1.5 $  $Date: 2023/05/09 04:59:28 $
 
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
@@ -46,7 +46,7 @@ void FNAME(
   /* some inputs + outputs are not used in all functions */
 ) { 
   int npoints1, npoints2, nk, nk1;
-  int maxchunk, i, jleft, jright, jwhich, lastjwhich, unsorted, k, k1;
+  int maxchunk, i, jleft, jright, lastjwhich, unsorted, k, k1;
   double d2, d2minK, x1i, y1i, z1i, dx, dy, dz, dz2, hu, hu2, tmp;
   double *d2min; 
 #ifdef WHICH
@@ -55,6 +55,8 @@ void FNAME(
 #endif
 #ifdef EXCLUDE
   int id1i;
+#else
+  int jwhich;
 #endif
 
   npoints1 = *n1;
@@ -93,7 +95,9 @@ void FNAME(
 
       /* initialise nn distances and indices */
       d2minK = hu2;
+#ifndef EXCLUDE      
       jwhich = -1;
+#endif      
       for(k = 0; k < nk; k++) {
 	d2min[k] = hu2;
 #ifdef WHICH
@@ -128,7 +132,9 @@ void FNAME(
 		if (d2 < d2minK) {
 		  /* overwrite last entry in list of neighbours */
 		  d2min[nk1] = d2;
+#ifndef EXCLUDE
 		  jwhich = jright;
+#endif		  
 #ifdef WHICH
 		  which[nk1] = jright;
 #endif
@@ -180,7 +186,9 @@ void FNAME(
 		if (d2 < d2minK) {
 		  /* overwrite last entry in list of neighbours */
 		  d2min[nk1] = d2;
+#ifndef EXCLUDE
 		  jwhich = jleft;
+#endif		  
 #ifdef WHICH
 		  which[nk1] = jleft;
 #endif
