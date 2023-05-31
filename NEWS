@@ -1,3 +1,16 @@
+        CHANGES IN spatstat.geom VERSION 3.2-1.001
+
+OVERVIEW
+
+    o Bug fix in intensity.quadratcount
+
+BUG FIXES
+
+    o intensity.quadratcount
+    Results were incorrect if the quadrats were the intersections of
+    a rectangular grid with an irregular window and all quadrats were nonempty.
+    Fixed.
+
         CHANGES IN spatstat.geom VERSION 3.2-1
 
 OVERVIEW

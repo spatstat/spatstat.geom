@@ -1,7 +1,7 @@
 #
 #  quadratcount.R
 #
-#  $Revision: 1.59 $  $Date: 2020/12/19 05:25:06 $
+#  $Revision: 1.61 $  $Date: 2023/05/31 07:29:33 $
 #
 
 quadratcount <- function(X, ...) {
@@ -19,15 +19,22 @@ quadratcount.ppp <- function(X, nx=5, ny=nx, ...,
   W <- X$window
 
   if(is.null(tess)) {
-    # rectangular boundaries 
+    ## rectangular boundaries 
     if(!is.numeric(nx))
       stop("nx should be numeric")
-    # start with rectangular tessellation
+    ## start with rectangular tessellation
     tess <- quadrats(as.rectangle(W),
                      nx=nx, ny=ny, xbreaks=xbreaks, ybreaks=ybreaks)
-    # fast code for counting points in rectangular grid
+    ## fast code for counting points in rectangular grid
     Xcount <- rectquadrat.countEngine(X$x, X$y, tess$xgrid, tess$ygrid)
-    #
+    ## map entries of 'Xcount' to tiles of 'tess'
+    ## (Values of Xcount are stored in row-major order,  
+    ## tiles in a rectangular tessellation are in column-major order)
+    nx <- length(tess$xgrid) - 1L
+    ny <- length(tess$ygrid) - 1L
+    tilemap <- as.integer(matrix(seq_len(nx * ny),
+                                 ncol=nx, nrow=ny, byrow=TRUE))
+    ## 
     if(W$type != "rectangle") {
       # intersections of rectangles with window including empty intersections
       tess <- quadrats(X,
@@ -35,17 +42,19 @@ quadratcount.ppp <- function(X, nx=5, ny=nx, ...,
                        keepempty=TRUE)
       # now delete the empty quadrats and the corresponding counts
       nonempty <- !tiles.empty(tess)
-#     WAS: nonempty <- !unlist(lapply(tiles(tess), is.empty))
       if(!any(nonempty))
         stop("All tiles are empty")
       if(!all(nonempty)) {
-#        ntiles <- sum(nonempty)
+        ## retain nonempty tiles
         tess   <- tess[nonempty]
-        Xcount <- t(Xcount)[nonempty]
-        # matrices and tables are in row-major order,
-        # tiles in a rectangular tessellation are in column-major order
+        ## retain corresponding counts 
+        retaincount <- nonempty[tilemap]
+        Xcount <- as.integer(Xcount)[retaincount]
         Xcount <- array(Xcount,
                         dimnames=list(tile=tilenames(tess)))
+        ## map old tile numbers to new tile numbers
+        sequencemap <- cumsum(nonempty) # old tile number -> new tile number
+        tilemap <- sequencemap[tilemap[retaincount]]
         class(Xcount) <- "table"
       }
     }
@@ -59,15 +68,21 @@ quadratcount.ppp <- function(X, nx=5, ny=nx, ...,
     if(tess$type == "rect") {
       # fast code for counting points in rectangular grid
       Xcount <- rectquadrat.countEngine(X$x, X$y, tess$xgrid, tess$ygrid)
+      nx <- length(tess$xgrid) - 1L
+      ny <- length(tess$ygrid) - 1L
+      tilemap <- as.integer(matrix(seq_len(nx * ny),
+                                   ncol=nx, nrow=ny, byrow=TRUE))
     } else {
       # quadrats are another type of tessellation
       Y <- cut(X, tess)
       if(anyNA(marks(Y)))
         warning("Tessellation does not contain all the points of X")
       Xcount <- table(tile=marks(Y))
+      tilemap <- seq_len(tess$n)
     }
   }
   attr(Xcount, "tess") <- tess
+  attr(Xcount, "tilemap") <- tilemap
   class(Xcount) <- c("quadratcount", class(Xcount))
   return(Xcount)
 }
@@ -189,19 +204,24 @@ domain.quadratcount <- Window.quadratcount <- function(X, ...) { as.owin(X) }
 
 intensity.quadratcount <- function(X, ..., image=FALSE) {
   Y <- as.tess(X)
-  a <- tile.areas(Y)
-  ## in the rectangular case, tiles are indexed in column-major order
-  if(Y$type == "rect" && length(dim(X)) > 1) 
-    a <- matrix(a, byrow=TRUE, nrow(X), ncol(X))
-  lambda <- X/a
+  A <- tile.areas(Y)
+  flat <- (length(dim(X)) <= 1)
+  if(flat) {
+    lambda <- X/A
+  } else {
+    ## rectangular array
+    ## entries of X are stored in row major order
+    ## tiles of Y are listed in column major order
+    lambda <- t(t(X)/A)
+  }
   if(!image) {
     trap.extra.arguments(...)
     class(lambda) <- "table"
     attr(lambda, "tess") <- NULL
     return(lambda)
   }
-  ## again to handle rectangular case
-  lambda <- as.vector(t(lambda))
+  ## now map the entries of 'lambda' to tiles of 'Y'
+  lambda <- as.numeric(t(lambda))
   tileid <- as.im(Y, ...)
   result <- eval.im(lambda[tileid])
   return(result)
