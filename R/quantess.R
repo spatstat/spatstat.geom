@@ -2,7 +2,7 @@
 #' 
 #'     Quantile Tessellation
 #'
-#'   $Revision: 1.23 $  $Date: 2020/11/18 03:07:14 $
+#'   $Revision: 1.24 $  $Date: 2023/06/02 02:42:09 $
 
 quantess <- function(M, Z, n, ...) {
   UseMethod("quantess")
@@ -40,7 +40,7 @@ quantess.owin <- function(M, Z, n, ..., type=2, origin=c(0,0), eps=NULL) {
                      y = tess(xgrid=R$xrange, ygrid=qZ),
                      rad = polartess(B, radii=qZ, origin=origin),
                      ang = polartess(B, angles=qZ, origin=origin))
-    out <- intersect.tess(strips, tess(tiles=list(W)))
+    out <- intersect.tess(strips, W)
     tilenames(out) <- makeCutLabels(qZ, include.lowest=TRUE)
   } else {
     ZC <- cut(Zim, breaks=qZ, include.lowest=TRUE)

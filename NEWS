@@ -1,11 +1,16 @@
-        CHANGES IN spatstat.geom VERSION 3.2-1.001
+        CHANGES IN spatstat.geom VERSION 3.2-1.002
 
 OVERVIEW
 
-    o Bug fix in intensity.quadratcount
+    o Bug fixes.
 
 BUG FIXES
 
+    o quantess.owin
+    The window of the resulting tessellation was sometimes slightly different
+    from the original window M.
+    Fixed.
+    
     o intensity.quadratcount
     Results were incorrect if the quadrats were the intersections of
     a rectangular grid with an irregular window and all quadrats were nonempty.
