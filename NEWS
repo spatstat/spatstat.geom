@@ -1,8 +1,13 @@
-        CHANGES IN spatstat.geom VERSION 3.2-1.002
+        CHANGES IN spatstat.geom VERSION 3.2-1.003
 
 OVERVIEW
 
-    o Bug fixes.
+    o Bug fixes and minor improvements.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o as.mask
+    Improved numerical performance (rounding error).
 
 BUG FIXES
 

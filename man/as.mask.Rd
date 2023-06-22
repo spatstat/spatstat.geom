@@ -87,11 +87,11 @@
     \item if \code{rule.eps="grow.frame"},
     the grid spacing (pixel size) \code{eps} will remain unchanged,
     and the rectangular frame will be expanded slightly
-    so that an integer number of pixels fits exactly into the frame.
+    so that it consists of an integer number of pixels in each direction.
     \item if \code{rule.eps="shrink.frame"},
     the grid spacing (pixel size) \code{eps} will remain unchanged,
     and the rectangular frame will be contracted slightly
-    so that an integer number of pixels fits exactly into the frame.
+    so that it consists of an integer number of pixels in each direction.
   }
 
   If \code{dimyx} is given, then the pixel grid will be an

@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.200 $	$Date: 2023/05/01 07:12:54 $
+#	$Revision: 4.201 $	$Date: 2023/06/22 02:02:30 $
 #
 #
 #	A window may be either
@@ -597,30 +597,37 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL,
         height <- diff(yrange)
         nc <- width/eps[1L]
         nr <- height/eps[2L]
+        fc <- nc %% 1
+        fr <- nr %% 1
         rule.eps <- match.arg(rule.eps)
         switch(rule.eps,
                adjust.eps = {
                  ## Frame size is fixed; pixel size will be adjusted
-                 nr <- ceiling(nr)
                  nc <- ceiling(nc)
-                 eps <- c(width/nc, height/nr)
+                 nr <- ceiling(nr)
+                 if(fc != 0) eps[1L] <- width/nc
+                 if(fr != 0) eps[2L] <- height/nr
                },
                grow.frame = {
                  ## Pixel size is fixed; frame will be expanded
-                 nr <- ceiling(nr)
                  nc <- ceiling(nc)
-                 xrange <- mean(xrange) + c(-1,1) * nc * eps[1L]/2
-                 yrange <- mean(yrange) + c(-1,1) * nr * eps[2L]/2
+                 nr <- ceiling(nr)
+                 if(fc != 0) 
+                   xrange <- mean(xrange) + c(-1,1) * nc * eps[1L]/2
+                 if(fr != 0) 
+                   yrange <- mean(yrange) + c(-1,1) * nr * eps[2L]/2
                },
                shrink.frame = {
                  ## Pixel size is fixed; frame will be contracted
-                 nr <- floor(nr)
                  nc <- floor(nc)
-                 if(nr <= 0 || nc <= 0)
+                 nr <- floor(nr)
+                 if(nc <= 0 || nr <= 0) 
                    stop(paste("pixel size argument eps exceeds frame size;",
                               "unable to shrink frame"))
-                 xrange <- mean(xrange) + c(-1,1) * nc * eps[1L]/2
-                 yrange <- mean(yrange) + c(-1,1) * nr * eps[2L]/2
+                 if(fc != 0) 
+                   xrange <- mean(xrange) + c(-1,1) * nc * eps[1L]/2
+                 if(fr != 0) 
+                   yrange <- mean(yrange) + c(-1,1) * nr * eps[2L]/2
                })
       } else {
         ## use spatstat default dimensions
