@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.106 $ $Date: 2023/05/02 04:48:52 $
+#   $Revision: 1.107 $ $Date: 2023/07/08 03:30:59 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -665,6 +665,7 @@ as.function.tess <- function(x, ..., values=NULL) {
   if(is.null(values)) {
     f <- function(x,y) { tileindex(x,y,V) }
   } else {
+    if(is.data.frame(values)) values <- unlist(values)
     if(length(values) != nobjects(x))
       stop("Length of 'values' should equal the number of tiles", call.=FALSE)
     f <- function(x,y) { values[as.integer(tileindex(x,y,V))] }
