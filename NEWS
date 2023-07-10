@@ -1,8 +1,17 @@
-        CHANGES IN spatstat.geom VERSION 3.2-2.001
+        CHANGES IN spatstat.geom VERSION 3.2-2.002
 
 OVERVIEW
 
     o Bug fixes and minor improvements.
+
+    o Workaround for hard crash in dev.capabilities()
+
+BUG FIXES
+
+    o plot.ppp, plot.im
+    A hard crash (segmentation fault) could occur
+    due to a bug in grDevices::dev.capabilities().
+    Fixed.
 
         CHANGES IN spatstat.geom VERSION 3.2-2
 

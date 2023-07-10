@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.107 $	$Date: 2023/01/18 08:17:07 $
+#	$Revision: 1.108 $	$Date: 2023/07/09 04:17:12 $
 #
 #
 #--------------------------------------------------------------------------
@@ -24,8 +24,8 @@ plot.ppp <- local({
       if(is.null(cols) && is.null(col) && 
          !any(c("fg", "bg") %in% names(list(...))) &&
          (nx <- npoints(x)) > 100 &&
-         identical(dev.capabilities()$semiTransparency, TRUE) &&
-         spatstat.options("transparent"))
+         spatstat.options("transparent") &&
+         isTRUE(safeDevCapabilities()$semiTransparency))
         cols <- rgb(0,0,0, default.transparency(nx))
       if(!is.null(cols) && !is.null(col)) col <- NULL
       symap <- symbolmap(..., chars=chars, cols=cols, col=col)

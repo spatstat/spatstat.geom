@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.156 $   $Date: 2023/02/28 01:34:40 $
+#  $Revision: 1.157 $   $Date: 2023/07/09 04:34:17 $
 #
 #  Plotting code for pixel images
 #
@@ -31,7 +31,7 @@ plot.im <- local({
                       resolve.defaults(list(x=quote(W), type="n"), aarg), 
                       extrargs=graphicsPars("owin"))
     }
-    if(workaround && identical(aarg$useRaster, TRUE)) {
+    if(workaround && isTRUE(aarg$useRaster)) {
       #' workaround for bug 16035
       #' detect reversed coordinates
       usr <- par('usr')
@@ -592,26 +592,28 @@ plot.im <- local({
       colourinfo$breaks <- soc$breaks
 
     ##  ........ decide whether to use rasterImage .........
-    
-    ## get device capabilities
-    ##      (this will start a graphics device if none is active)
-    rasterable <- dev.capabilities()$rasterImage
-    if(is.null(rasterable)) rasterable <- "no"
-    ##
-    can.use.raster <-
-      switch(rasterable,
-             yes=TRUE,
-             no=FALSE,
-             "non-missing"=!anyNA(x$v),
-             FALSE)
-    if(is.null(useRaster)) {
-      useRaster <- can.use.raster
-    } else if(useRaster && !can.use.raster) {
+
+    if(!isFALSE(useRaster)) {
+      ## get device capabilities
+      ##      (this will start a graphics device if none is active)
+      rasterable <- safeDevCapabilities()$rasterImage
+      if(is.null(rasterable)) rasterable <- "no"
+      ##
+      can.use.raster <-
+        switch(rasterable,
+               yes=TRUE,
+               no=FALSE,
+               "non-missing"=!anyNA(x$v),
+               FALSE)
+      if(is.null(useRaster)) {
+        useRaster <- can.use.raster
+      } else if(useRaster && !can.use.raster) {
         whinge <- "useRaster=TRUE is not supported by the graphics device"
         if(rasterable == "non-missing")
           whinge <- paste(whinge, "for images with NA values")
         warning(whinge, call.=FALSE)
-    } 
+      }
+    }
 
     ## ........ catch old usage (undocumented ) ................
     contourargs <- resolve.defaults(contourargs, dotargs$args.contour)

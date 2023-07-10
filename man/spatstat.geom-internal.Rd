@@ -277,6 +277,7 @@
 \alias{row.names.hyperframe}
 \alias{row.names<-.hyperframe}
 \alias{safedeldir}
+\alias{safeDevCapabilities}
 \alias{safelookup}
 \alias{scalardilate.breakpts}
 \alias{scalardilate.diagramobj}
@@ -631,6 +632,7 @@ rotxypolygon(p, angle = pi/2)
 \method{row.names}{hyperframe}(x)
 \method{row.names}{hyperframe}(x) <- value
 safedeldir(X)
+safeDevCapabilities()
 safelookup(Z, x, factor, warn)
 \method{scalardilate}{breakpts}(X, f, \dots)
 \method{scalardilate}{diagramobj}(X, f, \dots)
