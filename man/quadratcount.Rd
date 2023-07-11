@@ -120,7 +120,10 @@
   extracts the counts \bold{in the wrong order}.
   To obtain the quadrat counts in the same order as the
   tiles of the corresponding tessellation would be listed,
-  use \code{as.vector(t(Q))}, which works in all cases.
+  use \code{as.vector(t(Q))}.
+
+  In all cases, the correspondence between entries of the table of counts
+  and tiles of the tessellation is given by \code{attr(Q, "tilemap")}.
 }
 \seealso{
   \code{\link{plot.quadratcount}},

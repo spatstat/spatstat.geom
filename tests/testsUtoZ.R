@@ -39,7 +39,7 @@ local({
 #
 # Tests of owin geometry code
 #
-#  $Revision: 1.17 $  $Date: 2020/12/04 08:24:51 $
+#  $Revision: 1.18 $  $Date: 2023/07/11 06:21:37 $
 
 local({
   if(ALWAYS) { # C code
@@ -87,6 +87,19 @@ local({
     U2 <- as.owin(list(xmin=0, xmax=1, ymin=0, ymax=1))
   }
 
+  if(ALWAYS) {
+    #' validity of as.mask applied to rectangles with additional raster info
+    Z <- as.im(unit.square())
+    R <- square(0.5)
+    aR <- area(R)
+    a <- area(as.mask(R, xy=Z))
+    if(abs(a-aR) > aR/20)
+      stop("Problem with as.mask(rectangle, xy=image)")
+    a <- area(as.mask(R, xy=list(x=Z$xcol, y=Z$yrow)))
+    if(abs(a-aR) > aR/20)
+      stop("Problem with as.mask(rectangle, xy=list(x,y))")
+  }
+    
   if(FULLTEST) {
     #' intersections involving masks
     B1 <- square(1)

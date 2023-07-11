@@ -1,7 +1,7 @@
 #
 #  quadratcount.R
 #
-#  $Revision: 1.61 $  $Date: 2023/05/31 07:29:33 $
+#  $Revision: 1.64 $  $Date: 2023/07/11 06:07:42 $
 #
 
 quadratcount <- function(X, ...) {
@@ -50,11 +50,12 @@ quadratcount.ppp <- function(X, nx=5, ny=nx, ...,
         ## retain corresponding counts 
         retaincount <- nonempty[tilemap]
         Xcount <- as.integer(Xcount)[retaincount]
-        Xcount <- array(Xcount,
-                        dimnames=list(tile=tilenames(tess)))
         ## map old tile numbers to new tile numbers
         sequencemap <- cumsum(nonempty) # old tile number -> new tile number
         tilemap <- sequencemap[tilemap[retaincount]]
+        ## attach tile names to counts
+        Xcount <- array(Xcount,
+                        dimnames=list(tile=tilenames(tess)[tilemap]))
         class(Xcount) <- "table"
       }
     }
@@ -88,7 +89,7 @@ quadratcount.ppp <- function(X, nx=5, ny=nx, ...,
 }
 
 plot.quadratcount <- function(x, ...,
-                              add=FALSE, entries=as.vector(t(as.table(x))),
+                              add=FALSE, entries,
                               dx=0, dy=0, show.tiles=TRUE,
                               textargs = list()) {
   xname <- short.deparse(substitute(x))
@@ -105,6 +106,14 @@ plot.quadratcount <- function(x, ...,
                              list(...),
                              list(main=xname),
                              .StripNull=TRUE))
+  }
+  if(missing(entries)) {
+    counts <- as.integer(as.table(x))
+    tilemap <- attr(x, "tilemap")
+    if(is.null(tilemap))
+      stop("quadratcount object has outdated format; please recompute it")
+    entries <- integer(length(counts))
+    entries[tilemap] <- counts
   }
   if(!is.null(entries)) {
     labels <- paste(as.vector(entries))
@@ -205,23 +214,22 @@ domain.quadratcount <- Window.quadratcount <- function(X, ...) { as.owin(X) }
 intensity.quadratcount <- function(X, ..., image=FALSE) {
   Y <- as.tess(X)
   A <- tile.areas(Y)
-  flat <- (length(dim(X)) <= 1)
-  if(flat) {
-    lambda <- X/A
-  } else {
-    ## rectangular array
-    ## entries of X are stored in row major order
-    ## tiles of Y are listed in column major order
-    lambda <- t(t(X)/A)
-  }
+  ## mapping from X to A
+  tilemap <- attr(X, "tilemap")
+  if(is.null(tilemap))
+    stop("quadratcount object has old format; please recompute it")
+  ## intensity values as a table
+  lambdaTable <- X/(A[tilemap])
   if(!image) {
     trap.extra.arguments(...)
-    class(lambda) <- "table"
-    attr(lambda, "tess") <- NULL
-    return(lambda)
+    class(lambdaTable) <- "table"
+    attr(lambdaTable, "tess") <- NULL
+    return(lambdaTable)
   }
+  ## intensity values associated with tiles
+  lambda <- as.numeric(lambdaTable)
+  lambda[tilemap] <- lambda
   ## now map the entries of 'lambda' to tiles of 'Y'
-  lambda <- as.numeric(t(lambda))
   tileid <- as.im(Y, ...)
   result <- eval.im(lambda[tileid])
   return(result)

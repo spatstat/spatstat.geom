@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.201 $	$Date: 2023/06/22 02:02:30 $
+#	$Revision: 4.202 $	$Date: 2023/07/11 06:06:53 $
 #
 #
 #	A window may be either
@@ -740,12 +740,14 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL,
   switch(w$type,
          rectangle = {
            out <- rasta
-           if(!all(xrange == rasta$xrange)
-              || !all(yrange == rasta$yrange)) {
+           wxrange <- w$xrange
+           wyrange <- w$yrange
+           if(!all(wxrange == rasta$xrange)
+              || !all(wyrange == rasta$yrange)) {
              xcol <- rasta$xcol
              yrow <- rasta$yrow
-             badrow <- which(yrow > yrange[2L] | yrow < yrange[1L])
-             badcol <- which(xcol > xrange[2L] | xcol < xrange[1L])
+             badrow <- which(yrow > wyrange[2L] | yrow < wyrange[1L])
+             badcol <- which(xcol > wxrange[2L] | xcol < wxrange[1L])
              out$m[badrow , ] <- FALSE
              out$m[ , badcol] <- FALSE
            }

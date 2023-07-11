@@ -10,7 +10,7 @@
 }
 \usage{
 \method{plot}{quadratcount}(x, \dots, add = FALSE,
-              entries = as.vector(t(as.table(x))),
+              entries, 
               dx = 0, dy = 0, show.tiles = TRUE,
               textargs = list())
 }
@@ -61,6 +61,12 @@
   Then the quadrat counts are printed using
   \code{\link[graphics]{text.default}}. This display can be controlled
   using the arguments \code{dx,dy} and \code{textargs}.
+
+  If \code{entries} is given, it should be a vector of length equal to
+  the number of quadrats (the number of tiles in the tessellation
+  \code{as.tess(x)}) containing integer or character values
+  to be displayed in each quadrat, in the same sequence
+  as \code{tiles(as.tess(x))} or \code{tilenames(as.tess(x))}.
 }
 \value{
   Null.
@@ -74,11 +80,9 @@
 \examples{
    plot(quadratcount(swedishpines, 5))
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{hplot}

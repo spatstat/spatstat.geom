@@ -73,3 +73,40 @@ local({
   print(summary(d))
 })
 }
+#
+# tests/quadcount.R
+#
+# Tests of quadrat counting code
+#
+#  $Revision: 1.1 $  $Date: 2023/07/11 06:55:50 $
+
+local({
+  if(FULLTEST) {
+    ## from M. Gimond
+    A <- quadratcount(humberside, 2, 3)
+    nA <- as.integer(A)
+    if(!all(nA == c(2, 13, 34, 20, 11, 123)))
+      stop("Incorrect quadrat count (2,3)")
+    ## execute intensity.quadratcount
+    lamA <- intensity(A, image=TRUE)
+    ## check sum 1/lambda equals area
+    vA <- sum(1/lamA[humberside])
+    if(abs(1 - vA/area(Window(humberside))) > 0.05)
+      stop("Incorrect sum of 1/lambda (2,3)")
+    ##
+    B <- quadratcount(humberside, 5, 3)
+    nB <- as.integer(B) 
+    if(!all(nB == c(0, 3, 0, 2, 2, 3, 14, 117, 19, 5, 35, 0, 3)))
+      stop("Incorrect quadrat count (5,3)")
+    lamB <- intensity(B, image=TRUE)
+    vB <- sum(1/lamB[humberside])
+    aaB <- tile.areas(as.tess(B))
+    tilemap <- attr(B, "tilemap")
+    retaintile <- logical(length(aaB))
+    retaintile[tilemap] <- (nB > 0)
+    aB <- sum(aaB[retaintile])
+    if(abs(1 - vB/aB) > 0.05)
+      stop("Incorrect sum of 1/lambda (5,3)")
+  }
+})
+reset.spatstat.options()
