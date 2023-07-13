@@ -115,15 +115,14 @@
   use \code{\link[spatstat.explore]{quadrat.test}}.
 }
 \section{Warning}{
-  If \code{Q} is the result of \code{quadratcount}
-  using rectangular tiles, then \code{as.numeric(Q)}
-  extracts the counts \bold{in the wrong order}.
-  To obtain the quadrat counts in the same order as the
-  tiles of the corresponding tessellation would be listed,
-  use \code{as.vector(t(Q))}.
+  If \code{Q} is a \code{quadratcount} object,
+  the ordering of entries in the table \code{Q} 
+  \bold{may be different from} the ordering of quadrats (tiles
+  in the tessellation \code{as.tess(Q)}).
 
-  In all cases, the correspondence between entries of the table of counts
-  and tiles of the tessellation is given by \code{attr(Q, "tilemap")}.
+  To obtain the entries of the table in the same order
+  as the quadrats, use
+  \code{counts <- as.numeric(t(Q))} or \code{counts <- marks(as.tess(Q))}.
 }
 \seealso{
   \code{\link{plot.quadratcount}},

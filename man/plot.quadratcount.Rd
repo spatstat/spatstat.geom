@@ -10,7 +10,7 @@
 }
 \usage{
 \method{plot}{quadratcount}(x, \dots, add = FALSE,
-              entries, 
+              entries=as.integer(t(x)), 
               dx = 0, dy = 0, show.tiles = TRUE,
               textargs = list())
 }
@@ -66,7 +66,8 @@
   the number of quadrats (the number of tiles in the tessellation
   \code{as.tess(x)}) containing integer or character values
   to be displayed in each quadrat, in the same sequence
-  as \code{tiles(as.tess(x))} or \code{tilenames(as.tess(x))}.
+  as \code{tiles(as.tess(x))} or \code{tilenames(as.tess(x))}
+  or the counts in the transposed table \code{t(x)}.
 }
 \value{
   Null.

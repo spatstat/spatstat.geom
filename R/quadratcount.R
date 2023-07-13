@@ -1,7 +1,7 @@
 #
 #  quadratcount.R
 #
-#  $Revision: 1.64 $  $Date: 2023/07/11 06:07:42 $
+#  $Revision: 1.65 $  $Date: 2023/07/13 09:35:52 $
 #
 
 quadratcount <- function(X, ...) {
@@ -27,35 +27,25 @@ quadratcount.ppp <- function(X, nx=5, ny=nx, ...,
                      nx=nx, ny=ny, xbreaks=xbreaks, ybreaks=ybreaks)
     ## fast code for counting points in rectangular grid
     Xcount <- rectquadrat.countEngine(X$x, X$y, tess$xgrid, tess$ygrid)
-    ## map entries of 'Xcount' to tiles of 'tess'
-    ## (Values of Xcount are stored in row-major order,  
-    ## tiles in a rectangular tessellation are in column-major order)
-    nx <- length(tess$xgrid) - 1L
-    ny <- length(tess$ygrid) - 1L
-    tilemap <- as.integer(matrix(seq_len(nx * ny),
-                                 ncol=nx, nrow=ny, byrow=TRUE))
     ## 
     if(W$type != "rectangle") {
       # intersections of rectangles with window including empty intersections
       tess <- quadrats(X,
                        nx=nx, ny=ny, xbreaks=xbreaks, ybreaks=ybreaks,
                        keepempty=TRUE)
-      # now delete the empty quadrats and the corresponding counts
       nonempty <- !tiles.empty(tess)
       if(!any(nonempty))
         stop("All tiles are empty")
       if(!all(nonempty)) {
+        ## reshape counts as 1-dim table corresponding to tiles
+        Xcount <- as.integer(t(Xcount))
         ## retain nonempty tiles
         tess   <- tess[nonempty]
         ## retain corresponding counts 
-        retaincount <- nonempty[tilemap]
-        Xcount <- as.integer(Xcount)[retaincount]
-        ## map old tile numbers to new tile numbers
-        sequencemap <- cumsum(nonempty) # old tile number -> new tile number
-        tilemap <- sequencemap[tilemap[retaincount]]
+        Xcount <- Xcount[nonempty]
         ## attach tile names to counts
         Xcount <- array(Xcount,
-                        dimnames=list(tile=tilenames(tess)[tilemap]))
+                        dimnames=list(tile=tilenames(tess)))
         class(Xcount) <- "table"
       }
     }
@@ -68,28 +58,21 @@ quadratcount.ppp <- function(X, nx=5, ny=nx, ...,
     }
     if(tess$type == "rect") {
       # fast code for counting points in rectangular grid
-      Xcount <- rectquadrat.countEngine(X$x, X$y, tess$xgrid, tess$ygrid)
-      nx <- length(tess$xgrid) - 1L
-      ny <- length(tess$ygrid) - 1L
-      tilemap <- as.integer(matrix(seq_len(nx * ny),
-                                   ncol=nx, nrow=ny, byrow=TRUE))
     } else {
       # quadrats are another type of tessellation
       Y <- cut(X, tess)
       if(anyNA(marks(Y)))
         warning("Tessellation does not contain all the points of X")
       Xcount <- table(tile=marks(Y))
-      tilemap <- seq_len(tess$n)
     }
   }
   attr(Xcount, "tess") <- tess
-  attr(Xcount, "tilemap") <- tilemap
   class(Xcount) <- c("quadratcount", class(Xcount))
   return(Xcount)
 }
 
 plot.quadratcount <- function(x, ...,
-                              add=FALSE, entries,
+                              add=FALSE, entries=as.integer(t(x)),
                               dx=0, dy=0, show.tiles=TRUE,
                               textargs = list()) {
   xname <- short.deparse(substitute(x))
@@ -106,14 +89,6 @@ plot.quadratcount <- function(x, ...,
                              list(...),
                              list(main=xname),
                              .StripNull=TRUE))
-  }
-  if(missing(entries)) {
-    counts <- as.integer(as.table(x))
-    tilemap <- attr(x, "tilemap")
-    if(is.null(tilemap))
-      stop("quadratcount object has outdated format; please recompute it")
-    entries <- integer(length(counts))
-    entries[tilemap] <- counts
   }
   if(!is.null(entries)) {
     labels <- paste(as.vector(entries))
@@ -202,7 +177,10 @@ quadrats <- function(X, nx=5, ny=nx, xbreaks = NULL, ybreaks = NULL,
 }
 
 as.tess.quadratcount <- function(X) {
-  return(attr(X, "tess"))
+  Y <- attr(X, "tess")
+  m <- as.integer(t(X)) ## counts in order corresponding to tiles
+  marks(Y) <- m
+  return(Y)
 }
 
 as.owin.quadratcount <- function(W, ..., fatal=TRUE) {
@@ -212,26 +190,20 @@ as.owin.quadratcount <- function(W, ..., fatal=TRUE) {
 domain.quadratcount <- Window.quadratcount <- function(X, ...) { as.owin(X) }
 
 intensity.quadratcount <- function(X, ..., image=FALSE) {
-  Y <- as.tess(X)
-  A <- tile.areas(Y)
-  ## mapping from X to A
-  tilemap <- attr(X, "tilemap")
-  if(is.null(tilemap))
-    stop("quadratcount object has old format; please recompute it")
-  ## intensity values as a table
-  lambdaTable <- X/(A[tilemap])
-  if(!image) {
-    trap.extra.arguments(...)
-    class(lambdaTable) <- "table"
-    attr(lambdaTable, "tess") <- NULL
-    return(lambdaTable)
+  Y <- as.tess(X)  # marks are counts
+  lambda <- marks(Y)[,1]/tile.areas(Y) 
+  if(image) {
+    ## make an image
+    tileid <- as.im(Y, ...)  # values are tile index
+    result <- eval.im(lambda[tileid])
+  } else {
+    ## make a table using correct correspondence
+    result <- t(X)
+    result[] <- lambda
+    result <- t(result)
+    class(result) <- "table"
+    attr(result, "tess") <- NULL
   }
-  ## intensity values associated with tiles
-  lambda <- as.numeric(lambdaTable)
-  lambda[tilemap] <- lambda
-  ## now map the entries of 'lambda' to tiles of 'Y'
-  tileid <- as.im(Y, ...)
-  result <- eval.im(lambda[tileid])
   return(result)
 }
 
