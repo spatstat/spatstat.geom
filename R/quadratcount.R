@@ -1,7 +1,7 @@
 #
 #  quadratcount.R
 #
-#  $Revision: 1.65 $  $Date: 2023/07/13 09:35:52 $
+#  $Revision: 1.66 $  $Date: 2023/07/16 09:47:27 $
 #
 
 quadratcount <- function(X, ...) {
@@ -197,10 +197,12 @@ intensity.quadratcount <- function(X, ..., image=FALSE) {
     tileid <- as.im(Y, ...)  # values are tile index
     result <- eval.im(lambda[tileid])
   } else {
-    ## make a table using correct correspondence
-    result <- t(X)
+    ## save as a table corresponding to X
+    result <- X
+    flip <- (length(dim(X)) == 2)
+    if(flip) result <- t(result)
     result[] <- lambda
-    result <- t(result)
+    if(flip) result <- t(result)
     class(result) <- "table"
     attr(result, "tess") <- NULL
   }
