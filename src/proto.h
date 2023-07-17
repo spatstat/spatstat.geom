@@ -22,7 +22,7 @@ void paircount(int *, double *, double *, double *, int *);
 void Fclosepairs(int *, double *, double *, double *, int *, int *, int *, int *, double *, double *, double *, double *, double *, double *, double *, int *); 
 void crosscount(int *, double *, double *, int *, double *, double *, double *, int *); 
 void Fcrosspairs(int *, double *, double *, int *, double *, double *, double *, int *, int *, int *, int *, double *, double *, double *, double *, double *, double *, double *, int *);
-void cocoImage(int *, int *, int *); 
+void cocoImage(int *, int *, int *); void coco4Image(int *, int *, int *); 
 void cocoGraph(int *, int *, int *, int *, int *, int *);
 void mdtPconv(double *, double *, double *, double *, int *, int *, int *, int *, int *, int *, double *, double *, int *, double *, int *, int *); 
 void mdtPconv(double *, double *, double *, double *, int *, int *, int *, int *, int *, int *, double *, double *, int *, double *, int *, int *);

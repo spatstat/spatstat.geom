@@ -6,12 +6,15 @@
        cocoImage:   connected component transform of a discrete binary image
                    (8-connected topology)
 
+       coco4Image:  connected component transform of a discrete binary image
+                   (4-connected topology)
+
        cocoGraph: connected component labels for a discrete graph
                    specified by a list of edges
        
-       $Revision: 1.11 $ $Date: 2022/10/22 09:29:51 $
+       $Revision: 1.12 $ $Date: 2023/07/17 06:06:11 $
 
-  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2023
   Licence: GNU Public Licence >= 2
 
        
@@ -29,7 +32,7 @@ void shape_raster(Raster *ras, void *data,
 		  double xmin, double ymin, double xmax, double ymax,
 		  int nrow, int ncol, int mrow, int mcol);
 
-/* workhorse function for cocoImage */
+/* workhorse functions for cocoImage */
 
 void
 comcommer(Raster  *im)
@@ -97,6 +100,71 @@ void cocoImage(
 		(double) *nc, (double) *nr, 
 		*nr+2, *nc+2, 1, 1);
   comcommer(&im);
+}	
+
+/*
+  4-connected 
+*/
+
+void
+com4commer(Raster  *im)
+{
+  int	j,k;
+  int rmin, rmax, cmin, cmax;
+  int label, curlabel, minlabel;
+  int nchanged;
+
+  /* image boundaries */
+  rmin = im->rmin;
+  rmax = im->rmax;
+  cmin = im->cmin;
+  cmax = im->cmax;
+
+#define ENTRY(ROW, COL) Entry(*im, ROW, COL, int)
+
+#define UPDATE(ROW,COL,BEST,NEW) \
+     NEW = ENTRY(ROW, COL); \
+     if(NEW != 0 && NEW < BEST) \
+       BEST = NEW
+
+  nchanged = 1;
+
+  while(nchanged >0) {
+    nchanged = 0;
+    R_CheckUserInterrupt();
+    for(j = rmin; j <= rmax; j++) {
+      for(k = cmin; k <= cmax; k++) {
+	curlabel = ENTRY(j, k);
+	if(curlabel != 0) {
+	  minlabel = curlabel;
+	  UPDATE(j-1, k,   minlabel, label);
+	  UPDATE(j,   k-1, minlabel, label);
+	  UPDATE(j,   k,   minlabel, label);
+	  UPDATE(j,   k+1, minlabel, label);
+	  UPDATE(j+1, k,   minlabel, label);
+	  if(minlabel < curlabel) {
+	    ENTRY(j, k) = minlabel;
+	    nchanged++;
+	  }
+	}
+      }
+    }
+  }
+}
+
+void coco4Image(
+  int *mat,        /* input:  binary image */
+  int *nr,
+  int *nc          /* raster dimensions
+			   EXCLUDING margin of 1 on each side */
+) {
+  Raster im;
+
+  shape_raster( &im, (void *) mat, 
+		(double) 1, (double) 1,
+		(double) *nc, (double) *nr, 
+		*nr+2, *nc+2, 1, 1);
+  com4commer(&im);
 }	
 
 void cocoGraph(

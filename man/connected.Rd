@@ -13,9 +13,9 @@
 \usage{
 connected(X, \dots)
 
-\method{connected}{owin}(X, \dots, method="C")
+\method{connected}{owin}(X, \dots, method="C", connect=8)
 
-\method{connected}{im}(X, \dots, background = NA, method="C")
+\method{connected}{im}(X, \dots, background = NA, method="C", connect=8)
 }
 \arguments{
   \item{X}{
@@ -33,6 +33,9 @@ connected(X, \dots)
   \item{\dots}{
     Arguments passed to \code{\link{as.mask}} to determine the
     pixel resolution.
+  }
+  \item{connect}{
+    The connectivity of the pixel grid: either 8 or 4.
   }
 }
 \details{
@@ -52,12 +55,13 @@ connected(X, \dots)
   of pixels) in the foreground.
 
   Two pixels belong to the same connected component if they have the value
-  \code{TRUE} and if they are neighbours (in the 8-connected
-  sense). This rule is applied repeatedly until it terminates.
+  \code{TRUE} and if they are neighbours in the 8-connected sense
+  (or in the 4-connected sense if \code{connect=4}).
+  This rule is applied repeatedly until it terminates.
   Then each connected component
   contains all the pixels that can be reached by stepping from neighbour
   to neighbour.
-
+  
   If \code{method="C"}, the computation is performed by a compiled C language
   implementation of the classical algorithm of Rosenfeld and Pfalz
   (1966). If \code{method="interpreted"}, the computation is performed

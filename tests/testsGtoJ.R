@@ -82,7 +82,7 @@ local({
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.40 $   $Date: 2022/10/23 01:57:03 $
+#   $Revision: 1.42 $   $Date: 2023/07/17 06:34:00 $
 #
 
 
@@ -135,7 +135,10 @@ local({
   
   ##
   d <- distmap(cells, dimyx=32)
-  Z <- connected(d <= 0.06, method="interpreted")
+  D6 <- (d <= 0.06)
+  Z <- connected(D6, method="interpreted")
+  Z <- connected(D6,                       connect=4)
+  Z <- connected(D6, method="interpreted", connect=4)
 
   a <- where.max(d, first=FALSE)
   a <- where.min(d, first=FALSE)

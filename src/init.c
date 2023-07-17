@@ -24,6 +24,7 @@ static const R_CMethodDef CEntries[] = {
     {"bdrymask",          (DL_FUNC) &bdrymask,           4},
     {"Ccrossdist",        (DL_FUNC) &Ccrossdist,         8},
     {"CcrossPdist",       (DL_FUNC) &CcrossPdist,       10},
+    {"coco4Image",        (DL_FUNC) &coco4Image,         3},
     {"cocoGraph",         (DL_FUNC) &cocoGraph,          6},
     {"cocoImage",         (DL_FUNC) &cocoImage,          3},
     {"Corput",            (DL_FUNC) &Corput,             3},

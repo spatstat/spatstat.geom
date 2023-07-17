@@ -1,8 +1,13 @@
-        CHANGES IN spatstat.geom VERSION 3.2-2.005
+        CHANGES IN spatstat.geom VERSION 3.2-2.006
 
 OVERVIEW
 
     o Bug fixes.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o connected.owin, connected.im
+    New argument 'connect' specifies the connectivity of the raster.
 
 BUG FIXES
 
