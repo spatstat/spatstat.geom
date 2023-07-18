@@ -3,7 +3,7 @@
 #
 # connected component transform
 #
-#    $Revision: 1.27 $  $Date: 2023/07/17 06:30:16 $
+#    $Revision: 1.29 $  $Date: 2023/07/18 03:59:12 $
 #
 # Interpreted code for pixel images by Julian Burgos <jmburgos@u.washington.edu>
 # Rewritten in C by Adrian Baddeley
@@ -15,8 +15,14 @@ connected <- function(X, ...) {
 }
 
 connected.im <- function(X, ..., background=NA, method="C", connect=8) {
-  W <- if(!is.na(background)) solutionset(X != background) else 
-       if(X$type == "logical") solutionset(X) else as.owin(X)
+  if(!is.na(background)) {
+    W <- solutionset(X != background)
+  } else if(X$type == "logical") {
+    W <- solutionset(X)
+  } else {
+    warning("Assuming background = NA, foreground = other values", call.=FALSE)
+    W <- as.owin(X)
+  }
   connected.owin(W, method=method, ..., connect=connect)
 }
 
@@ -45,20 +51,41 @@ connected.owin <- function(X, ..., method="C", connect=8) {
     L[M] <- seq_len(sum(M))
     L[!M] <- 0
     ## resolve labels
-    if(connect == 8) {
-      ## 8-connected
-      z <- .C(SG_cocoImage,
-              mat=as.integer(t(L)),
-              nr=as.integer(nr),
-              nc=as.integer(nc),
-              PACKAGE="spatstat.geom")
+    if(typeof(L) == "double") {
+      ## Labels are numeric (not integer)
+      ## This can occur if raster is really large
+      if(connect == 8) {
+        ## 8-connected
+        z <- .C(SG_coco8dbl,
+                mat=as.double(t(L)),
+                nr=as.integer(nr),
+                nc=as.integer(nc),
+                PACKAGE="spatstat.geom")
+      } else {
+        ## 4-connected
+        z <- .C(SG_coco4dbl,
+                mat=as.double(t(L)),
+                nr=as.integer(nr),
+                nc=as.integer(nc),
+                PACKAGE="spatstat.geom")
+      }
     } else {
-      ## 4-connected
-      z <- .C(SG_coco4Image,
-              mat=as.integer(t(L)),
-              nr=as.integer(nr),
-              nc=as.integer(nc),
-              PACKAGE="spatstat.geom")
+      ## Labels are integer
+      if(connect == 8) {
+        ## 8-connected
+        z <- .C(SG_coco8int,
+                mat=as.integer(t(L)),
+                nr=as.integer(nr),
+                nc=as.integer(nc),
+                PACKAGE="spatstat.geom")
+      } else {
+        ## 4-connected
+        z <- .C(SG_coco4int,
+                mat=as.integer(t(L)),
+                nr=as.integer(nr),
+                nc=as.integer(nc),
+                PACKAGE="spatstat.geom")
+      }
     }
     # unpack
     Z <- matrix(z$mat, nr+2, nc+2, byrow=TRUE)

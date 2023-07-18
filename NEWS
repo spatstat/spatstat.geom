@@ -1,7 +1,9 @@
-        CHANGES IN spatstat.geom VERSION 3.2-2.006
+        CHANGES IN spatstat.geom VERSION 3.2-2.007
 
 OVERVIEW
 
+    o Connected component transform can now use a 4-connected grid.
+    
     o Bug fixes.
 
 SIGNIFICANT USER-VISIBLE CHANGES
