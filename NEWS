@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.2-3
+        CHANGES IN spatstat.geom VERSION 3.2-4
 
 OVERVIEW
 
@@ -11,6 +11,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o connected.owin, connected.im
     New argument 'connect' specifies the connectivity of the raster,
     either 4 or 8 neighbours for each pixel.
+
+    o round.ppp, round.pp3, round.ppx
+    Now has ellipsis argument '...' for conformity with generic 'round'
 
 BUG FIXES
 

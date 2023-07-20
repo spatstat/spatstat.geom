@@ -5,8 +5,8 @@
 #
 #   $Revision: 1.6 $  $Date: 2019/02/20 03:34:50 $
 
-round.ppp <- round.pp3 <- round.ppx <- function(x, digits=0) {
-  coords(x) <- round(as.matrix(coords(x)), digits=digits)
+round.ppp <- round.pp3 <- round.ppx <- function(x, digits=0, ...) {
+  coords(x) <- round(as.matrix(coords(x)), digits=digits, ...)
   return(x)
 }
 

@@ -10,11 +10,11 @@
   to the spatial coordinates of a point pattern.
 }
 \usage{
-\method{round}{ppp}(x, digits = 0)
+\method{round}{ppp}(x, digits = 0, \dots)
 
-\method{round}{pp3}(x, digits = 0)
+\method{round}{pp3}(x, digits = 0, \dots)
 
-\method{round}{ppx}(x, digits = 0)
+\method{round}{ppx}(x, digits = 0, \dots)
 }
 \arguments{
   \item{x}{
@@ -24,6 +24,7 @@
   \item{digits}{
     integer indicating the number of decimal places. 
   }
+  \item{\dots}{Additional arguments passed to the default method.}
 }
 \details{
   These functions are methods for the generic function
