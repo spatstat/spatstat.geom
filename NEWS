@@ -1,15 +1,16 @@
-        CHANGES IN spatstat.geom VERSION 3.2-2.007
+        CHANGES IN spatstat.geom VERSION 3.2-2.008
 
 OVERVIEW
 
     o Connected component transform can now use a 4-connected grid.
     
-    o Bug fixes.
+    o Bug fixes in quadrat counting code.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o connected.owin, connected.im
-    New argument 'connect' specifies the connectivity of the raster.
+    New argument 'connect' specifies the connectivity of the raster,
+    either 4 or 8 neighbours for each pixel.
 
 BUG FIXES
 

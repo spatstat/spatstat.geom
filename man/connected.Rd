@@ -55,12 +55,22 @@ connected(X, \dots)
   of pixels) in the foreground.
 
   Two pixels belong to the same connected component if they have the value
-  \code{TRUE} and if they are neighbours in the 8-connected sense
-  (or in the 4-connected sense if \code{connect=4}).
+  \code{TRUE} and if they are neighbours.
   This rule is applied repeatedly until it terminates.
   Then each connected component
   contains all the pixels that can be reached by stepping from neighbour
   to neighbour.
+
+  Pixels are defined to be neighbours if they are physically adjacent to
+  each other. If \code{connect=4}, each pixel has 4 neighbours,
+  lying one step above or below, or one step to the left or right.  
+  If \code{connect=8} (the default), each pixel has 8 neighbours,
+  lying one step above or below, or one step to the left or right,
+  or one diagonal step away. (Pixels at the edge of the image have fewer
+  neighbours.) The 8-connected algorithm is the default
+  because it gives better results when the pixel grid is coarse. The
+  4-connected algorithm is faster and is recommended when the pixel grid
+  is fine.
   
   If \code{method="C"}, the computation is performed by a compiled C language
   implementation of the classical algorithm of Rosenfeld and Pfalz
