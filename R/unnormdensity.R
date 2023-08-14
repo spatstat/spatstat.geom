@@ -1,7 +1,7 @@
 #
 #  unnormdensity.R
 #
-#  $Revision: 1.18 $  $Date: 2023/03/05 02:04:27 $
+#  $Revision: 1.19 $  $Date: 2023/08/14 06:27:35 $
 #
 
 unnormdensity <- local({
@@ -10,6 +10,9 @@ unnormdensity <- local({
     if(any(!nzchar(names(list(...)))))
       stop("All arguments must be named (tag=value)")
     envir.here <- sys.frame(sys.nframe())
+    ## suppress annoying warnings in density.default
+    defaults <- resolve.defaults(defaults,
+                                 list(warnWbw=FALSE))
     if(length(x) <= 1) {
       ## density.default does not handle this 
       out <- do.call(fewdatacase,
