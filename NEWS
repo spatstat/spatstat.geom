@@ -1,8 +1,10 @@
-        CHANGES IN spatstat.geom VERSION 3.2-4.001
+        CHANGES IN spatstat.geom VERSION 3.2-4.002
 
 OVERVIEW
 
     o Suppress annoying warnings.
+
+    o Further bug fix in quadratcount
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -10,6 +12,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Suppress annoying warning messages from density.default.
     This affects many functions in the spatstat family of packages.
 
+BUG FIXES
+
+    o quadratcount
+    Crashed if argument 'tess' was a rectangular grid tessellation.
+    Fixed.
+    
         CHANGES IN spatstat.geom VERSION 3.2-4
 
 OVERVIEW

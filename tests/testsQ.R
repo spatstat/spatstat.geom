@@ -78,10 +78,14 @@ local({
 #
 # Tests of quadrat counting code
 #
-#  $Revision: 1.2 $  $Date: 2023/07/13 09:06:19 $
+#  $Revision: 1.3 $  $Date: 2023/08/15 13:28:31 $
 
 local({
   if(FULLTEST) {
+    ## from Jordan Adamson
+    Te <- quadrats(unit.square(), 4)
+    X <- runifrect(8)
+    Q <- quadratcount(X, tess=Te)
     ## from M. Gimond
     A <- quadratcount(humberside, 2, 3)
     nA <- as.integer(t(A))

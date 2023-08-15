@@ -1,7 +1,7 @@
 #
 #  quadratcount.R
 #
-#  $Revision: 1.66 $  $Date: 2023/07/16 09:47:27 $
+#  $Revision: 1.67 $  $Date: 2023/08/15 13:21:39 $
 #
 
 quadratcount <- function(X, ...) {
@@ -58,6 +58,7 @@ quadratcount.ppp <- function(X, nx=5, ny=nx, ...,
     }
     if(tess$type == "rect") {
       # fast code for counting points in rectangular grid
+      Xcount <- rectquadrat.countEngine(X$x, X$y, tess$xgrid, tess$ygrid)
     } else {
       # quadrats are another type of tessellation
       Y <- cut(X, tess)
