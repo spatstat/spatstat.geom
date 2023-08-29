@@ -42,7 +42,7 @@ static const R_CMethodDef CEntries[] = {
     {"dinfty_R",          (DL_FUNC) &dinfty_R,           3},
     {"discareapoly",      (DL_FUNC) &discareapoly,      12},
     {"discs2grid",        (DL_FUNC) &discs2grid,        11},
-    {"distmapbin",        (DL_FUNC) &distmapbin,         9},
+    {"distmapbin",        (DL_FUNC) &distmapbin,        10},
     {"dwpure",            (DL_FUNC) &dwpure,             6},
     {"exact_dt_R",        (DL_FUNC) &exact_dt_R,        14},
     {"fardist2grid",      (DL_FUNC) &fardist2grid,      10},

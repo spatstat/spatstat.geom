@@ -82,9 +82,17 @@ local({
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.42 $   $Date: 2023/07/17 06:34:00 $
+#   $Revision: 1.43 $   $Date: 2023/08/29 01:03:59 $
 #
 
+
+if(ALWAYS) {
+  local({
+    #' Test of case 'CONNECT=24' in src/distmapbin.[ch]
+    #' Distance transform with 24-connected neighbours
+    A <- distmap(heather$coarse, connect=24)
+  })
+}
 
 if(FULLTEST) {
 local({

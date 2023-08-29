@@ -2,7 +2,7 @@
 #
 #      distmap.R
 #
-#      $Revision: 1.32 $     $Date: 2022/05/21 09:52:11 $
+#      $Revision: 1.34 $     $Date: 2023/08/28 06:38:54 $
 #
 #
 #     Distance transforms
@@ -45,7 +45,8 @@ distmap.ppp <- function(X, ..., clip=FALSE, metric=NULL) {
   return(V)
 }
 
-distmap.owin <- function(X, ..., discretise=FALSE, invert=FALSE, metric=NULL) {
+distmap.owin <- function(X, ..., discretise=FALSE, invert=FALSE,
+                         connect=8, metric=NULL) {
   verifyclass(X, "owin")
   uni <- unitname(X)
   if(!is.null(metric)) {
@@ -79,6 +80,9 @@ distmap.owin <- function(X, ..., discretise=FALSE, invert=FALSE, metric=NULL) {
       Dist[complement.owin(X, bigbox)] <- 0
     }
   } else {
+    check.1.integer(connect)
+    if(!(connect %in% c(8, 24)))
+      stop("Argument 'connect' must equal 8 or 24", call.=FALSE)
     X <- as.mask(X, ...)
     if(invert)
       X <- complement.owin(X)
@@ -92,6 +96,7 @@ distmap.owin <- function(X, ..., discretise=FALSE, invert=FALSE, metric=NULL) {
     mat <- rbind(FALSE, mat, FALSE)
     ## call C routine
     res <- .C(SG_distmapbin,
+              connect=as.integer(connect),
               xmin=as.double(xc[1L]),
               ymin=as.double(yr[1L]),
               xmax=as.double(xc[nc]),

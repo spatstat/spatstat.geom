@@ -6,7 +6,8 @@
   in the given window.
 }
 \usage{
-  \method{distmap}{owin}(X, \dots, discretise=FALSE, invert=FALSE, metric=NULL)
+  \method{distmap}{owin}(X, \dots, discretise=FALSE, invert=FALSE,
+        connect=8, metric=NULL)
 }
 \arguments{
   \item{X}{
@@ -23,6 +24,10 @@
   \item{invert}{
     If \code{TRUE}, compute the distance transform of the
     complement of the window.
+  }
+  \item{connect}{
+    Neighbourhood connectivity for the discrete distance transform
+    algorithm. Either 8 or 24.
   }
   \item{metric}{
     Optional. A distance metric

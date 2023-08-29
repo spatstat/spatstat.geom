@@ -52,7 +52,7 @@ void nnXwMD(int *, int *, double *, int *, double *, double *, int *, double *);
 void nnXxMD(int *, int *, double *, int *, int *, double *, int *, double *, int *, double *); 
 void knnXwMD(int *, int *, double *, int *, double *, int *, double *, int *, double *); 
 void knnXxMD(int *, int *, double *, int *, int *, double *, int *, int *, double *, int *, double *);
-void distmapbin(double *, double *, double *, double *, int *, int *, int *, double *, double *);
+void distmapbin(int *, double *, double *, double *, double *, int *, int *, int *, double *, double *);
 void tabsumweight(int *, double *, double *, int *, double *, double *);
 void exact_dt_R(double *, double *, int *, double *, double *, double *, double *, int *, int *, int *, int *, double *, int *, double *);
 void ps_exact_dt_R(double *, double *, double *, double *, int *, int *, int *, int *, int *, double *, int *, int *, double *);
