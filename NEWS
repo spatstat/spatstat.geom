@@ -1,8 +1,10 @@
-        CHANGES IN spatstat.geom VERSION 3.2-4.003
+        CHANGES IN spatstat.geom VERSION 3.2-4.004
 
 OVERVIEW
 
     o Extension of distance transform algorithm.
+
+    o Improvement to progress reports.
     
     o Suppress annoying warnings.
 
@@ -12,6 +14,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o distmap.owin
     New argument 'connect'.
+
+    o progressreport
+    The estimated time of completion is also printed, if the remaining time
+    is longer than 10 minutes.
     
     o unnormdensity
     Suppress annoying warning messages from density.default.

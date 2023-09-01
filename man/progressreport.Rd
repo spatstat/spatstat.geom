@@ -85,9 +85,8 @@ progressreport(i, n,
     the output will be a sequence of dots (one dot for every \code{tick}
     iterations), iteration numbers (printed when iteration number is
     a multiple of \code{every} or is less than 4),
-    and optionally the estimated time
-    remaining. For example \code{[etd 1:20:05]} means an estimated time
-    of 1 hour, 20 minutes and 5 seconds until finished.
+    and optionally the estimated time remaining
+    and the estimated completion time.
 
     The estimated time remaining will be printed only if
     \code{style="tty"}, and the argument \code{state} is given,
@@ -95,6 +94,10 @@ progressreport(i, n,
     iterations are slow (defined as: the estimated time remaining
     is longer than 3 minutes, or the average time per iteration is
     longer than 20 seconds).
+
+    The estimated completion time will be printed only if the
+    estimated time remaining is printed and the remaining time is
+    longer than 10 minutes.
 
     By default, the estimated time remaining is calculated 
     by assuming that each iteration takes the same amount of time,

@@ -1,7 +1,7 @@
 #
 #    util.R    miscellaneous utilities
 #
-#    $Revision: 1.258 $    $Date: 2023/05/07 04:02:48 $
+#    $Revision: 1.260 $    $Date: 2023/09/01 03:19:24 $
 #
 
 # common invocation of matrixsample
@@ -116,7 +116,7 @@ progressreport <- local({
     # where showevery \in {1, every, n}.
     chars.report <- max(1, ceiling(log10(n)))
     if(showtime) {
-      chars.time <- nchar(' [etd 12:00:00] ')
+      chars.time <- nchar(' [12:00:00 remaining] ')
       timesperreport <- if(showevery == 1) every else
                         if(showevery == every) 1 else 0
       chars.report <- chars.report + timesperreport * chars.time
@@ -325,10 +325,16 @@ progressreport <- local({
                  cat("\n")
              }
              if(showtime && i > 1 && i < n && (i %% showevery == 0)) {
-               etdname <- paste0("etd", if(fallback) "(linear)" else "")
-               st <- paste(etdname, codetime(round(remaining)))
+               st <- paste(codetime(round(remaining)),
+                           paste0("remaining",
+                                  if(fallback) "(linear)" else ""))
+               if(longwait <- (remaining > 600)) {
+                 finishtime <- Sys.time() + remaining
+                 st <- paste0(st, ", estimate finish ", round(finishtime))
+               }
                st <- paren(st, "[")
-               cat(paste("", st, ""))
+               brk <- if(longwait) "\n" else " "
+               cat(paste0(brk, st, brk))
              }
              flush.console()
            },
