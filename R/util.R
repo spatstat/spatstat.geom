@@ -1,7 +1,7 @@
 #
 #    util.R    miscellaneous utilities
 #
-#    $Revision: 1.260 $    $Date: 2023/09/01 03:19:24 $
+#    $Revision: 1.268 $    $Date: 2023/09/04 03:45:14 $
 #
 
 # common invocation of matrixsample
@@ -108,26 +108,37 @@ progressreport <- local({
  
 
   IterationsPerLine <- function(charsperline, n, every, tick,
-                                showtime, showevery) {
-    # Calculate number of iterations that triggers a newline.
-    # A dot is printed every 'tick' iterations
-    # Iteration number is printed every 'every' iterations.
-    # If showtime=TRUE, the time is shown every 'showevery' iterations
-    # where showevery \in {1, every, n}.
+                                showtimeinline, showevery) {
+    ## Calculate number of iterations that triggers a newline.
+    ## A dot is printed every 'tick' iterations
+    ## Iteration number is printed every 'every' iterations.
+    ##
+    ## Number of characters in each report of the iteration number
     chars.report <- max(1, ceiling(log10(n)))
-    if(showtime) {
+    chars.punctu <- if(every == 1) nchar(', ') else 0
+    chars.report <- chars.report + chars.punctu
+    if(showtimeinline) {
+      ## If showtimeinline=TRUE, the time remaining is shown in brackets
+      ## every 'showevery' iterations, where showevery \in {1, every, n}.
+      ## If showtimeinline=FALSE, either the time remaining is never shown,
+      ## or time remaining + estimated finish are displayed on a separate line.
       chars.time <- nchar(' [12:00:00 remaining] ')
       timesperreport <- if(showevery == 1) every else
                         if(showevery == every) 1 else 0
       chars.report <- chars.report + timesperreport * chars.time
     }
+    ## Total number of characters in a complete block between iteration numbers
     chars.ticks <- floor((every-1)/tick)
     chars.block <- chars.report + chars.ticks
+    ## Number of whole blocks per line
     nblocks <- max(1, floor(charsperline/chars.block))
+    ## Number of iterations per line
     nperline <- nblocks * every
+    ## Adjust
     leftover <- charsperline - nblocks * chars.block
     if(leftover > 0)
-      nperline <- nperline + min(leftover * tick, showevery - 1)
+      nperline <- nperline + min(leftover * tick, every - 1, showevery - 1)
+    ## iteration number that triggers newline
     return(nperline)
   }
   
@@ -221,38 +232,32 @@ progressreport <- local({
            tty={
              if(i == 1 || !Exists("ProgressData", state)) {
                ## Initialise stuff
+               starttime   <- now
+               lastnewline <- 0
                if(missevery && every > 1 && n > 10) 
                  every <- niceround(every)
                showevery <- if(showtime) every else n
                if(!nperline.fixed) 
                  nperline <- IterationsPerLine(charsperline, n, every, tick,
                                                showtime, showevery)
-               state <- Put("ProgressData",
-                            list(every=every,
-                                 tick=tick,
-                                 nperline=nperline,
-                                 starttime=now,
-                                 showtime=showtime,
-                                 showevery=showevery,
-                                 nperline.fixed=nperline.fixed,
-                                 showtime.optional=showtime.optional),
-                            state)
              } else {
+               ## Extract information from previous state
                pd <- Get("ProgressData", state)
                if(is.null(pd))
                  stop(paste("progressreport called with i =", i,
                             "before i = 1"))
-               every     <- pd$every
-               tick      <- pd$tick
-               nperline  <- pd$nperline
-               showtime  <- pd$showtime
-               showevery <- pd$showevery
+               every        <- pd$every
+               tick         <- pd$tick
+               nperline     <- pd$nperline
+               lastnewline  <- pd$lastnewline
+               starttime    <- pd$starttime
+               showtime     <- pd$showtime
+               showevery    <- pd$showevery
                showtime.optional <- pd$showtime.optional
                nperline.fixed    <- pd$nperline.fixed
                if(i < n) {
                  if(showtime || showtime.optional) {
                    ## estimate time remaining
-                   starttime <- pd$starttime
                    elapsed <- now - starttime
                    elapsed <- unname(elapsed[3])
                    if(linear) {
@@ -294,34 +299,31 @@ progressreport <- local({
                          showevery <- min(niceround(aminute), showevery)
                      }
                      # update number of iterations per line
-                     if(showtime && !nperline.fixed) 
+                     if(showtime && !nperline.fixed) {
+                       showtimeinline <- (remaining < 600)
                        nperline <- IterationsPerLine(charsperline,
                                                      n, every, tick,
-                                                     showtime, showevery)
+                                                     showtimeinline,
+                                                     showevery)
+                     }
                    }
                  }
-                 state <- Put("ProgressData",
-                              list(every=every,
-                                   tick=tick,
-                                   nperline=nperline,
-                                   starttime=starttime,
-                                   showtime=showtime,
-                                   showevery=showevery,
-                                   nperline.fixed=nperline.fixed,
-                                   showtime.optional=showtime.optional),
-                              state)
                }
              }
-             if(i == n) 
-               cat(paste(" ", n, ".\n", sep=""))
-             else if(every == 1 || i <= 3)
-               cat(paste(i, ",", if(i %% nperline == 0) "\n" else " ", sep=""))
-             else {
+             ## determine whether newline is required
+             offset <- if(lastnewline == 0 && every != 1) 6 else 0
+             do.newline <- ((i - lastnewline + offset) %% nperline == 0)
+             ## Finally, print the report
+             if(i == n) {
+               cat(paste0("\n", n, ".\n"))
+             } else if(every == 1 || i <= 3) {
+               cat(paste0(i, ",", if(do.newline) "\n" else " "))
+             } else {
                if(i %% every == 0) 
                  cat(i)
                else if(i %% tick == 0)
                  cat(".")
-               if(i %% nperline == 0)
+               if(do.newline)
                  cat("\n")
              }
              if(showtime && i > 1 && i < n && (i %% showevery == 0)) {
@@ -331,11 +333,27 @@ progressreport <- local({
                if(longwait <- (remaining > 600)) {
                  finishtime <- Sys.time() + remaining
                  st <- paste0(st, ", estimate finish ", round(finishtime))
+                 do.newline <- TRUE
                }
                st <- paren(st, "[")
                brk <- if(longwait) "\n" else " "
                cat(paste0(brk, st, brk))
              }
+             ## remember when the last newline occurred
+             if(do.newline)
+               lastnewline <- i
+             ## save the current state
+             state <- Put("ProgressData", 
+                          list(every=every,
+                               tick=tick,
+                               nperline=nperline,
+                               lastnewline=lastnewline,
+                               starttime=starttime,
+                               showtime=showtime,
+                               showevery=showevery,
+                               nperline.fixed=nperline.fixed,
+                               showtime.optional=showtime.optional),
+                          state)
              flush.console()
            },
            stop(paste("Unrecognised option for style:", dQuote(style)))
