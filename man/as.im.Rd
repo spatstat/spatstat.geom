@@ -33,7 +33,7 @@
   \method{as.im}{tess}(X, W=NULL, \dots, 
         eps=NULL, dimyx=NULL, xy=NULL,
         rule.eps=c("adjust.eps", "grow.frame", "shrink.frame"),
-        na.replace=NULL)
+        na.replace=NULL, values=NULL)
 
   \method{as.im}{function}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
@@ -82,7 +82,13 @@
   }
   \item{value}{Optional.
     The value to be assigned to pixels inside the window,
-    if \code{X} is a window.
+    if \code{X} is a window. A single atomic value (numeric, integer,
+    logical etc).
+  }
+  \item{values}{Optional.
+    Vector of values to be assigned to each tile of the tessellation,
+    when \code{X} is a tessellation. An atomic vector (numeric,
+    integer, logical etc.)
   }
   \item{strict}{
     Logical value indicating whether to match formal arguments
@@ -143,9 +149,12 @@
     a matrix. 
     \item
     a tessellation (object of class \code{"tess"}).
-    The result is a factor-valued image, with one factor level
+    By default, the result is a factor-valued image, with one factor level
     corresponding to each tile of the tessellation. Pixels are classified
     according to the tile of the tessellation into which they fall.
+    If argument \code{values} is given, the result is a pixel image
+    in which every pixel inside the \code{i}-th tile of the tessellation
+    has pixel value equal to \code{values[i]}.
     \item
     a single number (or a single logical, complex, factor or character
     value). The result is an image

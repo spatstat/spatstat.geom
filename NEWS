@@ -1,3 +1,14 @@
+        CHANGES IN spatstat.geom VERSION 3.2-5.001
+
+OVERVIEW
+
+    o Minor improvements.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o as.im.tess
+    New argument 'values'.
+
         CHANGES IN spatstat.geom VERSION 3.2-5
 
 OVERVIEW

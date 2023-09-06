@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.109 $ $Date: 2023/07/11 06:36:54 $
+#   $Revision: 1.110 $ $Date: 2023/09/06 02:36:38 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -593,19 +593,39 @@ tile.areas <- function(x) {
 as.im.tess <- function(X, W=NULL, ...,
                        eps=NULL, dimyx=NULL, xy=NULL,
                        rule.eps=c("adjust.eps", "grow.frame", "shrink.frame"),
-                       na.replace=NULL) {
+                       na.replace=NULL, values=NULL) {
   rule.eps <- match.arg(rule.eps)
   ## if W is present, it may have to be converted
   if(!is.null(W)) {
     stopifnot(is.owin(W))
     if(W$type != "mask") 
       W <- as.mask(W, eps=eps, dimyx=dimyx, xy=xy, rule.eps=rule.eps)
-  } 
+  }
+  if(!is.null(values)) {
+    if(!is.atomic(values))
+      stop("Argument 'values' should contain numeric, logical or factor values",
+           call.=FALSE)
+    if(length(values) != nobjects(X))
+      stop(paste("length(values) =", length(values), "!=",
+                 nobjects(X), "= number of tiles"),
+           call.=FALSE)
+  }
   switch(X$type,
          image={
-           out <- as.im(X$image, W=W, eps=eps, dimyx=dimyx, xy=xy,
-                        rule.eps=rule.eps,
-                        na.replace=na.replace)
+           if(is.null(values)) {
+             ## result is factor image
+             out <- as.im(X$image, W=W, eps=eps, dimyx=dimyx, xy=xy,
+                          rule.eps=rule.eps,
+                          na.replace=na.replace)
+           } else {
+             ## map tiles to 'values'
+             out <- as.im(X$image, W=W, eps=eps, dimyx=dimyx, xy=xy,
+                          rule.eps=rule.eps)
+             out <- eval.im(values[as.integer(out)])
+             ## replace NA by other value
+             if(!is.null(na.replace))
+               out <- as.im(out, na.replace=na.replace)
+           }
          },
          tiled={
            if(is.null(W))
@@ -622,14 +642,21 @@ as.im.tess <- function(X, W=NULL, ...,
              tag <- as.im(indic, value=i)
              if(i == 1) {
                out <- tag
-               outv <- out$v
+               outv <- as.integer(out$v)
              } else {
                outv <- pmin.int(outv, tag$v, na.rm=TRUE)
              }
            }
-           out <- im(factor(outv, levels=seq_len(ntil), labels=nama),
-                     out$xcol, out$yrow)
-           unitname(out) <- unitname(W)
+           if(is.null(values)) {
+             ## result is factor image
+             outv <- factor(outv, levels=seq_len(ntil), labels=nama)
+           } else {
+             ## map tiles to 'values'
+             outv <- values[outv]
+           }
+           if(!is.null(na.replace) && anyNA(outv))
+             outv[is.na(outv)] <- na.replace
+           out <- im(outv, out$xcol, out$yrow, unitname=unitname(W))
          },
          rect={
            out <- as.im(W %orifnull% as.rectangle(X),
@@ -637,16 +664,24 @@ as.im.tess <- function(X, W=NULL, ...,
                         rule.eps=rule.eps)
            xg <- X$xgrid
            yg <- X$ygrid
-           nrows <- length(yg) - 1
-           ncols <- length(xg) - 1
+           nrows <- length(yg) - 1L
+           ncols <- length(xg) - 1L
            jx <- findInterval(out$xcol, xg, rightmost.closed=TRUE)
            iy <- findInterval(out$yrow, yg, rightmost.closed=TRUE)
            M <- as.matrix(out)
            Jcol <- jx[col(M)]
-           Irow <- nrows - iy[row(M)] + 1
-           Ktile <- Jcol + ncols * (Irow - 1)
-           Ktile <- factor(Ktile, levels=seq_len(nrows * ncols))
-           out <- im(Ktile, xcol=out$xcol, yrow=out$yrow,
+           Irow <- nrows - iy[row(M)] + 1L
+           Ktile <- as.integer(Jcol + ncols * (Irow - 1L))
+           if(is.null(values)) {
+             ## result is factor image
+             outv <- factor(Ktile, levels=seq_len(nrows * ncols))
+           } else {
+             ## map tiles to 'values'
+             outv <- values[Ktile]
+           }
+           if(!is.null(na.replace) && anyNA(outv))
+             outv[is.na(outv)] <- na.replace
+           out <- im(outv, xcol=out$xcol, yrow=out$yrow,
                      unitname=unitname(W))
          }
          )
