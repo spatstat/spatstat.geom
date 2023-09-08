@@ -1,5 +1,4 @@
 \name{integral.im}
-\alias{integral}
 \alias{integral.im}
 \title{
   Integral of a Pixel Image
@@ -8,8 +7,6 @@
   Computes the integral of a pixel image.
 }
 \usage{
-integral(f, domain=NULL, \dots)
-
 \method{integral}{im}(f, domain=NULL, weight=NULL, \dots)
 }
 \arguments{
@@ -31,8 +28,10 @@ integral(f, domain=NULL, \dots)
   }
  }
 \details{
-  The function \code{integral} is generic, with methods
-  for \code{"im"}, \code{"msr"}, \code{"linim"} and \code{"linfun"}.
+  The function \code{\link[spatstat.geom]{integral}} is generic, with methods
+  for spatial objects
+  (\code{"im"}, \code{"msr"}, \code{"linim"}, \code{"linfun"})
+  and one-dimensional functions (\code{"density"}, \code{"fv"}).
   
   The method \code{integral.im} treats the pixel image \code{f} as a function of
   the spatial coordinates, and computes its integral.
@@ -63,6 +62,7 @@ integral(f, domain=NULL, \dots)
   if \code{domain} is a tessellation).
 }
 \seealso{
+  \code{\link[spatstat.geom]{integral}},
   \code{\link{eval.im}},
   \code{\link{[.im}}
 }
