@@ -111,3 +111,4 @@ tessellation. Then all tiles are shifted by the same vector.
 }
 \keyword{spatial}
 \keyword{math}
+\concept{Geometrical transformations}

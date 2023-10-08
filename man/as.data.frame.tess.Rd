@@ -52,4 +52,4 @@
 }
 \keyword{spatial}
 \keyword{methods}
-
+\concept{Tessellation}

@@ -79,3 +79,4 @@
 }
 \keyword{spatial}
 \keyword{hplot}
+\concept{Three-dimensional}

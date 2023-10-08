@@ -117,3 +117,4 @@ bufftess(X, breaks, W = Window(X), \dots, polygonal = TRUE)
 }
 \keyword{spatial}
 \keyword{manip}
+\concept{Tessellation}

@@ -128,3 +128,4 @@ quantess(M, Z, n, \dots)
 }
 \keyword{spatial}
 \keyword{manip}
+\concept{Tessellation}

@@ -58,3 +58,4 @@ chop.tess(X, L)
 }
 \keyword{spatial}
 \keyword{math}
+\concept{Tessellation}

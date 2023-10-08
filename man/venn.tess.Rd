@@ -71,3 +71,4 @@ venn.tess(\dots, window = NULL, labels=FALSE)
 }
 \keyword{spatial}
 \keyword{math}
+\concept{Tessellation}

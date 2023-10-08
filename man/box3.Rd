@@ -59,3 +59,4 @@ box3(xrange = c(0, 1), yrange = xrange, zrange = yrange, unitname = NULL)
 }
 \keyword{spatial}
 \keyword{datagen}
+\concept{Three-dimensional}

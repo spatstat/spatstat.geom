@@ -132,3 +132,4 @@
 }
 \keyword{spatial}
 \keyword{hplot}
+\concept{Tessellation}

@@ -26,3 +26,4 @@ is.lpp(x)
 }
 \keyword{spatial}
 \keyword{manip}
+\concept{Linear network}

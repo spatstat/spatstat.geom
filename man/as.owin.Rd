@@ -177,11 +177,7 @@ in any of several formats, into an object of class \code{"owin"}.
     of the objects in the list, and the union of these windows
     will be returned.
     \item
-    an object of class \code{"SpatialPolygon"},
-    \code{"SpatialPolygons"} or \code{"SpatialPolygonsDataFrame"}.
-    To handle these data types,
-    \bold{the package} \pkg{maptools} \bold{must be loaded},
-    because it provides the methods for \code{as.owin} for these classes.
+    an object of another suitable class from another package.
     For full details, see \code{vignette('shapefiles')}.
   }
   If the argument \code{W} is not in one of these formats
@@ -201,11 +197,8 @@ in any of several formats, into an object of class \code{"owin"}.
   \code{\link{owin.object}},
   \code{\link{owin}}.
 
-  Additional methods for \code{as.owin} are provided
-  in the \pkg{maptools} package:
-  \code{as.owin.SpatialPolygon},
-  \code{as.owin.SpatialPolygons},
-  \code{as.owin.SpatialPolygonsDataFrame}.
+  Additional methods for \code{as.owin} may be provided
+  by other packages outside the \pkg{spatstat} family.
 }
 \examples{
  w <- as.owin(c(0,1,0,1))

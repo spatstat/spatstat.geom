@@ -55,3 +55,4 @@
 }
 \keyword{spatial}
 \keyword{math}
+\concept{Geometrical transformations}

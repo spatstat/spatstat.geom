@@ -70,3 +70,4 @@ if(require(spatstat.random)) {
 \keyword{spatial}
 \keyword{math}
 
+\concept{Three-dimensional}

@@ -87,3 +87,4 @@ hextess(W, s, offset = c(0, 0), origin=NULL, trim = TRUE)
 }
 \keyword{spatial}
 \keyword{datagen}
+\concept{Tessellation}

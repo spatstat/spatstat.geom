@@ -29,3 +29,4 @@ is.linim(x)
 }
 \keyword{spatial}
 \keyword{manip}
+\concept{Linear network}

@@ -41,18 +41,20 @@ dirichlet(X)
   \code{\link{tess}},
   \code{\link{delaunay}},
   \code{\link{ppp}},
-  \code{\link{dirichletVertices}}
+  \code{\link{dirichletVertices}}.
+
+  For the Dirichlet tessellation on a linear network,
+  see \code{\link[spatstat.linnet]{lineardirichlet}}.
 }
 \examples{
   X <- runifrect(42)
   plot(dirichlet(X))
   plot(X, add=TRUE)
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{
+  \adrian
+  and \rolf.
 }
 \keyword{spatial}
 \keyword{manip}
+\concept{Dirichlet tessellation}

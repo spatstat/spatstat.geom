@@ -107,3 +107,4 @@ polartess(W, \dots, nradial = NULL, nangular = NULL,
 }
 \keyword{spatial}
 \keyword{manip}
+\concept{Tessellation}

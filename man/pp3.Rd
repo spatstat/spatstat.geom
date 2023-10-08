@@ -50,3 +50,4 @@ pp3(x, y, z, ..., marks=NULL)
 }
 \keyword{spatial}
 \keyword{datagen}
+\concept{Three-dimensional}

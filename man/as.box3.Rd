@@ -50,3 +50,4 @@ as.box3(...)
 }
 \keyword{spatial}
 \keyword{manip}
+\concept{Three-dimensional}

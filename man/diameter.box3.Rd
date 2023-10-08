@@ -80,3 +80,4 @@ eroded.volumes(x, r)
 }
 \keyword{spatial}
 \keyword{math}
+\concept{Three-dimensional}
