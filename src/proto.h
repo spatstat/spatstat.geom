@@ -2,7 +2,7 @@
 #include <Rinternals.h>
 
 /*
-  Prototype declarations for all native routines in spatstat.core package
+  Prototype declarations for all native routines in spatstat.geom package
 
   Automatically generated - do not edit! 
 
