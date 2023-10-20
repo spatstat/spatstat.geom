@@ -76,7 +76,7 @@
     the factory-fresh default is \code{stringsAsFactors=FALSE} and
     the default can be changed by setting
     \code{options(stringsAsFactors=FALSE)}.
-    \item in \R versions {>= 4.1.0} the default
+    \item in \R versions \code{>= 4.1.0} the default
     is \code{stringsAsFactors=FALSE} and there is no option to
     change the default.
   }

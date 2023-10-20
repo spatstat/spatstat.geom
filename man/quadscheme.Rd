@@ -107,7 +107,7 @@
 \section{Error Messages}{
   The following error messages need some explanation.
   (See also the list of error messages in \code{\link[spatstat.model]{ppm.ppp}}).
-  \itemize{
+  \describe{
     \item{\dQuote{Some tiles with positive area do not contain any
 	quadrature points: relative error = X\%}}{
       This is not important unless the relative error is large.
