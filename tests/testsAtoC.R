@@ -372,7 +372,7 @@ local({
 # tests/correctC.R
 # check for agreement between C and interpreted code
 # for interpoint distances etc.
-# $Revision: 1.9 $ $Date: 2023/11/05 01:35:44 $
+# $Revision: 1.10 $ $Date: 2023/12/08 07:10:34 $
 
 if(ALWAYS) { # depends on hardware
 local({
@@ -435,8 +435,7 @@ local({
   nw3I <- nnwhich(X, k=3, method="interpreted")
   checkagree(nw3C, nw3I, "nnwhich(k=3)")
 
-  spatstat.options(op)
 })
 
-reset.spatstat.options()
 }
+
