@@ -34,6 +34,31 @@ local({
   }
 })
 
+# tests/weightedstats.R
+# $Revision: 1.2 $ $Date: 2023/11/05 01:40:53 $
+
+local({
+  if(ALWAYS) { # depends on hardware
+    ## whist()
+    ## check agreement between C and interpreted code for whist()
+    set.seed(98123)
+    x <- runif(1000)
+    w <- sample(1:5, 1000, replace=TRUE)
+    b <- seq(0,1,length=101)
+    aC <- whist(x,b,w, method="C")
+    aR <- whist(x,b,w, method="interpreted")
+    if(!all(aC == aR))
+      stop("Algorithms for whist disagree")
+  }
+  if(FULLTEST) {
+    ## cases of 'unnormdensity()'
+    x <- rnorm(20) 
+    d0 <- unnormdensity(x, weights=rep(0, 20))
+    dneg <- unnormdensity(x, weights=c(-runif(19), 0))
+  }
+
+})
+
 #
 # tests/windows.R
 #

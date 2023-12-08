@@ -63,8 +63,8 @@ transformquantiles(X, uniform = FALSE, reverse = FALSE, ...)
 }
 \seealso{
   To apply an arbitrary function \code{f} to the pixel values in an image,
-  use the idiom \code{X[] <- f(X[])},
-  or use \code{\link{eval.im}}.
+  use the idiom \code{X[] <- f(X[])}.
+%  or use \code{\link{eval.im}}.
 }
 \examples{
   X <- c(3, 5, 1, 2, 4)
@@ -72,16 +72,16 @@ transformquantiles(X, uniform = FALSE, reverse = FALSE, ...)
   transformquantiles(X, uniform=TRUE)
   transformquantiles(X, uniform=TRUE, reverse=TRUE)
 
-  Z <- 100 * as.im(bei.extra$grad, dimyx=c(25,50))
-  opa <- par(mfrow=c(2,2))
-  plot(Z,main="original")
-  plot(transformquantiles(Z, reverse=TRUE), main="reverse=TRUE")
-  plot(transformquantiles(Z, uniform=TRUE),
-  main="uniform=TRUE", col=grey.colors,zlim=c(0,1))
-  plot(transformquantiles(Z, uniform=TRUE, reverse=TRUE),
-                          main="uniform=TRUE, reverse=TRUE",
-                          col=grey.colors, zlim=c(0,1))
-  par(opa)
+%  Z <- 100 * as.im(bei.extra$grad, dimyx=c(25,50))
+%  opa <- par(mfrow=c(2,2))
+%  plot(Z,main="original")
+%  plot(transformquantiles(Z, reverse=TRUE), main="reverse=TRUE")
+%  plot(transformquantiles(Z, uniform=TRUE),
+%  main="uniform=TRUE", col=grey.colors,zlim=c(0,1))
+%  plot(transformquantiles(Z, uniform=TRUE, reverse=TRUE),
+%                          main="uniform=TRUE, reverse=TRUE",
+%                          col=grey.colors, zlim=c(0,1))
+%  par(opa)
 }
 \keyword{spatial}
 \keyword{manip}

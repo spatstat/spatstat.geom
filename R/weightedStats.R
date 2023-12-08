@@ -3,7 +3,7 @@
 #'
 #'   weighted versions of hist, var, median, quantile
 #'
-#'  $Revision: 1.9 $  $Date: 2022/05/21 09:52:11 $
+#'  $Revision: 1.10 $  $Date: 2023/11/05 01:20:43 $
 #'
 
 
@@ -11,7 +11,7 @@
 #'    whist      weighted histogram
 #'
 
-whist <- function(x, breaks, weights=NULL) {
+whist <- function(x, breaks, weights=NULL, method=c("C", "interpreted")) {
     N <- length(breaks)
     if(length(x) == 0) 
       h <- numeric(N+1)
@@ -25,14 +25,19 @@ whist <- function(x, breaks, weights=NULL) {
         h <- tabulate(cell+1L, nbins=nb)
       } else {
         ##  weighted histogram
-        if(!spatstat.options("Cwhist")) {
-          cell <- factor(cell, levels=0:N)
-          h <- unlist(lapply(split(weights, cell), sum, na.rm=TRUE))
-        } else {
-          h <- .Call(SG_Cwhist,
-                     as.integer(cell), as.double(weights), as.integer(nb),
-                     PACKAGE="spatstat.geom")
-        }
+        method <- match.arg(method)
+        switch(method,
+               interpreted = {
+                 cell <- factor(cell, levels=0:N)
+                 h <- unlist(lapply(split(weights, cell), sum, na.rm=TRUE))
+               },
+               C = {
+                 h <- .Call(SG_Cwhist,
+                            as.integer(cell),
+                            as.double(weights),
+                            as.integer(nb),
+                            PACKAGE="spatstat.geom")
+               })
       }
     }
     h <- as.numeric(h)

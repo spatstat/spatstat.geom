@@ -1,7 +1,7 @@
 #
 #	affine.R
 #
-#	$Revision: 1.54 $	$Date: 2020/11/09 08:34:32 $
+#	$Revision: 1.55 $	$Date: 2023/11/05 00:36:40 $
 #
 
 affinexy <- function(X, mat=diag(c(1,1)), vec=c(0,0), invert=FALSE) {
@@ -386,6 +386,19 @@ scalardilate.default <- function(X, f, ...) {
   return(Y)
 }
 
+scalardilate.breakpts <- function(X, f, ...) {
+  out <- with(X,
+              list(val    = f*val,
+                   max    = f*max,
+                   ncells = ncells,
+                   r      = f*r,
+                   even   = even,
+                   npos   = npos,
+                   step   = if(is.null(step)) NULL else (f*step)))
+  class(out) <- "breakpts"
+  out
+}  
+                            
 scalardilate.im <- scalardilate.owin <- scalardilate.psp <- scalardilate.ppp <-
   function(X, f, ..., origin=NULL) {
   trap.extra.arguments(..., .Context="In scalardilate(X,f)")

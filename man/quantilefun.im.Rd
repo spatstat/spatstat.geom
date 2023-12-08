@@ -1,26 +1,18 @@
-\name{quantilefun}
-\alias{quantilefun}
-\alias{quantilefun.ecdf}
-\alias{quantilefun.ewcdf}
+\name{quantilefun.im}
+\alias{quantilefun.im}
 \title{
-  Quantile Function
+  Quantile Function for Images
 }
 \description{
-  Return the inverse function of a cumulative distribution function.
+  Return the inverse function of the cumulative distribution function
+  of pixel values in an image.
 }
 \usage{
-  quantilefun(x, \dots)
-
-  \method{quantilefun}{ecdf}(x, \dots, type=1)
-
-  \method{quantilefun}{ewcdf}(x, \dots, type=1)
+  \method{quantilefun}{im}(x, \dots, type=1)
 }
 \arguments{
   \item{x}{
-    Data for which the quantile function should be calculated.
-    Either an object containing data (such as a pixel image)
-    or an object representing a cumulative distribution function
-    (of class \code{"ecdf"} or \code{"ewcdf"}).
+    Pixel image (object of class \code{"im"}).
   }
   \item{\dots}{
     Other arguments passed to methods.
@@ -46,16 +38,12 @@
   If \code{x} is a pixel image (object of class \code{"im"})
   then the pixel values of \code{x} will be extracted
   and the quantile function of the pixel values is constructed.
-
-  If \code{x} is an object representing a cumulative distribution
-  function (object of class \code{"ecdf"} or \code{"ewcdf"}) then the
-  quantile function of the original data is constructed.
 }
 \value{
   A function in the \R language.
 }
 \seealso{
-%  \code{\link{quantilefun.im}},
+  \code{\link{quantilefun}},
   
   \code{\link{ewcdf}}, 
   \code{\link{quantile.ewcdf}}, 
@@ -63,13 +51,17 @@
   \code{\link[stats]{quantile}}
 }
 \examples{
-  ## numeric data
-  z <- rnorm(50)
-  FZ <- ecdf(z)
-  QZ <- quantilefun(FZ)
-  QZ(0.5) # median value of z
-  if(interactive()) plot(QZ, xlim=c(0,1), xlab="probability",
-                     ylab="quantile of z")
+  ## image data: terrain elevation
+  Z <- bei.extra$elev
+  if(require(spatstat.explore)) {
+    FE <- spatialcdf(Z, normalise=TRUE)
+  } else {
+    FE <- ecdf(Z[])
+  }
+  QE <- quantilefun(FE)
+  QE(0.5) # median elevation
+  if(interactive()) plot(QE, xlim=c(0,1),
+     xlab="probability", ylab="quantile of elevation")
 }
 \author{
   \spatstatAuthors.

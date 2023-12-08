@@ -33,8 +33,13 @@ integral(f, domain=NULL, \dots)
   A single numeric or complex value, or a vector of such values.
 }
 \seealso{
-  \code{\link[spatstat.geom]{integral.im}},
-  \code{\link[spatstat.geom]{integral.density}}.
+  % temporarily break links
+%  \code{\link[spatstat.geom]{integral.im}},
+%  \code{\link[spatstat.geom]{integral.density}}.
+
+\code{\link{integral.density}}.
+
+\code{integral.im} in package \code{spatstat.geom}.
 }
 \author{
 \spatstatAuthors.

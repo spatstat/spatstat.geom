@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.178 $     $Date: 2023/05/04 00:58:05 $
+#      $Revision: 1.180 $     $Date: 2023/11/04 04:39:23 $
 #
 #      The class "im" of raster images
 #
@@ -1086,10 +1086,6 @@ quantilefun.im <- function(x, ..., type=1) {
   quantilefun(f, type=type)
 }
   
-integral <- function(f, domain=NULL, ...) {
-  UseMethod("integral")
-}
-
 integral.im <- function(f, domain=NULL, weight=NULL, ...) {
   verifyclass(f, "im")
   if(!is.null(weight)) {
@@ -1368,17 +1364,3 @@ fillNA <- function(x, value=0) {
   return(x)
 }
 
-
-## probability integral transformation
-## aka histogram equalisation
-## aka transformation to uniformity
-
-transformquantiles <- function(X, uniform=FALSE, reverse=FALSE, ...) {
-  if(!uniform && !reverse) return(X)
-  o <- order(X[])
-  V <- X
-  n <- length(o)
-  if(uniform) V[][o] <- (seq_len(n) - 0.5)/n
-  if(reverse) V[][o] <- V[][rev(o)]
-  return(V)
-}

@@ -1,60 +1,56 @@
-#
-#	breakpts.S
-#
-#	A simple class definition for the specification
-#       of histogram breakpoints in the special form we need them.
-#
-#	even.breaks()
-#
-#	$Revision: 1.27 $	$Date: 2023/02/28 01:57:26 $
-#
-#
-#       Other functions in this directory use the standard Splus function
-#	hist() to compute histograms of distance values.
-#       One argument of hist() is the vector 'breaks'
-#	of breakpoints for the histogram cells. 
-#
-#       The breakpoints must
-#            (a) span the range of the data
-#            (b) be given in increasing order
-#            (c) satisfy breaks[2] = 0,
-#
-#	The function make.even.breaks() will create suitable breakpoints.
-#
-#       Condition (c) means that the first histogram cell has
-#       *right* endpoint equal to 0.
-#
-#       Since all our distance values are nonnegative, the effect of (c) is
-#       that the first histogram cell counts the distance values which are
-#       exactly equal to 0. Hence F(0), the probability P{X = 0},
-#       is estimated without a discretisation bias.
-#
-#	We assume the histograms have followed the default counting rule
-#	in hist(), which is such that the k-th entry of the histogram
-#	counts the number of data values in 
-#		I_k = ( breaks[k],breaks[k+1] ]	for k > 1
-#		I_1 = [ breaks[1],breaks[2]   ]
-#
-#	The implementations of estimators of c.d.f's in this directory
-#       produce vectors of length = length(breaks)-1
-#       with value[k] = estimate of F(breaks[k+1]),
-#       i.e. value[k] is an estimate of the c.d.f. at the RIGHT endpoint
-#       of the kth histogram cell.
-#
-#       An object of class 'breakpts' contains:
-#
-#              $val     the actual breakpoints
-#              $max     the maximum value (= last breakpoint)
-#              $ncells  total number of histogram cells
-#              $r       right endpoints, r = val[-1]
-#              $even    logical = TRUE if cells known to be evenly spaced
-#              $npos    number of histogram cells on the positive halfline
-#                        = length(val) - 2,
-#                       or NULL if cells not evenly spaced
-#              $step    histogram cell width
-#                       or NULL if cells not evenly spaced
-#       
-# --------------------------------------------------------------------
+#'
+#'	breakpts.R
+#'
+#'	A simple class definition for the specification
+#'      of histogram breakpoints for nonnegative numbers (such as distances)
+#'      in the special form we need them.
+#'
+#'
+#'	$Revision: 1.31 $	$Date: 2023/11/05 01:02:04 $
+#'
+#'      The breakpoints must
+#'           (a) span the range of the data
+#'           (b) be given in increasing order
+#'           (c) satisfy breaks[2] = 0.
+#'
+#'	The function make.even.breaks() will create suitable breakpoints.
+#'
+#'      Condition (c) means that the first histogram cell has
+#'      *right* endpoint equal to 0.
+#'
+#'      Since the numerical data are nonnegative, the effect of (c) is
+#'      that the first histogram cell counts the number of values which are
+#'      exactly equal to 0. Hence F(0), the probability P{X = 0},
+#'      is estimated without a discretisation bias.
+#'
+#'	We assume the histograms have followed the default counting rule
+#'	in hist.default(), which is such that the k-th entry of the histogram
+#'	counts the number of data values in 
+#'		I_k = ( breaks[k],breaks[k+1] ]	for k > 1
+#'		I_1 = [ breaks[1],breaks[2]   ]
+#'
+#'	The implementations of estimators of distance distributions
+#'      in the spatstat package return vectors of length = length(breaks)-1
+#'      with value[k] = estimate of F(breaks[k+1]),
+#'      i.e. value[k] is an estimate of the c.d.f. at the RIGHT endpoint
+#'      of the kth histogram cell.
+#'
+#'      An object of class 'breakpts' contains:
+#'
+#'             $val     the actual breakpoints
+#'             $max     the maximum value (= last breakpoint)
+#'             $ncells  total number of histogram cells
+#'             $r       right endpoints, r = val[-1]
+#'             $even    logical = TRUE if cells known to be evenly spaced
+#'             $npos    number of histogram cells on the positive halfline
+#'                       = length(val) - 2,
+#'                      or NULL if cells not evenly spaced
+#'             $step    histogram cell width
+#'                      or NULL if cells not evenly spaced
+#'      
+#' --------------------------------------------------------------------
+#' 
+
 breakpts <- function(val, maxi, even=FALSE, npos=NULL, step=NULL) {
   out <- list(val=as.numeric(val),
               max=as.numeric(maxi),
@@ -65,19 +61,6 @@ breakpts <- function(val, maxi, even=FALSE, npos=NULL, step=NULL) {
   out
 }
 
-scalardilate.breakpts <- function(X, f, ...) {
-  out <- with(X,
-              list(val    = f*val,
-                   max    = f*max,
-                   ncells = ncells,
-                   r      = f*r,
-                   even   = even,
-                   npos   = npos,
-                   step   = if(is.null(step)) NULL else (f*step)))
-  class(out) <- "breakpts"
-  out
-}  
-                            
 make.even.breaks <- function(bmax, npos, bstep) {
   bmax <- as.numeric(bmax)
   if(bmax <= 0)
@@ -101,12 +84,12 @@ make.even.breaks <- function(bmax, npos, bstep) {
   breakpts(val, right, TRUE, npos, bstep)
 }
 
-"as.breakpts" <- function(...) {
+as.breakpts <- function(...) {
 
   XL <- list(...)
 
   if(length(XL) == 1L) {
-    # single argument
+    #' There is a single argument
     X <- XL[[1L]]
 
     if(inherits(X, "breakpts")) {
@@ -119,37 +102,39 @@ make.even.breaks <- function(bmax, npos, bstep) {
       X <- as.numeric(X)
       if(X[2L] != 0)
         stop("breakpoints do not satisfy breaks[2] = 0")
-      # The following test for equal spacing is used in hist.default
+      #'The following test for equal spacing is used in hist.default
       steps <- diff(X)
-      if(diff(range(steps)) < 1e-07 * mean(steps))
-        # equally spaced
+      if(diff(range(steps)) < 1e-07 * mean(steps)) {
+        #'equally spaced
         return(breakpts(X, max(X), TRUE, length(X)-2, steps[1L]))
-      else
-        # unknown spacing
+      } else {
+        #'unknown spacing
         return(breakpts(X, max(X), FALSE))
+      }
     }
+    
   } else {
-
-    # There are multiple arguments.
-  
-    # exactly two arguments - interpret as even.breaks()
+    #' There are multiple arguments.
+    
+    #' Exactly two arguments 
     if(length(XL) == 2)
       return(make.even.breaks(XL[[1L]], XL[[2L]]))
 
-    # two arguments 'max' and 'npos'
+    #' Two arguments named 'max' and 'npos'
   
     if(!is.null(XL$max) && !is.null(XL$npos))
       return(make.even.breaks(XL$max, XL$npos))
 
-    # otherwise
+    #' otherwise
     stop("Don't know how to convert these data to breakpoints")
   }
-  # never reached
+  #' never reached
 }
 
 
 check.hist.lengths <- function(hist, breaks) {
-  verifyclass(breaks, "breakpts")
+  #' internal check for consistency between histogram result and breakpoints
+  stopifnot(inherits(breaks, "breakpts"))
   nh <- length(hist)
   nb <- breaks$ncells
   if(nh != nb)
@@ -172,56 +157,3 @@ breakpts.from.r <- function(r) {
   return(as.breakpts(b))
 }
 
-handle.r.b.args <- function(r=NULL, breaks=NULL, window, pixeps=NULL,
-                            rmaxdefault=NULL) {
-  if(!is.null(r) && !is.null(breaks))
-    stop(paste("Do not specify both",
-               sQuote("r"), "and", sQuote("breaks")))
-  if(!is.null(breaks)) {
-    breaks <- as.breakpts(breaks)
-  } else if(!is.null(r)) {
-    breaks <- breakpts.from.r(r)
-  } else {
-    #' determine rmax
-    #' ignore infinite or NA values of rmaxdefault
-    if(!isTRUE(is.finite(rmaxdefault)))
-      rmaxdefault <- NULL
-    rmax <- rmaxdefault %orifnull% diameter(Frame(window))
-    #' determine spacing
-    if(is.null(pixeps)) {
-      pixeps <-
-        if(is.mask(window)) min(window$xstep, window$ystep) else rmax/128
-    }
-    rstep <- pixeps/4
-    breaks <- make.even.breaks(rmax, bstep=rstep)
-  }
-  return(breaks)
-}
-
-check.finespacing <- function(r, eps=NULL, win=NULL,
-                              rmaxdefault = max(r), 
-                              context="",
-                              action=c("fatal", "warn", "silent"),
-                              rname) {
-  if(missing(rname)) rname <- short.deparse(substitute(r))
-  action <- match.arg(action)
-  if(is.null(eps)) {
-    b <- handle.r.b.args(window=win, rmaxdefault=rmaxdefault)
-    eps <- b$step
-  }
-  dr <- max(diff(r))
-  if(dr > eps * 1.01) {
-    whinge <- paste(context, "the successive", rname,
-                    "values must be finely spaced:",
-                    "given spacing =",
-                    paste0(signif(dr, 5), ";"),
-                    "required spacing <= ",
-                    signif(eps, 3))
-    switch(action,
-           fatal = stop(whinge, call.=FALSE),
-           warn = warning(whinge, call.=FALSE),
-           silent = {})
-    return(FALSE)
-  }
-  return(TRUE)
-}

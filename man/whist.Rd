@@ -8,7 +8,7 @@
   with a given set of weights.
 }
 \usage{
-whist(x, breaks, weights = NULL)
+whist(x, breaks, weights = NULL, method=c("C", "interpreted"))
 }
 \arguments{
   \item{x}{
@@ -20,6 +20,13 @@ whist(x, breaks, weights = NULL)
   \item{weights}{
     Numeric vector of weights for the observed values. 
   }
+  \item{method}{
+    Developer use only.
+    A character string specifying whether to use internal C code
+    (\code{method="C"}, the default) or interpreted \R code
+    (\code{method="interpreted"}). 
+  }
+    
 }
 \details{
   This low-level function computes (but does not plot) the weighted

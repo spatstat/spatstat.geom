@@ -488,13 +488,13 @@ warn.once <- function(key, ...) {
          valid="a single logical value"
        ),
        check.RandomFields.loaded=list(
-         # this is working OK so no need to check unless debugging
+         # defunct
          default=FALSE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
        ),
        check.RandomFieldsUtils.loaded=list(
-         # this is working OK so no need to check unless debugging
+         # defunct
          default=FALSE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"

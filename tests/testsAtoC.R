@@ -372,7 +372,7 @@ local({
 # tests/correctC.R
 # check for agreement between C and interpreted code
 # for interpoint distances etc.
-# $Revision: 1.8 $ $Date: 2020/12/03 03:06:04 $
+# $Revision: 1.9 $ $Date: 2023/11/05 01:35:44 $
 
 if(ALWAYS) { # depends on hardware
 local({
@@ -435,17 +435,6 @@ local({
   nw3I <- nnwhich(X, k=3, method="interpreted")
   checkagree(nw3C, nw3I, "nnwhich(k=3)")
 
-  # whist
-  set.seed(98123)
-  x <- runif(1000)
-  w <- sample(1:5, 1000, replace=TRUE)
-  b <- seq(0,1,length=101)
-  op <- spatstat.options(Cwhist=TRUE)
-  aT <- whist(x,b,w)
-  spatstat.options(Cwhist=FALSE)
-  aF <- whist(x,b,w)
-  if(!all(aT == aF))
-    stop("Algorithms for whist disagree")
   spatstat.options(op)
 })
 
