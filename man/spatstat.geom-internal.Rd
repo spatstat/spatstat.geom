@@ -492,7 +492,7 @@ parbreak(terse)
 perspVisible(x, y, z, M)
 plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
                    started, map)
-pointweights(X, \dots, weights, parent)
+pointweights(X, \dots, weights, parent, dfok)
 polytileareaEngine(P, xrange, yrange, nx, ny, DivideByPixelArea)
 putSpatstatVariable(name, value)
 lookup.im(Z, x, y, naok, strict)
