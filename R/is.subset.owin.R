@@ -1,7 +1,7 @@
 #
 #  is.subset.owin.R
 #
-#  $Revision: 1.16 $   $Date: 2019/03/01 06:02:27 $
+#  $Revision: 1.17 $   $Date: 2023/12/16 05:02:18 $
 #
 #  Determine whether a window is a subset of another window
 #
@@ -52,17 +52,17 @@ is.subset.owin <- local({
         return(FALSE)
       ## all vertices of A are inside B.
       if(is.convex(B)) return(TRUE)
-      ## check for boundary crossings
-      bx <- crossing.psp(edges(A), edges(B))
-      if(npoints(bx) > 0) return(FALSE)
-      ## Absence of boundary crossings is sufficient if B has no holes
-      if(length(B$bdry) == 1 || !any(sapply(B$bdry, is.hole.xypolygon)))
-        return(TRUE)
-      ## Compare area of intersection with area of putative subset
-      ## (these are subject to numerical rounding error)
-      areaA <- area(A)
-      if(overlap.owin(A,B) >= areaA ||
-         overlap.owin(B,A) >= areaA) return(TRUE)
+      ## check whether the boundaries are disjoint
+      if(!anycrossing.psp(edges(A), edges(B))) {
+        ## Disjoint boundary crossings sufficient if B has no holes
+        if(length(B$bdry) == 1 || !any(sapply(B$bdry, is.hole.xypolygon)))
+          return(TRUE)
+        ## Compare area of intersection with area of putative subset
+        ## (use '>=' instead of '==' because of numerical rounding error)
+        areaA <- area(A)
+        if(overlap.owin(A,B) >= areaA ||
+           overlap.owin(B,A) >= areaA) return(TRUE)
+      }
       ## continue...
     }
   

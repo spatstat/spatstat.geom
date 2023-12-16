@@ -1,8 +1,15 @@
-        CHANGES IN spatstat.geom VERSION 3.2-7.001
+        CHANGES IN spatstat.geom VERSION 3.2-7.002
 
 OVERVIEW
 
-    o Internal improvements.
+    o Minor improvements.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o is.subset.owin
+    Algorithm slightly modified to give better results when
+    the two polygons share some common edges.
+
 
         CHANGES IN spatstat.geom VERSION 3.2-7
 
