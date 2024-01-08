@@ -508,7 +508,7 @@ markformat(x)
 \method{markformat}{psp}(x) 
 \method{markformat}{default}(x) 
 mark.scale.default(marx, w, \dots, markscale, maxsize, meansize,
-                   zerosize, characters)
+                   minsize, zerosize, characters)
 markspace.integral(X)
 \method{marks}{default}(x, \dots)
 \method{marks}{quad}(x, dfok=FALSE, \dots)

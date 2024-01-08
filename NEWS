@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.2-7.003
+        CHANGES IN spatstat.geom VERSION 3.2-7.004
 
 OVERVIEW
 
@@ -9,6 +9,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o is.subset.owin
     Algorithm slightly modified to give better results when
     the two polygons share some common edges.
+
+    o plot.ppp
+    New argument 'minsize' specifies the size of the smallest symbol
+    used to represent the marks, when the marks are numeric.
 
     o plot.ppp
     New argument 'zerosize' specifies the size of the symbol

@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.93 $   $Date: 2022/11/03 11:08:33 $
+#    $Revision: 1.94 $   $Date: 2024/01/08 06:37:19 $
 #
 #
 
@@ -338,8 +338,22 @@ warn.once <- function(key, ...) {
        par.points=list(
          ## default graphics parameters for 'points'
          default=list(),
-         check=is.list,
-         valid="a list"
+         check=function(x) {
+           if(!is.list(x)) return(FALSE)
+           nama <- names(x)
+           a <- c("maxsize", "meansize", "markscale")
+           b <- c("minsize", "zerosize")
+           hit <- !is.na(match(a, nama))
+           if(sum(hit) > 1) return(FALSE)
+           hit <- !is.na(match(b, nama))
+           if(sum(hit) > 1) return(FALSE)
+           return(TRUE)
+         },
+         valid=paste("a list containing arguments to points.default",
+                     "and/or containing at most one of the parameters",
+                     "'maxsize', 'meansize' or 'markscale', and",
+                     "at most one of the parameters",
+                     "'minsize' or 'zerosize'")
          ),
        par.pp3=list(
          ## default graphics parameters for 'plot.pp3'

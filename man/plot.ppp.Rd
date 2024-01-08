@@ -13,7 +13,7 @@
                     leg.side=c("left", "bottom", "top", "right"),
                     leg.args=list(),
                     symap=NULL, maxsize=NULL, meansize=NULL, markscale=NULL,
-                    zerosize=0,
+                    minsize=NULL, zerosize=NULL,
                     zap=0.01,
                     show.window=show.all, show.all=!add, do.plot=TRUE,
                     multiplot=TRUE)
@@ -125,9 +125,18 @@
     Incompatible with \code{maxsize} and \code{meansize}.
     Ignored if \code{symap} is given.
   }
+  \item{minsize}{
+    \emph{Minimum} physical size of the circles/squares plotted
+    when \code{x} is a marked point pattern with 
+    numerical marks.
+    Incompatible with \code{zerosize}.
+    Ignored if \code{symap} is given.
+  }
   \item{zerosize}{
     Physical size of the circle/square representing a mark value of zero,
     when \code{x} is a marked point pattern with numerical marks.
+    Incompatible with \code{minsize}.
+    Defaults to zero.
     Ignored if \code{symap} is given.
   }
   \item{zap}{
@@ -273,8 +282,9 @@
     The arguments \code{maxsize}, \code{meansize} and \code{markscale} 
     are incompatible with each other (and incompatible with
     \code{symap}).
-    Together with \code{zerosize}, 
-    they control the physical size of the circles and
+    The arguments \code{minsize} and \code{zerosize} are incompatible
+    with each other (and incompatible with \code{symap}).
+    Together, these arguments control the physical size of the circles and
     squares which represent the marks in a point pattern with continuous
     marks. The size of a circle is defined as its \emph{diameter};
     the size of a square is its side length.
@@ -288,6 +298,9 @@
     If \code{meansize} is given, then the
     average absolute mark value, \code{mmean=mean(abs(marks(x)))},
     will be scaled to have physical size \code{meansize}.
+    If \code{minsize} is given, then the
+    minimum mark value, \code{mmean=mean(abs(marks(x)))},
+    will be scaled to have physical size \code{minsize}.
     \item
     The user can set the default values of these plotting parameters
     using \code{\link{spatstat.options}("par.points")}.
@@ -409,7 +422,7 @@
    plot(longleaf, markscale=0.1)
    plot(longleaf, maxsize=5)
    plot(longleaf, meansize=2)
-   plot(longleaf, zerosize=2)
+   plot(longleaf, minsize=2)
 
    # draw circles of diameter equal to nearest neighbour distance
    plot(cells \%mark\% nndist(cells), markscale=1, legend=FALSE)
