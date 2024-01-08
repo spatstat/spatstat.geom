@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.108 $	$Date: 2023/07/09 04:17:12 $
+#	$Revision: 1.110 $	$Date: 2024/01/08 04:22:59 $
 #
 #
 #--------------------------------------------------------------------------
@@ -16,6 +16,7 @@ plot.ppp <- local({
   default.symap.points <- function(x, ..., 
                                   chars=NULL, cols=NULL, col=NULL, 
                                   maxsize=NULL, meansize=NULL, markscale=NULL,
+                                  zerosize=0,
                                   markrange=NULL, marklevels=NULL) {
     marx <- marks(x)
     if(is.null(marx)) {
@@ -32,7 +33,9 @@ plot.ppp <- local({
       pnames <- symbolmapparnames(symap)
       if("shape" %in% pnames && !("size" %in% pnames)) {
         ## symbols require a size parameter
-        m <- mark.scale.default(rep(1, npoints(x)), Window(x), maxsize=maxsize, meansize=meansize)
+        m <- symbol.sizes.default(rep(1, npoints(x)), Window(x),
+                                  maxsize=maxsize, meansize=meansize,
+                                  zerosize=zerosize)
         symap <- update(symap, size=m)
       }
       return(symap)
@@ -69,10 +72,11 @@ plot.ppp <- local({
                                  characters=chargiven)
       if(is.na(scal)) return(symbolmap(..., chars=chars, cols=cols))
       ## scale determined
-      sizefun <- function(x, scal=1) {
+      sizefun <- function(x, scal=1, timerange=NULL) {
         (scal/2) * scaletointerval(x, 0, 1, timerange)
       }
       formals(sizefun)[[2]] <- scal  ## ensures value of 'scal' is printed
+      formals(sizefun)[[3]] <- timerange
       ##
       g <- do.call(symbolmap,
                    resolve.defaults(list(range=timerange),
@@ -108,17 +112,20 @@ plot.ppp <- local({
         return(symbolmap(..., chars=chars, cols=cols))
       scal <- mark.scale.default(marx, as.owin(x), 
                                  markscale=markscale, maxsize=maxsize,
-                                 meansize=meansize,
+                                 meansize=meansize, zerosize=zerosize,
                                  characters=chargiven)
       if(is.na(scal)) return(symbolmap(..., chars=chars, cols=cols))
       ## scale determined
+      zerosize <- attr(scal, "zerosize") %orifnull% 0
+      scal <- as.numeric(scal)
       if(markrange[1] >= 0) {
         ## all marks are nonnegative
         shapedefault <-
           if(!assumecircles) list() else list(shape="circles")
-        cexfun <- function(x, scal=1) { scal * x }
-        circfun <- function(x, scal=1) { scal * x }
+        cexfun <- function(x, scal=1, zerosize=0) { zerosize + scal * x }
+        circfun <- function(x, scal=1, zerosize=0) { zerosize + scal * x }
         formals(cexfun)[[2]] <- formals(circfun)[[2]] <- scal
+        formals(cexfun)[[3]] <- formals(circfun)[[3]] <- zerosize
         sizedefault <-
           if(sizegiven) list() else
           if(chargiven) list(cex=cexfun) else list(size=circfun)
@@ -127,9 +134,10 @@ plot.ppp <- local({
         shapedefault <-
           if(!assumecircles) list() else
           list(shape=function(x) { ifelse(x >= 0, "circles", "squares") })
-        cexfun <- function(x, scal=1) { scal * abs(x) }
-        circfun <- function(x, scal=1) { scal * abs(x) }
+        cexfun <- function(x, scal=1, zerosize=0) { zerosize + scal * abs(x) }
+        circfun <- function(x, scal=1, zerosize=0) { zerosize + scal * abs(x) }
         formals(cexfun)[[2]] <- formals(circfun)[[2]] <- scal
+        formals(cexfun)[[3]] <- formals(circfun)[[3]] <- zerosize
         sizedefault <-
           if(sizegiven) list() else
           if(chargiven) list(cex=cexfun) else list(size=circfun)
@@ -158,11 +166,12 @@ plot.ppp <- local({
     } else {
       #' values mapped to symbols
       #' determine size
-      scal <- mark.scale.default(rep(1, npoints(x)),
-                                 Window(x), 
-                                 maxsize=maxsize,
-                                 meansize=meansize,
-                                 characters=FALSE)
+      scal <- symbol.sizes.default(rep(1, npoints(x)),
+                                   Window(x), 
+                                   maxsize=maxsize,
+                                   meansize=meansize,
+                                   zerosize=zerosize,
+                                   characters=FALSE)
       g <- symbolmap(inputs=um, ..., size=scal, cols=cols)
     }
     return(g)
@@ -188,7 +197,8 @@ plot.ppp <- local({
              which.marks=NULL, add=FALSE, type=c("p", "n"), 
              legend=TRUE, leg.side=c("left", "bottom", "top", "right"),
              leg.args=list(),
-             symap=NULL, maxsize=NULL, meansize=NULL, markscale=NULL, zap=0.01, 
+             symap=NULL, maxsize=NULL, meansize=NULL, markscale=NULL,
+             zerosize=0, zap=0.01, 
              show.window=show.all, show.all=!add, do.plot=TRUE,
              multiplot=TRUE)
 {
@@ -259,6 +269,7 @@ plot.ppp <- local({
                                            maxsize=maxsize,
                                            meansize=meansize,
                                            markscale=markscale,
+                                           zerosize=zerosize,
                                            zap=zap)))
       return(invisible(out))
     } 
@@ -303,7 +314,7 @@ plot.ppp <- local({
     if(is.null(symap))
       symap <- default.symap.points(y, chars=chars, cols=cols, 
                                     maxsize=maxsize, meansize=meansize,
-                                    markscale=markscale,
+                                    markscale=markscale, zerosize=zerosize,
                                     ...)
   }
 
@@ -313,7 +324,8 @@ plot.ppp <- local({
   if(sick) {
     ## Get relevant parameters
     par.direct <- list(main=main, use.marks=use.marks,
-                   maxsize=maxsize, meansize=meansize, markscale=markscale)
+                       maxsize=maxsize, meansize=meansize, markscale=markscale,
+                       zerosize=zerosize)
     par.rejects <- resolve.1.default(list(par.rejects=list(pch="+")),
                                      list(...))
     par.all <- resolve.defaults(par.rejects, par.direct)
@@ -448,8 +460,13 @@ plot.ppp
 })
 
 
+## utility function to determine mark scale 
+## (factor converting mark values to physical sizes on the plot)
+## using a default rule
+
 mark.scale.default <- function(marx, w, ..., markscale=NULL,
                                maxsize=NULL, meansize=NULL,
+                               zerosize=0,
                                characters=FALSE) {
   ## establish values of markscale, maxsize, meansize
   ngiven <- (!is.null(markscale)) +
@@ -466,44 +483,62 @@ mark.scale.default <- function(marx, w, ..., markscale=NULL,
     maxsize   <- pop$maxsize
     meansize <- pop$meansize
   }
-  ## Now check whether markscale is fixed
   if(!is.null(markscale)) {
+    ## mark scale is already given
     stopifnot(markscale > 0)
-    return(markscale)
-  }
-  # Usual case: markscale is to be determined from maximum/mean physical size
-  if(is.null(maxsize) && is.null(meansize)) {
-    ## compute default value of 'maxsize'
-    ## guess appropriate max physical size of symbols
-    bb <- as.rectangle(w)
-    maxsize <- 1.4/sqrt(pi * length(marx)/area(bb))
-    maxsize <- min(maxsize, diameter(bb) * 0.07)
-    ## updated: maxsize now represents *diameter*
-    maxsize <- 2 * maxsize
+    scal <- markscale
   } else {
-    if(!is.null(maxsize)) stopifnot(maxsize > 0) else stopifnot(meansize > 0)
+    ## mark scale is to be determined from desired maximum/mean physical size
+    if(!is.null(maxsize)) {
+      stopifnot(maxsize > 0)
+    } else if(!is.null(meansize)) {
+      stopifnot(meansize > 0)
+    } else {
+      ## No prescriptions specified.
+      ## Compute default value of 'maxsize'
+      ## First guess appropriate max physical size of symbols
+      bb <- as.rectangle(w)
+      maxradius <- 1.4/sqrt(pi * length(marx)/area(bb))
+      maxsize <- 2 * min(maxradius, diameter(bb) * 0.07)
+    }
+    ## Examine mark values
+    absmarx <- abs(marx)
+    maxabs <- max(absmarx)
+    tiny <- (maxabs < 4 * .Machine$double.eps)
+    if(tiny)
+      return(NA)
+
+    ## finally determine physical scale for symbols
+    if(!is.null(maxsize)) {
+      scal <- (maxsize-zerosize)/maxabs
+    } else {
+      meanabs <- mean(absmarx)
+      scal <- (meansize-zerosize)/meanabs
+    }
+
+    if(characters) {
+      ## when using characters ('pch') we need to
+      ## convert physical sizes to 'cex' values
+      charsize <- max(sidelengths(as.rectangle(w)))/40
+      scal <- scal/charsize
+      zerosize <- zerosize/charsize
+    }
   }
+
+  attr(scal, "zerosize") <- zerosize
   
-  # Examine mark values
-  absmarx <- abs(marx)
-  maxabs <- max(absmarx)
-  tiny <- (maxabs < 4 * .Machine$double.eps)
-  if(tiny)
-    return(NA)
+  return(scal)
+}
 
-  ## finally determine physical scale for symbols
-  if(!is.null(maxsize)) {
-    scal <- maxsize/maxabs
-  } else {
-    meanabs <- mean(absmarx)
-    scal <- meansize/meanabs
-  }
-  if(!characters) return(scal)
+## utility function to determine symbol sizes using default rule
 
-  ## if using characters ('pch') we need to
-  ## convert physical sizes to 'cex' values
-  charsize <- max(sidelengths(as.rectangle(w)))/40
-  return(scal/charsize)
+symbol.sizes.default <- function(markvalues, ...) {
+  scal <- mark.scale.default(markvalues, ...)
+  if(is.na(scal)) return(NA)
+  zerosize <- attr(scal, "zerosize") %orifnull% 0
+  scal <- as.numeric(scal)
+  sizes <- zerosize + scal * markvalues
+  return(sizes)
 }
 
 fakemaintitle <- function(bb, main, ...) {

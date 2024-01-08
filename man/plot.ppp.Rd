@@ -13,6 +13,7 @@
                     leg.side=c("left", "bottom", "top", "right"),
                     leg.args=list(),
                     symap=NULL, maxsize=NULL, meansize=NULL, markscale=NULL,
+                    zerosize=0,
                     zap=0.01,
                     show.window=show.all, show.all=!add, do.plot=TRUE,
                     multiplot=TRUE)
@@ -122,6 +123,11 @@
     numerical marks. Mark value will be multiplied by \code{markscale}
     to determine physical size.
     Incompatible with \code{maxsize} and \code{meansize}.
+    Ignored if \code{symap} is given.
+  }
+  \item{zerosize}{
+    Physical size of the circle/square representing a mark value of zero,
+    when \code{x} is a marked point pattern with numerical marks.
     Ignored if \code{symap} is given.
   }
   \item{zap}{
@@ -265,14 +271,17 @@
     by setting \code{spatstat.options(transparent=FALSE)}.
     \item 
     The arguments \code{maxsize}, \code{meansize} and \code{markscale} 
-    are incompatible with each other (and incompatible with \code{symap}).
-    They control the physical size of the circles and
+    are incompatible with each other (and incompatible with
+    \code{symap}).
+    Together with \code{zerosize}, 
+    they control the physical size of the circles and
     squares which represent the marks in a point pattern with continuous
     marks. The size of a circle is defined as its \emph{diameter};
     the size of a square is its side length.
     If \code{markscale} is given, then a mark value of \code{m}
-    is plotted as a circle of diameter \code{m * markscale}
-    (if \code{m} is positive) or a square of side \code{abs(m) * markscale}
+    is plotted as a circle of diameter \code{m * markscale + zerosize}
+    (if \code{m} is positive) or a square of side
+    \code{abs(m) * markscale + zerosize}
     (if \code{m} is negative). If \code{maxsize} is given, then the
     largest mark in absolute value, \code{mmax=max(abs(marks(x)))},
     will be scaled to have physical size \code{maxsize}.
@@ -400,6 +409,7 @@
    plot(longleaf, markscale=0.1)
    plot(longleaf, maxsize=5)
    plot(longleaf, meansize=2)
+   plot(longleaf, zerosize=2)
 
    # draw circles of diameter equal to nearest neighbour distance
    plot(cells \%mark\% nndist(cells), markscale=1, legend=FALSE)
