@@ -12,7 +12,9 @@
                          vertical = FALSE,
                          side = c("bottom", "left", "top", "right"),
                          annotate = TRUE, labelmap = NULL, add = FALSE,
-                         nsymbols = NULL, warn = TRUE, colour.only=FALSE)
+                         nsymbols = NULL, warn = TRUE,
+                         colour.only=FALSE,
+                         representatives=NULL)
 } 
 \arguments{
   \item{x}{
@@ -50,6 +52,7 @@
   }
   \item{nsymbols}{
     Optional. The maximum number of symbols that should be displayed.
+    Ignored if \code{representatives} are given.
   }
   \item{warn}{
     Logical value specifying whether to issue a warning
@@ -62,6 +65,10 @@
     plotted. If \code{FALSE} (the default) the entire symbol map is
     plotted, including information about symbol shape and size as well
     as colour.
+  }
+  \item{representatives}{
+    Optional. Vector containing the values of the input data
+    which should be shown on the plot.
   }
 }
 \details{
@@ -104,6 +111,7 @@
                     size=function(x) sqrt(ifelse(x > 0, x/pi, -x)),
                     bg = function(x) ifelse(abs(x) < 1, "red", "black"))
   plot(g2, vertical=TRUE, side="left", col.axis="blue", cex.axis=2)
+  plot(g2, representatives=c(-1,0,1))
 }
 \keyword{spatial}
 \keyword{hplot}

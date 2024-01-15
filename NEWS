@@ -1,8 +1,10 @@
-        CHANGES IN spatstat.geom VERSION 3.2-7.005
+        CHANGES IN spatstat.geom VERSION 3.2-7.006
 
 OVERVIEW
 
-    o Minor improvements.
+    o Improvements to window geometry code.
+
+    o Improvements to symbol map displays.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -17,6 +19,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.ppp
     New argument 'zerosize' specifies the size of the symbol
     used to represent the mark value 0, when marks are numeric.
+
+    o plot.symbolmap
+    New argument 'representatives' specifies which data values
+    will be shown in the plot.
 
         CHANGES IN spatstat.geom VERSION 3.2-7
 

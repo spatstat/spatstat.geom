@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.46 $  $Date: 2023/02/21 08:09:47 $
+##   $Revision: 1.47 $  $Date: 2024/01/15 05:34:44 $
 ##
 
 symbolmap <- local({
@@ -480,7 +480,7 @@ plot.symbolmap <- function(x, ..., main,
                            side=c("bottom", "left", "top", "right"),
                            annotate=TRUE, labelmap=NULL, add=FALSE,
                            nsymbols=NULL, warn=TRUE,
-                           colour.only=FALSE) {
+                           colour.only=FALSE, representatives=NULL) {
   if(missing(main))
     main <- short.deparse(substitute(x))
   miss.side <- missing(side)
@@ -523,17 +523,51 @@ plot.symbolmap <- function(x, ..., main,
          },
          continuous = {
            ra <- stuff$range
-           if(is.null(ra))
-             stop("Cannot plot symbolmap with an infinite range")
-           vv <- if(is.null(nsymbols)) prettyinside(ra) else
+           if(!is.null(representatives)) {
+             vv <- representatives
+             if(!all(ok <- inside.range(vv, ra))) {
+               nbad <- sum(!ok)
+               vv <- vv[ok]
+               warning(paste(nbad, "out of", length(vv),
+                             ngettext(nbad, "value", "values"),
+                             "in the argument",
+                             sQuote("representatives"),
+                             ngettext(nbad, "was", "were"),
+                             "outside the range of the symbol map, and",
+                             ngettext(nbad, "was", "were"),
+                             "removed"),
+                       call.=FALSE)
+             }
+           } else {
+             if(is.null(ra))
+               stop("Cannot plot symbolmap with an infinite range")
+             vv <- if(is.null(nsymbols)) prettyinside(ra) else
                  prettyinside(ra, n = nsymbols)
-           if(is.numeric(vv))
-             vv <- signif(vv, 4)
+             if(is.numeric(vv))
+               vv <- signif(vv, 4)
+           }
          },
          discrete = {
            dd <- stuff$inputs
-           vv <- if(is.null(nsymbols)) prettydiscrete(dd) else
-                 prettydiscrete(dd, n = nsymbols)
+           if(!is.null(representatives)) {
+             vv <- representatives
+             if(!all(ok <- vv %in% dd)) {
+               nbad <- sum(!ok)
+               vv <- vv[ok]
+               warning(paste(nbad, "out of", length(vv),
+                             ngettext(nbad, "value", "values"),
+                             "in the argument",
+                             sQuote("representatives"),
+                             ngettext(nbad, "was", "were"),
+                             "outside the domain of the symbol map, and",
+                             ngettext(nbad, "was", "were"),
+                             "removed"),
+                       call.=FALSE)
+             }
+           } else {
+             vv <- if(is.null(nsymbols)) prettydiscrete(dd) else
+                   prettydiscrete(dd, n = nsymbols)
+           }
            if(warn && (length(vv) < length(dd))) {
              warning(paste("Only", length(vv), "out of", length(dd),
                            "symbols are shown in the symbol map"),
