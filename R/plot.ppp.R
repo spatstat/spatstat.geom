@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.114 $	$Date: 2024/01/08 06:56:52 $
+#	$Revision: 1.115 $	$Date: 2024/01/15 04:33:38 $
 #
 #
 #--------------------------------------------------------------------------
@@ -17,7 +17,8 @@ plot.ppp <- local({
                                    chars=NULL, cols=NULL, col=NULL, 
                                    maxsize=NULL, meansize=NULL, markscale=NULL,
                                    minsize=NULL, zerosize=NULL,
-                                   markrange=NULL, marklevels=NULL) {
+                                   markrange=NULL, marklevels=NULL,
+                                   marktransform=NULL) {
     marx <- marks(x)
     if(is.null(marx)) {
       ## null or constant symbol map
@@ -50,6 +51,35 @@ plot.ppp <- local({
     assumecircles <- !(shapegiven || chargiven)
     sizegiven <- ("size" %in% argnames) ||
                  (("cex" %in% argnames) && !shapegiven)
+
+
+    ## pre-transformation of mark values
+    transforming <- is.function(marktransform)
+    Tmarx <- if(transforming) marktransform(marx) else marx
+
+    transformedsizeargs <- list()
+    if(transforming && sizegiven) {
+      ## Given arguments 'size' or 'cex'
+      ## are meant to apply to the transformed mark values.
+      ## Insert the transformation 
+      if("size" %in% argnames) {
+        siz <- list(...)$size
+        if(is.function(siz)) {
+          newsiz <- function(x, tra=marktransform, oldsize=siz) {
+            oldsize(tra(x))
+          }
+          transformedsizeargs$size <- newsiz
+        }
+      }
+      if(("cex" %in% argnames) && !shapegiven) {
+        cx <- list(...)$cex
+        if(is.function(cx)) {
+          newcex <- function(x, tra=marktransform, oldcex=cx) {oldcex(tra(x))}
+          transformedsizeargs$cex <- newcex
+        }
+      }
+    }
+    
     
     if(inherits(marx, c("Date", "POSIXt"))) {
       ## ......... marks are dates or date/times .....................
@@ -58,12 +88,15 @@ plot.ppp <- local({
       if(sizegiven) {
         g <- do.call(symbolmap,
           resolve.defaults(list(range=timerange),
+                           transformedsizeargs,
                            list(...),
                            shapedefault,
                            list(chars=chars, cols=cols)))
         return(g)
       }
-      ## attempt to determine a scale for the marks 
+      ## attempt to determine a scale for the marks
+      if(transforming)
+        stop("Argument marktransform is not yet supported for Date-time values")
       y <- scaletointerval(marx, 0, 1, timerange)
       y <- y[is.finite(y)]
       if(length(y) == 0) return(symbolmap(..., chars=chars, cols=cols))
@@ -101,17 +134,28 @@ plot.ppp <- local({
       }
       ## 
       if(sizegiven) {
+        ## size function is given
         g <- do.call(symbolmap,
           resolve.defaults(list(range=markrange),
+                           transformedsizeargs,
                            list(...),
                            if(assumecircles) list(shape="circles") else list(),
                            list(chars=chars, cols=cols)))
         return(g)
       }
-      ## attempt to determine a scale for the marks 
-      if(all(markrange == 0))
+      ## attempt to determine a scale for the (transformed) marks 
+      if(transforming) {
+        if(!is.numeric(Tmarx))
+          stop(paste("Function", sQuote("marktransform"),
+                     "should map numeric values to numeric values"),
+               call.=FALSE)
+        Tmarkrange <- range(Tmarx, marktransform(markrange))
+      } else Tmarkrange <- markrange
+      ## degenerate?
+      if(all(Tmarkrange == 0))
         return(symbolmap(..., chars=chars, cols=cols))
-      scal <- mark.scale.default(marx, as.owin(x), 
+      ## try scaling
+      scal <- mark.scale.default(Tmarx, as.owin(x), 
                                  markscale=markscale, maxsize=maxsize,
                                  meansize=meansize,
                                  minsize=minsize, zerosize=zerosize,
@@ -120,14 +164,16 @@ plot.ppp <- local({
       ## scale determined
       zerosize <- attr(scal, "zerosize") %orifnull% 0
       scal <- as.numeric(scal)
-      if(markrange[1] >= 0) {
-        ## all marks are nonnegative
+      if(Tmarkrange[1] >= 0) {
+        ## all (transformed) marks are nonnegative
         shapedefault <-
           if(!assumecircles) list() else list(shape="circles")
-        cexfun <- function(x, scal=1, zerosize=0) { zerosize + scal * x }
-        circfun <- function(x, scal=1, zerosize=0) { zerosize + scal * x }
+        cexfun <- function(x, scal=1, zerosize=0, tra=I) { zerosize + scal * tra(x) }
+        circfun <- function(x, scal=1, zerosize=0, tra=I) { zerosize + scal * tra(x) }
         formals(cexfun)[[2]] <- formals(circfun)[[2]] <- scal
         formals(cexfun)[[3]] <- formals(circfun)[[3]] <- zerosize
+        if(transforming)
+          formals(cexfun)[[4]] <- formals(circfun)[[4]] <- marktransform
         sizedefault <-
           if(sizegiven) list() else
           if(chargiven) list(cex=cexfun) else list(size=circfun)
@@ -136,10 +182,12 @@ plot.ppp <- local({
         shapedefault <-
           if(!assumecircles) list() else
           list(shape=function(x) { ifelse(x >= 0, "circles", "squares") })
-        cexfun <- function(x, scal=1, zerosize=0) { zerosize + scal * abs(x) }
-        circfun <- function(x, scal=1, zerosize=0) { zerosize + scal * abs(x) }
+        cexfun <- function(x, scal=1, zerosize=0, tra=I) { zerosize + scal * abs(tra(x)) }
+        circfun <- function(x, scal=1, zerosize=0, tra=I) { zerosize + scal * abs(tra(x)) }
         formals(cexfun)[[2]] <- formals(circfun)[[2]] <- scal
         formals(cexfun)[[3]] <- formals(circfun)[[3]] <- zerosize
+        if(transforming)
+          formals(cexfun)[[4]] <- formals(circfun)[[4]] <- marktransform
         sizedefault <-
           if(sizegiven) list() else
           if(chargiven) list(cex=cexfun) else list(size=circfun)
@@ -153,6 +201,10 @@ plot.ppp <- local({
       return(g)
     }
     ##  ...........  non-numeric marks .........................
+    if(transforming)
+      stop(paste("Argument", sQuote("marktransform"),
+                 "is not yet supported for non-numeric marks"),
+           call.=FALSE)
     um <- marklevels %orifnull%
           if(is.factor(marx)) levels(marx) else sortunique(marx)
     ntypes <- length(um)
