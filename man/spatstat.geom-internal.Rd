@@ -507,7 +507,9 @@ markformat(x)
 \method{markformat}{ppx}(x) 
 \method{markformat}{psp}(x) 
 \method{markformat}{default}(x) 
-mark.scale.default(marx, w, \dots, markscale, maxsize, meansize,
+mark.scale.default(marx, w, \dots,
+                   markrange,
+                   markscale, maxsize, meansize,
                    minsize, zerosize, characters)
 markspace.integral(X)
 \method{marks}{default}(x, \dots)

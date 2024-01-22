@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.115 $	$Date: 2024/01/15 04:33:38 $
+#	$Revision: 1.117 $	$Date: 2024/01/22 08:13:33 $
 #
 #
 #--------------------------------------------------------------------------
@@ -100,7 +100,7 @@ plot.ppp <- local({
       y <- scaletointerval(marx, 0, 1, timerange)
       y <- y[is.finite(y)]
       if(length(y) == 0) return(symbolmap(..., chars=chars, cols=cols))
-      scal <- mark.scale.default(y, as.owin(x), 
+      scal <- mark.scale.default(y, as.owin(x), markrange=c(0,1),
                                  markscale=markscale, maxsize=maxsize,
                                  meansize=meansize, 
                                  characters=chargiven)
@@ -155,7 +155,7 @@ plot.ppp <- local({
       if(all(Tmarkrange == 0))
         return(symbolmap(..., chars=chars, cols=cols))
       ## try scaling
-      scal <- mark.scale.default(Tmarx, as.owin(x), 
+      scal <- mark.scale.default(Tmarx, as.owin(x), markrange=Tmarkrange,
                                  markscale=markscale, maxsize=maxsize,
                                  meansize=meansize,
                                  minsize=minsize, zerosize=zerosize,
@@ -521,11 +521,13 @@ plot.ppp
 ## (factor converting mark values to physical sizes on the plot)
 ## using a default rule
 
-mark.scale.default <- function(marx, w, ..., markscale=NULL,
+mark.scale.default <- function(marx, w, ...,
+                               markrange=NULL,
+                               markscale=NULL,
                                maxsize=NULL, meansize=NULL,
                                minsize=NULL, zerosize=NULL,
                                characters=FALSE) {
-  ## establish values of markscale, maxsize, meansize
+  ## establish values of parameters markscale, maxsize, meansize
   ngiven <- (!is.null(markscale)) +
             (!is.null(maxsize)) +
             (!is.null(meansize))
@@ -551,6 +553,17 @@ mark.scale.default <- function(marx, w, ..., markscale=NULL,
       zerosize <- 0
   }
   if(!is.null(minsize)) stopifnot(minsize >= 0)
+  ## determine range of absolute values of marks to be mapped
+  absmarx <- abs(marx)
+  ra <- range(absmarx)
+  if(!is.null(markrange)) {
+    check.range(markrange)
+    ra <- range(ra, abs(markrange))
+    if(inside.range(0, markrange))
+      ra <- range(0, ra)
+  }
+  minabs <- ra[1L]
+  maxabs <- ra[2L]
   ## determine linear map
   ## physical size = zerosize + scal * markvalue
   if(!is.null(markscale)) {
@@ -560,7 +573,7 @@ mark.scale.default <- function(marx, w, ..., markscale=NULL,
     if(!is.null(minsize)) {
       ## required minimum physical size (of marks in range) is specified
       ## determine intercept 'zerosize'
-      zerosize <- minsize - scal * min(abs(marx))
+      zerosize <- minsize - scal * ra[1L]
     } ## otherwise 'zerosize' is given or defaults to 0
   } else {
     ## mark scale is to be determined from desired maximum/mean physical size
@@ -577,10 +590,6 @@ mark.scale.default <- function(marx, w, ..., markscale=NULL,
       maxsize <- 2 * min(maxradius, diameter(bb) * 0.07)
     }
     ## Examine mark values
-    absmarx <- abs(marx)
-    rangeabs <- range(absmarx)
-    minabs <- rangeabs[1L]
-    maxabs <- rangeabs[2L]
     epsilon <- 4 * .Machine$double.eps
     if(maxabs < epsilon)
       return(NA)
@@ -607,7 +616,7 @@ mark.scale.default <- function(marx, w, ..., markscale=NULL,
       }
     } else if(!is.null(meansize)) {
       ## required mean physical size (of marks in range) is specified
-      meanabs <- mean(absmarx)
+      meanabs <- mean(if(is.null(markrange)) absmarx else abs(markrange))
       if(!is.null(minsize)) {
         ## required minimum physical size (of marks in range) is specified
         ## map {minabs, meanabs} -> {minsize, meansize}
