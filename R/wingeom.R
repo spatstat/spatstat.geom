@@ -1,7 +1,7 @@
 #
 #	wingeom.R	Various geometrical computations in windows
 #
-#	$Revision: 4.140 $	$Date: 2022/05/21 09:52:11 $
+#	$Revision: 4.141 $	$Date: 2024/01/31 03:30:32 $
 #
 
 volume.owin <- function(x) { area.owin(x) }
@@ -911,14 +911,19 @@ diameter.owin <- function(x) {
   w <- as.owin(x)
   if(is.empty(w))
     return(NULL)
-  vert <- vertices(w)
-  if(length(vert$x) > 3) {
-    # extract convex hull
-    h <- with(vert, chull(x, y))
-    vert <- with(vert, list(x=x[h], y=y[h]))
+  if(w$type == "rectangle") {
+    d <- sqrt(diff(w$xrange)^2+diff(w$yrange)^2)
+  } else {
+    vert <- vertices(w)
+    if(length(vert$x) > 3) {
+      ## extract convex hull
+      h <- with(vert, chull(x, y))
+      vert <- with(vert, list(x=x[h], y=y[h]))
+    }
+    d2 <- pairdist(vert, squared=TRUE)
+    d <- sqrt(max(d2))
   }
-  d <- pairdist(vert, squared=TRUE)
-  return(sqrt(max(d)))
+  return(d)
 }
 
 ##    radius of inscribed circle

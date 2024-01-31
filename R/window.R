@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.202 $	$Date: 2023/07/11 06:06:53 $
+#	$Revision: 4.203 $	$Date: 2024/01/31 03:52:30 $
 #
 #
 #	A window may be either
@@ -525,16 +525,17 @@ Frame.default <- function(X) { as.rectangle(X) }
 ## .........................................................
 
 as.rectangle <- function(w, ...) {
+  if(!inherits(w, c("owin", "im", "ppp", "layered")))
+    w <- as.owin(w, ...)
   if(inherits(w, "owin"))
     return(owin(w$xrange, w$yrange, unitname=unitname(w)))
   else if(inherits(w, "im"))
     return(owin(w$xrange, w$yrange, unitname=unitname(w)))
   else if(inherits(w, "layered")) 
-    return(do.call(boundingbox, unname(lapply(w, as.rectangle))))
-  else {
-    w <- as.owin(w, ...)
-    return(owin(w$xrange, w$yrange, unitname=unitname(w)))
-  }
+    return(do.call(boundingbox, unname(lapply(w, as.rectangle, ...))))
+  else if(inherits(w, "ppp")) 
+    return(owin(w$window$xrange, w$window$yrange, unitname=unitname(w$window)))
+  else return(NULL)
 }
 
 #

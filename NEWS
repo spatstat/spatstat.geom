@@ -2,6 +2,20 @@
 
 OVERVIEW
 
+    o Some geometry code accelerated.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o diameter.owin
+    Accelerated when the window is a rectangle.
+
+    o nncross.ppp
+    Slightly accelerated.
+    
+        CHANGES IN spatstat.geom VERSION 3.2-8
+
+OVERVIEW
+
     o Improvements to window geometry code.
 
     o Improvements to symbol map displays.

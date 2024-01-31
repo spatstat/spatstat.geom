@@ -2,7 +2,7 @@
 #   nncross.R
 #
 #
-#    $Revision: 1.39 $  $Date: 2022/05/21 09:52:11 $
+#    $Revision: 1.40 $  $Date: 2024/01/31 03:57:09 $
 #
 #  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2012
 #  Licence: GNU Public Licence >= 2
@@ -136,7 +136,12 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
   }
 
   #' upper bound on distance
-  dmax <- diameter(boundingbox(as.rectangle(X), as.rectangle(Y)))
+  #' was: dmax <- diameter(boundingbox(as.rectangle(X), as.rectangle(Y)))
+  BX <- as.rectangle(X)
+  BY <- as.rectangle(Y)
+  rx <- range(BX$xrange, BY$xrange)
+  ry <- range(BX$yrange, BY$yrange)
+  dmax <- sqrt(diff(rx)^2 + diff(ry)^2)
   huge <- 1.1 * dmax
 
   
