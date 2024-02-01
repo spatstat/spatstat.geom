@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.203 $	$Date: 2024/01/31 03:52:30 $
+#	$Revision: 4.211 $	$Date: 2024/02/01 02:30:49 $
 #
 #
 #	A window may be either
@@ -68,267 +68,285 @@
     "Transpose matrices to get the standard presentation in R",
     "Example: image(result$xcol,result$yrow,t(result$d))")
 
-owin <- local({
-
-  isxy <- function(x) { (is.matrix(x) || is.data.frame(x)) && ncol(x) == 2 }
-  asxy <- function(xy) { list(x=xy[,1], y=xy[,2]) }
-
-  owin <- function(xrange=c(0,1), yrange=c(0,1),
+owin <- function(xrange=c(0,1), yrange=c(0,1),
                  ..., poly=NULL, mask=NULL, unitname=NULL, xy=NULL) {
-
-  # trap a common abuse of syntax
+  ## trap a common abuse of syntax: owin(window)
   if(nargs() == 1 && !missing(xrange) && is.owin(xrange))
     return(xrange)
-  
-  unitname <- as.unitname(unitname)
 
-  ## Exterminate ambiguities
+  ## parse
   poly.given <- !is.null(poly)
   mask.given <- !is.null(mask)
-  if(poly.given  && mask.given)
-     stop("Ambiguous -- both polygonal boundary and digital mask supplied")
-
-  if(!is.null(xy) && !mask.given)
-    warning("Argument xy ignored: it is only applicable when a mask is given")
-     
-  if(missing(xrange) != missing(yrange))
-    stop("If one of xrange, yrange is specified then both must be.")
-  if(!missing(xrange)) {
+  range.given <- !missing(xrange) || !missing(yrange)
+  
+  if(range.given) {
+    if(missing(xrange) != missing(yrange))
+      stop("If one of xrange, yrange is specified then both must be.")
     xrange <- unname(xrange)
     yrange <- unname(yrange)
   }
-    
-  # convert data frames to vanilla lists
+  
+  if(poly.given && mask.given)
+     stop("Ambiguous -- both polygonal boundary and digital mask supplied")
+
+  if(!mask.given && !is.null(xy))
+    warning("Argument xy ignored: it is only applicable when a mask is given")
+
   if(poly.given) {
+    ## convert data frames to vanilla lists
     if(is.data.frame(poly))
       poly <- as.list(poly)
     else if(is.list(poly) && any(unlist(lapply(poly, is.data.frame))))
       poly <- lapply(poly, as.list)
   }
-  
-  ## Hidden options controlling how much checking is performed
-  check <- resolve.1.default(list(check=TRUE), list(...))
-  calculate <- resolve.1.default(list(calculate=check), list(...))
-  strict <- resolve.1.default(list(strict=spatstat.options("checkpolygons")),
-                              list(...))
-  fix <- resolve.1.default(list(fix=spatstat.options("fixpolygons")),
-                           list(...))
 
   if(!poly.given && !mask.given) {
-    ######### rectangle #################
+    ## rectangular window
+    owinInternalRect(xrange, yrange, ..., unitname=unitname)
+  } else if(poly.given) {
+    ## polygonal window
+    if(range.given) {
+      owinInternalPoly(xrange, yrange, ..., poly=poly, unitname=unitname)
+    } else {
+      owinInternalPoly(                ..., poly=poly, unitname=unitname)
+    }
+  } else {
+    ## mask window
+    if(range.given) {
+      owinInternalMask(xrange, yrange, ..., mask=mask, xy=xy, unitname=unitname)
+    } else {
+      owinInternalMask(                ..., mask=mask, xy=xy, unitname=unitname)
+    }
+  }
+}
+
+owinInternalRect <- function(xrange=c(0,1), yrange=c(0,1),
+                             ..., unitname=NULL, check = TRUE) {
+  if(check) {
+    if(!is.vector(xrange) || length(xrange) != 2 || xrange[2L] < xrange[1L])
+      stop("xrange should be a vector of length 2 giving (xmin, xmax)")
+    if(!is.vector(yrange) || length(yrange) != 2 || yrange[2L] < yrange[1L])
+      stop("yrange should be a vector of length 2 giving (ymin, ymax)")
+  }
+  unitname <- as.unitname(unitname)
+  w <- list(type="rectangle", xrange=xrange, yrange=yrange, units=unitname)
+  class(w) <- "owin"
+  return(w)
+}
+
+
+isXYdata <- function(x) { (is.matrix(x) || is.data.frame(x)) && ncol(x) == 2 }
+asXYdata <- function(xy) { list(x=xy[,1], y=xy[,2]) }
+
+owinInternalPoly <- function(xrange=c(0,1), yrange=c(0,1),
+                             ..., poly=NULL, unitname=NULL, 
+                             check     = TRUE,
+                             calculate = check,
+                             strict    = spatstat.options("checkpolygons"),
+                             fix       = spatstat.options("fixpolygons")) {
+  unitname <- as.unitname(unitname)
+  if(length(poly) == 0) {
+    ## empty polygon
     if(check) {
       if(!is.vector(xrange) || length(xrange) != 2 || xrange[2L] < xrange[1L])
         stop("xrange should be a vector of length 2 giving (xmin, xmax)")
       if(!is.vector(yrange) || length(yrange) != 2 || yrange[2L] < yrange[1L])
         stop("yrange should be a vector of length 2 giving (ymin, ymax)")
     }
-    w <- list(type="rectangle", xrange=xrange, yrange=yrange, units=unitname)
+    w <- list(type="polygonal", xrange=xrange, yrange=yrange,
+              bdry=list(), units=unitname)
     class(w) <- "owin"
     return(w)
-  } else if(poly.given) {
-    ######### polygonal boundary ########
-    #
-    if(length(poly) == 0) {
-      # empty polygon
-      if(check) {
-        if(!is.vector(xrange) || length(xrange) != 2 || xrange[2L] < xrange[1L])
-          stop("xrange should be a vector of length 2 giving (xmin, xmax)")
-        if(!is.vector(yrange) || length(yrange) != 2 || yrange[2L] < yrange[1L])
-          stop("yrange should be a vector of length 2 giving (ymin, ymax)")
-      }
-      w <- list(type="polygonal", xrange=xrange, yrange=yrange,
-                bdry=list(), units=unitname)
-      class(w) <- "owin"
-      return(w)
-    }
-    # convert matrix or data frame to list(x,y)
-    if(isxy(poly)) {
-      poly <- asxy(poly)
-    } else if(is.list(poly) && all(unlist(lapply(poly, isxy)))) {
-      poly <- lapply(poly, asxy)
-    }
-    # nonempty polygon  
-    # test whether it's a single polygon or multiple polygons
-    if(verify.xypolygon(poly, fatal=FALSE))
-      psingle <- TRUE
-    else if(all(unlist(lapply(poly, verify.xypolygon, fatal=FALSE))))
-      psingle <- FALSE
-    else
-      stop("poly must be either a list(x,y) or a list of list(x,y)")
-
-    w.area <- NULL
-    
-    if(psingle) {
-      # single boundary polygon
-      bdry <- unname(list(poly))
-      if(check || calculate) {
-        w.area <- Area.xypolygon(poly)
-        if(w.area < 0)
-          stop(paste("Area of polygon is negative -",
-                     "maybe traversed in wrong direction?"))
-      }
-    } else {
-      # multiple boundary polygons
-      bdry <- unname(poly)
-      if(check || calculate) {
-        w.area <- sapply(poly, Area.xypolygon)
-        if(sum(w.area) < 0)
-          stop(paste("Area of window is negative;\n",
-                     "check that all polygons were traversed",
-                     "in the right direction"))
-      }
-    }
-
-    actual.xrange <- range(unlist(lapply(bdry, getElement, name="x")))
-    if(missing(xrange))
-      xrange <- actual.xrange
-    else if(check) {
-      if(!is.vector(xrange) || length(xrange) != 2 || xrange[2L] < xrange[1L])
-        stop("xrange should be a vector of length 2 giving (xmin, xmax)")
-      if(!all(xrange == range(c(xrange, actual.xrange))))
-        stop("polygon's x coordinates outside xrange")
-    }
-    
-    actual.yrange <- range(unlist(lapply(bdry, getElement, name="y")))
-    if(missing(yrange))
-      yrange <- actual.yrange
-    else if(check) {
-      if(!is.vector(yrange) || length(yrange) != 2 || yrange[2L] < yrange[1L])
-        stop("yrange should be a vector of length 2 giving (ymin, ymax)")
-      if(!all(yrange == range(c(yrange, actual.yrange))))
-      stop("polygon's y coordinates outside yrange")
-    }
-
-    if(!is.null(w.area)) {
-      # tack on area and hole data
-      holes <- (w.area < 0)
-      for(i in seq_along(bdry)) 
-        bdry[[i]] <- append(bdry[[i]], list(area=w.area[i], hole=holes[i]))
-    }
-    
-    w <- list(type="polygonal",
-              xrange=xrange, yrange=yrange, bdry=bdry, units=unitname)
-    class(w) <- "owin"
-
-    if(check && strict) { 
-      ## strict checks on geometry (self-intersection etc)
-      ok <- owinpolycheck(w)
-      if(!ok) {
-        errors <- attr(ok, "err")
-        stop(paste("Polygon data contain", commasep(errors)))
-      }
-    }
-    if(check && fix) {
-      if(length(bdry) == 1 &&
-         length(bx <- bdry[[1L]]$x) == 4 &&
-         length(unique(bx)) == 2 &&
-         length(unique(bdry[[1L]]$y)) == 2) {
-        ## it's really a rectangle
-        if(Area.xypolygon(bdry[[1L]]) < 0)
-          w$bdry <- lapply(bdry, reverse.xypolygon)
-      } else {
-        ## repair polygon data by invoking polyclip
-        ##        to intersect polygon with larger-than-bounding rectangle
-        ##        (Streamlined version of intersect.owin)
-        ww <- lapply(bdry, reverse.xypolygon)
-        xrplus <- mean(xrange) + c(-1,1) * diff(xrange)
-        yrplus <- mean(yrange) + c(-1,1) * diff(yrange)
-        bignum <- (.Machine$integer.max^2)/2
-        epsclip <- max(diff(xrange), diff(yrange))/bignum
-        rr <- list(list(x=xrplus[c(1,2,2,1)], y=yrplus[c(2,2,1,1)]))
-        bb <- polyclip::polyclip(ww, rr, "intersection",
-                                 fillA="nonzero", fillB="nonzero", eps=epsclip)
-        ## ensure correct polarity
-        totarea <- sum(unlist(lapply(bb, Area.xypolygon)))
-        if(totarea < 0)
-          bb <- lapply(bb, reverse.xypolygon)
-        w$bdry <- bb
-      }
-    }
-    return(w)
-  } else if(mask.given) {
-    ######### digital mask #####################
-
-    if(is.data.frame(mask) &&
-       ncol(mask) %in% c(2,3) &&
-       sum(sapply(mask, is.numeric)) == 2) {
-      # data frame with 2 columns of coordinates
-      return(as.owin(W=mask, xy=xy))
-    }
-      
-    if(!is.matrix(mask))
-      stop(paste(sQuote("mask"), "must be a matrix"))
-    if(!is.logical(mask))
-      stop(paste("The entries of", sQuote("mask"), "must be logical"))
-    if(anyNA(mask)) 
-      mask[is.na(mask)] <- FALSE
-    
-    nc <- ncol(mask)
-    nr <- nrow(mask)
-
-    if(!is.null(xy)) {
-      # pixel coordinates given explicitly
-      # validate dimensions
-      if(!is.list(xy) || !checkfields(xy, c("x","y")))
-        stop("xy should be a list with entries x and y")
-      xcol <- xy$x
-      yrow <- xy$y
-      if(length(xcol) != nc)
-        stop(paste("length of xy$x =", length(xcol),
-                   "!=", nc, "= number of columns of mask"))
-      if(length(yrow) != nr)
-        stop(paste("length of xy$y =", length(yrow),
-                   "!=", nr, "= number of rows of mask"))
-      # x and y should be evenly spaced
-      if(!evenly.spaced(xcol))
-        stop("xy$x is not evenly spaced")
-      if(!evenly.spaced(yrow))
-        stop("xy$y is not evenly spaced")
-      # determine other parameters
-      xstep <- diff(xcol)[1L]
-      ystep <- diff(yrow)[1L]
-      if(missing(xrange) && missing(yrange)) {
-        xrange <- range(xcol) + c(-1,1) * xstep/2
-        yrange <- range(yrow) + c(-1,1) * ystep/2
-      }
-    } else {
-      # determine pixel coordinates from xrange, yrange
-      if(missing(xrange) && missing(yrange)) {
-        # take pixels to be 1 x 1 unit
-        xrange <- c(0,nc)
-        yrange <- c(0,nr)
-      } else if(check) {
-        if(!is.vector(xrange) || length(xrange) != 2 || xrange[2L] < xrange[1L])
-          stop("xrange should be a vector of length 2 giving (xmin, xmax)")
-        if(!is.vector(yrange) || length(yrange) != 2 || yrange[2L] < yrange[1L])
-          stop("yrange should be a vector of length 2 giving (ymin, ymax)")
-      }
-      xstep <- diff(xrange)/nc
-      ystep <- diff(yrange)/nr
-      xcol  <- seq(from=xrange[1L]+xstep/2, to=xrange[2L]-xstep/2, length.out=nc)
-      yrow  <- seq(from=yrange[1L]+ystep/2, to=yrange[2L]-ystep/2, length.out=nr)
-    }
-
-    out <- list(type     = "mask",
-                xrange   = unname(xrange),
-                yrange   = unname(yrange),
-                dim      = c(nr, nc),
-                xstep    = unname(xstep),
-                ystep    = unname(ystep),
-                warnings = .Spatstat.Image.Warning,
-                xcol    = unname(xcol), 
-                yrow    = unname(yrow),
-                m       = mask,
-                units   = unitname)
-    class(out) <- "owin"
-    return(out)
   }
-  # never reached
-  NULL
+  ## convert matrix or data frame to list(x,y)
+  if(isXYdata(poly)) {
+    poly <- asXYdata(poly)
+  } else if(is.list(poly) && all(unlist(lapply(poly, isXYdata)))) {
+    poly <- lapply(poly, asXYdata)
+  }
+  ## nonempty polygon  
+  ## test whether it's a single polygon or multiple polygons
+  if(verify.xypolygon(poly, fatal=FALSE))
+    psingle <- TRUE
+  else if(all(unlist(lapply(poly, verify.xypolygon, fatal=FALSE))))
+    psingle <- FALSE
+  else
+    stop("poly must be either a list(x,y) or a list of list(x,y)")
+  
+  w.area <- NULL
+
+  if(psingle) {
+    ## single boundary polygon
+    bdry <- unname(list(poly))
+    if(check || calculate) {
+      w.area <- Area.xypolygon(poly)
+      if(w.area < 0)
+        stop(paste("Area of polygon is negative -",
+                   "maybe traversed in wrong direction?"))
+    }
+  } else {
+    ## multiple boundary polygons
+    bdry <- unname(poly)
+    if(check || calculate) {
+      w.area <- sapply(poly, Area.xypolygon)
+      if(sum(w.area) < 0)
+        stop(paste("Area of window is negative;\n",
+                   "check that all polygons were traversed",
+                   "in the right direction"))
+    }
+  }
+
+  actual.xrange <- range(unlist(lapply(bdry, getElement, name="x")))
+  if(missing(xrange))
+    xrange <- actual.xrange
+  else if(check) {
+    if(!is.vector(xrange) || length(xrange) != 2 || xrange[2L] < xrange[1L])
+      stop("xrange should be a vector of length 2 giving (xmin, xmax)")
+    if(!all(xrange == range(c(xrange, actual.xrange))))
+      stop("polygon's x coordinates outside xrange")
+  }
+    
+  actual.yrange <- range(unlist(lapply(bdry, getElement, name="y")))
+  if(missing(yrange))
+    yrange <- actual.yrange
+  else if(check) {
+    if(!is.vector(yrange) || length(yrange) != 2 || yrange[2L] < yrange[1L])
+      stop("yrange should be a vector of length 2 giving (ymin, ymax)")
+    if(!all(yrange == range(c(yrange, actual.yrange))))
+      stop("polygon's y coordinates outside yrange")
+  }
+
+  if(!is.null(w.area)) {
+    ## tack on area and hole data
+    holes <- (w.area < 0)
+    for(i in seq_along(bdry)) 
+      bdry[[i]] <- append(bdry[[i]], list(area=w.area[i], hole=holes[i]))
+  }
+    
+  w <- list(type="polygonal",
+            xrange=xrange, yrange=yrange, bdry=bdry, units=unitname)
+  class(w) <- "owin"
+      
+  if(check && strict) { 
+    ## strict checks on geometry (self-intersection etc)
+    ok <- owinpolycheck(w)
+    if(!ok) {
+      errors <- attr(ok, "err")
+      stop(paste("Polygon data contain", commasep(errors)))
+    }
+  }
+  if(check && fix) {
+    if(length(bdry) == 1 &&
+       length(bx <- bdry[[1L]]$x) == 4 &&
+       length(unique(bx)) == 2 &&
+       length(unique(bdry[[1L]]$y)) == 2) {
+      ## it's really a rectangle
+      if(Area.xypolygon(bdry[[1L]]) < 0)
+        w$bdry <- lapply(bdry, reverse.xypolygon)
+    } else {
+      ## repair polygon data by invoking polyclip
+      ##        to intersect polygon with larger-than-bounding rectangle
+      ##        (Streamlined version of intersect.owin)
+      ww <- lapply(bdry, reverse.xypolygon)
+      xrplus <- mean(xrange) + c(-1,1) * diff(xrange)
+      yrplus <- mean(yrange) + c(-1,1) * diff(yrange)
+      bignum <- (.Machine$integer.max^2)/2
+      epsclip <- max(diff(xrange), diff(yrange))/bignum
+      rr <- list(list(x=xrplus[c(1,2,2,1)], y=yrplus[c(2,2,1,1)]))
+      bb <- polyclip::polyclip(ww, rr, "intersection",
+                               fillA="nonzero", fillB="nonzero", eps=epsclip)
+      ## ensure correct polarity
+      totarea <- sum(unlist(lapply(bb, Area.xypolygon)))
+      if(totarea < 0)
+        bb <- lapply(bb, reverse.xypolygon)
+      w$bdry <- bb
+    }
+  }
+  return(w)
 }
 
-  owin
-})
+owinInternalMask <- function(xrange=c(0,1), yrange=c(0,1),
+                             ..., mask=NULL, unitname=NULL, xy=NULL,
+                             check     = TRUE) {
+
+  unitname <- as.unitname(unitname)
+
+  if(is.data.frame(mask) &&
+     ncol(mask) %in% c(2,3) &&
+     sum(sapply(mask, is.numeric)) == 2) {
+    ## data frame with 2 columns of coordinates
+    W <- as.owin(W=mask, xy=xy)
+    unitname(W) <- unitname
+    return(W)
+  }
+    
+  if(!is.matrix(mask))
+    stop(paste(sQuote("mask"), "must be a matrix"))
+  if(!is.logical(mask))
+    stop(paste("The entries of", sQuote("mask"), "must be logical"))
+  if(anyNA(mask)) 
+    mask[is.na(mask)] <- FALSE
+      
+  nc <- ncol(mask)
+  nr <- nrow(mask)
+
+  if(!is.null(xy)) {
+    ## pixel coordinates given explicitly
+    ## validate dimensions
+    if(!is.list(xy) || !checkfields(xy, c("x","y")))
+      stop("xy should be a list with entries x and y")
+    xcol <- xy$x
+    yrow <- xy$y
+    if(length(xcol) != nc)
+      stop(paste("length of xy$x =", length(xcol),
+                 "!=", nc, "= number of columns of mask"))
+    if(length(yrow) != nr)
+      stop(paste("length of xy$y =", length(yrow),
+                 "!=", nr, "= number of rows of mask"))
+    ## x and y should be evenly spaced
+    if(!evenly.spaced(xcol))
+      stop("xy$x is not evenly spaced")
+    if(!evenly.spaced(yrow))
+      stop("xy$y is not evenly spaced")
+    ## determine other parameters
+    xstep <- diff(xcol)[1L]
+    ystep <- diff(yrow)[1L]
+    if(missing(xrange) && missing(yrange)) {
+      xrange <- range(xcol) + c(-1,1) * xstep/2
+      yrange <- range(yrow) + c(-1,1) * ystep/2
+    }
+  } else {
+    ## determine pixel coordinates from xrange, yrange
+    if(missing(xrange) && missing(yrange)) {
+      ## take pixels to be 1 x 1 unit
+      xrange <- c(0,nc)
+      yrange <- c(0,nr)
+    } else if(check) {
+      if(!is.vector(xrange) || length(xrange) != 2 || xrange[2L] < xrange[1L])
+        stop("xrange should be a vector of length 2 giving (xmin, xmax)")
+      if(!is.vector(yrange) || length(yrange) != 2 || yrange[2L] < yrange[1L])
+        stop("yrange should be a vector of length 2 giving (ymin, ymax)")
+    }
+    xstep <- diff(xrange)/nc
+    ystep <- diff(yrange)/nr
+    xcol  <- seq(from=xrange[1L]+xstep/2, to=xrange[2L]-xstep/2, length.out=nc)
+    yrow  <- seq(from=yrange[1L]+ystep/2, to=yrange[2L]-ystep/2, length.out=nr)
+  }
+
+  out <- list(type     = "mask",
+              xrange   = unname(xrange),
+              yrange   = unname(yrange),
+              dim      = c(nr, nc),
+              xstep    = unname(xstep),
+              ystep    = unname(ystep),
+              warnings = .Spatstat.Image.Warning,
+              xcol    = unname(xcol), 
+              yrow    = unname(yrow),
+              m       = mask,
+              units   = unitname)
+  class(out) <- "owin"
+  return(out)
+}
 
 #
 #-----------------------------------------------------------------------------
@@ -476,23 +494,23 @@ as.owin.default <- function(W, ..., fatal=TRUE) {
   }
   
   if(checkfields(W, c("xrange", "yrange"))) {
-    Z <- owin(W$xrange, W$yrange)
+    Z <- owinInternalRect(W$xrange, W$yrange)
     return(Z)
   } else if(checkfields(W, c("xmin", "xmax", "ymin", "ymax"))) {
     W <- as.list(W)
-    Z <- owin(c(W$xmin, W$xmax),c(W$ymin, W$ymax))
+    Z <- owinInternalRect(c(W$xmin, W$xmax),c(W$ymin, W$ymax))
     return(Z)
   } else if(checkfields(W, c("xl", "xu", "yl", "yu"))) {
     W <- as.list(W)
-    Z <- owin(c(W$xl, W$xu),c(W$yl, W$yu))
+    Z <- owinInternalRect(c(W$xl, W$xu),c(W$yl, W$yu))
     return(Z)
   } else if(checkfields(W, c("x", "y", "area"))
             && checkfields(W$area, c("xl", "xu", "yl", "yu"))) {
     V <- as.list(W$area)
-    Z <- owin(c(V$xl, V$xu),c(V$yl, V$yu))
+    Z <- owinInternalRect(c(V$xl, V$xu),c(V$yl, V$yu))
     return(Z)
   } else if(is.vector(W) && is.numeric(W) && length(W) == 4) {
-    Z <- owin(W[1:2], W[3:4])
+    Z <- owinInternalRect(W[1:2], W[3:4])
     return(Z)
   } else if(!is.null(Z <- attr(W, "bbox"))) {
     return(as.owin(Z, ..., fatal=fatal))
@@ -525,17 +543,17 @@ Frame.default <- function(X) { as.rectangle(X) }
 ## .........................................................
 
 as.rectangle <- function(w, ...) {
-  if(!inherits(w, c("owin", "im", "ppp", "layered")))
-    w <- as.owin(w, ...)
   if(inherits(w, "owin"))
-    return(owin(w$xrange, w$yrange, unitname=unitname(w)))
-  else if(inherits(w, "im"))
-    return(owin(w$xrange, w$yrange, unitname=unitname(w)))
-  else if(inherits(w, "layered")) 
+    return(owinInternalRect(w$xrange, w$yrange, unitname=unitname(w), check=FALSE))
+  if(inherits(w, "im"))
+    return(owinInternalRect(w$xrange, w$yrange, unitname=unitname(w), check=FALSE))
+  if(inherits(w, "ppp")) 
+    return(owinInternalRect(w$window$xrange, w$window$yrange, unitname=unitname(w$window),
+                            check=FALSE))
+  if(inherits(w, "layered")) 
     return(do.call(boundingbox, unname(lapply(w, as.rectangle, ...))))
-  else if(inherits(w, "ppp")) 
-    return(owin(w$window$xrange, w$window$yrange, unitname=unitname(w$window)))
-  else return(NULL)
+  w <- as.owin(w, ...)
+  return(owinInternalRect(w$xrange, w$yrange, unitname=unitname(w), check=FALSE))
 }
 
 #

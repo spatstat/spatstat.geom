@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.2-8.002
+        CHANGES IN spatstat.geom VERSION 3.2-8.003
 
 OVERVIEW
 
@@ -11,6 +11,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o nncross.ppp
     Slightly accelerated.
+
+    o owin
+    Accelerated in many cases.
+
+    o as.rectangle
+    Accelerated in many cases.
     
         CHANGES IN spatstat.geom VERSION 3.2-8
 
