@@ -2,7 +2,7 @@
 #   nncross.R
 #
 #
-#    $Revision: 1.40 $  $Date: 2024/01/31 03:57:09 $
+#    $Revision: 1.41 $  $Date: 2024/02/01 03:25:39 $
 #
 #  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2012
 #  Licence: GNU Public Licence >= 2
@@ -23,6 +23,7 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
                     sortby=c("range", "var", "x", "y"),
                     is.sorted.X = FALSE,
                     is.sorted.Y = FALSE,
+                    dmax=Inf,
                     metric=NULL) {
   stopifnot(is.ppp(Y) || is.psp(Y))
   if(!is.null(metric)) {
@@ -137,11 +138,16 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
 
   #' upper bound on distance
   #' was: dmax <- diameter(boundingbox(as.rectangle(X), as.rectangle(Y)))
-  BX <- as.rectangle(X)
-  BY <- as.rectangle(Y)
-  rx <- range(BX$xrange, BY$xrange)
-  ry <- range(BX$yrange, BY$yrange)
-  dmax <- sqrt(diff(rx)^2 + diff(ry)^2)
+  if(missing(dmax) || is.infinite(dmax)) {
+    BX <- as.rectangle(X)
+    BY <- as.rectangle(Y)
+    rx <- range(BX$xrange, BY$xrange)
+    ry <- range(BX$yrange, BY$yrange)
+    dmax <- sqrt(diff(rx)^2 + diff(ry)^2)
+  } else {
+    check.1.real(dmax)
+    stopifnot(dmax > 0)
+  }
   huge <- 1.1 * dmax
 
   

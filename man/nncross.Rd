@@ -19,6 +19,7 @@
           sortby=c("range", "var", "x", "y"),
           is.sorted.X = FALSE,
           is.sorted.Y = FALSE,
+          dmax=Inf,
           metric=NULL)
 
   \method{nncross}{default}(X, Y, \dots)
@@ -48,6 +49,10 @@
   \item{is.sorted.X, is.sorted.Y}{
     Logical values attesting whether the point patterns \code{X} and
     \code{Y} have been sorted. See Details.
+  }
+  \item{dmax}{
+    Optional. A number that is known to be larger than the distance
+    between any point of \code{X} and any point of \code{Y}. See Details.
   }
   \item{metric}{
     Optional. A distance metric
@@ -100,9 +105,9 @@
   will only compare two points if they have different values of the
   identifier. See the Examples.
 }
-\section{Sorting data and pre-sorted data}{
+\section{Efficiency, sorting data, and pre-sorted data}{
   Read this section if you care about the speed of computation.
-  
+
   For efficiency, the algorithm sorts the point patterns \code{X} and \code{Y}
   into increasing order of the \eqn{x} coordinate
   or increasing order of the the \eqn{y} coordinate.
@@ -134,6 +139,20 @@
   should be set to \code{TRUE}, and \code{sortby} should be set
   equal to \code{"x"} or \code{"y"} to indicate which coordinate
   is sorted.  
+
+  The algorithm involves an upper bound \code{dmax} on the distances,
+  that is, \code{dmax} is a number that is known to be greater than the
+  distance between any point in \code{X} and any point in \code{Y}.
+  Normally the user does not specify \code{dmax}. The default value is
+  \code{dmax = diameter(boundingbox(Frame(X), Frame(Y)))},
+  that is, the length of the diagonal of a bounding rectangle that
+  contains the windows of \code{X} and \code{Y}.
+  In simulation experiments, where the same windows are
+  used repeatedly, this computation will be repeated unnecessarily.
+  For efficiency in this case, it would be faster to first compute \code{dmax} as above, 
+  and then supply this value to \code{nncross} during the simulations.
+  We caution that the results would be incorrect if the wrong value of
+  \code{dmax} is specified.
 }
 \value{
   A data frame, or a vector if the data frame would contain only one column.

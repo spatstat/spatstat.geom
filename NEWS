@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.2-8.003
+        CHANGES IN spatstat.geom VERSION 3.2-8.004
 
 OVERVIEW
 
@@ -6,18 +6,21 @@ OVERVIEW
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o as.rectangle
+    Accelerated in many cases.
+
     o diameter.owin
     Accelerated when the window is a rectangle.
 
     o nncross.ppp
     Slightly accelerated.
 
+    o nncross.ppp
+    New argument 'dmax'.
+
     o owin
     Accelerated in many cases.
 
-    o as.rectangle
-    Accelerated in many cases.
-    
         CHANGES IN spatstat.geom VERSION 3.2-8
 
 OVERVIEW
