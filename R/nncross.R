@@ -2,7 +2,7 @@
 #   nncross.R
 #
 #
-#    $Revision: 1.41 $  $Date: 2024/02/01 03:25:39 $
+#    $Revision: 1.43 $  $Date: 2024/02/02 02:37:06 $
 #
 #  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2012
 #  Licence: GNU Public Licence >= 2
@@ -23,7 +23,6 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
                     sortby=c("range", "var", "x", "y"),
                     is.sorted.X = FALSE,
                     is.sorted.Y = FALSE,
-                    dmax=Inf,
                     metric=NULL) {
   stopifnot(is.ppp(Y) || is.psp(Y))
   if(!is.null(metric)) {
@@ -136,20 +135,11 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
     if(exclude) iY <- iY[oY]
   }
 
-  #' upper bound on distance
-  #' was: dmax <- diameter(boundingbox(as.rectangle(X), as.rectangle(Y)))
-  if(missing(dmax) || is.infinite(dmax)) {
-    BX <- as.rectangle(X)
-    BY <- as.rectangle(Y)
-    rx <- range(BX$xrange, BY$xrange)
-    ry <- range(BX$yrange, BY$yrange)
-    dmax <- sqrt(diff(rx)^2 + diff(ry)^2)
-  } else {
-    check.1.real(dmax)
-    stopifnot(dmax > 0)
-  }
-  huge <- 1.1 * dmax
-
+  #' Largest possible distance computable in double precision
+  huge <- sqrt(.Machine$double.xmax)
+  #' Code initialises nndist^2 to huge^2
+  #' and returns nndist='huge' whenever the set of distances is empty
+  huge <- 0.999 * huge # Ensures huge^2 <= .Machine$double.xmax
   
   # number of neighbours that are well-defined
   kmaxcalc <- min(nY, kmax)
@@ -187,7 +177,7 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
                 call.=FALSE)
       nnwcode[uhoh] <- NA
       if(want.dist) nndval[uhoh] <- Inf
-    } else if(want.dist && any(uhoh <- (nndval > dmax))) {
+    } else if(want.dist && any(uhoh <- (nndval > 0.99 * huge))) {
       if(!exclude)
         warning("Infinite distances unexpectedly returned in nncross",
                 call.=FALSE)
@@ -238,7 +228,7 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
     if(want.which && any(uhoh <- (nnW == 0))) {
       nnW[uhoh] <- NA
       if(want.dist) nnD[uhoh] <- Inf
-    } else if(want.dist && any(uhoh <- (nnD > dmax)))
+    } else if(want.dist && any(uhoh <- (nnD > 0.99 * huge)))
       nnD[uhoh] <- Inf
     
     # reinterpret indices in original ordering

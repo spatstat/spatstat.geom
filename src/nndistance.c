@@ -7,9 +7,9 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2012
   Licence: GNU Public Licence >= 2
 
-  $Revision: 1.24 $     $Date: 2022/10/22 10:09:51 $
+  $Revision: 1.26 $     $Date: 2024/02/02 08:27:01 $
 
-  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2024
   Licence: GNU Public Licence >= 2
 
   THE FOLLOWING FUNCTIONS ASSUME THAT y IS SORTED IN ASCENDING ORDER 
@@ -194,8 +194,8 @@ void nnXinterface(
    int *wantwhich,
    /* outputs */
    double *nnd,
-   int *nnwhich, 
-   /* prior upper bound on pairwise distances */
+   int *nnwhich,
+   /* largest possible distance */
    double *huge
 ) {
   /* defined above */

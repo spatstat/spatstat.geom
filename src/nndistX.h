@@ -24,7 +24,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2012
   Licence: GPL >= 2
 
-  $Revision: 1.8 $  $Date: 2022/10/23 05:21:52 $
+  $Revision: 1.9 $  $Date: 2024/02/02 08:17:46 $
 
 
 */
@@ -40,12 +40,14 @@ void FNAME(
   int *n1, double *x1, double *y1, int *id1, 
   int *n2, double *x2, double *y2, int *id2, 
   double *nnd,
-  int *nnwhich, 
+  int *nnwhich,
   double *huge
   /* some inputs + outputs are not used in all functions */
 ) { 
   int npoints1, npoints2, maxchunk, i, jleft, jright, lastjwhich;
-  double d2, d2min, x1i, y1i, dx, dy, dy2, hu, hu2;
+  double d2, d2min, x1i, y1i, dx, dy, dy2;
+  double hu, hu2;
+  
 #ifdef USEJ
   int jwhich;
 #endif  

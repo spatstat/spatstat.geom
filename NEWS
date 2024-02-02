@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.2-8.004
+        CHANGES IN spatstat.geom VERSION 3.2-8.006
 
 OVERVIEW
 
@@ -14,9 +14,6 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o nncross.ppp
     Slightly accelerated.
-
-    o nncross.ppp
-    New argument 'dmax'.
 
     o owin
     Accelerated in many cases.
