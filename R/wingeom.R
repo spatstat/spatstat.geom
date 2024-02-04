@@ -1,7 +1,7 @@
 #
 #	wingeom.R	Various geometrical computations in windows
 #
-#	$Revision: 4.141 $	$Date: 2024/01/31 03:30:32 $
+#	$Revision: 4.142 $	$Date: 2024/02/04 08:04:51 $
 #
 
 volume.owin <- function(x) { area.owin(x) }
@@ -124,7 +124,7 @@ square <- function(r=1, unitname=NULL) {
   } else if(length(r) == 2) {
     stopifnot(r[1L] < r[2L])
   } else stop("argument r must be a single number, or a vector of length 2")
-  owin(r,r, unitname=unitname)
+  owinInternalRect(r,r, unitname=unitname)
 }
 
 # convert polygonal window to mask window 
@@ -330,7 +330,7 @@ intersect.owin <- function(..., fatal=FALSE, p) {
   if(!fatal && (is.null(xr) || is.null(yr)))
     return(emptywindow(A))
   #' non-empty intersection of Frames
-  C <- owin(xr, yr, unitname=uname)
+  C <- owinInternalRect(xr, yr, unitname=uname)
 
   # Determine type of intersection
   Arect <- is.rectangle(A)
@@ -532,7 +532,7 @@ union.owin <- function(..., p) {
 
   ## Create a rectangle to contain the result
   
-  C <- owin(range(A$xrange, B$xrange),
+  C <- owinInternalRect(range(A$xrange, B$xrange),
             range(A$yrange, B$yrange),
             unitname=uname)
 
@@ -710,7 +710,7 @@ trim.mask <- function(M, R, tolerant=TRUE) {
     ## R is a rectangle
 
     ## Ensure R is a subset of bounding rectangle of M
-    R <- owin(intersect.ranges(M$xrange, R$xrange),
+    R <- owinInternalRect(intersect.ranges(M$xrange, R$xrange),
               intersect.ranges(M$yrange, R$yrange))
     
     ## Deal with very thin rectangles
@@ -784,7 +784,7 @@ trim.rectangle <- function(W, xmargin=0, ymargin=xmargin) {
     stop("window is too small to cut off margins of the width specified")
   if(sum(ymargin) > diff(W$yrange))
     stop("window is too small to cut off margins of the height specified")
-  owin(W$xrange + c(1,-1) * xmargin,
+  owinInternalRect(W$xrange + c(1,-1) * xmargin,
        W$yrange + c(1,-1) * ymargin,
        unitname=unitname(W))
 }
@@ -800,7 +800,7 @@ grow.rectangle <- function(W, xmargin=0, ymargin=xmargin, fraction=NULL) {
   ymargin <- ensure2vector(ymargin)
   if(any(xmargin < 0) || any(ymargin < 0))
     stop("values of xmargin, ymargin must be nonnegative")
-  owin(W$xrange + c(-1,1) * xmargin,
+  owinInternalRect(W$xrange + c(-1,1) * xmargin,
        W$yrange + c(-1,1) * ymargin,
        unitname=unitname(W))
 }

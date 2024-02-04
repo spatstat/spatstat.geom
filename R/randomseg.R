@@ -1,7 +1,7 @@
 #
 # randomseg.R
 #
-# $Revision: 1.17 $ $Date: 2022/01/04 05:30:06 $
+# $Revision: 1.18 $ $Date: 2024/02/04 08:04:51 $
 #
 
 
@@ -28,7 +28,7 @@ rlinegrid <- function(angle=45, spacing=0.1, win=owin()) {
            y0= ymid + p * si - q * co,
            x1= xmid + p * co - q * si,
            y1= ymid + p * si + q * co,
-           window=owin(xmid+c(-1,1)*rmax, ymid+c(-1,1)*rmax), check=FALSE)
+           window=owinInternalRect(xmid+c(-1,1)*rmax, ymid+c(-1,1)*rmax), check=FALSE)
   # clip to window
   X <- X[win]
   return(X)

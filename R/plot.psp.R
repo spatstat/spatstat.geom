@@ -3,7 +3,7 @@
 #'
 #'  plot method for segment patterns
 #'
-#'  $Revision: 1.6 $ $Date: 2022/08/06 10:24:57 $
+#'  $Revision: 1.7 $ $Date: 2024/02/04 08:04:51 $
 
 plot.psp <- function(x, ..., main, add=FALSE,
                      show.all=!add, 
@@ -83,7 +83,7 @@ plot.psp <- function(x, ..., main, add=FALSE,
     xwidth <- diff(bb$xrange)
     xheight <- diff(bb$yrange)
     xsize <- max(xwidth, xheight)
-    bb.rib <- owin(bb$xrange[2] + c(ribsep, ribsep+ribwid) * xsize,
+    bb.rib <- owinInternalRect(bb$xrange[2] + c(ribsep, ribsep+ribwid) * xsize,
                    bb$yrange)
     bb.all <- boundingbox(bb.rib, bb)
     if(do.plot) {

@@ -1,7 +1,7 @@
 #
 # areadiff.R
 #
-#  $Revision: 1.41 $  $Date: 2022/05/21 09:52:11 $
+#  $Revision: 1.42 $  $Date: 2024/02/04 08:04:51 $
 #
 # Computes sufficient statistic for area-interaction process
 #
@@ -229,7 +229,7 @@ areaGain.grid <- function(u, X, r, ..., W=NULL, ngrid=spatstat.options("ngrid.di
     D <- distmap(X, eps=eps)
     DW <- D[W, drop=FALSE]
     # distance from (0,0) - thresholded to make digital discs
-    discWin <- owin(c(-rmax,rmax),c(-rmax,rmax))
+    discWin <- owinInternalRect(c(-rmax,rmax),c(-rmax,rmax))
     discWin <- as.mask(discWin, eps=eps)
     rad <- as.im(function(x,y){sqrt(x^2+y^2)}, W=discWin)
     # 

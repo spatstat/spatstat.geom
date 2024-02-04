@@ -3,7 +3,7 @@
 ##
 ##     Texture plots and texture maps
 ##
-##  $Revision: 1.16 $ $Date: 2020/12/19 05:25:06 $
+##  $Revision: 1.17 $ $Date: 2024/02/04 08:04:51 $
 
 ### .................. basic graphics .............................
 
@@ -174,13 +174,13 @@ plot.texturemap <- local({
       vgap   <- (height - n * boxheight)/(n-1)
       boxes <- list()
       for(i in 1:n) boxes[[i]] <-
-        owin(xlim, ylim[1] + c(i-1, i) * boxheight + (i-1) * vgap)
+        owinInternalRect(xlim, ylim[1] + c(i-1, i) * boxheight + (i-1) * vgap)
     } else {
       boxwidth <- min(height, width/(n + (n-1) * gap))
       hgap   <- (width - n * boxwidth)/(n-1)
       boxes <- list()
       for(i in 1:n) boxes[[i]] <-
-        owin(xlim[1] + c(i-1, i) * boxwidth + (i-1) * hgap, ylim)
+        owinInternalRect(xlim[1] + c(i-1, i) * boxwidth + (i-1) * hgap, ylim)
     }
     boxsize <- shortside(boxes[[1]])
     if(is.null(spacing))
@@ -305,22 +305,22 @@ textureplot <- local({
         switch(leg.side,
                right={
                  ## legend to right of image
-                 owin(bb$xrange[2] + c(legsep, legsep+legwid) * Size,
+                 owinInternalRect(bb$xrange[2] + c(legsep, legsep+legwid) * Size,
                       bb$yrange)
                },
                left={
                  ## legend to left of image
-                 owin(bb$xrange[1] - c(legsep+legwid, legsep) * Size,
+                 owinInternalRect(bb$xrange[1] - c(legsep+legwid, legsep) * Size,
                       bb$yrange)
                },
                top={
                  ## legend above image
-                 owin(bb$xrange,
+                 owinInternalRect(bb$xrange,
                       bb$yrange[2] + c(legsep, legsep+legwid) * Size)
                },
                bottom={
                  ## legend below image
-                 owin(bb$xrange,
+                 owinInternalRect(bb$xrange,
                       bb$yrange[1] - c(legsep+legwid, legsep) * Size)
            })
       iside <- match(leg.side, c("bottom", "left", "top", "right"))

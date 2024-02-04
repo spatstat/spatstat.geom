@@ -1,7 +1,7 @@
 ##
 ## boundingbox.R
 ##
-## $Revision: 1.11 $ $Date: 2017/12/30 05:04:44 $
+## $Revision: 1.12 $ $Date: 2024/02/04 08:04:51 $
 
 # bounding.box <- function(...) {
 #  .Deprecated("boundingbox", "spatstat")
@@ -55,7 +55,7 @@ recognise.spatstat.type <- local({
 
 bbEngine <- local({
 
-  bb.listxy <- function(X) owin(range(X$x), range(X$y))
+  bb.listxy <- function(X) owinInternalRect(range(X$x), range(X$y))
 
   bb.linnet <- function(X) boundingbox(vertices(X))
 
@@ -99,7 +99,7 @@ bbEngine <- local({
       ## take bounding box of these boxes
       xrange <- range(unlist(lapply(boxes, getElement, name="xrange")))
       yrange <- range(unlist(lapply(boxes, getElement, name="yrange")))
-      W <- owin(xrange, yrange)
+      W <- owinInternalRect(xrange, yrange)
       ## If all of the windows have a common unit name, give
       ## that unit name to the bounding box.
       youse <- unique(t(sapply(boxes,unitname)))
@@ -148,7 +148,7 @@ bbEngine <- local({
                return(NULL)
              xr <- range(unlist(lapply(bdry, rangeofx)))
              yr <- range(unlist(lapply(bdry, rangeofy)))
-             return(owin(xr, yr, unitname=unitname(w)))
+             return(owinInternalRect(xr, yr, unitname=unitname(w)))
            },
            mask = {
              m <- w$m
@@ -156,7 +156,7 @@ bbEngine <- local({
              y <- rastery.mask(w)
              xr <- range(x[m]) + c(-1,1) * w$xstep/2
              yr <- range(y[m]) + c(-1,1) * w$ystep/2
-             return(owin(xr, yr, unitname=unitname(w)))
+             return(owinInternalRect(xr, yr, unitname=unitname(w)))
            },
            stop("unrecognised window type", w$type)
            )
@@ -171,7 +171,7 @@ bbEngine <- local({
 
 boundingbox.default <- local({
 
-  bb.listxy <- function(X) owin(range(X$x), range(X$y))
+  bb.listxy <- function(X) owinInternalRect(range(X$x), range(X$y))
 
   boundingbox.default <- function(...) {
     arglist <- list(...)
@@ -189,7 +189,7 @@ boundingbox.default <- local({
       vecs <- arglist[isnumvec]
       x <- vecs[[1L]]
       y <- vecs[[2L]]
-      bb <- if(length(x) == length(y)) owin(range(x), range(y)) else NULL
+      bb <- if(length(x) == length(y)) owinInternalRect(range(x), range(y)) else NULL
       arglist <- arglist[!isnumvec]
     }
     if(length(arglist) == 0)

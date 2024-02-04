@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.47 $  $Date: 2024/01/15 05:34:44 $
+##   $Revision: 1.48 $  $Date: 2024/02/04 08:04:51 $
 ##
 
 symbolmap <- local({
@@ -728,37 +728,37 @@ plan.legend.layout <- function(B,
   switch(side,
          right={
            ## symbols to right of image
-           b <- owin(B$xrange[2] + sep + c(0, size),
+           b <- owinInternalRect(B$xrange[2] + sep + c(0, size),
                      B$yrange)
            ## text to right of symbols
-           tt <- owin(b$xrange[2] + sep + c(0, textwidth),
+           tt <- owinInternalRect(b$xrange[2] + sep + c(0, textwidth),
                       b$yrange)
            iside <- 4
          },
          left={
            ## symbols to left of image
-           b <- owin(B$xrange[1] - sep - c(size, 0),
+           b <- owinInternalRect(B$xrange[1] - sep - c(size, 0),
                      B$yrange)
            ## text to left of symbols
-           tt <- owin(b$xrange[1] - sep - c(textwidth, 0),
+           tt <- owinInternalRect(b$xrange[1] - sep - c(textwidth, 0),
                       b$yrange)
            iside <- 2
          },
          top={
            ## symbols above image
-           b <- owin(B$xrange,
+           b <- owinInternalRect(B$xrange,
                      B$yrange[2] + sep + c(0, size))
            ## text above symbols
-           tt <- owin(b$xrange,
+           tt <- owinInternalRect(b$xrange,
                       b$yrange[2] + 3* charsize + c(0, textheight))
            iside <- 3
          },
          bottom={
            ## symbols below image
-           b <- owin(B$xrange,
+           b <- owinInternalRect(B$xrange,
                      B$yrange[1] - sep - c(size, 0))
            ## text below symbols
-           tt <- owin(b$xrange,
+           tt <- owinInternalRect(b$xrange,
                       b$yrange[1] - 3 * charsize - c(textheight, 0))
            iside <- 1
          })

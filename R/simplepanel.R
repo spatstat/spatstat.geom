@@ -4,7 +4,7 @@
 #  A simple, robust point & click interface
 #     used in rmh visual debugger.
 #
-#  $Revision: 1.16 $  $Date: 2022/11/03 11:08:33 $
+#  $Revision: 1.17 $  $Date: 2024/02/04 08:04:51 $
 #
 
 simplepanel <- function(title, B, boxes, clicks, redraws=NULL, exit=NULL, env) {
@@ -74,23 +74,23 @@ grow.simplepanel <- function(P, side=c("right","left","top","bottom"),
   switch(side,
          right={
            new.width <- if(!is.null(len)) len else sidelengths(B)[1]/2
-           extraspace <- owin(B$xrange[2] + c(0, new.width), B$yrange)
+           extraspace <- owinInternalRect(B$xrange[2] + c(0, new.width), B$yrange)
            new.boxes <- layout.boxes(extraspace, n, ..., aspect=aspect)
          },
          left={
            new.width <- if(!is.null(len)) len else sidelengths(B)[1]/2
-           extraspace <- owin(B$xrange[1] - c(new.width, 0), B$yrange)
+           extraspace <- owinInternalRect(B$xrange[1] - c(new.width, 0), B$yrange)
            new.boxes <- layout.boxes(extraspace, n, ..., aspect=aspect)
          },
          top={
            new.height <- if(!is.null(len)) len else sidelengths(B)[2]/2
-           extraspace <- owin(B$xrange, B$yrange[2] + c(0, new.height))
+           extraspace <- owinInternalRect(B$xrange, B$yrange[2] + c(0, new.height))
            new.boxes <- layout.boxes(extraspace, n, ..., aspect=aspect,
                                      horizontal=TRUE)
          },
          bottom={
            new.height <- if(!is.null(len)) len else sidelengths(B)[2]/2
-           extraspace <- owin(B$xrange, B$yrange[1] - c(new.height, 0))
+           extraspace <- owinInternalRect(B$xrange, B$yrange[1] - c(new.height, 0))
            new.boxes <- layout.boxes(extraspace, n, ..., aspect=aspect,
                                      horizontal=TRUE)
          })
@@ -185,7 +185,7 @@ layout.boxes <- function(B, n, horizontal=FALSE, aspect=0.5, usefrac=0.9){
     usewidth <-  min(useheight /aspect, width * usefrac)
     lostwidth <- width - usewidth
     lostheightshare <- heightshare - useheight
-    template <- owin(c(0, usewidth), c(0, useheight))
+    template <- owinInternalRect(c(0, usewidth), c(0, useheight))
     boxes <- list()
     boxes[[1]] <- shift(template,
                         c(B$xrange[1]+lostwidth/2,

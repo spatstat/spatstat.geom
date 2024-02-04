@@ -4,7 +4,7 @@
 ##   Simple objects for the elements of a diagram (text, arrows etc)
 ##    that are compatible with plot.layered and plot.solist
 ##
-##   $Revision: 1.14 $ $Date: 2018/11/29 05:20:09 $
+##   $Revision: 1.15 $ $Date: 2024/02/04 08:04:51 $
 
 # ......... internal class 'diagramobj' supports other classes  .........
 
@@ -53,7 +53,7 @@ textstring <- function(x, y, txt=NULL, ...) {
       x <- x$x
       stopifnot(length(x) == length(y))
     }
-    X <- ppp(x, y, window=owin(range(x),range(y)))
+    X <- ppp(x, y, window=owinInternalRect(range(x),range(y)))
   }
   marks(X) <- txt
   Y <- diagramobj(X, otherargs=list(...))
@@ -345,7 +345,7 @@ plot.onearrow <- function(x, ...,
                     extrargs=c("col", "lwd", "lty", "xpd", "lend"))
 
   HT <- rbind(Head, Tail)
-  W <- owin(range(HT[,1]), range(HT[,2]))
+  W <- owinInternalRect(range(HT[,1]), range(HT[,2]))
   nht <- nrow(HT)
   HT <- cbind(HT[-nht, , drop=FALSE], HT[-1, , drop=FALSE])
   objLines <- as.psp(HT, window=W)

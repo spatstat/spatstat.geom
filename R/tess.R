@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.110 $ $Date: 2023/09/06 02:36:38 $
+#   $Revision: 1.111 $ $Date: 2024/02/04 08:04:51 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -23,7 +23,7 @@ tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
     stopifnot(is.numeric(ygrid) && all(diff(ygrid) > 0))
     if(!is.null(window))
       warning("Argument 'window' ignored, because xgrid, grid are given")
-    window <- owin(range(xgrid), range(ygrid), unitname=uname)
+    window <- owinInternalRect(range(xgrid), range(ygrid), unitname=uname)
     ntiles <- (length(xgrid)-1) * (length(ygrid)-1)
     out <- list(type="rect", window=window, xgrid=xgrid, ygrid=ygrid, n=ntiles)
   } else if(istiled) {
@@ -444,7 +444,7 @@ tiles <- function(x) {
            ny <- length(yg) - 1
            for(j in rev(seq_len(ny))) {
              for(i in seq_len(nx)) {
-               winij <- owin(xg[c(i,i+1)], yg[c(j,j+1)])
+               winij <- owinInternalRect(xg[c(i,i+1)], yg[c(j,j+1)])
                out <- append(out, list(winij))
              }
            }

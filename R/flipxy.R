@@ -3,7 +3,7 @@
 #
 # flip x and y coordinates
 #
-# $Revision: 1.3 $ $Date: 2017/02/07 07:22:47 $ 
+# $Revision: 1.4 $ $Date: 2024/02/04 08:04:51 $ 
 #
 
 flipxy <- function(X) {
@@ -30,7 +30,7 @@ flipxy.owin <- function(X) {
   verifyclass(X, "owin")
   switch(X$type,
          rectangle={
-           W <- owin(X$yrange, X$xrange, unitname=unitname(X))
+           W <- owinInternalRect(X$yrange, X$xrange, unitname=unitname(X))
          },
          polygonal={
            bdry <- lapply(X$bdry, flipxypolygon)

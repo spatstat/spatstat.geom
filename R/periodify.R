@@ -3,7 +3,7 @@
 #
 # replicate a pattern periodically
 #
-#  $Revision: 1.3 $  $Date: 2011/04/17 05:52:50 $
+#  $Revision: 1.4 $  $Date: 2024/02/04 08:04:51 $
 #
 
 periodify <- function(X, ...) {
@@ -39,7 +39,7 @@ periodify.ppp <- function(X, nx=1, ny=1, ...,
   if(!combine)
     return(Xshift)
   Wnew <- if(isrect) {
-    owin(range(range(W$xrange) + range(shifts[,1])),
+    owinInternalRect(range(range(W$xrange) + range(shifts[,1])),
          range(range(W$yrange) + range(shifts[,2])))
   } else NULL
   Z <- do.call(superimpose, append(Xshift, list(W=Wnew, check=check)))
@@ -75,7 +75,7 @@ periodify.psp <- function(X, nx=1, ny=1, ...,
   if(!combine)
     return(Xshift)
   Wnew <- if(isrect) {
-    owin(range(range(W$xrange) + range(shifts[,1])),
+    owinInternalRect(range(range(W$xrange) + range(shifts[,1])),
          range(range(W$yrange) + range(shifts[,2])))
   } else NULL
   Z <- do.call(superimpose, append(Xshift, list(W=Wnew, check=check)))
@@ -107,7 +107,7 @@ periodify.owin <- function(X, nx=1, ny=1, ...,
   if(combine) {
     if(isrect) {
       # result is a rectangle
-      Y <-  owin(range(range(X$xrange) + range(shifts[,1])),
+      Y <-  owinInternalRect(range(range(X$xrange) + range(shifts[,1])),
                     range(range(X$yrange) + range(shifts[,2])))
     } else {
       # result is another type of window

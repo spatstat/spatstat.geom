@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.111 $ $Date: 2022/05/23 02:33:06 $
+#  $Revision: 1.112 $ $Date: 2024/02/04 08:04:51 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -128,7 +128,7 @@ as.psp.data.frame <- function(x, ..., window=NULL, marks=NULL,
     dy <- sin(x$angle) * rr
     bb <- boundingbox(window)
     rmax <- max(rr)
-    bigbox <- owin(bb$xrange + c(-1,1) * rmax, bb$yrange + c(-1,1) * rmax)
+    bigbox <- owinInternalRect(bb$xrange + c(-1,1) * rmax, bb$yrange + c(-1,1) * rmax)
     pattern <- psp(x$xmid - dx, x$ymid - dy, x$xmid + dx, x$ymid + dy,
                    window=bigbox,check=FALSE)
     out <- pattern[window]
@@ -188,7 +188,7 @@ as.psp.default <- function(x, ..., window=NULL, marks=NULL,
     window <- as.owin(window)
     bb <- boundingbox(window)
     rmax <- max(rr)
-    bigbox <- owin(bb$xrange + c(-1,1) * rmax, bb$yrange + c(-1,1) * rmax)
+    bigbox <- owinInternalRect(bb$xrange + c(-1,1) * rmax, bb$yrange + c(-1,1) * rmax)
     pattern <- psp(x$x - dx, x$y - dy, x$x + dx, x$y + dy,
                    window=bigbox, marks=marks, check=FALSE)
     clipped <- pattern[window]

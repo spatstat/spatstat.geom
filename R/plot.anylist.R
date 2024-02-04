@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.36 $ $Date: 2023/01/05 02:12:32 $
+##  $Revision: 1.37 $ $Date: 2024/02/04 08:04:51 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
@@ -360,7 +360,7 @@ plot.anylist <- plot.solist <- plot.listof <-
       eheights <- marpar[1] + heights + marpar[3] + mainheight
       Width <- sum(ewidths) + hsep * (length(ewidths) - 1)
       Height <- sum(eheights) + vsep * (length(eheights) - 1)
-      bigbox <- owin(c(0, Width), c(0, Height))
+      bigbox <- owinInternalRect(c(0, Width), c(0, Height))
       ox <- marpar[2] + cumsum(c(0, ewidths + hsep))[1:ncols]
       oy <- marpar[1] + cumsum(c(0, rev(eheights) + vsep))[nrows:1]
       panelorigin <- as.matrix(expand.grid(x=ox, y=oy))

@@ -2,7 +2,7 @@
 # clickpoly.R
 #
 #
-# $Revision: 1.11 $  $Date: 2022/01/04 05:30:06 $
+# $Revision: 1.12 $  $Date: 2024/02/04 08:04:51 $
 #
 #
 
@@ -42,7 +42,7 @@ clickpoly <- function(add=FALSE, nv=NULL, np=1, ...) {
 clickbox <- function(add=TRUE, ...) {
   spatstatLocator(0) # check locator enabled
   cat("Click two corners of a box\n")
-  if(!add) plot(owin(), main="Click two corners of a box") 
+  if(!add) plot(owinInternalRect(), main="Click two corners of a box") 
   a <- try(spatstatLocator(1), silent=TRUE)
   if(inherits(a, "try-error")) {
     ## add=TRUE but there is no current plot
@@ -55,7 +55,7 @@ clickbox <- function(add=TRUE, ...) {
   abline(v=b$x)
   abline(h=b$y)
   ab <- concatxy(a, b)
-  result <- owin(range(ab$x), range(ab$y))
+  result <- owinInternalRect(range(ab$x), range(ab$y))
   plotPolygonBdry(result, ...)
   return(result)
 }

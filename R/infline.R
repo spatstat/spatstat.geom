@@ -3,7 +3,7 @@
 #
 # Infinite lines
 #
-# $Revision: 1.28 $ $Date: 2017/02/07 07:47:20 $
+# $Revision: 1.29 $ $Date: 2024/02/04 08:04:51 $
 #
 
 infline <- function(a=NULL, b=NULL, h=NULL, v=NULL, p=NULL, theta=NULL) {
@@ -83,7 +83,7 @@ clip.infline <- function(L, win) {
   width <- diff(xr)
   height <- diff(yr)
   rmax <- sqrt(width^2 + height^2)/2
-  boundbox <- owin(xmid + c(-1,1) * rmax, ymid + c(-1,1) * rmax)
+  boundbox <- owinInternalRect(xmid + c(-1,1) * rmax, ymid + c(-1,1) * rmax)
   # convert line coordinates to origin (xmid, ymid)
   p <- L$p
   theta <- L$theta
@@ -162,8 +162,8 @@ chop.tess <- function(X, L) {
       if(h < yr[1L] || h > yr[2L])
         Z <- NULL
       else {
-        lower <- owin(xr, c(yr[1L], h))
-        upper <- owin(xr, c(h, yr[2L]))
+        lower <- owinInternalRect(xr, c(yr[1L], h))
+        upper <- owinInternalRect(xr, c(h, yr[2L]))
         Z <- tess(tiles=list(lower,upper), window=B)
       }
     } else if(!is.na(v <- L[i, "v"])) {
@@ -171,8 +171,8 @@ chop.tess <- function(X, L) {
       if(v < xr[1L] || v > xr[2L])
         Z <- NULL
       else {
-        left <- owin(c(xr[1L], v), yr)
-        right <- owin(c(v, xr[2L]), yr)
+        left <- owinInternalRect(c(xr[1L], v), yr)
+        right <- owinInternalRect(c(v, xr[2L]), yr)
         Z <- tess(tiles=list(left,right), window=B)
       }
     } else {
@@ -188,7 +188,7 @@ chop.tess <- function(X, L) {
                               y=c(yleft,ylo,ylo,yright)))
       upper <- owin(poly=list(x=xr[c(1L,2L,2L,1L)],
                               y=c(yleft,yright,yhi,yhi)))
-      Bplus <- owin(xr, c(ylo, yhi), unitname=unitname(B))
+      Bplus <- owinInternalRect(xr, c(ylo, yhi), unitname=unitname(B))
       Z <- tess(tiles=list(lower,upper), window=Bplus)
     }
     # intersect this simple tessellation with X

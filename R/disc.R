@@ -3,7 +3,7 @@
 ##
 ##  discs and ellipses
 ##
-## $Revision: 1.21 $ $Date: 2021/09/05 01:14:56 $
+## $Revision: 1.22 $ $Date: 2024/02/04 08:04:51 $
 ##
 
 disc <- local({
@@ -38,7 +38,7 @@ disc <- local({
     } else {
       xr <- centre[1L] + radius * c(-1,1)
       yr <- centre[2L] + radius * c(-1,1)
-      B <- owin(xr,yr)
+      B <- owinInternalRect(xr,yr)
       IW <- as.im(indic, B, x0=centre[1L], y0=centre[2L], r=radius, ...)
       W <- levelset(IW, 1, "==")
     }
@@ -111,7 +111,7 @@ ellipse <- local({
       xr <- xm*c(-1,1)+centre[1L]
       yr <- ym*c(-1,1)+centre[2L]
       ## Wrecked-angle to contain the mask.
-      B  <- as.mask(owin(xr,yr),...)
+      B  <- as.mask(owinInternalRect(xr,yr),...)
       ## Build the mask as a level set.
       IW <- as.im(indic, B, x0=centre[1L], y0=centre[2L], a=a, b=b, co=co, si=si)
       return(levelset(IW, 1, "=="))

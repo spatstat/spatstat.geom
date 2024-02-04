@@ -1,7 +1,7 @@
 #
 #	affine.R
 #
-#	$Revision: 1.55 $	$Date: 2023/11/05 00:36:40 $
+#	$Revision: 1.56 $	$Date: 2024/02/04 08:04:51 $
 #
 
 affinexy <- function(X, mat=diag(c(1,1)), vec=c(0,0), invert=FALSE) {
@@ -48,7 +48,7 @@ affinexypolygon <- function(p, mat=diag(c(1,1)), vec=c(0,0),
          rectangle={
            if(diagonalmatrix) {
              # result is a rectangle
-             Y <- owin(range(mat[1L,1L] * X$xrange + vec[1L]),
+             Y <- owinInternalRect(range(mat[1L,1L] * X$xrange + vec[1L]),
                        range(mat[2L,2L] * X$yrange + vec[2L]))
              unitname(Y) <- newunits
              return(Y)

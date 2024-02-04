@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.157 $   $Date: 2023/07/09 04:34:17 $
+#  $Revision: 1.158 $   $Date: 2024/02/04 08:04:51 $
 #
 #  Plotting code for pixel images
 #
@@ -652,32 +652,32 @@ plot.im <- local({
     }
     
     # determine plot region
-    bb <- owin(x$xrange, x$yrange)
+    bb <- owinInternalRect(x$xrange, x$yrange)
     Width <- diff(bb$xrange)
     Height <- diff(bb$yrange)
     Size <- max(Width, Height)
     switch(ribside,
            right={
              # ribbon to right of image
-             bb.rib <- owin(bb$xrange[2] + c(ribsep, ribsep+ribwid) * Size,
+             bb.rib <- owinInternalRect(bb$xrange[2] + c(ribsep, ribsep+ribwid) * Size,
                             bb$yrange)
              rib.iside <- 4
            },
            left={
              # ribbon to left of image
-             bb.rib <- owin(bb$xrange[1] - c(ribsep+ribwid, ribsep) * Size,
+             bb.rib <- owinInternalRect(bb$xrange[1] - c(ribsep+ribwid, ribsep) * Size,
                             bb$yrange)
              rib.iside <- 2
            },
            top={
              # ribbon above image
-             bb.rib <- owin(bb$xrange,
+             bb.rib <- owinInternalRect(bb$xrange,
                             bb$yrange[2] + c(ribsep, ribsep+ribwid) * Size)
              rib.iside <- 3
            },
            bottom={
              # ribbon below image
-             bb.rib <- owin(bb$xrange,
+             bb.rib <- owinInternalRect(bb$xrange,
                             bb$yrange[1] - c(ribsep+ribwid, ribsep) * Size)
              rib.iside <- 1
            })

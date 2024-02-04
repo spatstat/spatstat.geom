@@ -3,7 +3,7 @@
 #
 #	The 'plot' method for observation windows (class "owin")
 #
-#	$Revision: 1.62 $	$Date: 2020/12/19 05:25:06 $
+#	$Revision: 1.63 $	$Date: 2024/02/04 08:04:51 $
 #
 #
 #
@@ -280,8 +280,8 @@ break.holes <- local({
              xsplit <- mean(range(p.i$x))
              left <- c(xr[1], xsplit)
              right <- c(xsplit, xr[2])
-             xleft <- insect(x, owin(left, yr))
-             xright <- insect(x, owin(right, yr))
+             xleft <- insect(x, owinInternalRect(left, yr))
+             xright <- insect(x, owinInternalRect(right, yr))
              ## recurse
              xleft <- break.holes(xleft, splitby="y",
                                   depth=depth+1, maxdepth=maxdepth)
@@ -295,8 +295,8 @@ break.holes <- local({
              ysplit <- mean(range(p.i$y))
              lower <- c(yr[1], ysplit)
              upper <- c(ysplit, yr[2])
-             xlower <- insect(x, owin(xr, lower))
-             xupper <- insect(x, owin(xr, upper))
+             xlower <- insect(x, owinInternalRect(xr, lower))
+             xupper <- insect(x, owinInternalRect(xr, upper))
              ## recurse
              xlower <- break.holes(xlower, splitby="x",
                                    depth=depth+1, maxdepth=maxdepth)

@@ -66,7 +66,7 @@ erosion.owin <-
   if(is.rectangle(w) && polygonal) {
     # result is a smaller rectangle
     if(shrink.frame) {
-      return(owin(exr, eyr))  # type 'rectangle' 
+      return(owinInternalRect(exr, eyr))  # type 'rectangle' 
     } else {
       return(owin(xr, yr, poly=ebox, check=FALSE)) # type 'polygonal'
     }

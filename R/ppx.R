@@ -3,7 +3,7 @@
 #
 #  class of general point patterns in any dimension
 #
-#  $Revision: 1.70 $  $Date: 2020/12/19 05:25:06 $
+#  $Revision: 1.71 $  $Date: 2024/02/04 08:04:51 $
 #
 
 ppx <- local({
@@ -459,7 +459,7 @@ unitname.ppx <- function(x) { unitname(x$domain) }
 
 as.owin.boxx <- function(W, ..., fatal=TRUE) {
   ra <- W$ranges
-  if(length(ra) == 2) return(owin(ra[[1]], ra[[2]]))
+  if(length(ra) == 2) return(owinInternalRect(ra[[1]], ra[[2]]))
   if(fatal) stop(paste("Cannot interpret box of dimension",
                        length(ra), "as a window"))
   return(NULL)

@@ -3,7 +3,7 @@
 #'
 #'   Check validity of polygon data
 #'
-#'  $Revision: 1.4 $  $Date: 2022/05/21 09:52:11 $
+#'  $Revision: 1.5 $  $Date: 2024/02/04 08:04:51 $
 #'
 
 #' check validity of a polygonal owin
@@ -15,7 +15,7 @@ owinpolycheck <- function(W, verbose=TRUE) {
   # extract stuff
   B <- W$bdry
   npoly <- length(B)
-  outerframe <- owin(W$xrange, W$yrange)
+  outerframe <- owinInternalRect(W$xrange, W$yrange)
   # can't use as.rectangle here; we're still checking validity
   boxarea.mineps <- area.owin(outerframe) * (1 - 0.00001)
 
