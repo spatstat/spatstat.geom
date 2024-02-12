@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.48 $  $Date: 2024/02/04 08:04:51 $
+##   $Revision: 1.51 $  $Date: 2024/02/12 07:45:33 $
 ##
 
 symbolmap <- local({
@@ -768,22 +768,88 @@ plan.legend.layout <- function(B,
 }
 
 
-as.colourmap.symbolmap <- function(x, ...) {
+as.colourmap.symbolmap <- function(x, ..., warn=TRUE) {
   ## extract only the colour map and plot it
   parlist <- attr(x, "stuff")$parlist
   iscol <- sapply(parlist, inherits, what="colourmap")
   nc <- sum(iscol)
   if(nc == 0) {
-    warning("No colour map information was detected", call.=FALSE)
+    if(warn) warning("No colour map information was detected", call.=FALSE)
     return(NULL)
   }
   used <- which(iscol)[[1L]]
   cmap <- parlist[[used]]
-  if(nc > 1) 
+  if(nc > 1 && warn)
     warning(paste("More than one colour map was detected;",
                   "using the colour map for",
                   sQuote(names(parlist)[used])),
             call.=FALSE)
   return(cmap)
+}
+
+summary.symbolmap <- function(object, ...) {
+  st <- attr(object, "stuff")
+  typ <- st[["type"]]
+  dom <- switch(typ,
+                constant = { integer(0) },
+                discrete = { st$inputs },
+                continuous = { st$range })
+  parlist <- st[["parlist"]]
+  parnames <- names(parlist)
+  iscol <- sapply(parlist, inherits, what="colourmap")
+  isatom <- sapply(parlist, is.atomic)
+  lenfs <- lengths(parlist)
+  isconstant <- isatom & (lenfs == 1)
+  if(any(iscol)) 
+    isconstant[iscol] <- (lengths(lapply(parlist[iscol], colouroutputs)) == 1)
+  z <- list(type      = typ,
+            domain    = dom, 
+            pars      = parnames,
+            colpars   = parnames[iscol],
+            rangetype = if(typ == "continuous") st[["rangetype"]] else NULL,
+            range     = if(typ == "continuous") st[["range"]] else NULL,
+            isconstant = isconstant)
+  class(z) <- c("summary.symbolmap", class(z))
+  return(z)
+}
+
+print.summary.symbolmap <- function(x, ...) {
+  with(x, {
+    switch(type,
+           constant = {
+             if(length(pars) == 0) {
+               cat("Symbol map", "with no parameters", fill=TRUE)
+             } else {
+               cat("Symbol map", "with constant values", fill=TRUE)
+             }
+           },
+           discrete = {
+             cat("Symbol map", "for discrete inputs:", fill=TRUE)
+             print(domain)
+           },
+           continuous = {
+             cat("Symbol map", "for",
+                 switch(rangetype,
+                        numeric="real numbers",
+                        date = "dates",
+                        datetime = "date/time values",
+                        unknown = "unrecognised data"),
+                 if(!is.null(range)) paste("in", prange(range)) else NULL,
+                 fill=TRUE)
+           })
+    if(length(pars) > 0) {
+      splat("Graphics parameters defined:",
+            commasep(sQuote(pars)))
+      if(length(colpars) > 0)
+        splat("Colour parameters:", commasep(sQuote(colpars)))
+      if(all(isconstant)) {
+        splat("All graphics parameters are constant")
+      } else {
+        splat("Non-constant graphics parameters:",
+              commasep(sQuote(pars[!isconstant])))
+      }
+    }
+    return(invisible(NULL))
+  })
 }
 

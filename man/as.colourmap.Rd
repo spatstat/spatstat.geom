@@ -13,7 +13,7 @@
 
   \method{as.colourmap}{colourmap}(x, \dots)
 
-  \method{as.colourmap}{symbolmap}(x, \dots)
+  \method{as.colourmap}{symbolmap}(x, \dots, warn=TRUE)
 }
 \arguments{
   \item{x}{
@@ -24,10 +24,15 @@
   \item{\dots}{
     Other arguments passed to methods.
   }
+  \item{warn}{
+    Logical value specifying whether to issue a warning
+    if \code{x} does not contain any colour map information.
+  }
 }
 \details{
   If \code{x} contains colour map information, it will be extracted
-  and returned as a colour map object. Otherwise, \code{NULL} will be returned.
+  and returned as a colour map object. Otherwise, \code{NULL} will be
+  returned (and a warning will be issued if \code{warn=TRUE}, the default).
 }
 \value{
   A colour map (object of class \code{"colourmap"}) or \code{NULL}.
