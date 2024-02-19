@@ -135,6 +135,8 @@ symbolmap(\dots, range = NULL, inputs = NULL)
   and plot the resulting symbols.
   
   \code{\link{update.symbolmap}} to change the symbol map.
+
+  There are methods for \code{print} and \code{summary} for symbol maps.
 }
 \examples{
   g <- symbolmap(inputs=letters[1:10], pch=11:20)

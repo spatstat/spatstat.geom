@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.51 $  $Date: 2024/02/12 07:45:33 $
+##   $Revision: 1.52 $  $Date: 2024/02/18 08:43:05 $
 ##
 
 symbolmap <- local({
@@ -796,16 +796,16 @@ summary.symbolmap <- function(object, ...) {
                 continuous = { st$range })
   parlist <- st[["parlist"]]
   parnames <- names(parlist)
-  iscol <- sapply(parlist, inherits, what="colourmap")
+  iscolmap <- sapply(parlist, inherits, what="colourmap")
   isatom <- sapply(parlist, is.atomic)
   lenfs <- lengths(parlist)
   isconstant <- isatom & (lenfs == 1)
-  if(any(iscol)) 
-    isconstant[iscol] <- (lengths(lapply(parlist[iscol], colouroutputs)) == 1)
+  if(any(iscolmap)) 
+    isconstant[iscolmap] <- (lengths(lapply(parlist[iscolmap], colouroutputs)) == 1)
   z <- list(type      = typ,
             domain    = dom, 
             pars      = parnames,
-            colpars   = parnames[iscol],
+            colmaps   = parnames[iscolmap],
             rangetype = if(typ == "continuous") st[["rangetype"]] else NULL,
             range     = if(typ == "continuous") st[["range"]] else NULL,
             isconstant = isconstant)
@@ -838,16 +838,16 @@ print.summary.symbolmap <- function(x, ...) {
                  fill=TRUE)
            })
     if(length(pars) > 0) {
-      splat("Graphics parameters defined:",
-            commasep(sQuote(pars)))
-      if(length(colpars) > 0)
-        splat("Colour parameters:", commasep(sQuote(colpars)))
-      if(all(isconstant)) {
+      splat("Graphics parameters defined:")
+      splat(paste("\t",
+                  sQuote(pars),
+                  "\t",
+                  paren(ifelse(isconstant, "constant", "variable")),
+                  "\t",
+                  ifelse(pars %in% colmaps, "(colour map)", ""),
+                  "\n"))
+      if(all(isconstant)) 
         splat("All graphics parameters are constant")
-      } else {
-        splat("Non-constant graphics parameters:",
-              commasep(sQuote(pars[!isconstant])))
-      }
     }
     return(invisible(NULL))
   })
