@@ -1,3 +1,14 @@
+        CHANGES IN spatstat.geom VERSION 3.2-9.001
+
+OVERVIEW
+
+    o Tweaked a plot function.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o plot.tess
+    Changed the default values for do.col and do.labels
+
         CHANGES IN spatstat.geom VERSION 3.2-9
 
 OVERVIEW

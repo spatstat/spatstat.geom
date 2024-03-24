@@ -10,9 +10,9 @@
                       show.all=!add,
                       border=NULL,
                       do.plot=TRUE,
-                      do.labels=FALSE,
+                      do.labels=!missing(labels),
                       labels=tilenames(x), labelargs=list(),
-                      do.col=FALSE,
+                      do.col=!missing(values),
                       values=marks(x),
                       multiplot=TRUE, 
                       col=NULL, ribargs=list())
@@ -38,7 +38,8 @@
   }
   \item{do.labels}{
     Logical value indicating whether to show a text label for each tile
-    of the tessellation.
+    of the tessellation. The default is \code{TRUE} if \code{labels} are
+    given, and \code{FALSE} otherwise.
   }
   \item{labels}{Character vector of labels for the tiles.}
   \item{labelargs}{
@@ -47,7 +48,8 @@
   }
   \item{do.col}{
     Logical value indicating whether tiles should be filled with
-    colour. Always \code{TRUE} for pixel tessellations.
+    colour (for tessellations where the tiles are rectangles or polygons).
+    The default is \code{TRUE} if \code{values} are given, and \code{FALSE} otherwise.
   }
   \item{values}{
     A vector of numerical values (or a factor, or vector of character
@@ -94,6 +96,10 @@
   each column of mark values. Then the arguments \code{\dots} are
   passed to \code{\link{plot.solist}} to determine the arrangement of
   the panels. 
+
+  If \code{do.labels=TRUE}, a text label is plotted in the middle of
+  each tile. The text labels are determined by the argument
+  \code{labels}, and default to the names of the tiles given by \code{tilenames(x)}.
 }
 \value{
   (Invisible) window of class \code{"owin"} specifying a bounding box
