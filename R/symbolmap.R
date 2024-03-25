@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.52 $  $Date: 2024/02/18 08:43:05 $
+##   $Revision: 1.54 $  $Date: 2024/03/25 09:25:24 $
 ##
 
 symbolmap <- local({
@@ -399,6 +399,20 @@ invoke.symbolmap <- local({
               arrowtype=arrowtype, ...)
   }
 
+  sanitycheck <- function(df, forbidden, kind) {
+    ## 'df' is the result of a symbol map
+    ##  (applies to numeric, factor, character)
+    bad <- sapply(lapply(df, forbidden), any)
+    if(any(bad)) {
+      stop(paste("Symbol map produced", kind, "values for",
+                 ngettext(sum(bad), "parameter", "parameters"),
+                 commasep(sQuote(colnames(df)[bad]))),
+           call.=FALSE)
+    }
+    return(NULL)
+  }
+    
+
   ## main function
 
   invoke.symbolmap <- function(map, values, x=NULL, y=NULL, ...,
@@ -420,6 +434,11 @@ invoke.symbolmap <- local({
     ## map numerical/factor values to graphical parameters
     g <- map(values)
     parnames <- colnames(g)
+    ## trap user coding errors etc
+    sanitycheck(g, is.na, "NA")
+    sanitycheck(g, is.nan, "NaN")
+    sanitycheck(g, is.infinite, "infinite")
+    ##
     if(do.plot) {
       ## add spatial coordinates
       xydf <- data.frame(x=x, y=y, angleref=angleref)
