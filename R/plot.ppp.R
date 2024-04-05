@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.117 $	$Date: 2024/01/22 08:13:33 $
+#	$Revision: 1.118 $	$Date: 2024/04/05 04:44:24 $
 #
 #
 #--------------------------------------------------------------------------
@@ -14,7 +14,8 @@ plot.ppp <- local({
   
   ## determine symbol map for marks of points
   default.symap.points <- function(x, ..., 
-                                   chars=NULL, cols=NULL, col=NULL, 
+                                   chars=NULL, cols=NULL, col=NULL,
+                                   fixsize=FALSE,
                                    maxsize=NULL, meansize=NULL, markscale=NULL,
                                    minsize=NULL, zerosize=NULL,
                                    markrange=NULL, marklevels=NULL,
@@ -48,13 +49,13 @@ plot.ppp <- local({
     argnames <- names(list(...))
     shapegiven <- "shape" %in% argnames
     chargiven <- (!is.null(chars)) || ("pch" %in% argnames)
-    assumecircles <- !(shapegiven || chargiven)
     sizegiven <- ("size" %in% argnames) ||
                  (("cex" %in% argnames) && !shapegiven)
-
+    assumecircles <- !(shapegiven || chargiven)
+    shapedefault <- if(!assumecircles) list() else list(shape="circles")
 
     ## pre-transformation of mark values
-    transforming <- is.function(marktransform)
+    transforming <- is.function(marktransform) && !fixsize
     Tmarx <- if(transforming) marktransform(marx) else marx
 
     transformedsizeargs <- list()
@@ -84,7 +85,6 @@ plot.ppp <- local({
     if(inherits(marx, c("Date", "POSIXt"))) {
       ## ......... marks are dates or date/times .....................
       timerange <- range(marx, na.rm=TRUE)
-      shapedefault <- if(!assumecircles) list() else list(shape="circles")
       if(sizegiven) {
         g <- do.call(symbolmap,
           resolve.defaults(list(range=timerange),
@@ -139,8 +139,23 @@ plot.ppp <- local({
           resolve.defaults(list(range=markrange),
                            transformedsizeargs,
                            list(...),
-                           if(assumecircles) list(shape="circles") else list(),
+                           shapedefault,
                            list(chars=chars, cols=cols)))
+        return(g)
+      } else if(fixsize) {
+        ## require symbols of equal size
+        bb <- Frame(x)
+        nn <- nndist(x)
+        nn <- nn[nn > 0]
+        size1 <- 1.4/sqrt(pi * length(marx)/area(bb))
+        size2 <- 0.07 * diameter(bb)
+        size3 <- if(length(nn)) median(nn) else Inf
+        size <- min(size1, size2, size3)
+        g <- do.call(symbolmap,
+                     resolve.defaults(list(range=markrange),
+                                      list(...),
+                                      list(size=size, chars=chars, cols=cols),
+                                      shapedefault))
         return(g)
       }
       ## attempt to determine a scale for the (transformed) marks 
@@ -155,7 +170,8 @@ plot.ppp <- local({
       if(all(Tmarkrange == 0))
         return(symbolmap(..., chars=chars, cols=cols))
       ## try scaling
-      scal <- mark.scale.default(Tmarx, as.owin(x), markrange=Tmarkrange,
+      scal <- mark.scale.default(Tmarx, as.owin(x),
+                                 markrange=Tmarkrange,
                                  markscale=markscale, maxsize=maxsize,
                                  meansize=meansize,
                                  minsize=minsize, zerosize=zerosize,
@@ -166,8 +182,6 @@ plot.ppp <- local({
       scal <- as.numeric(scal)
       if(Tmarkrange[1] >= 0) {
         ## all (transformed) marks are nonnegative
-        shapedefault <-
-          if(!assumecircles) list() else list(shape="circles")
         cexfun <- function(x, scal=1, zerosize=0, tra=I) { zerosize + scal * tra(x) }
         circfun <- function(x, scal=1, zerosize=0, tra=I) { zerosize + scal * tra(x) }
         formals(cexfun)[[2]] <- formals(circfun)[[2]] <- scal
