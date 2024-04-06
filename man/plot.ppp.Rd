@@ -184,12 +184,12 @@
       using a single plot character
     }
     \item{multitype point pattern:}{
-      If \code{x$marks} is a factor, then 
+      If \code{marks(x)} is a factor, then 
       each level of the factor is 
       represented by a different plot character.
     }
     \item{continuous marks:}{
-      If \code{x$marks} is a numeric vector,
+      If \code{marks(x)} is a numeric vector,
       the marks are rescaled to the unit interval and
       each point is represented by a circle 
       with \emph{diameter} proportional to the rescaled mark
@@ -198,7 +198,7 @@
       (if the value is negative).
     }
     \item{other kinds of marks:}{
-      If \code{x$marks} is neither numeric nor a factor,
+      If \code{marks(x)} is neither numeric nor a factor,
       then each possible mark will be represented by a
       different plotting character. The default is to
       represent the \eqn{i}th smallest mark value by
@@ -249,7 +249,7 @@
     plotting character (see \code{par("pch")}).
     For a multitype point pattern, \code{chars} should be a vector
     of integers or characters, of the same length
-    as \code{levels(x$marks)}, and then the \eqn{i}th level or type 
+    as \code{levels(marks(x))}, and then the \eqn{i}th level or type 
     will be plotted using character \code{chars[i]}.
     \item
     If \code{chars} is absent, but there is an extra argument

@@ -1,11 +1,16 @@
-        CHANGES IN spatstat.geom VERSION 3.2-9.003
+        CHANGES IN spatstat.geom VERSION 3.2-9.004
 
 OVERVIEW
 
-    o Tweaked a plot function.
+    o Tweaked plot functions.
 
     o More stability improvements.
 
+NEW FUNCTIONS
+
+    o default.symbolmap.ppp
+    Algorithm for determining the graphical symbol map used by plot.ppp.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.tess

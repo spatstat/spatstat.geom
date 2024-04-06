@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.54 $  $Date: 2024/03/25 09:25:24 $
+##   $Revision: 1.55 $  $Date: 2024/04/06 09:51:20 $
 ##
 
 symbolmap <- local({
@@ -872,3 +872,6 @@ print.summary.symbolmap <- function(x, ...) {
   })
 }
 
+default.symbolmap <- function(x, ...) {
+  UseMethod("default.symbolmap")
+}
