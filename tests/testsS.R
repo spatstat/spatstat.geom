@@ -379,17 +379,21 @@ local({
 ##
 ##   Quirks associated with symbolmaps, etc.
 ##
-## $Revision: 1.5 $ $Date: 2020/12/04 08:02:52 $
+## $Revision: 1.6 $ $Date: 2024/04/08 04:22:25 $
 
 if(FULLTEST) {
 local({
   set.seed(100)
   X <- runifrect(8)
 
-  ## symbolmap 
+  ## symbolmap for numeric values
   g1 <- symbolmap(range=c(0,100), size=function(x) x/50)
   invoke.symbolmap(g1, 50, x=numeric(0), y=numeric(0), add=TRUE)
   plot(g1, labelmap=100)
+  ## symbolmap for discrete categories
+  g2 <- symbolmap(inputs=letters[1:5], chars=1:5)
+  invoke.symbolmap(g2, "a", x=numeric(0), y=numeric(0), add=TRUE)
+  plot(g2)
   ## constant/trivial
   a <- symbolmap(pch=16)
   print(a)
@@ -397,6 +401,11 @@ local({
   symbolmapdomain(a)
   b <- symbolmap()
   print(b)
+  ## graphical arguments with mixed types (function, constant)
+  f <- function(x) { ifelse(x %in% letters[1:3], "circles", "squares")}
+  g3 <- symbolmap(inputs=letters[1:5], size=0.7, shape=f)
+  invoke.symbolmap(g3, "a", x=numeric(0), y=numeric(0), add=TRUE)
+  plot(g3)
 
   ## textureplot
   V <- as.im(dirichlet(X))

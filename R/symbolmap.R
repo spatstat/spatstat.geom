@@ -41,7 +41,7 @@ symbolmap <- local({
       lenfs <- lengths(parlist)
       constants <- atomic & (lenfs == 1)
       if(any(bad <- !(constants | functions))) {
-        if(type == "discrete" && any(repairable <- atomic[bad])) {
+        if(type == "discrete" && any(repairable <- atomic & bad)) {
           ## recycle data to desired length
           parlist[repairable] <- lapply(parlist[repairable],
                                         reptolength,

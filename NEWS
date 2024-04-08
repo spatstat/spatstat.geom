@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.2-9.004
+        CHANGES IN spatstat.geom VERSION 3.2-9.005
 
 OVERVIEW
 
@@ -16,6 +16,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.tess
     Changed the default values for do.col and do.labels
 
+BUG FIXES
+
+    o symbolmap
+    Crashed in some instances when 'inputs' was given
+    and the graphical parameters included both functions and vectors.
+    Fixed.
+    
         CHANGES IN spatstat.geom VERSION 3.2-9
 
 OVERVIEW
