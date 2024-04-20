@@ -4,7 +4,7 @@
 #  A simple, robust point & click interface
 #     used in rmh visual debugger.
 #
-#  $Revision: 1.17 $  $Date: 2024/02/04 08:04:51 $
+#  $Revision: 1.18 $  $Date: 2024/04/15 06:24:04 $
 #
 
 simplepanel <- function(title, B, boxes, clicks, redraws=NULL, exit=NULL, env) {
@@ -134,7 +134,7 @@ run.simplepanel <- function(P, popup=TRUE, verbose=FALSE) {
     while(more) {
       redraw.simplepanel(P, verbose=verbose)
       xy <- spatstatLocator(1)
-      if(is.null(xy)) {
+      if(is.null(xy) || length(xy$x) == 0) {
         if(verbose) cat("No (x,y) coordinates\n")
         break
       }

@@ -1,28 +1,72 @@
-        CHANGES IN spatstat.geom VERSION 3.2-9.005
+        CHANGES IN spatstat.geom VERSION 3.2-9.007
 
 OVERVIEW
 
+    o 'spatstat.geom' now depends on the new package 'spatstat.univar'.
+
+    o Some functions have been moved into the package 'spatstat.univar'.
+    
     o Tweaked plot functions.
 
-    o More stability improvements.
+    o Stability improvements and bug fixes.
 
+PACKAGE DEPENDENCE
+
+    o spatstat.geom
+    'spatstat.geom' now depends on the new package 'spatstat.univar'.
+    Several functions that were previously provided in 'spatstat.geom'
+    have been moved to 'spatstat.univar'.
+    
 NEW FUNCTIONS
 
     o default.symbolmap.ppp
     Algorithm for determining the graphical symbol map used by plot.ppp.
-    
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.tess
     Changed the default values for do.col and do.labels
 
+    o simplepanel
+    Improved stability    
+
+    o ewcdf
+    This function has been moved to the new package 'spatstat.univar'
+    along with most of the methods for class 'ewcdf'.
+    
+    o mean.ewcdf, quantile.ewcdf, quantilefun.ewcdf
+    These methods have been moved to the new package 'spatstat.univar'.
+    
+    o hotrod
+    This function has been moved to the new package 'spatstat.univar'.
+    
+    o integral
+    The generic 'integral' and the method 'integral.density'
+    have been moved to the new package 'spatstat.univar'.
+    
+    o quantilefun, quantilefun.ewcdf
+    The generic 'quantilefun' and the method 'quantile.ewcdf'
+    have been moved to the new package 'spatstat.univar'.
+    
+    o transformquantiles
+    This function has been moved to the new package 'spatstat.univar'.
+    
+    o weighted.median
+    This function has been moved to the new package 'spatstat.univar'.
+    
+    o whist
+    This function has been moved to the new package 'spatstat.univar'.
+    
+    o unnormdensity
+    This function has been moved to the new package 'spatstat.univar'.
+    
 BUG FIXES
 
     o symbolmap
     Crashed in some instances when 'inputs' was given
     and the graphical parameters included both functions and vectors.
     Fixed.
-    
+
         CHANGES IN spatstat.geom VERSION 3.2-9
 
 OVERVIEW

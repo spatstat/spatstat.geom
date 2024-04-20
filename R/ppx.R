@@ -3,7 +3,7 @@
 #
 #  class of general point patterns in any dimension
 #
-#  $Revision: 1.71 $  $Date: 2024/02/04 08:04:51 $
+#  $Revision: 1.72 $  $Date: 2024/04/19 09:24:00 $
 #
 
 ppx <- local({
@@ -311,7 +311,7 @@ coords.ppp <- function(x, ...) { data.frame(x=x$x,y=x$y) }
   value <- as.data.frame(value)
   if(ncol(value) != 2)
     stop("Expecting a 2-column matrix or data frame, or two vectors")
-  result <- as.ppp(value, win)
+  result <- as.ppp(value, win, ...)
   marks(result) <- marks(x)
   return(result)
 }

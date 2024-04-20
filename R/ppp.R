@@ -4,7 +4,7 @@
 #	A class 'ppp' to define point patterns
 #	observed in arbitrary windows in two dimensions.
 #
-#	$Revision: 4.115 $	$Date: 2023/02/28 02:02:45 $
+#	$Revision: 4.116 $	$Date: 2024/04/19 09:34:39 $
 #
 #	A point pattern contains the following entries:	
 #
@@ -171,7 +171,7 @@ as.ppp <- function(X, ..., fatal=TRUE) {
 }
 
 as.ppp.ppp <- function(X, ..., fatal=TRUE) {
-  check <- resolve.defaults(list(...), list(check=FALSE))$check
+  check <- isTRUE(list(...)$check) # default FALSE
   return(ppp(X$x, X$y, window=X$window, marks=X$marks, check=check))
 }
 
@@ -181,31 +181,28 @@ as.ppp.quad <- function(X, ..., fatal=TRUE) {
 
 as.ppp.data.frame <- function(X, W = NULL, ..., fatal=TRUE) {
   X <- as.data.frame(X) #' swim against the tidyverse
-  check <- resolve.defaults(list(...), list(check=TRUE))$check
   if(ncol(X) < 2) 
     return(complaining("X must have at least two columns",
                        fatal, value=NULL))
-
   if(is.null(W))
     return(complaining("x,y coords given but no window specified",
                        fatal, value=NULL))
-
   # columns 1 and 2 are assumed to be coordinates
   # marks from other columns
   marx <- if(ncol(X) > 2) X[, -(1:2)] else NULL
 
   if(is.function(W))
-    Z <- cobble.xy(X[,1], X[,2], W, fatal, marks=marx, check=check)
+    Z <- cobble.xy(x=X[,1], y=X[,2], f=W, fatal=fatal, marks=marx, ...)
   else {
     win <- as.owin(W)
-    Z <- ppp(X[,1], X[,2], window = win, marks=marx, check=check)
+    Z <- ppp(x=X[,1], y=X[,2], window = win, marks=marx, ...)
   }
 
   return(Z)
 }
     
 as.ppp.matrix <- function(X, W = NULL, ..., fatal=TRUE) {
-  check <- resolve.defaults(list(...), list(check=TRUE))$check
+  check <- !isFALSE(list(...)$check) # default TRUE
   if(!verifyclass(X, "matrix", fatal=fatal)
      || !is.numeric(X))
     return(complaining("X must be a numeric matrix",
@@ -220,7 +217,7 @@ as.ppp.matrix <- function(X, W = NULL, ..., fatal=TRUE) {
                        fatal, value=NULL))
     
   if(is.function(W))
-    Z <- cobble.xy(X[,1], X[,2], W, fatal)
+    Z <- cobble.xy(X[,1], X[,2], W, fatal, check=check)
   else {
     win <- as.owin(W)
     Z <- ppp(X[,1], X[,2], window = win, check=check)
