@@ -46,6 +46,29 @@ local({
 
 
 #'
+#'  tests/discarea.R
+#'
+#'   $Revision: 1.3 $ $Date: 2020/04/28 12:58:26 $
+#'
+
+if(ALWAYS) {
+local({
+  u <- c(0.5,0.5)
+  B <- owin(poly=list(x=c(0.3, 0.5, 0.7, 0.4), y=c(0.3, 0.3, 0.6, 0.8)))
+  areaGain(u, cells, 0.1, exact=TRUE)
+  areaGain(u, cells, 0.1, W=NULL)
+  areaGain(u, cells, 0.1, W=B)
+
+  X <- cells[square(0.4)]
+  areaLoss(X, 0.1, exact=TRUE)  # -> areaLoss.diri
+  areaLoss(X, 0.1, exact=FALSE) # -> areaLoss.grid
+  areaLoss.poly(X, 0.1)
+
+  areaLoss(X, 0.1, exact=FALSE, method="distmap")          # -> areaLoss.grid
+  areaLoss(X, c(0.1, 0.15), exact=FALSE, method="distmap") # -> areaLoss.grid
+})
+}
+#'
 #'   tests/duplicity.R
 #'
 #'  Tests of duplicated/multiplicity code

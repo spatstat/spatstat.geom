@@ -18,7 +18,6 @@
 \alias{areaLoss.grid}
 \alias{areaLoss.poly}
 \alias{AsymmDistance.psp}
-\alias{as.breakpts}
 \alias{as.character.unitname}
 \alias{as.data.frame.ppplist}
 \alias{as.double.im}
@@ -34,15 +33,12 @@
 \alias{boundingbox.list}
 \alias{bounding.box3}
 \alias{break.holes}
-\alias{breakpts}
-\alias{breakpts.from.r}
 \alias{cartesian}
 \alias{cellmiddles}
 \alias{checkbigmatrix}          
 \alias{checkfields}          
 \alias{check.arc}
 \alias{check.finespacing}
-\alias{check.hist.lengths}
 \alias{circunion}
 \alias{clip.psp}
 \alias{cliprect.psp}
@@ -146,7 +142,6 @@
 \alias{putSpatstatVariable}
 \alias{lookup.im}
 \alias{majorminorversion}
-\alias{make.even.breaks}
 \alias{makeunitname}
 \alias{markappend}
 \alias{markcbind}
@@ -208,7 +203,6 @@
 \alias{print.anylist}    
 \alias{print.colourmap}
 \alias{print.distfun}
-\alias{print.ewcdf}
 \alias{print.funxy}       
 \alias{print.hyperframe}
 \alias{print.indicfun}       
@@ -248,7 +242,6 @@
 \alias{putlastshift}
 \alias{qtPrepareCoordinate}
 \alias{quad}
-\alias{quantilefun.interpolatedCDF}
 \alias{rasterfilter}
 \alias{recognise.spatstat.type}
 \alias{rectquadrat.breaks}
@@ -374,7 +367,6 @@ areaLoss.grid(X, r, \dots, W, subset,
                          exact = FALSE)
 areaLoss.poly(X, r, \dots, W, subset, splitem)
 AsymmDistance.psp(X, Y, metric, method)
-as.breakpts(\dots)
 \method{as.character}{unitname}(x, \dots)
 \method{as.data.frame}{ppplist}(x, row.names, \dots)
 \method{as.double}{im}(x, \dots)
@@ -390,15 +382,12 @@ bdry.mask(W)
 \method{boundingbox}{list}(\dots)
 bounding.box3(\dots)
 break.holes(x, splitby, depth, maxdepth)
-breakpts(val, maxi, even = FALSE, npos = NULL, step = NULL)
-breakpts.from.r(r)
 cartesian(pp, markset, fac = TRUE)
 cellmiddles(W, nx, ny, npix, distances)
 checkbigmatrix(n, m, fatal, silent)
 checkfields(X,L)
 check.arc(arc, fatal)
 check.finespacing(r, eps, win, rmaxdefault, context, action, rname)
-check.hist.lengths(hist,breaks)
 circunion(arcs)
 clip.psp(x, window, check, fragments)
 cliprect.psp(x, window, fragments)
@@ -503,7 +492,6 @@ polytileareaEngine(P, xrange, yrange, nx, ny, DivideByPixelArea)
 putSpatstatVariable(name, value)
 lookup.im(Z, x, y, naok, strict)
 majorminorversion(v)
-make.even.breaks(bmax, npos, bstep)
 makeunitname(sing, plur, mul)
 markappend(\dots)
 markcbind(\dots)
@@ -575,7 +563,6 @@ prepareTitle(main)
 \method{print}{anylist}(x, \dots)
 \method{print}{colourmap}(x, \dots)
 \method{print}{distfun}(x, \dots)
-\method{print}{ewcdf}(x, digits, \dots)
 \method{print}{funxy}(x, \dots)
 \method{print}{hyperframe}(x, \dots)
 \method{print}{indicfun}(x, \dots)
@@ -615,7 +602,6 @@ project3Dhom(xyz, eye, org, vert)
 putlastshift(X, vec)
 qtPrepareCoordinate(covname, W, origin)
 quad(data, dummy, w, param)
-\method{quantilefun}{interpolatedCDF}(x, \dots, type)
 rasterfilter(X, f)
 recognise.spatstat.type(x)
 rectquadrat.breaks(xr, yr, nx = 5, ny = nx, xbreaks = NULL, ybreaks = NULL)

@@ -28,7 +28,7 @@
   }
  }
 \details{
-  The function \code{\link[spatstat.geom]{integral}} is generic, with methods
+  The function \code{\link[spatstat.univar]{integral}} is generic, with methods
   for spatial objects
   (\code{"im"}, \code{"msr"}, \code{"linim"}, \code{"linfun"})
   and one-dimensional functions (\code{"density"}, \code{"fv"}).
@@ -62,7 +62,7 @@
   if \code{domain} is a tessellation).
 }
 \seealso{
-  \code{\link[spatstat.geom]{integral}},
+  \code{\link[spatstat.univar]{integral}},
   \code{\link{eval.im}},
   \code{\link{[.im}}
 }
