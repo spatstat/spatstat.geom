@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.2-9.007
+        CHANGES IN spatstat.geom VERSION 3.2-9.008
 
 OVERVIEW
 
@@ -28,7 +28,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Changed the default values for do.col and do.labels
 
     o simplepanel
-    Improved stability    
+    Improved stability 
 
     o ewcdf
     This function has been moved to the new package 'spatstat.univar'
