@@ -181,10 +181,16 @@ layout.boxes <- function(B, n, horizontal=FALSE, aspect=0.5, usefrac=0.9){
   stopifnot(n > 0)
   width <- sidelengths(B)[1]
   height <- sidelengths(B)[2]
+  if(is.finite(aspect) && aspect > 0) {
+    recip.aspect <- 1/aspect
+  } else {
+    aspect <- Inf
+    recip.aspect <- Inf
+  }
   if(!horizontal) {
     heightshare <- height/n
-    useheight <- min(width * aspect, heightshare * usefrac)
-    usewidth <-  min(useheight /aspect, width * usefrac)
+    useheight <- min(heightshare * usefrac,  width * aspect)
+    usewidth <-  min(width * usefrac,        useheight * recip.aspect)
     lostwidth <- width - usewidth
     lostheightshare <- heightshare - useheight
     template <- owinInternalRect(c(0, usewidth), c(0, useheight))
@@ -197,7 +203,8 @@ layout.boxes <- function(B, n, horizontal=FALSE, aspect=0.5, usefrac=0.9){
         boxes[[j]] <- shift(boxes[[j-1]], c(0, heightshare))
   } else {
     boxes <- layout.boxes(flipxy(B), n,
-                            horizontal=FALSE, aspect=1/aspect, usefrac=usefrac)
+                          horizontal=FALSE,
+                          aspect=recip.aspect, usefrac=usefrac)
     boxes <-  lapply(boxes, flipxy)
   }
   return(boxes)
