@@ -4,7 +4,7 @@
 #  A simple, robust point & click interface
 #     used in rmh visual debugger.
 #
-#  $Revision: 1.19 $  $Date: 2024/04/23 01:53:28 $
+#  $Revision: 1.20 $  $Date: 2024/04/25 01:23:23 $
 #
 
 simplepanel <- function(title, B, boxes, clicks, redraws=NULL, exit=NULL, env) {
@@ -129,7 +129,7 @@ run.simplepanel <- function(P, popup=TRUE, verbose=FALSE) {
   if(popup) dev.new()
   ntitle <- sum(nzchar(P$title))
   opa <- par(mar=c(0,0,ntitle+0.2,0),ask=FALSE)
-  on.exit(par(opa))
+  if(!popup) on.exit(par(opa))
   with(P, {
     # interaction loop
     more <- TRUE
@@ -208,6 +208,7 @@ layout.boxes <- function(B, n, horizontal=FALSE, aspect=0.5, usefrac=0.9){
 dflt.redraw <- function(button, name, env) {
   plot(button, add=TRUE, border="pink")
   text(centroid.owin(button), labels=name)
+  return(TRUE)
 }
 
 print.simplepanel <- function(x, ...) {

@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.2-9.008
+        CHANGES IN spatstat.geom VERSION 3.2-9.009
 
 OVERVIEW
 
@@ -28,8 +28,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Changed the default values for do.col and do.labels
 
     o simplepanel
-    Improved stability 
+    Improved stability.
 
+    o layout.boxes
+    Argument 'aspect' can be NA or Inf indicating that the aspect ratio
+    of the boxes is unconstrained.
+    
     o ewcdf
     This function has been moved to the new package 'spatstat.univar'
     along with most of the methods for class 'ewcdf'.
