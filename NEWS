@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.2-9.010
+        CHANGES IN spatstat.geom VERSION 3.2-9.011
 
 OVERVIEW
 
@@ -71,6 +71,10 @@ BUG FIXES
     and the graphical parameters included both functions and vectors.
     Fixed.
 
+    o plot.ppp, default.symbolmap.ppp
+    Ignored 'zerosize' in some cases.
+    Fixed.
+    
         CHANGES IN spatstat.geom VERSION 3.2-9
 
 OVERVIEW

@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.120 $	$Date: 2024/04/06 11:34:23 $
+#	$Revision: 1.121 $	$Date: 2024/04/26 01:04:19 $
 #
 #
 #--------------------------------------------------------------------------
@@ -561,7 +561,7 @@ mark.scale.default <- function(marx, w, ...,
     maxsize   <- pop$maxsize
     meansize  <- pop$meansize
   }
-  ng <- !is.null(minsize) + !is.null(zerosize)
+  ng <- (!is.null(minsize)) + (!is.null(zerosize))
   if(ng > 1)
     stop("Arguments minsize and zerosize are incompatible", call.=FALSE)
   if(ng == 0) {
