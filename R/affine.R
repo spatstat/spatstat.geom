@@ -1,7 +1,7 @@
 #
 #	affine.R
 #
-#	$Revision: 1.56 $	$Date: 2024/02/04 08:04:51 $
+#	$Revision: 1.58 $	$Date: 2024/04/26 02:29:54 $
 #
 
 affinexy <- function(X, mat=diag(c(1,1)), vec=c(0,0), invert=FALSE) {
@@ -261,9 +261,14 @@ reflect.im <- function(X) {
 }
 
 shiftxy <- function(X, vec=c(0,0)) {
-  if(is.null(vec)) {
+  vec <- as.numeric(vec)
+  n <- length(vec)
+  if(n == 0) {
     warning("Null displacement vector; treated as zero")
     return(X)
+  } else if(n != 2) {
+    stop(paste("Displacement vector has length", n, "!= 2"),
+         call.=FALSE)
   }
   list(x = X$x + vec[1L],
        y = X$y + vec[2L])

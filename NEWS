@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.2-9.011
+        CHANGES IN spatstat.geom VERSION 3.2-9.012
 
 OVERVIEW
 
@@ -29,6 +29,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o simplepanel
     Improved stability.
+
+    o shift
+    Improved stability
 
     o layout.boxes
     Argument 'aspect' can be NA or Inf indicating that the aspect ratio
