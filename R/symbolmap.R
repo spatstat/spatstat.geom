@@ -798,12 +798,12 @@ as.colourmap.symbolmap <- function(x, ..., warn=TRUE) {
   }
   used <- which(iscol)[[1L]]
   cmap <- parlist[[used]]
-  if(nc > 1 && warn)
+  if(nc > 1 && warn && length(unique(parlist[iscol])) > 1)
     warning(paste("More than one colour map was detected;",
                   "using the colour map for",
                   sQuote(names(parlist)[used])),
             call.=FALSE)
-  return(cmap)
+    return(cmap)
 }
 
 summary.symbolmap <- function(object, ...) {
@@ -821,13 +821,32 @@ summary.symbolmap <- function(object, ...) {
   isconstant <- isatom & (lenfs == 1)
   if(any(iscolmap)) 
     isconstant[iscolmap] <- (lengths(lapply(parlist[iscolmap], colouroutputs)) == 1)
-  z <- list(type      = typ,
-            domain    = dom, 
-            pars      = parnames,
-            colmaps   = parnames[iscolmap],
-            rangetype = if(typ == "continuous") st[["rangetype"]] else NULL,
-            range     = if(typ == "continuous") st[["range"]] else NULL,
-            isconstant = isconstant)
+  colournames <- c("col", "cols", "fg", "bg", "border", "fill")
+  shapenames <- c("shape", "pch", "chars", "direction", "arrowtype", "headlength", "headangle", "etch")
+  sizenames <- c("size", "cex", "headlength")
+  physicalsizenames <- c("size", "headlength")
+  iscolour <- iscolmap | (parnames %in% colournames)
+  isshape <- parnames %in% shapenames
+  issize <- parnames %in% sizenames
+  isphysical <- parnames %in% physicalsizenames
+  fixedcolour <- all(isconstant[iscolour])
+  fixedshape <- all(isconstant[isshape])
+  fixedsize <- all(isconstant[issize])
+  z <- list(type        = typ,
+            domain      = dom, 
+            pars        = parnames,
+            colmaps     = parnames[iscolmap],
+            rangetype   = if(typ == "continuous") st[["rangetype"]] else NULL,
+            range       = if(typ == "continuous") st[["range"]] else NULL,
+            isconstant  = isconstant, # vector
+            iscolour    = iscolour, # vector
+            issize      = issize, # vector
+            isshape     = isshape, # vector
+            isphysical  = isphysical, # vector
+            fixedshape  = fixedshape, # logical(1)
+            fixedsize   = fixedsize,  # logical(1)
+            fixedcolour = fixedcolour # logical(1)
+            )
   class(z) <- c("summary.symbolmap", class(z))
   return(z)
 }
@@ -865,8 +884,22 @@ print.summary.symbolmap <- function(x, ...) {
                   "\t",
                   ifelse(pars %in% colmaps, "(colour map)", ""),
                   "\n"))
-      if(all(isconstant)) 
+      if(all(isconstant)) {
         splat("All graphics parameters are constant")
+      } else {
+        att <- c("size", "shape", "colour")
+        fux <- c(fixedsize, fixedshape, fixedcolour)
+        attfux <- att[fux]
+        attnon <- att[!fux]
+        blurb <- "Symbols have"
+        if(length(attfux))
+          blurb <- paste(blurb, "fixed", commasep(attfux, " and "))
+        if(length(attnon)) {
+          if(length(attfux)) blurb <- paste0(blurb, ", but")
+          blurb <- paste(blurb, "variable", commasep(attnon, " and "))
+        }
+        splat(blurb)
+      }
     }
     return(invisible(NULL))
   })

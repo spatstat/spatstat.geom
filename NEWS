@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.2-9.012
+        CHANGES IN spatstat.geom VERSION 3.2-9.013
 
 OVERVIEW
 
@@ -36,7 +36,17 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o layout.boxes
     Argument 'aspect' can be NA or Inf indicating that the aspect ratio
     of the boxes is unconstrained.
-    
+
+    o as.colourmap.symbolmap
+    Suppressed warning message about the symbolmap containing several colour maps,
+    when the colour maps were identical.
+
+    o plot.symbolmap
+    Suppressed warning message (occurring when colour.only=TRUE)
+    about the symbolmap containing several colour maps, when the colour maps were identical.
+
+DELETED FUNCTIONS
+
     o ewcdf
     This function has been moved to the new package 'spatstat.univar'
     along with most of the methods for class 'ewcdf'.
