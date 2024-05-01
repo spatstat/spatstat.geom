@@ -3,7 +3,7 @@
 #
 #	The 'plot' method for observation windows (class "owin")
 #
-#	$Revision: 1.63 $	$Date: 2024/02/04 08:04:51 $
+#	$Revision: 1.64 $	$Date: 2024/05/01 05:43:30 $
 #
 #
 #
@@ -13,7 +13,8 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
                       hatch=FALSE,
                       hatchargs=list(), 
                       invert=FALSE, do.plot=TRUE,
-                      claim.title.space=FALSE, use.polypath=TRUE) 
+                      claim.title.space=FALSE, use.polypath=TRUE,
+                      adj.main=0.5) 
 {
 #
 # Function plot.owin.  A method for plot.
@@ -44,6 +45,7 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
 
   ## graphics parameters that can be overridden by user
   gparam <- resolve.defaults(list(...), par())
+
   ## character expansion factors
   ##     main title size = 'cex.main' * par(cex.main) * par(cex)
   ## user's graphics expansion factor (*multiplies* par)
@@ -52,7 +54,7 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
   cex.main.rela <- cex.main.user * par('cex.main') 
   ## absolute size
   cex.main.absol <- cex.main.rela * par('cex')
-    
+
   if(!add) {
     ## new plot
     if(claim.title.space && nlines > 0) {
@@ -75,13 +77,21 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
   }
   if(show.all && nlines > 0) {
     ## add title 
+    if(!missing(adj.main)) {
+      check.1.real(adj.main)
+      stopifnot(adj.main %in% c(0, 0.5, 1))
+    }
     if(claim.title.space) {
       mainheight <- sum(strheight(main, units="user", cex=cex.main.rela))
       gapheight <- (strheight("b\nb", units="user", cex=cex.main.rela)
                     - 2 * strheight("b", units="user", cex=cex.main.rela))
       if(nlines > 1 && !is.expression(main))
         main <- paste(main, collapse="\n")
-      text(x=mean(xr), y=yr[2] + mainheight + 0.5 * gapheight, labels=main,
+      xpos <- xr[1] + adj.main * diff(xr)
+      text(x=xpos,
+           y=yr[2] + mainheight + 0.5 * gapheight,
+           labels=main,
+           adj=adj.main,
            cex=cex.main.rela,
            col=gparam$col.main,
            font=gparam$font.main)
@@ -89,7 +99,8 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
       title(main=main,
             cex=cex.main.rela,
             col=gparam$col.main,
-            font=gparam$font.main)
+            font=gparam$font.main,
+            adj=adj.main)
     }
   }
   

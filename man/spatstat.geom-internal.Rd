@@ -485,7 +485,7 @@ markvaluetype(x)
 packupNNdata(NND, NNW, what, k)
 parbreak(terse)
 perspVisible(x, y, z, M)
-plan.legend.layout(B, \dots, side, sep, size, sep.frac, size.frac,
+plan.legend.layout(B, \dots, side, sep, leg.size, sep.frac, size.frac,
                    started, map)
 pointweights(X, \dots, weights, parent, dfok)
 polytileareaEngine(P, xrange, yrange, nx, ny, DivideByPixelArea)

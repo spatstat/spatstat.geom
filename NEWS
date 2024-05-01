@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.2-9.013
+        CHANGES IN spatstat.geom VERSION 3.2-9.014
 
 OVERVIEW
 
@@ -24,8 +24,16 @@ NEW FUNCTIONS
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o plot.owin
+    New argument 'adj.main' controls the justification of the text
+    in the main title.
+    
     o plot.tess
     Changed the default values for do.col and do.labels
+
+    o layout.boxes
+    Argument 'aspect' can be NA or Inf indicating that the aspect ratio
+    of the boxes is unconstrained.
 
     o simplepanel
     Improved stability.
@@ -33,17 +41,14 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o shift
     Improved stability
 
-    o layout.boxes
-    Argument 'aspect' can be NA or Inf indicating that the aspect ratio
-    of the boxes is unconstrained.
-
     o as.colourmap.symbolmap
-    Suppressed warning message about the symbolmap containing several colour maps,
-    when the colour maps were identical.
+    A warning message, occurring when the symbolmap contains more than one
+    colour map, is suppressed if the colour maps are identical.
 
     o plot.symbolmap
     Suppressed warning message (occurring when colour.only=TRUE)
-    about the symbolmap containing several colour maps, when the colour maps were identical.
+    about the symbolmap containing several colour maps,
+    when the colour maps were identical.
 
 DELETED FUNCTIONS
 

@@ -10,7 +10,8 @@
                       hatch=FALSE,
                       hatchargs=list(), 
                       invert=FALSE, do.plot=TRUE,
-                      claim.title.space=FALSE, use.polypath=TRUE)
+                      claim.title.space=FALSE, use.polypath=TRUE,
+                      adj.main=0.5)
 }
 \arguments{
   \item{x}{
@@ -83,6 +84,13 @@
     supports this function. If \code{FALSE}, the polygon will be
     decomposed into simple closed polygons, which will be colour filled
     using \code{\link[graphics]{polygon}}.
+  }
+  \item{adj.main}{
+    Numeric value specifying the justification of the text in the main
+    title. Possible values are \code{adj.main=0.5} (the default)
+    specifying that the main title will be centred, \code{adj.main=0}
+    specifying left-justified text, and \code{adj.main=1} specifying
+    right-justified text.
   }
 }
 \value{

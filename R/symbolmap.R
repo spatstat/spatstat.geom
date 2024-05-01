@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.55 $  $Date: 2024/04/06 09:51:20 $
+##   $Revision: 1.56 $  $Date: 2024/05/01 05:11:57 $
 ##
 
 symbolmap <- local({
@@ -703,23 +703,23 @@ plan.legend.layout <- function(B,
                                ..., 
                                side=c("bottom", "left", "top", "right"),
                                sep=NULL,
-                               size=NULL,
+                               leg.size=NULL,
                                sep.frac=0.05,
                                size.frac=0.05,
                                started=FALSE,
                                map=NULL) {
   ## Determine size and position of a box containing legend or symbolmap
   ## attached to a plot in region 'B'.
-  ##   sep, size are absolute distances;
+  ##   sep, leg.size are absolute distances;
   ##   sep.frac, size.frac are fractions of the maximum sidelength of B.
   side <- match.arg(side)
   B <- as.rectangle(B)
   Bsize <- max(sidelengths(B))
-  if(is.null(size)) {
-    size <- size.frac * Bsize
+  if(is.null(leg.size)) {
+    leg.size <- size.frac * Bsize
   } else {
-    check.1.real(size)
-    stopifnot(size > 0)
+    check.1.real(leg.size)
+    stopifnot(leg.size > 0)
   }
   if(is.null(sep)) {
     sep <- sep.frac * Bsize
@@ -747,7 +747,7 @@ plan.legend.layout <- function(B,
   switch(side,
          right={
            ## symbols to right of image
-           b <- owinInternalRect(B$xrange[2] + sep + c(0, size),
+           b <- owinInternalRect(B$xrange[2] + sep + c(0, leg.size),
                      B$yrange)
            ## text to right of symbols
            tt <- owinInternalRect(b$xrange[2] + sep + c(0, textwidth),
@@ -756,7 +756,7 @@ plan.legend.layout <- function(B,
          },
          left={
            ## symbols to left of image
-           b <- owinInternalRect(B$xrange[1] - sep - c(size, 0),
+           b <- owinInternalRect(B$xrange[1] - sep - c(leg.size, 0),
                      B$yrange)
            ## text to left of symbols
            tt <- owinInternalRect(b$xrange[1] - sep - c(textwidth, 0),
@@ -766,7 +766,7 @@ plan.legend.layout <- function(B,
          top={
            ## symbols above image
            b <- owinInternalRect(B$xrange,
-                     B$yrange[2] + sep + c(0, size))
+                     B$yrange[2] + sep + c(0, leg.size))
            ## text above symbols
            tt <- owinInternalRect(b$xrange,
                       b$yrange[2] + 3* charsize + c(0, textheight))
@@ -775,7 +775,7 @@ plan.legend.layout <- function(B,
          bottom={
            ## symbols below image
            b <- owinInternalRect(B$xrange,
-                     B$yrange[1] - sep - c(size, 0))
+                     B$yrange[1] - sep - c(leg.size, 0))
            ## text below symbols
            tt <- owinInternalRect(b$xrange,
                       b$yrange[1] - 3 * charsize - c(textheight, 0))
@@ -783,7 +783,7 @@ plan.legend.layout <- function(B,
          })
   A <- boundingbox(B, b, tt)
   return(list(A=A, B=B, b=b, tt=tt,
-              iside=iside, side=side, size=size, charsize=charsize, sep=sep))
+              iside=iside, side=side, size=leg.size, charsize=charsize, sep=sep))
 }
 
 

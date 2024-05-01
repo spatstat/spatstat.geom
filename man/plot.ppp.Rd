@@ -96,7 +96,8 @@
     by \code{\link{symbolmap}}, the list may also include the argument
     \code{sep} giving the separation between the main plot and the
     legend, or \code{sep.frac} giving the separation as a fraction
-    of the relevant dimension (width or height) of the main plot.
+    of the largest dimension (maximum of width and height) of the main
+    plot.
   }
   \item{symap}{
     The graphical symbol map to be applied to the marks.
