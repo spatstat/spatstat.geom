@@ -148,15 +148,17 @@ plot.ppp <- function(x, main, ..., clipwin=NULL,
   ## Augment bounding box with space for legend, if appropriate
   legend <- legend && (symbolmaptype(symap) != "constant") 
   if(legend) {
-    sizeguess <- NULL
-    if(!isTRUE(leg.args$colour.only)) {
+    leg.args <- append(list(side=leg.side, vertical=vertical), leg.args)
+    if(isTRUE(leg.args$colour.only)) {
+      ## only the colour map will be plotted
+      sizeguess <- NULL
+    } else {
       ## symbols will be plotted
-      leg.args <- append(list(side=leg.side, vertical=vertical), leg.args)
       ## guess maximum size of symbols
       maxsize <- invoke.symbolmap(symap, symbolmapdomain(symap),
                                   corners(as.rectangle(x)),
                                   add=add, do.plot=FALSE)
-      if(maxsize > 0) sizeguess <- 1.5 * maxsize
+      sizeguess <- if(maxsize > 0) (1.5 * maxsize) else NULL
     }
     ## draw up layout
     layoutboxes <- do.call.matched(plan.legend.layout,
