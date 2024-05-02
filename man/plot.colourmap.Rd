@@ -7,7 +7,7 @@
 \usage{
 \method{plot}{colourmap}(x, ...,
        main, xlim = NULL, ylim = NULL, vertical = FALSE, axis = TRUE,
-       labelmap=NULL, gap=0.25, add=FALSE, increasing=NULL)
+       labelmap=NULL, gap=0.25, add=FALSE, increasing=NULL, nticks=5)
 }
 \arguments{
   \item{x}{Colour map to be plotted. An object of class \code{"colourmap"}.}
@@ -49,6 +49,12 @@
   \item{increasing}{
     Logical value indicating whether to display the colour map
     in increasing order. See Details.
+  }
+  \item{nticks}{
+    Optional. Integer specifying the approximate number of tick marks
+    (representing different values of the numerical input) that should be
+    drawn next to the colour map. Applies only when the colour map
+    inputs are numeric values.
   }
 }
 \details{
@@ -100,11 +106,9 @@
   ca <- colourmap(rainbow(8), inputs=letters[1:8])
   plot(ca, vertical=TRUE)
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{color}

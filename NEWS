@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.2-9.015
+        CHANGES IN spatstat.geom VERSION 3.2-9.016
 
 OVERVIEW
 
@@ -27,6 +27,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.owin
     New argument 'adj.main' controls the justification of the text
     in the main title.
+
+    o plot.colourmap
+    New argument 'nticks' controls the number of axis tick marks
+    when the colourmap is defined on a continuous range of numerical values.
     
     o plot.tess
     Changed the default values for do.col and do.labels

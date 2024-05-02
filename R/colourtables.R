@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.49 $ $Date: 2023/02/21 08:20:14 $
+# $Revision: 1.51 $ $Date: 2024/05/02 03:50:40 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
@@ -229,11 +229,25 @@ plot.colourmap <- local({
     } else stop("Unrecognised format for 'side'")
     return(sidecode)
   }
+
+  Ticks <- function(usr, log=FALSE, nint=NULL, ..., clip=TRUE) {
+    #' modification of grDevices::axisTicks
+    #'      constrains ticks to be inside the specified range 'usr' if clip=TRUE
+    #'      accepts nint=NULL as if it were missing
+    z <- if(is.null(nint)) axisTicks(usr=usr, log=log, ...) else
+         axisTicks(usr=usr, log=log, nint=nint, ...) 
+    if(clip) {
+      zlimits <- if(log) 10^usr else usr
+      z <- z[inside.range(z, zlimits)]
+    }
+    return(z)
+  }
+
     
   plot.colourmap <- function(x, ..., main,
                              xlim=NULL, ylim=NULL, vertical=FALSE, axis=TRUE,
                              labelmap=NULL, gap=0.25, add=FALSE,
-                             increasing=NULL) {
+                             increasing=NULL, nticks=5) {
     if(missing(main))
       main <- short.deparse(substitute(x))
     stuff <- attr(x, "stuff")
@@ -397,7 +411,7 @@ plot.colourmap <- local({
           la <- paste(labelmap(stuff$inputs))
           at <- linmap(v, rr, xlim)
         } else {
-          la <- prettyinside(rr)
+          la <- Ticks(rr, nint=nticks)
           at <- linmap(la, rr, xlim)
           la <- labelmap(la)
         }
@@ -425,7 +439,7 @@ plot.colourmap <- local({
           la <- paste(labelmap(stuff$inputs))
           at <- linmap(v, rr, ylim)
         } else {
-          la <- prettyinside(rr)
+          la <- Ticks(rr, nint=nticks)
           at <- linmap(la, rr, ylim)
           la <- labelmap(la)
         }

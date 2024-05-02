@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.121 $	$Date: 2024/04/26 01:04:19 $
+#	$Revision: 1.122 $	$Date: 2024/05/02 04:14:14 $
 #
 #
 #--------------------------------------------------------------------------
@@ -151,7 +151,11 @@ plot.ppp <- function(x, main, ..., clipwin=NULL,
     leg.args <- append(list(side=leg.side, vertical=vertical), leg.args)
     if(isTRUE(leg.args$colour.only)) {
       ## only the colour map will be plotted
+      ## use layout similar to plot.im
       sizeguess <- NULL
+      leg.args <- resolve.defaults(leg.args, list(sep.frac=0.15,
+                                                  size.frac=0.05,
+                                                  las=1))
     } else {
       ## symbols will be plotted
       ## guess maximum size of symbols
