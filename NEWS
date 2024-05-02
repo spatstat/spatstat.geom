@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.2-9.016
+        CHANGES IN spatstat.geom VERSION 3.2-9.017
 
 OVERVIEW
 
@@ -31,6 +31,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.colourmap
     New argument 'nticks' controls the number of axis tick marks
     when the colourmap is defined on a continuous range of numerical values.
+    
+    o plot.colourmap
+    New argument 'box' controls whether a box will be drawn around the colours.
     
     o plot.tess
     Changed the default values for do.col and do.labels

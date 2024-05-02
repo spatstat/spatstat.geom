@@ -7,7 +7,7 @@
 \usage{
 \method{plot}{colourmap}(x, ...,
        main, xlim = NULL, ylim = NULL, vertical = FALSE, axis = TRUE,
-       labelmap=NULL, gap=0.25, add=FALSE, increasing=NULL, nticks=5)
+       labelmap=NULL, gap=0.25, add=FALSE, increasing=NULL, nticks=5, box=NULL)
 }
 \arguments{
   \item{x}{Colour map to be plotted. An object of class \code{"colourmap"}.}
@@ -55,6 +55,12 @@
     (representing different values of the numerical input) that should be
     drawn next to the colour map. Applies only when the colour map
     inputs are numeric values.
+  }
+  \item{box}{
+    Optional. Logical value specifying whether to draw a black box
+    around the colour ribbon. Default is \code{box=FALSE} when plotting
+    separate blocks of colour (i.e. when the colourmap is discrete
+    and \code{gap > 0}) and \code{box=TRUE} otherwise.
   }
 }
 \details{

@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.51 $ $Date: 2024/05/02 03:50:40 $
+# $Revision: 1.52 $ $Date: 2024/05/02 06:19:31 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
@@ -247,7 +247,7 @@ plot.colourmap <- local({
   plot.colourmap <- function(x, ..., main,
                              xlim=NULL, ylim=NULL, vertical=FALSE, axis=TRUE,
                              labelmap=NULL, gap=0.25, add=FALSE,
-                             increasing=NULL, nticks=5) {
+                             increasing=NULL, nticks=5, box=NULL) {
     if(missing(main))
       main <- short.deparse(substitute(x))
     stuff <- attr(x, "stuff")
@@ -403,6 +403,12 @@ plot.colourmap <- local({
                                             col=col)),
                       extrargs=imageparams)
     }
+    #' draw box around colours?
+    #' default is TRUE unless drawing blocks of colour with gaps between.
+    if(is.null(box)) box <- !separate
+    if(!isFALSE(box))
+      rect(xlim[1], ylim[1], xlim[2], ylim[2])
+
     if(axis) {
       # ................. draw annotation ..................
       if(!vertical) {

@@ -445,11 +445,15 @@
    colmap <- colourmap(terrain.colors(20), range=ra)
    ## filled plot characters are the codes 21-25
    ## fill colour is indicated by 'bg'
-   sy <- symbolmap(pch=21, bg=colmap, range=ra)
+   ## outline colour is 'fg'
+   sy <- symbolmap(pch=21, bg=colmap, fg=colmap, range=ra)
    plot(longleaf, symap=sy)
 
    ## or more compactly..
    plot(longleaf, bg=terrain.colors(20), pch=21, cex=1)
+
+   ## plot only the colour map (since the symbols have fixed size and shape)
+   plot(longleaf, symap=sy, leg.args=list(colour.only=TRUE))
 
    ## clipping
    plot(humberside)
