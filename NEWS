@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.2-9.018
+        CHANGES IN spatstat.geom VERSION 3.2-9.019
 
 OVERVIEW
 
@@ -76,7 +76,11 @@ DELETED FUNCTIONS
     o quantilefun, quantilefun.ewcdf
     The generic 'quantilefun' and the method 'quantile.ewcdf'
     have been moved to the new package 'spatstat.univar'.
-    
+
+    o rounding, rounding.default
+    The generic 'rounding' and the method 'rounding.default'
+    have been moved to the new package 'spatstat.univar'.
+        
     o transformquantiles
     This function has been moved to the new package 'spatstat.univar'.
     
