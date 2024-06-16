@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.2-9.021
+        CHANGES IN spatstat.geom VERSION 3.2-9.022
 
 OVERVIEW
 
@@ -7,6 +7,8 @@ OVERVIEW
     o Some functions have been moved into the package 'spatstat.univar'.
     
     o Tweaked plot functions.
+
+    o More support for diagram objects.
 
     o Stability improvements and bug fixes.
 
@@ -22,8 +24,20 @@ NEW FUNCTIONS
     o default.symbolmap.ppp
     Algorithm for determining the graphical symbol map used by plot.ppp.
 
+    o affine.diagramobj, reflect.diagramobj, rotate.diagramobj
+    Methods for geometrical transformations of diagram objects.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o identify.ppp
+    Automatically starts a new plot device and displays `x`
+    if there is no plot device open.
+    
+    o identify.psp
+    Identified segments are highlighted. 
+    Automatically starts a new plot device and displays `x`
+    if there is no plot device open.
+    
     o plot.owin
     New argument 'adj.main' controls the justification of the text
     in the main title.
@@ -95,15 +109,15 @@ DELETED FUNCTIONS
     
 BUG FIXES
 
+    o plot.ppp, default.symbolmap.ppp
+    Ignored 'zerosize' in some cases.
+    Fixed.
+    
     o symbolmap
     Crashed in some instances when 'inputs' was given
     and the graphical parameters included both functions and vectors.
     Fixed.
 
-    o plot.ppp, default.symbolmap.ppp
-    Ignored 'zerosize' in some cases.
-    Fixed.
-    
         CHANGES IN spatstat.geom VERSION 3.2-9
 
 OVERVIEW

@@ -4,7 +4,7 @@
 #	A class 'ppp' to define point patterns
 #	observed in arbitrary windows in two dimensions.
 #
-#	$Revision: 4.116 $	$Date: 2024/04/19 09:34:39 $
+#	$Revision: 4.118 $	$Date: 2024/06/16 02:03:00 $
 #
 #	A point pattern contains the following entries:	
 #
@@ -636,6 +636,9 @@ print.summary.ppp <- function(x, ..., dp=getOption("digits")) {
 
 identify.ppp <- function(x, ...) {
   verifyclass(x, "ppp")
+  if(dev.cur() == 1 && interactive()) {
+    eval(substitute(plot(X), list(X=substitute(x))))
+  }
   id <- identify(x$x, x$y, ...)
   if(!is.marked(x)) return(id)
   marks <- as.data.frame(x)[id, -(1:2)]

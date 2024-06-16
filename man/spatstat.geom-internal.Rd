@@ -6,6 +6,7 @@
 \alias{[<-.splitppx}
 \alias{acedist.show}
 \alias{acedist.noshow}
+\alias{affine.diagramobj}
 \alias{affinexy}
 \alias{affinexypolygon}
 \alias{allElementsIdentical}
@@ -80,6 +81,7 @@
 \alias{fft2D}
 \alias{fftwAvailable}
 \alias{fillNA}
+\alias{flipxy.diagramobj}
 \alias{flipxypolygon}
 \alias{format.numberwithunit}
 \alias{framebottomleft}
@@ -195,6 +197,7 @@
 \alias{plotWidthMap}
 \alias{plot.barplotdata}
 \alias{plot.indicfun}
+\alias{pointgrid}
 \alias{ppllengine}
 \alias{pppdist.mat}
 \alias{pppdist.prohorov}
@@ -242,18 +245,9 @@
 \alias{putlastshift}
 \alias{qtPrepareCoordinate}
 \alias{quad}
-\alias{rasterfilter}
-\alias{recognise.spatstat.type}
-\alias{rectquadrat.breaks}
-\alias{rectquadrat.countEngine}
-\alias{remove.identical.pairs}
-\alias{repair.image.xycoords}
-\alias{resolve.stringsAsFactors}
-\alias{rgbNA}
-\alias{ruletextline}
 \alias{quadscheme.replicated}
 \alias{quadscheme.spatial}
-\alias{pointgrid}
+\alias{rasterfilter}
 \alias{rastersample}
 \alias{rasterx.mask}
 \alias{rastery.mask}
@@ -266,13 +260,22 @@
 \alias{rebound.ppp}
 \alias{rebound.psp}
 \alias{rebound.owin}
+\alias{rectquadrat.breaks}
+\alias{rectquadrat.countEngine}
+\alias{reflect.diagramobj}
+\alias{remove.identical.pairs}
+\alias{repair.image.xycoords}
 \alias{repair.old.factor.image}
+\alias{resolve.stringsAsFactors}
 \alias{restrict.mask}
 \alias{reversePolyclipArgs}
+\alias{rgbNA}
+\alias{rotate.diagramobj}
 \alias{rotxy}
 \alias{rotxypolygon}
 \alias{row.names.hyperframe}
 \alias{row.names<-.hyperframe}
+\alias{ruletextline}
 \alias{safedeldir}
 \alias{safeDevCapabilities}
 \alias{safelookup}
@@ -352,6 +355,7 @@
 \method{[}{splitppx}(x, \dots) <- value
 acedist.show(X, Y, n, d, timelag)
 acedist.noshow(X, Y, n, d)
+\method{affine}{diagramobj}(X, \dots)
 affinexy(X, mat, vec, invert)
 affinexypolygon(p, mat, vec, detmat)
 allElementsIdentical(x, entry)
@@ -429,6 +433,7 @@ fakemaintitle(bb, main, \dots)
 fft2D(z, inverse, west)
 fftwAvailable()
 fillNA(x, value)
+\method{flipxy}{diagramobj}(X)
 flipxypolygon(p)
 \method{format}{numberwithunit}(x, \dots, collapse, modifier)
 framebottomleft(w)
@@ -553,6 +558,7 @@ plotPolygonBdry(x, \dots)
 plotWidthMap(bb.leg, zlim, phys.scale, leg.scale, leg.side, leg.args, grafpar)
 \method{plot}{barplotdata}(x, \dots)
 \method{plot}{indicfun}(x, W, \dots, main)
+pointgrid(W, ngrid)
 ppllengine(X, Y, action="project", check=FALSE)
 pppdist.mat(X, Y, cutoff = 1, q = 1, matching = TRUE,
             precision = 9, approximation = 10)
@@ -602,18 +608,9 @@ project3Dhom(xyz, eye, org, vert)
 putlastshift(X, vec)
 qtPrepareCoordinate(covname, W, origin)
 quad(data, dummy, w, param)
-rasterfilter(X, f)
-recognise.spatstat.type(x)
-rectquadrat.breaks(xr, yr, nx = 5, ny = nx, xbreaks = NULL, ybreaks = NULL)
-rectquadrat.countEngine(x, y, xbreaks, ybreaks, weights)
-remove.identical.pairs(cl, imap, jmap)
-repair.image.xycoords(x)
-resolve.stringsAsFactors(stringsAsFactors)
-rgbNA(red, green, blue, alpha, maxColorValue)
-ruletextline(ch, n, terse)
 quadscheme.replicated(data, dummy, method, \dots)
 quadscheme.spatial(data, dummy, method, \dots)
-pointgrid(W, ngrid)
+rasterfilter(X, f)
 rastersample(X, Y)
 rasterx.mask(w, drop)
 rastery.mask(w, drop)
@@ -626,13 +623,23 @@ rebound(x, rect)
 \method{rebound}{ppp}(x, rect) 
 \method{rebound}{psp}(x, rect) 
 \method{rebound}{owin}(x, rect)
+recognise.spatstat.type(x)
+rectquadrat.breaks(xr, yr, nx = 5, ny = nx, xbreaks = NULL, ybreaks = NULL)
+rectquadrat.countEngine(x, y, xbreaks, ybreaks, weights)
+\method{reflect}{diagramobj}(X)
+remove.identical.pairs(cl, imap, jmap)
+repair.image.xycoords(x)
 repair.old.factor.image(x)
+resolve.stringsAsFactors(stringsAsFactors)
 restrict.mask(M, W)
 reversePolyclipArgs(x, p)
+rgbNA(red, green, blue, alpha, maxColorValue)
+\method{rotate}{diagramobj}(X, \dots)
 rotxy(X, angle = pi/2)
 rotxypolygon(p, angle = pi/2)
 \method{row.names}{hyperframe}(x)
 \method{row.names}{hyperframe}(x) <- value
+ruletextline(ch, n, terse)
 safedeldir(X)
 safeDevCapabilities()
 safelookup(Z, x, factor, warn)

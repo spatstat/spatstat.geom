@@ -7,7 +7,7 @@
 ##
 ## plot.solist is defined in plot.solist.R
 ##
-## $Revision: 1.28 $ $Date: 2022/08/27 04:11:07 $
+## $Revision: 1.29 $ $Date: 2024/06/16 02:20:05 $
 
 anylist <- function(...) {
   x <- list(...)
@@ -69,9 +69,9 @@ is.sob <- local({
                       "funxy", "distfun", "nnfun", 
                       "lpp", "linnet", "linfun", "lintess",  
                       "influence.ppm", "leverage.ppm")
-  # Note 'linim' inherits 'im'
-  #      'dfbetas.ppm' inherits 'msr'
-
+  ## Note 'linim' inherits 'im'
+  ##      'dfbetas.ppm' inherits 'msr'
+  ##      diagram objects typically inherit 'ppp'
   is.sob <- function(x) { inherits(x, what=sobjectclasses) }
   is.sob
 })

@@ -4,7 +4,7 @@
 ##   Simple objects for the elements of a diagram (text, arrows etc)
 ##    that are compatible with plot.layered and plot.solist
 ##
-##   $Revision: 1.15 $ $Date: 2024/02/04 08:04:51 $
+##   $Revision: 1.18 $ $Date: 2024/06/16 02:03:14 $
 
 # ......... internal class 'diagramobj' supports other classes  .........
 
@@ -25,14 +25,40 @@ diagramobj <- function(X, ...) {
   return(y)
 }
 
-shift.diagramobj <- function(X, ...) {
-  y <- NextMethod("shift")
+# ... geometrical transformations ....
+
+affine.diagramobj <- function(X, ...) {
+  y <- NextMethod("affine")
+  attributes(y) <- attributes(X)
+  return(y)
+}
+
+flipxy.diagramobj <- function(X) {
+  y <- NextMethod("flipxy")
+  attributes(y) <- attributes(X)
+  return(y)
+}
+
+reflect.diagramobj <- function(X) {
+  y <- NextMethod("reflect")
+  attributes(y) <- attributes(X)
+  return(y)
+}
+
+rotate.diagramobj <- function(X, ...) {
+  y <- NextMethod("rotate")
   attributes(y) <- attributes(X)
   return(y)
 }
 
 scalardilate.diagramobj <- function(X, f, ...) {
   y <- NextMethod("scalardilate")
+  attributes(y) <- attributes(X)
+  return(y)
+}
+
+shift.diagramobj <- function(X, ...) {
+  y <- NextMethod("shift")
   attributes(y) <- attributes(X)
   return(y)
 }

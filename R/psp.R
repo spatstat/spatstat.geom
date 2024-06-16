@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.112 $ $Date: 2024/02/04 08:04:51 $
+#  $Revision: 1.116 $ $Date: 2024/06/16 02:06:24 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -578,27 +578,34 @@ is.empty.psp <- function(x) { return(x$n == 0) }
 
 identify.psp <- function(x, ..., labels=seq_len(nsegments(x)),
                          n=nsegments(x), plot=TRUE) {
+  if(dev.cur() == 1 && interactive()) {
+    eval(substitute(plot(X), list(X=substitute(x))))
+  }
   Y <- x
-  W <- as.owin(Y)
+  B <- Frame(Y)
+  Bplus <- grow.rectangle(B, max(sidelengths(B))/4)
   mids <- midpoints.psp(Y)
-  poz <- c(1, 2,4, 3)[(floor(angles.psp(Y)/(pi/4)) %% 4) + 1L]
+  poz <- c(1, 2, 4, 3)[(floor(angles.psp(Y)/(pi/4)) %% 4) + 1L]
+  gp <- if(plot) graphicsPars("lines") else NULL
   if(!(is.numeric(n) && (length(n) == 1) && (n %% 1 == 0) && (n >= 0)))
     stop("n should be a single integer")
   out <- integer(0)
   while(length(out) < n) {
-    xy <- spatstatLocator(1)
-    # check for interrupt exit
+    xy <- spatstatLocator(1, type="n")
+    ## check for interrupt exit
     if(length(xy$x) == 0)
       return(out)
-    # find nearest segment
-    X <- ppp(xy$x, xy$y, window=W)
+    ## find nearest segment
+    X <- ppp(xy$x, xy$y, window=Bplus)
     ident <- project2segment(X, Y)$mapXY
-    # add to list
-    if(ident %in% out) {
+    if(length(ident) == 0) {
+      cat("Query location is too far away\n")
+    } else if(ident %in% out) {
       cat(paste("Segment", ident, "already selected\n"))
     } else {
+      ## add to list
       if(plot) {
-        # Display
+        ## Display
         mi <- mids[ident]
         li <- labels[ident]
         po <- poz[ident]
@@ -607,15 +614,20 @@ identify.psp <- function(x, ..., labels=seq_len(nsegments(x)),
         dont.complain.about(li, mix, miy)
         do.call.matched(graphics::text.default,
                         resolve.defaults(list(x=quote(mix), 
-					      y=quote(miy), 
-				              labels=quote(li)),
+                                              y=quote(miy), 
+                                              labels=quote(li)),
                                          list(...),
                                          list(pos=po)))
+        do.call.matched(plot.psp,
+                        resolve.defaults(list(x=Y[ident], add=TRUE),
+                                         list(...),
+                                         list(col="blue", lwd=2)),
+                        extrargs=gp)
       }
       out <- c(out, ident)
     }
   }
-  # exit if max n reached
+  ## exit if max n reached
   return(out)
 }
 
