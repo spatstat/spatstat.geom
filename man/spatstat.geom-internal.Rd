@@ -260,6 +260,7 @@
 \alias{rebound.ppp}
 \alias{rebound.psp}
 \alias{rebound.owin}
+\alias{recognise.spatstat.type}
 \alias{rectquadrat.breaks}
 \alias{rectquadrat.countEngine}
 \alias{reflect.diagramobj}
