@@ -1,4 +1,5 @@
 \name{spatstat.geom-deprecated}
+\alias{spatstat.geom-deprecated} %DoNotExport
 \alias{as.psp.owin}
 \alias{circumradius}
 \alias{circumradius.owin}

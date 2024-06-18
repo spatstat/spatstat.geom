@@ -1,5 +1,6 @@
 \name{spatstat.geom-internal} 
 \title{Internal spatstat.geom functions}
+\alias{spatstat.geom-internal} %DoNotExport
 \alias{[.diagramobj}
 \alias{[.pp3}
 \alias{[.splitppx}
