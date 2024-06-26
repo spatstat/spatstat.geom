@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.122 $	$Date: 2024/05/02 04:14:14 $
+#	$Revision: 1.123 $	$Date: 2024/06/26 06:56:32 $
 #
 #
 #--------------------------------------------------------------------------
@@ -326,12 +326,17 @@ default.symbolmap.ppp <- local({
     if(!is.null(dim(marx)))
       stop("Internal error: multivariate marks in default.symap.points")
 
+    ## understand user's wishes
     argnames <- names(list(...))
     shapegiven <- "shape" %in% argnames
     chargiven <- (!is.null(chars)) || ("pch" %in% argnames)
     sizegiven <- ("size" %in% argnames) ||
                  (("cex" %in% argnames) && !shapegiven)
     assumecircles <- !(shapegiven || chargiven)
+    sizeconstrained <- !all(sapply(list(maxsize, minsize, meansize, zerosize),
+                                   is.null))
+
+    ## set defaults
     shapedefault <- if(!assumecircles) list() else list(shape="circles")
 
     ## pre-transformation of mark values
@@ -424,13 +429,27 @@ default.symbolmap.ppp <- local({
         return(g)
       } else if(fixsize) {
         ## require symbols of equal size
-        bb <- Frame(x)
-        nn <- nndist(x)
-        nn <- nn[nn > 0]
-        size1 <- 1.4/sqrt(pi * length(marx)/area(bb))
-        size2 <- 0.07 * diameter(bb)
-        size3 <- if(length(nn)) median(nn) else Inf
-        size <- min(size1, size2, size3)
+        ## determine fixed physical size
+        if(!is.null(meansize)) {
+          size <- meansize
+        } else if(!is.null(minsize) && !is.null(maxsize)) {
+          size <- (minsize+maxsize)/2
+        } else if(!is.null(minsize)) {
+          size <- minsize
+        } else if(!is.null(maxsize)) {
+          size <- maxsize
+        } else if(!is.null(zerosize) && zerosize > 0) {
+          size <- zerosize
+        } else {
+          ## choose suitable size
+          bb <- Frame(x)
+          nn <- nndist(x)
+          nn <- nn[nn > 0]
+          size1 <- 1.4/sqrt(pi * length(marx)/area(bb))
+          size2 <- 0.07 * diameter(bb)
+          size3 <- if(length(nn)) median(nn) else Inf
+          size <- min(size1, size2, size3)
+        }
         g <- do.call(symbolmap,
                      resolve.defaults(list(range=markrange),
                                       list(...),
@@ -512,7 +531,7 @@ default.symbolmap.ppp <- local({
       chars <- default.charmap(ntypes, chars)
       g <- symbolmap(inputs=um, ..., chars=chars, cols=cols)
     } else {
-      #' values mapped to symbols
+      #' values mapped to symbols of equal size
       #' determine size
       scal <- symbol.sizes.default(rep(1, npoints(x)),
                                    Window(x), 
