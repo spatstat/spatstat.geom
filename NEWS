@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.2-9.025
+        CHANGES IN spatstat.geom VERSION 3.2-9.027
 
 OVERVIEW
 
@@ -103,7 +103,11 @@ DELETED FUNCTIONS
     
     o whist
     This function has been moved to the new package 'spatstat.univar'.
-    
+
+    o uniquemap, uniquemap.default, uniquemap.data.frame, uniquemap.matrix
+    The generic 'uniquemap' and these methods have been
+    moved to the new package 'spatstat.univar'.
+
     o unnormdensity
     This function has been moved to the new package 'spatstat.univar'.
     

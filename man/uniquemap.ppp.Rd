@@ -1,5 +1,4 @@
 \name{uniquemap.ppp}
-\alias{uniquemap}
 \alias{uniquemap.ppp}
 \alias{uniquemap.lpp}
 \alias{uniquemap.ppx}
@@ -12,8 +11,6 @@
   and map the duplicates to the unique representative.
 }
 \usage{
-uniquemap(x)
-
 \method{uniquemap}{ppp}(x)
 
 \method{uniquemap}{lpp}(x)
@@ -27,8 +24,8 @@ uniquemap(x)
   }
 }
 \details{
-  The function \code{uniquemap} is generic, with methods for
-  point patterns and data frames.
+  The function \code{\link[spatstat.univar]{uniquemap}} is generic, with methods for
+  point patterns, and a default method.
 
   This function determines whether any points of \code{x} are
   duplicated, and constructs a mapping of the indices of \code{x}
@@ -50,7 +47,7 @@ uniquemap(x)
 }
 \seealso{
   \code{\link{unique.ppp}}, \code{\link{duplicated.ppp}},
-  \code{\link{uniquemap.default}}
+  \code{\link[spatstat.univar]{uniquemap.default}}
 }
 \examples{
   Y <- runifrect(4)

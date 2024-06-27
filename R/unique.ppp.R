@@ -1,7 +1,7 @@
 #
 #   unique.ppp.R
 #
-# $Revision: 1.39 $  $Date: 2022/05/21 09:52:11 $
+# $Revision: 1.40 $  $Date: 2024/06/26 08:53:35 $
 #
 # Methods for 'multiplicity' co-authored by Sebastian Meyer
 # Copyright 2013 Adrian Baddeley and Sebastian Meyer 
@@ -73,26 +73,6 @@ anyDuplicated.ppp <- function(x, ...) {
                  anydup=as.integer(integer(1)),
                  PACKAGE="spatstat.geom")$anydup
   anydupXY && (!is.marked(x) || anyDuplicated(as.data.frame(x), ...))
-}
-
-## utility to check whether two rows are identical
-
-IdenticalRowPair <- function(i,j, a, b=a) {
-  #' i and j are row indices (single integers)
-  ai <- a[i,]
-  bj <- b[j,]
-  row.names(ai) <- row.names(bj) <- NULL
-  identical(ai, bj)
-}
-
-## vectorised
-
-IdenticalRows <- function(i, j, a, b=a) {
-  #' i and j are row index vectors of equal length
-  #' result[k] = identical( a[i[k],]  , b[j[k],] )
-  Mo <- if(missing(b)) list(a=a) else list(a=a, b=b)
-  mapply(IdenticalRowPair, i=i, j=j, MoreArgs=Mo,
-         SIMPLIFY=TRUE, USE.NAMES=FALSE)
 }
 
 ## .......... multiplicity .............

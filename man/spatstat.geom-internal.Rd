@@ -97,8 +97,6 @@
 \alias{handle.r.b.args}
 \alias{head.hyperframe}
 \alias{hsvNA}
-\alias{IdenticalRowPair}
-\alias{IdenticalRows}
 \alias{idorempty}
 \alias{imageOp}
 \alias{imagelistOp}
@@ -450,8 +448,6 @@ grow.mask(M, xmargin=0, ymargin=xmargin)
 handle.r.b.args(r = NULL, breaks = NULL, window, pixeps = NULL, rmaxdefault)
 \method{head}{hyperframe}(x,n,\dots)
 hsvNA(h, s, v, alpha)
-IdenticalRowPair(i,j,a,b)
-IdenticalRows(i,j,a,b)
 idorempty(w, r, caller)
 imageOp(e1, e2, op)
 imagelistOp(e1, e2, op)
