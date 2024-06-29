@@ -6,43 +6,98 @@
 [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.geom)](https://github.com/spatstat/spatstat.geom)
 
 The original `spatstat` package has been split into
-several sub-packages.
+several sub-packages. This package `spatstat.geom` is one of the sub-packages.
+It defines classes of spatial objects, and supports
+geometrical operations on them.
 
-This package `spatstat.geom` is one of the sub-packages. It contains functions for
+### Overview
 
-- definitions of spatial objects (point patterns, windows, pixel images, line segment patterns, tessellations, 3D point patterns, general multidimensional space-time point patterns, linear networks)
+`spatstat.geom` supports
 
-- interactive data entry and editing for spatial objects
+- classes of spatial objects
+- creation of spatial objects, conversion between different kinds
+- printing, plotting, summarising objects
+- combining and splitting objects
+- geometrical operations
+- morphological operations
 
-- printing and plotting spatial objects (including colour images, contour plots, perspective views, composite images)
+### Detailed contents
 
-- conversion of types (pixellation, discretisation, interpolation, solution set, level set)
+For a full list of functions, see the help file for `spatstat.geom-package`.
 
+#### Classes of spatial objects in 2D
+
+- point patterns (`ppp`)
+- spatial regions or windows (`owin`)
+- pixel images (`im`)
+- line segment patterns (`psp`)
+- tessellations (`tess`)
+- linear networks (`linnet`)
+
+#### Classes of spatial objects in 3D and higher
+
+- 3D point patterns (`pp3`)
+- general multidimensional space-time point patterns (`ppx`)
+
+#### Basic support
+
+- printing spatial objects
 - basic summary information about spatial objects
-
 - subsetting, splitting, superimposing spatial patterns
-
 - extracting information such as spatial coordinates
-
+- pixellation
+- discretisation of coordinates
+- interpolation of images
+- solution set, level set
 - identifying duplicated elements
 
-- geometrical transformations such as rotating, rescaling, shifting, reflecting, applying affine transformations
+#### Graphics
 
-- geometrical operations such as intersection, union, complement, set difference, convex hull, point-in-set
+- plotting spatial patterns
+- plotting images (depicted as colour images, contour plots, perspective views, composite images)
+- graphical information (layered objects, colour maps, symbol maps)
 
+#### Interactive
+
+- interactive data entry and editing for spatial objects
+- `identify` methods for identifying individual elements
+- simple interactive panels (`simplepanel`)
+
+#### Geometry
+
+- geometrical transformations (`rotate`, `scalardilation`,
+`shift`, `reflect`, `flipxy`, `affine`)
+- set operations (`intersect.owin`, `union.owin`, `complement.owin`, `setminus.owin`)
+- test whether a point falls inside a set
+- convex hull
 - geometrical mensuration (measuring areas, lengths, angles, diameter)
 
-- distance operations: nearest neighbour, nearest neighbour distance, pairwise distances, distance map, distance transform
+#### Distance Operations
 
-- geometrical constructions (tessellations, triangulation, discretisation, bounding box)
+- nearest neighbour
+- nearest neighbour distance
+- pairwise distances
+- distance map/ distance transform
 
-- mathematical morphology (erosion, dilation, opening, closing, morphological distance transform)
+#### Geometrical constructions
+
+- tessellations
+- triangulation
+- discretisation
+- bounding box
+
+#### Mathematical Morphology
+
+- erosion, dilation
+- opening, closing
+- morphological distance transform
+
+#### Image Processing
 
 - pixel-by-pixel arithmetic
-
 - set covariance function, convolution of images
 
-- graphical information (layered objects, colour maps, symbol maps)
+#### Elementary summary statistics
 
 - quadrat counting
 
