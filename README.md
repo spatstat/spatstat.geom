@@ -15,11 +15,12 @@ geometrical operations on them.
 `spatstat.geom` supports
 
 - classes of spatial objects
-- creation of spatial objects, conversion between different kinds
-- printing, plotting, summarising objects
-- combining and splitting objects
+- basic support for spatial objects
+- graphics
+- interaction with spatial objects
 - geometrical operations
 - morphological operations
+- image processing
 
 ### Detailed contents
 
@@ -81,7 +82,7 @@ For a full list of functions, see the help file for `spatstat.geom-package`.
 
 #### Geometrical constructions
 
-- tessellations
+- tessellations (`tess`, `hextess`, `quadrats`, `venn.tess`, `polartess`, `dirichlet`, `delaunay`, `quantess`, `rpoislinetess`)
 - triangulation
 - discretisation
 - bounding box
