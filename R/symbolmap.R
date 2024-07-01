@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.57 $  $Date: 2024/07/01 04:12:07 $
+##   $Revision: 1.58 $  $Date: 2024/07/01 05:57:44 $
 ##
 
 symbolmap <- local({
@@ -666,8 +666,10 @@ plot.symbolmap <- function(x, ..., main,
 
   ## ................. draw annotation ..................
   dotargs <- list(...)
-  if(length(dotargs$col) > 1) {
-    ## colourmap or multiple colour values - remove
+  axiscol <- dotargs$col
+  nac <- length(axiscol)
+  if(nac > 0 && (!is.colour(axiscol) || nac > 1)) {
+    ## only a single colour is permitted for 'axis'
     dotargs$col <- NULL
   }
   if(annotate && length(ll) > 0) {
