@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.56 $  $Date: 2024/05/01 05:11:57 $
+##   $Revision: 1.57 $  $Date: 2024/07/01 04:12:07 $
 ##
 
 symbolmap <- local({
@@ -665,6 +665,11 @@ plot.symbolmap <- function(x, ..., main,
                    angleref=if(vertical) 90 else 0)
 
   ## ................. draw annotation ..................
+  dotargs <- list(...)
+  if(length(dotargs$col) > 1) {
+    ## colourmap or multiple colour values - remove
+    dotargs$col <- NULL
+  }
   if(annotate && length(ll) > 0) {
     if(vertical) {
       ## default axis position is to the right 
@@ -676,7 +681,7 @@ plot.symbolmap <- function(x, ..., main,
       pos <- c(ylim[1], xlim[1], ylim[2], xlim[2])[sidecode]
       ## draw axis
       do.call.matched(graphics::axis,
-                      resolve.defaults(list(...),
+                      resolve.defaults(dotargs,
                                        list(side=sidecode, pos=pos, at=yp,
                                             labels=ll, tick=FALSE, las=1)),
                       extrargs=graphicsPars("axis"))
@@ -690,7 +695,7 @@ plot.symbolmap <- function(x, ..., main,
       pos <- c(ylim[1], xlim[1], ylim[2], xlim[2])[sidecode]
       ## draw axis
       do.call.matched(graphics::axis,
-                      resolve.defaults(list(...),
+                      resolve.defaults(dotargs,
                                        list(side = sidecode, pos = pos,
                                             at = xp, labels=ll, tick=FALSE)),
                       extrargs=graphicsPars("axis"))
