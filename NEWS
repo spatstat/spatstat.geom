@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.2-9.030
+        CHANGES IN spatstat.geom VERSION 3.3-0
 
 OVERVIEW
 
@@ -22,7 +22,10 @@ PACKAGE DEPENDENCE
 NEW FUNCTIONS
 
     o default.symbolmap.ppp
-    Algorithm for determining the graphical symbol map used by plot.ppp.
+    The algorithm for determining the graphical symbol map used by plot.ppp.
+
+    o default.symbolmap
+    New generic.
 
     o affine.diagramobj, reflect.diagramobj, rotate.diagramobj
     Methods for geometrical transformations of diagram objects.
