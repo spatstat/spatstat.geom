@@ -19,7 +19,7 @@
   }
   \item{\dots}{
     Additional graphics arguments passed to
-    \code{\link{add.texture}} or \code{\link{axis.default}}.
+    \code{\link{add.texture}} or \code{\link[graphics]{axis}}.
   }
   \item{main}{
     Main title for plot.

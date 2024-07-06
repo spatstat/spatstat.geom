@@ -43,10 +43,9 @@
   A function in the \R language.
 }
 \seealso{
-  \code{\link{quantilefun}},
-  
-  \code{\link{ewcdf}}, 
-  \code{\link{quantile.ewcdf}}, 
+  \code{\link[spatstat.univar]{quantilefun}},
+  \code{\link[spatstat.univar]{ewcdf}}, 
+  \code{\link[spatstat.univar]{quantile.ewcdf}}, 
   \code{\link[stats]{ecdf}},
   \code{\link[stats]{quantile}}
 }

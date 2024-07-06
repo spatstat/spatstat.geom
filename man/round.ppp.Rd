@@ -37,13 +37,10 @@
 }
 \author{
   \adrian
-  
-  
   and \rolf
-  
 }
 \seealso{
-  \code{\link{rounding}} to determine whether numbers have been
+  \code{\link{rounding.ppp}} to determine whether numbers have been
   rounded.
   
   \code{\link[base]{round}} in the Base package.
