@@ -18,7 +18,7 @@ nnmark(X, \dots, k = 1, at=c("pixels", "points"))
     A marked point pattern (object of class \code{"ppp"}).
   }
   \item{\dots}{
-    Arguments passed to \code{\link{as.mask}} to determine the
+    Arguments passed to \code{\link[spatstat.geom]{as.mask}} to determine the
     pixel resolution.
   }
   \item{k}{
@@ -55,7 +55,7 @@ nnmark(X, \dots, k = 1, at=c("pixels", "points"))
     The result is an image or a list of images containing the marks
     of the neighbours of each pixel.
     The pixel resolution is controlled by the arguments \code{\dots}
-    passed to \code{\link{as.mask}}.
+    passed to \code{\link[spatstat.geom]{as.mask}}.
   }
 
   If the argument \code{k} is given, then the \code{k}-th nearest

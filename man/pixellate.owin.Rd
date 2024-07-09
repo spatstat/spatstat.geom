@@ -21,7 +21,7 @@
     should occur. 
   }
   \item{\dots}{
-    Optional. Extra arguments passed to \code{\link{as.mask}}
+    Optional. Extra arguments passed to \code{\link[spatstat.geom]{as.mask}}
     to determine the pixel raster.
   }
   \item{DivideByPixelArea}{

@@ -29,7 +29,7 @@
     or both.
   }
   \item{\dots}{
-    Arguments passed to \code{\link{as.mask}} to determine the pixel
+    Arguments passed to \code{\link[spatstat.geom]{as.mask}} to determine the pixel
     resolution of the result.
   }
   \item{W}{

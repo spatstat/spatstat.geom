@@ -13,7 +13,7 @@
   \item{mat}{Matrix representing a linear transformation.}
   \item{vec}{Vector of length 2 representing a translation.}
   \item{\dots}{
-    Optional arguments passed to \code{\link{as.mask}}
+    Optional arguments passed to \code{\link[spatstat.geom]{as.mask}}
     controlling the pixel resolution of the transformed image.
   }
 }

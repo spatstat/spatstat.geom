@@ -21,7 +21,7 @@
     A spatial object such as a window or point pattern.
   }
   \item{\dots}{
-    Arguments passed to \code{\link{as.mask}} to determine
+    Arguments passed to \code{\link[spatstat.geom]{as.mask}} to determine
     the pixel resolution, if required.
   }
   \item{squared}{

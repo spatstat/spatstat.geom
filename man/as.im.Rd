@@ -73,9 +73,9 @@
   \item{\dots}{Additional arguments passed to \code{X} when \code{X}
     is a function.}
   \item{eps,dimyx,xy,rule.eps}{
-    Optional parameters passed to \code{\link{as.mask}}
+    Optional parameters passed to \code{\link[spatstat.geom]{as.mask}}
     which determine the pixel array geometry.
-    See \code{\link{as.mask}}.
+    See \code{\link[spatstat.geom]{as.mask}}.
   }
   \item{na.replace}{Optional value to replace \code{NA} entries in the
     output image.

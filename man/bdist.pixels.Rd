@@ -10,7 +10,7 @@
 \arguments{
   \item{w}{A window (object of class \code{"owin"}).}
   \item{\dots}{
-    Arguments passed to \code{\link{as.mask}} to determine
+    Arguments passed to \code{\link[spatstat.geom]{as.mask}} to determine
     the pixel resolution.}
   \item{style}{
     Character string (partially matched) determining the format of
@@ -53,7 +53,7 @@
 
   If the window is a rectangle or a polygonal region,
   the grid of pixels is determined by the arguments \code{"\dots"} 
-  passed to \code{\link{as.mask}}. The distance from each pixel to the
+  passed to \code{\link[spatstat.geom]{as.mask}}. The distance from each pixel to the
   boundary is calculated exactly, using analytic geometry.
   This is slower but more accurate than in the case of a binary mask.
 

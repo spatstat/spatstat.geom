@@ -22,7 +22,7 @@ as.mask.psp(x, W=NULL, ...)
     determining the pixel raster.
   }
   \item{\dots}{
-    Optional extra arguments passed to \code{\link{as.mask}}
+    Optional extra arguments passed to \code{\link[spatstat.geom]{as.mask}}
     to determine the pixel resolution.
   }
 }
@@ -39,8 +39,8 @@ as.mask.psp(x, W=NULL, ...)
   If \code{W} is missing or \code{NULL}, it defaults to the window
   containing \code{x}.
   Then \code{W} is converted to a
-  binary pixel mask using \code{\link{as.mask}}. The arguments
-  \code{\dots} are passed to \code{\link{as.mask}} to
+  binary pixel mask using \code{\link[spatstat.geom]{as.mask}}. The arguments
+  \code{\dots} are passed to \code{\link[spatstat.geom]{as.mask}} to
   control the pixel resolution.
 }
 \value{
@@ -49,7 +49,7 @@ as.mask.psp(x, W=NULL, ...)
 }
 \seealso{
   \code{\link{pixellate.psp}},
-  \code{\link{as.mask}}.
+  \code{\link[spatstat.geom]{as.mask}}.
 
   Use \code{\link{pixellate.psp}} if you want to measure the
   length of line in each pixel.

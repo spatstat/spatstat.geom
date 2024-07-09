@@ -14,7 +14,7 @@
     A window (object of class \code{"owin"}).
   }
   \item{\dots}{
-    Arguments passed to \code{\link{as.mask}}
+    Arguments passed to \code{\link[spatstat.geom]{as.mask}}
     to control pixel resolution.
   }
   \item{discretise}{
@@ -70,7 +70,7 @@
   then the window will first be converted to a binary pixel mask
   and the discrete path distances will be computed.
 
-  The arguments \code{\dots} are passed to \code{\link{as.mask}}
+  The arguments \code{\dots} are passed to \code{\link[spatstat.geom]{as.mask}}
   to control the pixel resolution.
   
   This function is a method for the generic \code{\link{distmap}}.

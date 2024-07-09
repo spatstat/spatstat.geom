@@ -24,7 +24,7 @@
   \item{r}{positive number: the radius of erosion.}
   \item{shrink.frame}{logical: if \code{TRUE}, erode the bounding
     rectangle as well.}
-  \item{\dots}{extra arguments to \code{\link{as.mask}}
+  \item{\dots}{extra arguments to \code{\link[spatstat.geom]{as.mask}}
     controlling the pixel resolution, if pixel approximation is used.}
   \item{strict}{Logical flag determining the fate of boundary pixels,
     if pixel approximation is used. See details.}
@@ -51,7 +51,7 @@
   to the erosion is computed.
   If \code{polygonal=FALSE} then a pixel approximation
   to the erosion is computed from the distance map of \code{w}.
-  The arguments \code{"\dots"} are passed to \code{\link{as.mask}}
+  The arguments \code{"\dots"} are passed to \code{\link[spatstat.geom]{as.mask}}
   to control the pixel resolution.
   The erosion consists of all pixels whose distance
   from the boundary of \code{w} is strictly greater than \code{r} (if

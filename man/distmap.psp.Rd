@@ -13,7 +13,7 @@
 \arguments{
   \item{X}{A line segment pattern (object of class \code{"psp"}).
   }
-  \item{\dots}{Arguments passed to \code{\link{as.mask}}
+  \item{\dots}{Arguments passed to \code{\link[spatstat.geom]{as.mask}}
     to control pixel resolution.
   }
   \item{extras}{

@@ -23,7 +23,7 @@
     \emph{diameters}.)
   }
   \item{\dots}{
-    Optional arguments passed to \code{\link{as.mask}} to determine
+    Optional arguments passed to \code{\link[spatstat.geom]{as.mask}} to determine
     the pixel resolution, if \code{mask=TRUE}.
   }
   \item{separate}{

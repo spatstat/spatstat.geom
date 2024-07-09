@@ -15,7 +15,7 @@
     tessellations by \code{\link{as.tess}}.
   }
   \item{\dots}{
-    Optional arguments passed to \code{\link{as.mask}}
+    Optional arguments passed to \code{\link[spatstat.geom]{as.mask}}
     to control the discretisation, if required.
   }
   \item{keepempty}{

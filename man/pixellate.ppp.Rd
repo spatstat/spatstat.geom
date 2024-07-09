@@ -16,7 +16,7 @@
 }
 \arguments{
   \item{x,X}{Point pattern (object of class \code{"ppp"}).}
-  \item{\dots}{Arguments passed to \code{\link{as.mask}} to determine
+  \item{\dots}{Arguments passed to \code{\link[spatstat.geom]{as.mask}} to determine
     the pixel resolution}
   \item{W}{Optional window mask (object of class \code{"owin"}) determining
     the pixel raster.
@@ -61,8 +61,8 @@
   class \code{"owin"} with type \code{"mask"}).
   Otherwise the pixel raster is determined by
   extracting the window containing \code{x} and converting it to a
-  binary pixel mask using \code{\link{as.mask}}. The arguments
-  \code{\dots} are passed to \code{\link{as.mask}} to
+  binary pixel mask using \code{\link[spatstat.geom]{as.mask}}. The arguments
+  \code{\dots} are passed to \code{\link[spatstat.geom]{as.mask}} to
   control the pixel resolution.
 
   If \code{weights} is \code{NULL}, then for each pixel

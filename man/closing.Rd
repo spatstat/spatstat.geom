@@ -24,7 +24,7 @@
     or a point pattern (object of class \code{"ppp"}).
   }
   \item{r}{positive number: the radius of the closing.}
-  \item{\dots}{extra arguments passed to \code{\link{as.mask}}
+  \item{\dots}{extra arguments passed to \code{\link[spatstat.geom]{as.mask}}
     controlling the pixel resolution, if a pixel approximation is used}
   \item{polygonal}{
     Logical flag indicating whether to compute a polygonal

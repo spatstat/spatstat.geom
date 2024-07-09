@@ -44,7 +44,7 @@ Creates a circular window
 
   If \code{mask=TRUE}, then the disc is approximated by a binary pixel
   mask. The resolution of the mask is controlled by
-  the arguments \code{\dots} which are passed to \code{\link{as.mask}}.
+  the arguments \code{\dots} which are passed to \code{\link[spatstat.geom]{as.mask}}.
 
   The argument \code{radius} must be a single positive number.
   The argument \code{centre} specifies the disc centre: it can be either 
@@ -62,7 +62,7 @@ Creates a circular window
   \code{\link{discs}},
   \code{\link{owin.object}},
   \code{\link{owin}},
-  \code{\link{as.mask}}
+  \code{\link[spatstat.geom]{as.mask}}
 }
 \note{This function can also be used to generate regular polygons,
   by setting \code{npoly} to a small integer value. For example

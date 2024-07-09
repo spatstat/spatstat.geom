@@ -16,7 +16,7 @@
     A tessellation (object of class \code{"tess"}).
   }
   \item{\dots}{
-    Arguments passed to \code{\link{as.mask}} to determine the
+    Arguments passed to \code{\link[spatstat.geom]{as.mask}} to determine the
     pixel resolution.
   }
 }

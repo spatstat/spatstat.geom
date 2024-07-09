@@ -18,7 +18,7 @@
     representing a function of spatial coordinates.
   }
   \item{\dots}{
-    Arguments passed to \code{\link{as.mask}} controlling the
+    Arguments passed to \code{\link[spatstat.geom]{as.mask}} controlling the
     pixel resolution used to compute the summary.
   }
 }
@@ -36,7 +36,7 @@
   \code{\link{as.im}} and numerical values at these locations
   are summarised using \code{\link{summary.im}}. The pixel resolution
   for the grid of locations is determined by the arguments
-  \code{\dots} which are passed to \code{\link{as.mask}}.
+  \code{\dots} which are passed to \code{\link[spatstat.geom]{as.mask}}.
 }
 \value{
   For \code{summary.funxy} the result is

@@ -47,7 +47,7 @@
   For non-rectangular windows the tile areas are currently calculated
   by approximating the window as a binary mask. The accuracy of this
   approximation is controlled by \code{npix}, which becomes
-  the argument \code{dimyx} of \code{\link{as.mask}}. 
+  the argument \code{dimyx} of \code{\link[spatstat.geom]{as.mask}}. 
 }
 \seealso{
   \code{\link{quad.object}},

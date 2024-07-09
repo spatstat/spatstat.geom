@@ -1,8 +1,14 @@
+        CHANGES IN spatstat.geom VERSION 3.3-2
+
+OVERVIEW
+
+    o Tweaks to documentation to satisfy the package checker.
+
         CHANGES IN spatstat.geom VERSION 3.3-1
 
 OVERVIEW
 
-    o Tweaks to documentation to  satisfy the package checker.
+    o Tweaks to documentation to satisfy the package checker.
 
         CHANGES IN spatstat.geom VERSION 3.3-0
 

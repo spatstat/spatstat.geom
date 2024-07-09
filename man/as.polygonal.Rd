@@ -53,7 +53,7 @@ as.polygonal(W, repair=FALSE)
 \seealso{
   \code{\link{owin}},
   \code{\link{as.owin}},
-  \code{\link{as.mask}},
+  \code{\link[spatstat.geom]{as.mask}},
   \code{\link{simplify.owin}}
 }
 \examples{

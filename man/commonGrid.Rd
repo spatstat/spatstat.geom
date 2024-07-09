@@ -13,7 +13,7 @@ commonGrid(\dots)
   \item{\dots}{
     Any number of pixel images (objects of class \code{"im"}),
     binary masks (objects of class \code{"owin"} of type \code{"mask"})
-    or data which can be converted to binary masks by \code{\link{as.mask}}.
+    or data which can be converted to binary masks by \code{\link[spatstat.geom]{as.mask}}.
   } 
 }
 \details{
@@ -21,7 +21,7 @@ commonGrid(\dots)
   for several spatial objects. 
 
   The arguments \code{\dots} may be pixel images,
-  binary masks, or other spatial objects acceptable to \code{\link{as.mask}}.
+  binary masks, or other spatial objects acceptable to \code{\link[spatstat.geom]{as.mask}}.
   
   The common pixel grid is determined by inspecting all the pixel images
   and binary masks in the argument list, finding the pixel grid with the
@@ -32,7 +32,7 @@ commonGrid(\dots)
   at the chosen pixel resolution.
   Use \code{\link{as.im}(X, W=M)} to convert a pixel image \code{X} to this new
   pixel resolution.
-  Use \code{\link{as.mask}(W, xy=M)} to convert a window \code{W}
+  Use \code{\link[spatstat.geom]{as.mask}(W, xy=M)} to convert a window \code{W}
   to a binary mask at this new pixel resolution.
   See the Examples.
 }

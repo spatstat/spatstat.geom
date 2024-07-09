@@ -31,7 +31,7 @@
 
   They may be manipulated by the functions 
   \code{\link{as.rectangle}},
-  \code{\link{as.mask}}, 
+  \code{\link[spatstat.geom]{as.mask}}, 
   \code{\link{complement.owin}},
   \code{\link{rotate}},
   \code{\link{shift}},
@@ -70,7 +70,7 @@
   \code{\link{owin}},
   \code{\link{as.owin}},
   \code{\link{as.rectangle}},
-  \code{\link{as.mask}},
+  \code{\link[spatstat.geom]{as.mask}},
   \code{\link{summary.owin}},
   \code{\link{print.owin}},
   \code{\link{complement.owin}},

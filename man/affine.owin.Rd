@@ -17,7 +17,7 @@
     will be processed by \code{\link{rescue.rectangle}}.
   }
   \item{\dots}{
-    Optional arguments passed to \code{\link{as.mask}}
+    Optional arguments passed to \code{\link[spatstat.geom]{as.mask}}
     controlling the pixel resolution of the transformed window,
     if \code{X} is a binary pixel mask.
   }

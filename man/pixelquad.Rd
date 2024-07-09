@@ -62,7 +62,7 @@ pixelquad(X, W = as.owin(X))
   pixel image or a binary mask (a window of type \code{"mask"})
   then the pixel grid of \code{W} will be used. If \code{W} is a
   rectangular or polygonal window, then it will first be converted to a
-  binary mask using \code{\link{as.mask}} at the default pixel
+  binary mask using \code{\link[spatstat.geom]{as.mask}} at the default pixel
   resolution.
 }
 \examples{

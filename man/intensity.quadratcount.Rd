@@ -21,7 +21,7 @@
     or a pixel image of the estimated intensity (\code{image=TRUE}).
   }
   \item{\dots}{
-    Arguments passed to \code{\link{as.mask}} to determine
+    Arguments passed to \code{\link[spatstat.geom]{as.mask}} to determine
     the resolution of the pixel image, if \code{image=TRUE}.
   }
 }

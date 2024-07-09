@@ -13,7 +13,7 @@
 \arguments{
   \item{X}{A point pattern (object of class \code{"ppp"}).
   }
-  \item{\dots}{Arguments passed to \code{\link{as.mask}}
+  \item{\dots}{Arguments passed to \code{\link[spatstat.geom]{as.mask}}
     to control pixel resolution.
   }
   \item{clip}{

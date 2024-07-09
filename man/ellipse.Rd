@@ -26,7 +26,7 @@
     to a perfect ellipse. See Details.
   }
   \item{\dots}{
-    Arguments passed to \code{\link{as.mask}} to determine the
+    Arguments passed to \code{\link[spatstat.geom]{as.mask}} to determine the
     pixel resolution, if \code{mask} is \code{TRUE}.
   }
   \item{npoly}{
@@ -42,7 +42,7 @@
 
   If \code{mask=TRUE}, then the ellipse is approximated by a binary pixel
   mask. The resolution of the mask is controlled by
-  the arguments \code{\dots} which are passed to \code{\link{as.mask}}.
+  the arguments \code{\dots} which are passed to \code{\link[spatstat.geom]{as.mask}}.
 
   The arguments \code{a} and \code{b} must be single positive numbers.
   The argument \code{centre} specifies the ellipse centre: it can be either 
@@ -61,7 +61,7 @@
   \code{\link{disc}},
   \code{\link{owin.object}},
   \code{\link{owin}},
-  \code{\link{as.mask}}
+  \code{\link[spatstat.geom]{as.mask}}
 }
 \examples{
   W <- ellipse(a=5,b=2,centre=c(5,1),phi=pi/6)

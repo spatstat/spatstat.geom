@@ -64,7 +64,7 @@
 }
 \seealso{
   \code{\link{owin}},
-  \code{\link{as.mask}},
+  \code{\link[spatstat.geom]{as.mask}},
   \code{\link{pixelcentres}}
 }
 \examples{

@@ -40,7 +40,7 @@ boundingcircle(x, \dots)
     A window (object of class \code{"owin"}), or another spatial object. 
   }
   \item{\dots}{
-    Arguments passed to \code{\link{as.mask}} to determine the
+    Arguments passed to \code{\link[spatstat.geom]{as.mask}} to determine the
     pixel resolution for the calculation.
   }
 }

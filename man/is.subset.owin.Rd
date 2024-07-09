@@ -28,9 +28,9 @@ is.subset.owin(A, B)
 
   Note that if \code{B} is not rectangular, the algorithm proceeds by
   discretising \code{A}, converting it to a pixel mask using 
-  \code{\link{as.mask}}. In this case the resulting
+  \code{\link[spatstat.geom]{as.mask}}. In this case the resulting
   answer is only ``approximately correct''. The accuracy of the
-  approximation can be controlled: see \code{\link{as.mask}}.
+  approximation can be controlled: see \code{\link[spatstat.geom]{as.mask}}.
 }
 
 \author{\adrian

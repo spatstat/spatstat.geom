@@ -9,7 +9,7 @@
 }
 \arguments{
   \item{x}{A window (object of class \code{"owin"}).}
-  \item{\dots}{Arguments passed to \code{\link{as.mask}} to control the
+  \item{\dots}{Arguments passed to \code{\link[spatstat.geom]{as.mask}} to control the
     pixel resolution.}
 }
 \details{
@@ -17,7 +17,7 @@
   logical matrux.
 
   It first converts the window \code{x} into a binary pixel mask
-  using \code{\link{as.mask}}. It then extracts the pixel entries
+  using \code{\link[spatstat.geom]{as.mask}}. It then extracts the pixel entries
   as a logical matrix.
 
   The resulting matrix has entries that are

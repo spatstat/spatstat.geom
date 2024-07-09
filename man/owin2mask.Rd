@@ -27,12 +27,12 @@ owin2mask(W,
     should be converted to a binary pixel mask.
   }
   \item{\dots}{
-    Optional arguments passed to \code{\link{as.mask}} to determine
+    Optional arguments passed to \code{\link[spatstat.geom]{as.mask}} to determine
     the pixel resolution.
   }
 }
 \details{
-  This function is similar to, but more flexible than, \code{\link{as.mask}}.
+  This function is similar to, but more flexible than, \code{\link[spatstat.geom]{as.mask}}.
   It converts the interior, exterior, or boundary of the window \code{W}
   to a binary pixel mask.
 
@@ -40,11 +40,11 @@ owin2mask(W,
     \item
     If \code{op="sample"} (the default), the mask consists of all pixels
     whose \bold{centres} lie inside the window \code{W}.
-    This is the same as using \code{\link{as.mask}}.
+    This is the same as using \code{\link[spatstat.geom]{as.mask}}.
     \item 
     If \code{op="notsample"}, the mask consists of all pixels
     whose \emph{centres lie outside} the window \code{W}.
-    This is the same as using \code{\link{as.mask}} followed by
+    This is the same as using \code{\link[spatstat.geom]{as.mask}} followed by
     \code{\link{complement.owin}}.
     \item 
     If \code{op="cover"}, the mask consists of all pixels
@@ -99,7 +99,7 @@ owin2mask(W,
   \adrian.
 }
 \seealso{
-  \code{\link{as.mask}}
+  \code{\link[spatstat.geom]{as.mask}}
 }
 \examples{
   W <- Window(chorley)

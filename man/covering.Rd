@@ -14,7 +14,7 @@
   }
   \item{r}{positive number: the radius of the covering discs.}
   \item{\dots}{
-    extra arguments passed to \code{\link{as.mask}}
+    extra arguments passed to \code{\link[spatstat.geom]{as.mask}}
     controlling the pixel resolution for the calculations.
   }
   \item{giveup}{

@@ -270,7 +270,7 @@
     \bold{Digital approximations:}
 
     \tabular{ll}{
-	\code{\link{as.mask}}	\tab
+	\code{\link[spatstat.geom]{as.mask}}	\tab
 	Make a discrete pixel approximation of a given window \cr
 	\code{\link{as.im.owin}} \tab convert window to pixel image \cr
 	\code{\link{pixellate.owin}} \tab convert window to pixel image \cr
@@ -316,7 +316,7 @@
 	\code{\link{is.convex}} \tab determine whether a window is convex \cr 
 	\code{\link{convexhull}} \tab compute convex hull \cr
 	\code{\link{triangulate.owin}} \tab decompose into triangles \cr
-	\code{\link{as.mask}} \tab pixel approximation of window \cr
+	\code{\link[spatstat.geom]{as.mask}} \tab pixel approximation of window \cr
 	\code{\link{as.polygonal}} \tab polygonal approximation of window \cr
 	\code{\link{is.rectangle}} \tab test whether window is a rectangle \cr 
 	\code{\link{is.polygonal}} \tab test whether window is polygonal \cr 

@@ -15,7 +15,7 @@
   \item{A,B}{Windows (objects of class \code{"owin"}).}
   \item{\dots}{
     Windows,
-    or arguments passed to \code{\link{as.mask}}
+    or arguments passed to \code{\link[spatstat.geom]{as.mask}}
     to control the discretisation.
   }
   \item{fatal}{Logical.
@@ -45,11 +45,11 @@
     \item data that can be coerced to this class by
     \code{\link{as.owin}}),
     \item lists of windows, of class \code{"solist"},
-    \item named arguments of \code{\link{as.mask}} to control
+    \item named arguments of \code{\link[spatstat.geom]{as.mask}} to control
     the discretisation if required.
   }
   For \code{setminus.owin}, the arguments \code{\dots}
-  must be named arguments of \code{\link{as.mask}}.
+  must be named arguments of \code{\link[spatstat.geom]{as.mask}}.
 
   If the intersection is empty, then if \code{fatal=FALSE}
   the result is an empty window or \code{NULL},

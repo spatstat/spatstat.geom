@@ -21,7 +21,7 @@
     or a point pattern (object of class \code{"ppp"}).
   }
   \item{r}{positive number: the radius of dilation.}
-  \item{\dots}{extra arguments passed to \code{\link{as.mask}}
+  \item{\dots}{extra arguments passed to \code{\link[spatstat.geom]{as.mask}}
     controlling the pixel resolution, if the pixel approximation is
     used; or passed to \code{\link{disc}} if the polygonal approximation
     is used.
@@ -52,7 +52,7 @@
   to the dilation is computed.
   If \code{polygonal=FALSE} then a pixel approximation
   to the dilation is computed from the distance map of \code{w}.
-  The arguments \code{"\dots"} are passed to \code{\link{as.mask}}
+  The arguments \code{"\dots"} are passed to \code{\link[spatstat.geom]{as.mask}}
   to control the pixel resolution.
 
   When \code{w} is a window, the default (when \code{polygonal=NULL})

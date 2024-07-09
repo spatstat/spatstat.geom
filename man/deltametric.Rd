@@ -27,7 +27,7 @@ deltametric(A, B, p = 2, c = Inf, ...)
     Either a positive numeric value, or \code{Inf}.
   }
   \item{\dots}{
-    Arguments passed to \code{\link{as.mask}} to determine the
+    Arguments passed to \code{\link[spatstat.geom]{as.mask}} to determine the
     pixel resolution of the distance maps computed by \code{\link{distmap}}.
   }
 }
@@ -68,7 +68,7 @@ deltametric(A, B, p = 2, c = Inf, ...)
   numerically.
   The accuracy of the computation depends on the pixel resolution
   which is controlled through the extra arguments \code{\dots} passed
-  to \code{\link{as.mask}}.
+  to \code{\link[spatstat.geom]{as.mask}}.
 }
 \value{
   A numeric value.

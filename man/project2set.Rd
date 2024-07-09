@@ -19,13 +19,13 @@
     or something acceptable to \code{\link{as.owin}}.
   }
   \item{\dots}{
-    Arguments passed to \code{\link{as.mask}} controlling the
+    Arguments passed to \code{\link[spatstat.geom]{as.mask}} controlling the
     pixel resolution.
   }
 }
 \details{
   The window \code{W} is first discretised as a binary mask
-  using \code{\link{as.mask}}.
+  using \code{\link[spatstat.geom]{as.mask}}.
   
   For each data point \code{X[i]} in the point pattern \code{X},
   the algorithm finds the nearest pixel in \code{W}.

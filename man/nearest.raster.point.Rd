@@ -50,7 +50,7 @@
 }
 \seealso{
   \code{\link{owin.object}},
-  \code{\link{as.mask}}
+  \code{\link[spatstat.geom]{as.mask}}
 }
 \examples{
   w <- owin(c(0,1), c(0,1), mask=matrix(TRUE, 100,100))  # 100 x 100 grid

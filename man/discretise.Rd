@@ -33,7 +33,7 @@
   deleted by the discretisation.
   If \code{move.points=TRUE}, the point coordinates are also discretised.
 
-  The window is first discretised using \code{\link{as.mask}}.
+  The window is first discretised using \code{\link[spatstat.geom]{as.mask}}.
   Next,
   \itemize{
     \item If \code{move.points=TRUE}, each point of \code{X}
@@ -50,13 +50,13 @@
 
   The arguments \code{eps}, \code{dimyx}, \code{xy} and \code{rule.eps}
   control the fineness of the pixel array. They are passed to
-  \code{\link{as.mask}}.
+  \code{\link[spatstat.geom]{as.mask}}.
   
   If \code{eps}, \code{dimyx} and \code{xy} are all absent or
   \code{NULL}, and if the window of \code{X} is of type \code{"mask"}
   to start with, then \code{discretise(X)} returns \code{X} unchanged.
 
-  See \code{\link{as.mask}} for further details
+  See \code{\link[spatstat.geom]{as.mask}} for further details
   about the arguments \code{eps}, \code{dimyx},
   \code{xy} and \code{rule.eps}, and the process of converting
   a window to one of type \code{mask}.
@@ -78,7 +78,7 @@
   and \rolf
 }
 \seealso{
-  \code{\link{as.mask}}
+  \code{\link[spatstat.geom]{as.mask}}
 }
 \examples{
   X <- demopat

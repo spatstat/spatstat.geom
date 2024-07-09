@@ -25,7 +25,7 @@ bufftess(X, breaks, W = Window(X), \dots, polygonal = TRUE)
     tessellation will be constructed.
   }
   \item{\dots}{
-    Optional arguments passed to \code{\link{as.mask}} controlling the
+    Optional arguments passed to \code{\link[spatstat.geom]{as.mask}} controlling the
     pixel resolution when \code{polygonal=FALSE},
     and optional arguments passed to \code{\link[base]{cut.default}}
     controlling the labelling of the distance bands.
@@ -90,7 +90,7 @@ bufftess(X, breaks, W = Window(X), \dots, polygonal = TRUE)
   Polygonal calculations are performed using \code{\link{dilation}}
   and \code{\link{setminus.owin}}. Pixel calculations are performed
   using \code{\link{distmap}} and \code{\link{cut.im}}. See
-  \code{\link{as.mask}} for details of arguments that control pixel
+  \code{\link[spatstat.geom]{as.mask}} for details of arguments that control pixel
   resolution. 
   
   For other kinds of tessellations, see 

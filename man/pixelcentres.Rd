@@ -32,7 +32,7 @@ pixelcentres(X, W = NULL, ...)
   (i.e. every pixel for which the mask value is \code{TRUE}).
 
   Otherwise, \code{X} is first converted to a window, then
-  converted to a mask using \code{\link{as.mask}}, then handled as
+  converted to a mask using \code{\link[spatstat.geom]{as.mask}}, then handled as
   above.
 }
 \value{

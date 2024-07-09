@@ -21,7 +21,7 @@
     the pixel resolution.
   }
   \item{\dots}{
-    Optional arguments passed to \code{\link{as.mask}} to determine
+    Optional arguments passed to \code{\link[spatstat.geom]{as.mask}} to determine
     the pixel resolution.
   }
   \item{weights}{
@@ -53,8 +53,8 @@
   If \code{W} is missing or \code{NULL}, it defaults to the window
   containing \code{x}.
   Then \code{W} is converted to a
-  binary pixel mask using \code{\link{as.mask}}. The arguments
-  \code{\dots} are passed to \code{\link{as.mask}} to
+  binary pixel mask using \code{\link[spatstat.geom]{as.mask}}. The arguments
+  \code{\dots} are passed to \code{\link[spatstat.geom]{as.mask}} to
   control the pixel resolution.
 
   If \code{weights} are given, then the length of the intersection
@@ -66,7 +66,7 @@
 }
 \seealso{
   \code{\link{pixellate}},
-  \code{\link{as.mask}},
+  \code{\link[spatstat.geom]{as.mask}},
   \code{\link{psp2mask}}.
   
   Use \code{\link{psp2mask}} if you only want to know
