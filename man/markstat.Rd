@@ -76,15 +76,15 @@
   relatives. See the section on \bold{Value}.
 
   This function is just a convenient wrapper for a common use of the
-  function \code{\link{applynbd}}. For more complex tasks,
-  use \code{\link{applynbd}}. 
+  function \code{\link[spatstat.geom]{applynbd}}. For more complex tasks,
+  use \code{\link[spatstat.geom]{applynbd}}. 
   To simply tabulate the marks in every \code{R}-neighbourhood, use
   \code{\link[spatstat.explore]{marktable}}.
 }
 \seealso{
-  \code{\link{applynbd}},
+  \code{\link[spatstat.geom]{applynbd}},
   \code{\link[spatstat.explore]{marktable}},
-  \code{\link{ppp.object}},
+  \code{\link[spatstat.geom]{ppp.object}},
   \code{\link{apply}}
 }
 \examples{

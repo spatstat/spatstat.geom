@@ -46,6 +46,8 @@
     \item \pkg{spatstat.utils} containing basic utilities
     \item \pkg{spatstat.data} containing datasets
     \item \pkg{spatstat.sparse} containing linear algebra utilities
+    \item \pkg{spatstat.univar} containing functions for estimating
+    probability distributions of random variables
     \item \pkg{spatstat.geom} containing geometrical objects
     and geometrical operations
     \item \pkg{spatstat.random} containing code for generating

@@ -72,21 +72,21 @@ unitname(x) <- value
  Note that re-setting the name of the unit of length \emph{does not}
  affect the numerical values in \code{x}. It changes only the string
  containing the name of the unit of length. To rescale the numerical
- values, use \code{\link{rescale}}.
+ values, use \code{\link[spatstat.geom]{rescale}}.
 }
 \value{
   The return value of \code{unitname} is an object of class \code{"unitname"}
   containing the name of the unit of length in \code{x}. There are
   methods for \code{print}, \code{summary}, \code{as.character},
-  \code{\link{rescale}} and \code{\link{compatible}}.
+  \code{\link[spatstat.geom]{rescale}} and \code{\link[spatstat.geom]{compatible}}.
 }
 \author{
   \spatstatAuthors.
 }
 \seealso{
-  \code{\link{rescale}},
-  \code{\link{owin}},
-  \code{\link{ppp}}
+  \code{\link[spatstat.geom]{rescale}},
+  \code{\link[spatstat.geom]{owin}},
+  \code{\link[spatstat.geom]{ppp}}
 }
 
 \examples{
