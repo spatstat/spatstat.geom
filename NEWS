@@ -1,9 +1,18 @@
-        CHANGES IN spatstat.geom VERSION 3.3-2.001
+        CHANGES IN spatstat.geom VERSION 3.3-2.002
 
 OVERVIEW
 
+    o Perspective plot of spatial point pattern with numerical marks.
+    
     o Tweaks to documentation.
 
+NEW FUNCTIONS
+
+    o persp.ppp
+    For a spatial point pattern with numeric marks,
+    generate a perspective plot in which each data point is
+    shown as a vertical spike, with height proportional to the mark value.
+    
         CHANGES IN spatstat.geom VERSION 3.3-2
 
 OVERVIEW
