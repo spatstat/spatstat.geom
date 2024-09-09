@@ -147,6 +147,8 @@
 	plot a point pattern (e.g. \code{plot(X)}) \cr
 	\code{spatstat.gui::iplot} \tab
 	plot a point pattern interactively \cr 
+	\code{\link{persp.ppp}} \tab
+	perspective plot of marked point pattern \cr
 	\code{\link{edit.ppp}} \tab interactive text editor \cr
 	\code{\link{[.ppp}} \tab 
 	extract or replace a subset of a point pattern \cr

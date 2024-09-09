@@ -7,7 +7,7 @@
 #'    rsyst()           systematic random (randomly-displaced grid)
 #'    rjitter()         random perturbation
 #'
-#'   $Revision: 1.17 $  $Date: 2024/06/09 00:11:04 $
+#'   $Revision: 1.18 $  $Date: 2024/09/09 01:43:21 $
 
 
 simulationresult <- function(resultlist, nsim=length(resultlist), drop=TRUE, NameBase="Simulation") {
@@ -106,7 +106,7 @@ rjitter <- function(X, ...) {
 }
 
 rjitter.ppp <- function(X, radius, retry=TRUE, giveup=10000, trim=FALSE, ...,
-                        nsim=1, drop=TRUE) {
+                        nsim=1, drop=TRUE, adjust=1) {
   verifyclass(X, "ppp")
   if(!missing(nsim)) {
     check.1.integer(nsim)
@@ -119,11 +119,11 @@ rjitter.ppp <- function(X, radius, retry=TRUE, giveup=10000, trim=FALSE, ...,
     result <- simulationresult(result, nsim, drop)
     return(result)
   }
+  #' determine the jitter radius
   if(missing(radius) || is.null(radius)) {
-    ## Stoyan rule of thumb
+    ## default: Stoyan rule of thumb
     bws <- 0.15/sqrt(5 * nX/area(W))
     radius <- min(bws, shortside(Frame(W)))
-    sameradius <- TRUE
   } else {
     ## either one radius, or a vector of radii
     check.nvector(radius, nX, oneok=TRUE, vname="radius")
@@ -132,29 +132,45 @@ rjitter.ppp <- function(X, radius, retry=TRUE, giveup=10000, trim=FALSE, ...,
       warning("Negative values of jitter radius were set to zero")
       radius <- pmax(0, radius)
     }
-    sameradius <- (length(radius) == 1)
   }
-  #'
-  if(isTRUE(trim)) {
+  #' trim?
+  if(isTRUE(trim)) 
     radius <- pmin(radius, bdist.points(X))
-    sameradius <- FALSE
+  #' adjust the jitter radius
+  if(!missing(adjust)) {
+    check.nvector(adjust, nX, oneok=TRUE, vname="adjust")
+    if(min(adjust) < 0) {
+      nbad <- sum(adjust < 0)
+      howmanyvalues <- if(length(adjust) == 1) {
+                         "the value"
+                       } else {
+                         paste(nbad, ngettext(nbad, "value", "values"))
+                       }
+      warning(paste("Negative sign was ignored in",
+                    howmanyvalues, "of", sQuote("adjust")),
+              call.=FALSE)
+      adjust <- abs(adjust)
+    }
+    radius <- adjust * radius
   }
   #'
+  sameradius <- (length(radius) == 1)
+  #' start jitterin'
   result <- vector(mode="list", length=nsim)
-  Xshift <- X
   for(isim in seq_len(nsim)) {
+    Xshift <- X
     if(!retry) {
       ## points outside window are lost
       rD <- radius * sqrt(runif(nX))
       aD <- runif(nX, max= 2 * pi)
-      Xshift$x <- X$x + rD * cos(aD)
-      Xshift$y <- X$y + rD * sin(aD)
-      result[[isim]] <- Xshift[W]
+      Xshift$x <- xx <- X$x + rD * cos(aD)
+      Xshift$y <- yy <- X$y + rD * sin(aD)
+      ok <- inside.owin(xx, yy, W)
+      Xshift <- Xshift[ok]
     } else {
       ## retry = TRUE: condition on points being inside window
       undone <- rep.int(TRUE, nX)
       triesleft <- giveup
-      Xshift <- X
       while(any(undone)) {
         triesleft <- triesleft - 1
         if(triesleft <= 0) 
@@ -174,8 +190,10 @@ rjitter.ppp <- function(X, radius, retry=TRUE, giveup=10000, trim=FALSE, ...,
           undone[changed] <- FALSE
         }
       }
-      result[[isim]] <- Xshift
+      attr(Xshift, "tries") <- giveup - triesleft
     }
+    attr(Xshift, "radius") <- radius
+    result[[isim]] <- Xshift
   }
   result <- simulationresult(result, nsim, drop)
   return(result)

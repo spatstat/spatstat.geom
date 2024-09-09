@@ -10,7 +10,7 @@
 rjitter(X, \dots)
 
 \method{rjitter}{ppp}(X, radius, retry=TRUE, giveup = 10000, trim=FALSE,
-        \dots, nsim=1, drop=TRUE)
+        \dots, nsim=1, drop=TRUE, adjust=1)
 }
 \arguments{
   \item{X}{
@@ -47,11 +47,18 @@ rjitter(X, \dots)
     result will be a point pattern, rather than a list 
     containing a point pattern.
   }
+  \item{adjust}{
+    Adjustment factor applied to the radius.
+    A numeric value or numeric vector.
+  }
 }
 \value{
   The result of \code{rjitter.ppp} is
   a point pattern (an object of class \code{"ppp"})
   or a list of point patterns.
+
+  Each point pattern has attributes \code{"radius"}
+  and (if \code{retry=TRUE}) \code{"tries"}.
 }
 \details{
   The function \code{rjitter} is generic, with methods for point
@@ -65,11 +72,12 @@ rjitter(X, \dots)
   \code{retry=FALSE} the point will be lost. 
 
   However if \code{retry=TRUE}, the algorithm will try again: each time a
-  perturbed point lies outside the window, the algorithm will reject it and
+  perturbed point lies outside the window, the algorithm will reject
+  the perturbed point and
   generate another proposed perturbation of the original point,
   until one lies inside the window, or until \code{giveup} unsuccessful
   attempts have been made. In the latter case, any unresolved points
-  will be included without any perturbation. The return value will
+  will be included, without any perturbation. The return value will
   always be a point pattern with the same number of points as \code{X}.
 
   If \code{trim=TRUE}, then the displacement radius for each data point
@@ -77,7 +85,19 @@ rjitter(X, \dots)
   the distance from the data point to the window boundary.
   This ensures that the randomly displaced points will
   always fall inside the window; no displaced points will be lost and no
-  retrying will be required.
+  retrying will be required. However, it implies that a point lying
+  exactly on the boundary will never be perturbed.
+
+  If \code{adjust} is given, the jittering radius will be multiplied
+  by \code{adjust}. This allows the user to specify
+  that the radius should be a multiple of the default radius.
+
+  The resulting point pattern
+  has an attribute \code{"radius"} giving the value
+  of \code{radius} used.
+  If \code{retry=TRUE}, the resulting point pattern also has an attribute
+  \code{"tries"} reporting the maximum number of trials needed to
+  ensure that all jittered points were inside the window.
 }
 \examples{
    X <- rsyst(owin(), 10, 10)
