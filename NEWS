@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.3-2.004
+        CHANGES IN spatstat.geom VERSION 3.3-3
 
 OVERVIEW
 
@@ -19,7 +19,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o rjitter.ppp
     New argument 'adjust' allows the default radius to be adjusted.
+
+    o rjitter.ppp
     The resulting point pattern now has attribute 'radius'.
+    
+    o rjitter.ppp
+    If 'retry=TRUE', the resulting point pattern now has attribute 'tries'
+    which reports the number of trials that were required.
     
         CHANGES IN spatstat.geom VERSION 3.3-2
 
