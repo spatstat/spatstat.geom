@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.111 $ $Date: 2024/02/04 08:04:51 $
+#   $Revision: 1.113 $ $Date: 2024/09/29 03:41:18 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -106,7 +106,14 @@ tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
   } else stop("Internal error: unrecognised format")
   ## add marks!
   if(!is.null(marks)) {
-    marks <- as.data.frame(marks)
+    mf <- markformat(marks)
+    switch(mf,
+           none = { marks <- NULL },
+           list = { marks <- hyperframe(marks=marks, row.names=NULL) },
+           vector = { marks <- data.frame(marks=marks, row.names=NULL) },
+           dataframe = ,
+           hyperframe = { row.names(marks) <- NULL }
+           )
     if(nrow(marks) != out$n)
       stop(paste("wrong number of marks:",
                  nrow(marks), "should be", out$n),
@@ -155,10 +162,43 @@ print.tess <- function(x, ..., brief=FALSE) {
            } else splat(nlev, "tiles (levels of a pixel image)")
          })
   if(!is.null(marx <- x$marks)) {
-    m <- dim(marx)[2] %orifnull% 1
-    if(m == 1) splat("Tessellation is marked") else
-    splat("Tessellation has", m, "columns of marks:",
-          commasep(sQuote(colnames(marx))))
+    mf <- markformat(marx)
+    switch(mf,
+           none = { },
+           vector = {
+             splat("Tessellation has", paste0(typeof(marx), "-valued marks"))
+           },
+           list = {
+             if(is.solist(marx)) {
+               splat("Tessellation has a list of spatial objects as marks")
+             } else {
+               cls <- unique(sapply(marks, class))
+               if(!is.character(cls)) {
+                 splat("Tessellation has a list of marks")
+               } else {
+                 splat("Tessellation has a list of marks of class",
+                       commasep(sQuote(cls)))
+               }
+             }
+           },
+           dataframe = {
+             splat("Tessellation has a data frame of marks:")
+             nc <- ncol(marx)
+             cn <- colnames(marx)
+             ty <- unname(sapply(marx, typeof))
+             for(i in seq_len(nc)) {
+               cat(paste0("\t$", cn[i], ":\t\t", ty[i], "\n"))
+             }
+           },
+           hyperframe = {
+             splat("Tessellation has a hyperframe of marks:")
+             nc <- ncol(marx)
+             cn <- colnames(marx)
+             cls <- sQuote(unclass(marx)$vclass)
+             for(i in seq_len(nc)) {
+               cat(paste0("\t$", cn[i], ":\t\t", cls[i], "\n"))
+             }
+           })
   }
   if(full) print(win)
   invisible(NULL)
@@ -552,14 +592,19 @@ marks.tess <- function(x, ...) {
 "marks<-.tess" <- function(x, ..., value) {
   stopifnot(is.tess(x))
   if(!is.null(value)) {
-    value <- as.data.frame(value)
+    mf <- markformat(value)
+    switch(mf,
+           none = { value <- NULL },
+           list = { value <- hyperframe(marks=value, row.names=NULL) },
+           vector = { value <- data.frame(marks=value, row.names=NULL) },
+           dataframe = ,
+           hyperframe = { row.names(value) <- NULL }
+           )
     ntil <- x$n
     if(nrow(value) != ntil)
       stop(paste("replacement value for marks has wrong length:",
                  nrow(value), "should be", ntil),
            call.=FALSE)
-    rownames(value) <- NULL
-    if(ncol(value) == 1) colnames(value) <- "marks"
   }
   x$marks <- value
   return(x)
@@ -837,7 +882,7 @@ intersect.tess <- function(X, Y, ..., keepempty=FALSE, keepmarks=FALSE, sep="x")
       if(keepmarks) {
         marx <- marks(X)
         if(!is.null(marx))
-          marx <- as.data.frame(marx)[!isempty, , drop=FALSE]
+          marx <- marksubset(marx, !isempty)
         marks(out) <- marx
       }
       return(out)
@@ -854,22 +899,43 @@ intersect.tess <- function(X, Y, ..., keepempty=FALSE, keepmarks=FALSE, sep="x")
 
   if(keepmarks) {
     ## initialise the mark variables to be inherited from parent tessellations
-    Xmarks <- as.data.frame(marks(X))
-    Ymarks <- as.data.frame(marks(Y))
-    gotXmarks <- (ncol(Xmarks) > 0)
-    gotYmarks <- (ncol(Ymarks) > 0)
+    Xmarks <- marks(X)
+    Ymarks <- marks(Y)
+    mfX <- markformat(Xmarks)
+    mfY <- markformat(Ymarks)
+    gotXmarks <- (mfX != "none")
+    gotYmarks <- (mfY != "none")
     if(gotXmarks && gotYmarks) {
-      colnames(Xmarks) <- paste0("X", colnames(Xmarks))
-      colnames(Ymarks) <- paste0("Y", colnames(Ymarks))
+      ## marks from each input will be combined as separate columns
+      switch(mfX,
+             vector = { Xmarks <- data.frame(Xmarks=Xmarks) },
+             list   = { Xmarks <- hyperframe(Xmarks=Xmarks) },
+             hyperframe = ,
+             dataframe = {
+               colnames(Xmarks) <- paste0("X", colnames(Xmarks))
+             })
+      switch(mfY,
+             vector = { Ymarks <- data.frame(Ymarks=Ymarks) },
+             list   = { Ymarks <- hyperframe(Ymarks=Ymarks) },
+             hyperframe = ,
+             dataframe = {
+               colnames(Ymarks) <- paste0("Y", colnames(Ymarks))
+             })
+      ## ensure hyperframe code is dispatched where required
+      if(is.hyperframe(Xmarks) && !is.hyperframe(Ymarks)) 
+        Ymarks <- as.hyperframe(Ymarks)
+      if(!is.hyperframe(Xmarks) && is.hyperframe(Ymarks)) 
+        Xmarks <- as.hyperframe(Xmarks)
     }
+    ## initialise 
     if(gotXmarks || gotYmarks) {
       marx <- if(gotXmarks && gotYmarks) {
-                cbind(Xmarks[integer(0), , drop=FALSE],
-                      Ymarks[integer(0), , drop=FALSE])
+                cbind(marksubset(Xmarks, integer(0)),
+                      marksubset(Ymarks, integer(0)))
               } else if(gotXmarks) {
-                Xmarks[integer(0), , drop=FALSE]
+                marksubset(Xmarks, integer(0))
               } else {
-                Ymarks[integer(0), , drop=FALSE]
+                marksubset(Ymarks, integer(0))
               }
     } else keepmarks <- FALSE
   }
@@ -879,22 +945,21 @@ intersect.tess <- function(X, Y, ..., keepempty=FALSE, keepmarks=FALSE, sep="x")
   for(i in seq_along(Xtiles)) {
     Xi <- Xtiles[[i]]
     Ti <- lapply(Ytiles, intersect.owin, B=Xi, ..., fatal=FALSE)
-    isempty <- !keepempty & sapply(Ti, is.empty)
-    nonempty <- !isempty
-    if(any(nonempty)) {
-      Ti <- Ti[nonempty]
-      names(Ti) <- if(Xtrivial) namesY[nonempty] else
-                   paste(namesX[i], namesY[nonempty], sep=sep)
+    keep <- keepempty | !sapply(Ti, is.empty)
+    if(any(keep)) {
+      Ti <- Ti[keep]
+      names(Ti) <- if(Xtrivial) namesY[keep] else
+                   paste(namesX[i], namesY[keep], sep=sep)
       Ztiles <- append(Ztiles, Ti)
       if(keepmarks) {
         extra <- if(gotXmarks && gotYmarks) {
-                   data.frame(X=Xmarks[i, ,drop=FALSE],
-                              Y=Ymarks[nonempty, ,drop=FALSE],
-                              row.names=NULL)
+                   cbind(marksubset(Xmarks, i),
+                         marksubset(Ymarks, keep),
+                         row.names=NULL)
                  } else if(gotYmarks) {
-                   Ymarks[nonempty, ,drop=FALSE]
+                   marksubset(Ymarks, keep)
                  } else {
-                   Xmarks[rep(i, sum(nonempty)), ,drop=FALSE]
+                   marksubset(Xmarks, rep(i, sum(keep)))
                  }
         marx <- rbind(marx, extra)
       }

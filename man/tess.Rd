@@ -31,7 +31,8 @@
     An object of class \code{"owin"}.
   }
   \item{marks}{
-    Optional vector or data frame of marks associated with the tiles.
+    Optional vector, data frame or hyperframe
+    of marks associated with the tiles.
   }
   \item{keepempty}{
     Logical flag indicating whether empty tiles should be retained

@@ -1,3 +1,18 @@
+        CHANGES IN spatstat.geom VERSION 3.3-3.001
+
+OVERVIEW
+
+    o Tessellations can have any kind of marks
+    
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o tess, marks<-.tess
+    A tessellation can now have any kind of marks
+    (vector, list, data frame or hyperframe).
+
+    o intersect.tess
+    Now handles marks of any kind (vector, list, data frame or hyperframe).
+
         CHANGES IN spatstat.geom VERSION 3.3-3
 
 OVERVIEW
