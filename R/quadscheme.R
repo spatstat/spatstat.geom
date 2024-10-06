@@ -2,7 +2,7 @@
 #
 #      quadscheme.S
 #
-#      $Revision: 4.35 $    $Date: 2016/02/11 10:17:12 $
+#      $Revision: 4.36 $    $Date: 2024/10/06 10:13:13 $
 #
 #      quadscheme()    generate a quadrature scheme from 
 #		       data and dummy point patterns.
@@ -267,16 +267,15 @@ validate.quad <- function(Q, fatal=FALSE, repair=TRUE, announce=FALSE) {
   }
   return(TRUE)
 }
-
   
 
-pixelquad <- function(X, W=as.owin(X)) {
+pixelquad <- function(X, W=as.owin(X), ...) {
   ## make a quadscheme with a dummy point at every pixel
   verifyclass(X, "ppp")
   
   ## convert window to mask if not already one
   W <- as.owin(W)
-  M <- as.mask(W)
+  M <- AsMaskInternal(W, ...)
   MM <- M$m
   pixelarea <- M$xstep * M$ystep
   

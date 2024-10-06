@@ -19,6 +19,7 @@
 \alias{areaLoss.diri}       
 \alias{areaLoss.grid}
 \alias{areaLoss.poly}
+\alias{AsMaskInternal}
 \alias{AsymmDistance.psp}
 \alias{as.character.unitname}
 \alias{as.data.frame.ppplist}
@@ -370,6 +371,7 @@ areaLoss.grid(X, r, \dots, W, subset,
                          ngrid = spatstat.options("ngrid.disc"),
                          exact = FALSE)
 areaLoss.poly(X, r, \dots, W, subset, splitem)
+AsMaskInternal(w, \dots, eps, dimyx, xy, rule.eps)
 AsymmDistance.psp(X, Y, metric, method)
 \method{as.character}{unitname}(x, \dots)
 \method{as.data.frame}{ppplist}(x, row.names, \dots)

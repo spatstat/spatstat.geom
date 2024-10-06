@@ -6,7 +6,7 @@
   of a pixel image.
 }
 \usage{
-pixelquad(X, W = as.owin(X))
+pixelquad(X, W = as.owin(X), \dots)
 }
 \arguments{
   \item{X}{Point pattern (object of class \code{"ppp"}) containing the
@@ -17,6 +17,10 @@ pixelquad(X, W = as.owin(X))
     A pixel image (object of class \code{"im"}),
     a window (object of class \code{"owin"}), or anything that can
     be converted to a window by \code{\link{as.owin}}.
+  }
+  \item{\dots}{
+    Optional arguments to \code{\link[spatstat.geom]{as.mask}}
+    controlling the pixel raster dimensions.
   }
 }
 \value{

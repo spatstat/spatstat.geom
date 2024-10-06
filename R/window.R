@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.211 $	$Date: 2024/02/01 02:30:49 $
+#	$Revision: 4.212 $	$Date: 2024/10/06 10:11:07 $
 #
 #
 #	A window may be either
@@ -556,9 +556,17 @@ as.rectangle <- function(w, ...) {
   return(owinInternalRect(w$xrange, w$yrange, unitname=unitname(w), check=FALSE))
 }
 
-#
-#-----------------------------------------------------------------------------
-#
+##
+##----------------------------------------------------------------------------
+##
+
+AsMaskInternal <- function(w, ..., eps=NULL, dimyx=NULL, xy=NULL,
+                           rule.eps=c("adjust.eps", "grow.frame",
+                                      "shrink.frame")) {
+  rule.eps <- match.arg(rule.eps)
+  as.mask(w, eps=eps, dimyx=dimyx, xy=xy, rule.eps=rule.eps)
+}
+
 as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL,
                     rule.eps=c("adjust.eps", "grow.frame", "shrink.frame")) {
   ## 	  eps:		   grid mesh (pixel) size

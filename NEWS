@@ -1,8 +1,10 @@
-        CHANGES IN spatstat.geom VERSION 3.3-3.001
+        CHANGES IN spatstat.geom VERSION 3.3-3.002
 
 OVERVIEW
 
-    o Tessellations can have any kind of marks
+    o Tessellations can have any kind of marks.
+
+    o Minor improvements.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -13,6 +15,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o intersect.tess
     Now handles marks of any kind (vector, list, data frame or hyperframe).
 
+    o pixelquad
+    Now accepts arguments passed to 'as.mask' to control the pixel resolution.
+    
         CHANGES IN spatstat.geom VERSION 3.3-3
 
 OVERVIEW
