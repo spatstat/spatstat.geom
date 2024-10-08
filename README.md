@@ -95,12 +95,26 @@ For a full list of functions, see the help file for `spatstat.geom-package`.
 
 #### Image Processing
 
-- pixel-by-pixel arithmetic
-- set covariance function, convolution of images
+- pixel-by-pixel arithmetic (`Math.im`)
+- set covariance function (`setcov`)
+- convolution of images (`imcov`)
 
 #### Elementary summary statistics
 
-- quadrat counting
+Summary statistics are mostly provided in the `spatstat.explore` package.
+However, `spatstat.geom` provides functions for calculating
+
+- average intensity of a point pattern (`intensity`)
+- quadrat counts (`quadratcount`)
+
+#### Elementary generation of random patterns
+
+Functions for generating random spatial patterns
+are mostly provided in the `spatstat.random` package.
+However, `spatstat.geom` provides basic functions for generating
+
+- random points in a rectangle (`runifrect`)
+- quasirandom points (`rQuasi`)
 
 The reorganisation of `spatstat` into a family of packages is described
 on the GitHub repository
