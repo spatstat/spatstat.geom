@@ -10,6 +10,13 @@ several sub-packages. This package `spatstat.geom` is one of the sub-packages.
 It defines classes of spatial objects, and supports
 geometrical operations on them.
 
+The reorganisation of `spatstat` into a family of packages is described
+on the GitHub repository
+[spatstat/spatstat](https://github.com/spatstat/spatstat).
+
+This repository holds the latest development version of `spatstat.geom`.
+For the latest public release on CRAN, click the green badge above.
+
 ### Overview
 
 `spatstat.geom` supports
@@ -116,9 +123,3 @@ However, `spatstat.geom` provides basic functions for generating
 - random points in a rectangle (`runifrect`)
 - quasirandom points (`rQuasi`)
 
-The reorganisation of `spatstat` into a family of packages is described
-on the GitHub repository
-[spatstat/spatstat](https://github.com/spatstat/spatstat).
-
-This repository holds the latest development version of `spatstat.geom`.
-For the latest public release on CRAN, click the green badge above.
