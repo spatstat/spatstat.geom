@@ -748,9 +748,11 @@ as.function.tess <- function(x, ..., values=NULL) {
     if(is.data.frame(values)) values <- unlist(values)
     if(length(values) != nobjects(x))
       stop("Length of 'values' should equal the number of tiles", call.=FALSE)
+    values <- unname(values)
     f <- function(x,y) { values[as.integer(tileindex(x,y,V))] }
   }
   g <- funxy(f, Window(V))
+  class(g) <- c("tessfun", class(g))
   return(g)
 }
 
