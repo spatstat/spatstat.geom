@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.3-3.003
+        CHANGES IN spatstat.geom VERSION 3.3-3.004
 
 OVERVIEW
 
@@ -17,6 +17,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o pixelquad
     Now accepts arguments passed to 'as.mask' to control the pixel resolution.
+
+    o persp.ppp
+    Now draws a reference scale bar for the vertical scale.
+    New arguments 'legend', 'legendpos', 'leg.args', 'leg.col'.
     
         CHANGES IN spatstat.geom VERSION 3.3-3
 

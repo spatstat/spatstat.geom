@@ -12,7 +12,9 @@
   \method{persp}{ppp}(x, \dots, main, grid = TRUE, ngrid = 10,
             col.grid = "grey", col.base = "white",
             win.args=list(), spike.args = list(), neg.args = list(),
-            which.marks = 1, zlab = NULL, zlim = NULL, zadjust = 1)
+            which.marks = 1, zlab = NULL, zlim = NULL, zadjust = 1,
+            legend=TRUE, legendpos="bottomleft",
+            leg.args=list(lwd=4), leg.col=c("black", "orange"))
 }
 \arguments{
   \item{x}{
@@ -73,6 +75,29 @@
   }
   \item{zadjust}{
     Scale adjustment factor controlling the height of spikes.
+  }
+  \item{legend}{
+    Logical value specifying whether to draw a reference scale bar for the
+    vertical axis.
+  }
+  \item{legendpos}{
+    Position of the reference scale bar. Either a character string
+    matching one of the options
+    \code{"bottomleft"}, \code{"bottomright"},
+    \code{"topleft"}, \code{"topright"},
+    \code{"bottom"}, \code{"left"}, \code{"top"} or \code{"right"},
+    or a numeric vector of length 2 specifing the coordinate position
+    of the base of the reference scale bar.
+  }
+  \item{leg.args}{
+    Additional arguments passed to \code{\link[graphics]{segments}}
+    to control the drawing of the reference scale bar.
+  }
+  \item{leg.col}{
+    A vector (usually of length 2) of colour values
+    for successive intervals in the reference scale.
+    The default is a reference scale consisting of
+    black and orange stripes.
   }
 }
 \details{
