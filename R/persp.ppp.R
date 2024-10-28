@@ -5,21 +5,22 @@
 #'  Copyright (C) Adrian Baddeley 2024
 #'  GPL Public Licence >= 2.0
 #'
-#' $Revision: 1.4 $ $Date: 2024/10/24 03:32:24 $
+#' $Revision: 1.5 $ $Date: 2024/10/28 06:10:01 $
 
 persp.ppp <- local({
   
-  persp.ppp <- function(x, ..., main, grid=TRUE, ngrid=10,
+  persp.ppp <- function(x, ..., main, type=c("l", "b"), grid=TRUE, ngrid=10,
                         col.grid="grey", col.base="white",
                         win.args=list(),
-                        spike.args=list(),
-                        neg.args=list(), which.marks=1,
+                        spike.args=list(), 
+                        neg.args=list(), point.args=list(), which.marks=1,
                         zlab=NULL, zlim=NULL,
                         zadjust=1,
                         legend=TRUE, legendpos="bottomleft",
                         leg.args=list(lwd=4),
                         leg.col=c("black", "orange")) {
     if(missing(main)) main <- short.deparse(substitute(x))
+    type <- match.arg(type)
     W <- Window(x)
     R <- Frame(x)
     marx <- marks(x)
@@ -85,14 +86,23 @@ persp.ppp <- local({
     #' create spikes
     S <- xyzsegmentdata(x$x, x$y, 0,
                         x$x, x$y, scaled.marx)
+    #' and bubbles
+    if(type == "b")
+      P <- data.frame(x=x$x, y=x$y, z=scaled.marx)
+    
     if(grid) {
       if(scaled.zlim[1] < 0) {
         #' first draw downward spikes
         downward <- (scaled.marx < 0)
         if(any(downward)) {
           SD <- S[downward, , drop=FALSE]
-          spectiveSegments(SD, neg.args, spike.args, ..., M=M)
+          spectiveSegments(SD, neg.args, spike.args, dotargs, M=M)
           S <- S[!downward, , drop=FALSE]
+          if(type == "b") {
+            PD <- P[downward, , drop=FALSE]
+            spectivePoints(PD, point.args, dotargs, M=M)
+            P <- P[!downward, , drop=FALSE]
+          }
         }
         #' plot baseline grid 
         spectiveFlatGrid(R, ngrid, M, col=col.grid)
@@ -105,6 +115,8 @@ persp.ppp <- local({
     #' draw upward spikes
     if(nrow(S) > 0) {
       spectiveSegments(S, spike.args, dotargs, M=M)
+      if(type == "b")
+        spectivePoints(P, point.args, dotargs, M=M)
     }
     #'
     if(legend) {
@@ -134,7 +146,7 @@ persp.ppp <- local({
       tixseg <- xyzsegmentdata(legxy[1], legxy[2], scaled.tix[-ntix],
                                legxy[1], legxy[2], scaled.tix[-1])
       tixcol <- rep(leg.col, ntix)[1:ntix]
-      spectiveSegments(tixseg, list(col=tixcol), leg.args, spike.args, M=M)
+      spectiveSegments(tixseg, list(col=tixcol), leg.args, M=M)
       spectiveText(legxy[1], legxy[2], scaled.tix[-c(1,ntix)],
                    labels=tix[-c(1,ntix)], pos=4, M=M)
     }
@@ -195,11 +207,21 @@ persp.ppp <- local({
     invisible(NULL)
   }
 
+  spectivePoints <- function(df, ..., M) {
+    ## arguments ... should be lists of parameters
+    p <- with(df, trans3dz(x, y, z, M))
+    do.call.matched(points.default,
+                    resolve.defaults(
+                      list(x=p$x, y=p$y),
+                      ...),
+                    extrargs=graphicsPars("points"))
+  }
+  
   spectiveText <- function(x,y,z, ..., M) {
     p <- trans3dz(x, y, z, M)
     text(p$x, p$y, ...)
   }
-  
+
   persp.ppp
 })
 

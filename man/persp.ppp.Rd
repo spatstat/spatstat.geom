@@ -9,10 +9,14 @@
   shown as a vertical spike, with height proportional to the mark value.
 }
 \usage{
-  \method{persp}{ppp}(x, \dots, main, grid = TRUE, ngrid = 10,
+  \method{persp}{ppp}(x, \dots, main, type=c("l", "b"),
+            grid = TRUE, ngrid = 10,
             col.grid = "grey", col.base = "white",
-            win.args=list(), spike.args = list(), neg.args = list(),
-            which.marks = 1, zlab = NULL, zlim = NULL, zadjust = 1,
+            win.args=list(),
+            spike.args = list(), neg.args = list(),
+            point.args=list(), 
+            which.marks = 1,
+            zlab = NULL, zlim = NULL, zadjust = 1,
             legend=TRUE, legendpos="bottomleft",
             leg.args=list(lwd=4), leg.col=c("black", "orange"))
 }
@@ -27,10 +31,17 @@
     (for example the rotation angle \code{theta} and the elevation angle
     \code{phi})
     or passed to \code{\link[graphics]{segments}} to control the drawing
-    (for example \code{lwd} for line width).
+    of lines (for example \code{lwd} for line width)
+    or passed to \code{\link[graphics]{points.default}} to control the drawing
+    of points (for example \code{pch} for symbol type).
   }
   \item{main}{
     Optional main title for the plot.
+  }
+  \item{type}{
+    Single character specifying how each observation will be plotted:
+    \code{type="l"} for lines, 
+    \code{type="b"} for both lines and points.
   }
   \item{grid}{
     Logical value specifying whether to draw a grid of reference lines
@@ -60,6 +71,10 @@
     List of arguments passed to \code{\link[graphics]{segments}}
     applicable only to those spikes which have negative height
     (corresponding to a mark value which is negative).
+  }
+  \item{point.args}{
+    List of arguments passed to \code{\link[graphics]{points.default}}
+    to control the drawing of the points, when \code{type="b"}.
   }
   \item{which.marks}{
     Integer, or character name, identifying the column of marks which
@@ -152,6 +167,11 @@ Adrian Baddeley.
    persp(Y, theta=30, phi=20, col.base="lightblue",
          win.args=list(col="pink", border=NA),
          spike.args=list(lwd=2), zadjust=1.5)
+
+   persp(Y, type="b",
+         theta=30, phi=20, col.base="lightblue",
+         win.args=list(col="pink", border=NA),
+         spike.args=list(lty=3), point.args=list(col="blue"), zadjust=1.5)
 
 }
 \keyword{hplot}
