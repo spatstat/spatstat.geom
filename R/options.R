@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.94 $   $Date: 2024/01/08 06:37:19 $
+#    $Revision: 1.96 $   $Date: 2024/11/18 02:44:24 $
 #
 #
 
@@ -13,8 +13,8 @@ putSpatstatVariable("Spatstat.ProgressData", NULL)
 putSpatstatVariable("warnedkeys", character(0))
 
 ## Kovesi's uniform colour map, row 29, linear 'bmy'
-putSpatstatVariable("DefaultImageColours", 
-c("#000C7D", "#000D7E", "#000D80", "#000E81", "#000E83", "#000E85", 
+.Kovesi29 <- c(
+"#000C7D", "#000D7E", "#000D80", "#000E81", "#000E83", "#000E85", 
 "#000F86", "#000F88", "#00108A", "#00108B", "#00118D", "#00118F", 
 "#001190", "#001292", "#001293", "#001295", "#001396", "#001398", 
 "#001399", "#00149A", "#00149C", "#00149D", "#00149E", "#00159F", 
@@ -56,7 +56,30 @@ c("#000C7D", "#000D7E", "#000D80", "#000E81", "#000E83", "#000E85",
 "#FED51C", "#FED61D", "#FED71D", "#FED91D", "#FEDA1D", "#FEDB1D", 
 "#FEDD1D", "#FEDE1E", "#FEDF1E", "#FEE11E", "#FEE21E", "#FEE31F", 
 "#FEE51F", "#FEE61F", "#FEE720", "#FEE820", "#FEEA21", "#FEEB21", 
-"#FEEC22", "#FEEE22", "#FEEF23", "#FEF023"))
+"#FEEC22", "#FEEE22", "#FEEF23", "#FEF023")
+
+putSpatstatVariable("DefaultImageColours", .Kovesi29)
+
+.Spatstat.Default.Image.Colfun <- function(n) {
+  z <- getSpatstatVariable("DefaultImageColours")
+  interp.colours(z, n)
+}
+  
+default.image.colours <- function() {
+  getSpatstatVariable("DefaultImageColours")
+}
+
+reset.default.image.colours <- function(col=NULL) {
+  if(is.null(col)) {
+    col <- .Kovesi29
+  } else if(!is.colour(col)) {
+    stop("col should be a vector of colour values")
+  }
+  putSpatstatVariable("DefaultImageColours", col)
+  spatstat.options(image.colfun = .Spatstat.Default.Image.Colfun)
+  return(invisible(col))
+}
+
 
 warn.once <- function(key, ...) {
   warned <- getSpatstatVariable("warnedkeys")
@@ -214,10 +237,7 @@ warn.once <- function(key, ...) {
        image.colfun=list(
          ## default colour scheme for plot.im
 #         default=function(n){topo.colors(n)},
-         default=function(n) {
-           z <- getSpatstatVariable("DefaultImageColours")
-           interp.colours(z, n)
-         },
+         default=.Spatstat.Default.Image.Colfun,
          check=function(x) {
            if(!is.function(x) || length(formals(x)) == 0) return(FALSE)
            y <- x(42)

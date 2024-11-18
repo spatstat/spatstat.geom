@@ -298,6 +298,10 @@
    }
   }
 
+  If \code{col} is missing or \code{col=NULL}, the default colour values
+  are the linear, perceptually uniform colour sequence given by
+  \code{\link[spatstat.data]{Kovesi}[[29,"values"]]}.
+  
   If \code{spatstat.options("monochrome")} has been set to \code{TRUE}
   then \bold{all colours will be converted to grey scale values}.
   
@@ -427,7 +431,8 @@
   \code{\link{persp.im}},
   \code{\link{hist.im}},
   \code{\link[graphics]{image.default}},
-  \code{\link{spatstat.options}}
+  \code{\link{spatstat.options}},
+  \code{\link{default.image.colours}}
 }
 \examples{
    # an image
