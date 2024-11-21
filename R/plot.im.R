@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.158 $   $Date: 2024/02/04 08:04:51 $
+#  $Revision: 1.159 $   $Date: 2024/11/21 07:44:45 $
 #
 #  Plotting code for pixel images
 #
@@ -222,7 +222,7 @@ plot.im <- local({
       zlimits <- if(log) 10^usr else usr
       z <- z[inside.range(z, zlimits)]
     }
-    return(z)
+    return(unique(z))
   }
 
   numericalRange <- function(x, zlim=NULL) {
@@ -246,6 +246,7 @@ plot.im <- local({
                      col=NULL, valuesAreColours=NULL, log=FALSE,
                      ncolours=256, gamma=1, 
                      ribbon=show.all, show.all=!add,
+                     drop.ribbon=FALSE,
                      ribside=c("right", "left", "bottom", "top"),
                      ribsep=0.15, ribwid=0.05, ribn=1024,
                      ribscale=1, ribargs=list(), riblab=NULL, colargs=list(),
@@ -417,57 +418,55 @@ plot.im <- local({
                col <- s$outputs
              } 
              trivial <- (diff(vrange) <= zap * .Machine$double.eps)
-             #' ribbonvalues: domain of colour map (pixel values)
-             #' ribbonrange: (min, max) of pixel values in image
-             #' nominalrange: range of values shown on ribbon 
-             #' nominalmarks: values shown on ribbon at tick marks
-             #' ribbonticks: pixel values of tick marks 
+             #' ribbonvalues: a sequence of pixel values, mapped to colours
+             #' ribbonrange:  (min, max) of pixel values mapped by ribbon
+             #' nominalrange: range of (scaled) values shown on ribbon 
+             #' nominalmarks: (scaled) values shown on ribbon at tick marks
+             #' ribbonticks: pixel values corresponding to tick marks 
              #' ribbonlabels: text displayed at tick marks
-             ribbonvalues <- if(trivial) vrange[1] else
-                             seq(from=vrange[1], to=vrange[2], length.out=ribn)
-             ribbonrange <- vrange
-             nominalrange <- Log(ribscale * Exp(ribbonrange))
-             nominalmarks <- if(trivial) nominalrange[1] else
-                             (user.ticks %orifnull% Ticks(nominalrange,
+             if(trivial) {
+               ribbonvalues <- mean(vrange)
+               nominalmarks <- Log(ribscale * Exp(ribbonvalues))
+             } else {
+               ribbonvalues <- seq(from=vrange[1L], to=vrange[2L],
+                                   length.out=ribn)
+               ribbonrange <- vrange
+               nominalrange <- Log(ribscale * Exp(ribbonrange))
+               nominalmarks <- user.ticks %orifnull% Ticks(nominalrange,
                                                          log=do.log,
-                                                         nint=user.nint))
+                                                         nint=user.nint)
+             }
              ribbonticks <- Log(nominalmarks/ribscale)
              ribbonlabels <- user.ribbonlabels %orifnull% paste(nominalmarks)
            },
            integer = {
-             values <- as.vector(x$v)
-             values <- values[!is.na(values)]
-             uv <- unique(values)
-             vrange <- numericalRange(uv, zlim)
-             nvalues <- length(uv)
-             trivial <- (nvalues < 2)
-             if(!trivial){
-               nominalrange <- Log(ribscale * Exp(vrange))
-               if(!is.null(user.ticks)) {
-                 nominalmarks <- user.ticks
-               } else {
-                 nominalmarks <- Ticks(nominalrange,
-                                       log=do.log,
-                                       nint = user.nint)
-                 nominalmarks <- nominalmarks[nominalmarks %% 1 == 0]
-               }
-               ribbonticks <- Log(nominalmarks/ribscale)
-               ribbonlabels <- user.ribbonlabels %orifnull% paste(nominalmarks)
-               if(!do.log && isTRUE(all.equal(ribbonticks,
-                                              vrange[1]:vrange[2]))) {
-                 # each possible pixel value will appear in ribbon
-                 ribbonvalues <- vrange[1]:vrange[2]
-                 imagebreaks <- c(ribbonvalues - 0.5, vrange[2] + 0.5)
-                 ribbonrange <- range(imagebreaks)
-                 ribbonticks <- ribbonvalues
-                 ribbonlabels <- user.ribbonlabels %orifnull% paste(ribbonticks * ribscale)
-               } else {
-                 # not all possible values will appear in ribbon
-                 ribn <- min(ribn, diff(vrange)+1)
-                 ribbonvalues <- seq(from=vrange[1], to=vrange[2],
-                                     length.out=ribn)
-                 ribbonrange <- vrange
-               }
+             vrange <- numericalRange(x, zlim)
+             trivial <- (diff(vrange) < 1)
+             nominalrange <- Log(ribscale * Exp(vrange))
+             if(!is.null(user.ticks)) {
+               nominalmarks <- user.ticks
+             } else {
+               nominalmarks <- Ticks(nominalrange,
+                                     log=do.log,
+                                     nint = user.nint)
+               nominalmarks <- nominalmarks[nominalmarks %% 1 == 0]
+             }
+             ribbonticks <- Log(nominalmarks/ribscale)
+             ribbonlabels <- user.ribbonlabels %orifnull% paste(nominalmarks)
+             if(!do.log && isTRUE(all.equal(ribbonticks,
+                                            vrange[1]:vrange[2]))) {
+               #' each possible pixel value will appear in ribbon
+               ribbonvalues <- vrange[1]:vrange[2]
+               imagebreaks <- c(ribbonvalues - 0.5, vrange[2] + 0.5)
+               ribbonrange <- range(imagebreaks)
+               ribbonticks <- ribbonvalues
+               ribbonlabels <- user.ribbonlabels %orifnull% paste(ribbonticks * ribscale)
+             } else {
+               ## not all possible values will appear in ribbon
+               ribn <- min(ribn, diff(vrange)+1)
+               ribbonvalues <- seq(from=vrange[1], to=vrange[2],
+                                   length.out=ribn)
+               ribbonrange <- vrange
              }
              if(!is.null(colmap)) {
                # explicit colour map
@@ -479,11 +478,8 @@ plot.im <- local({
              }
            },
            logical = {
-             values <- as.integer(as.vector(x$v))
-             values <- values[!is.na(values)]
-             uv <- unique(values)
-             trivial <- (length(uv) < 2)
              vrange <- c(0,1)
+             trivial <- FALSE
              imagebreaks <- c(-0.5, 0.5, 1.5)
              ribbonvalues <- c(0,1)
              ribbonrange <- range(imagebreaks)
@@ -620,7 +616,7 @@ plot.im <- local({
     
     ## ........ start plotting .................
 
-    if(!identical(ribbon, TRUE) || trivial) {
+    if(!isTRUE(ribbon) || (trivial && isTRUE(drop.ribbon))) {
       ## no ribbon wanted
 
       attr(output.colmap, "bbox") <- as.rectangle(x)
@@ -792,29 +788,45 @@ plot.im <- local({
       axisargs <- list(side=ribaxis.iside, labels=ribbonlabels)
       switch(ribside,
              right={
-               scal <- diff(bb.rib$yrange)/diff(ribbonrange)
-               at <- bb.rib$yrange[1] + scal * (ribbonticks - ribbonrange[1])
+               if(trivial) {
+                 at <- mean(bb.rib$yrange)
+               } else {
+                 scal <- diff(bb.rib$yrange)/diff(ribbonrange)
+                 at <- bb.rib$yrange[1] + scal * (ribbonticks - ribbonrange[1])
+               }
                axisargs <- append(axisargs, list(at=at))
                posargs <- list(pos=bb.rib$xrange[2],
                                yaxp=c(bb.rib$yrange, length(ribbonticks)))
              },
              left={
-               scal <- diff(bb.rib$yrange)/diff(ribbonrange)
-               at <- bb.rib$yrange[1] + scal * (ribbonticks - ribbonrange[1])
+               if(trivial) {
+                 at <- mean(bb.rib$yrange)
+               } else {
+                 scal <- diff(bb.rib$yrange)/diff(ribbonrange)
+                 at <- bb.rib$yrange[1] + scal * (ribbonticks - ribbonrange[1])
+               }
                axisargs <- append(axisargs, list(at=at))
                posargs <- list(pos=bb.rib$xrange[1],
                                yaxp=c(bb.rib$yrange, length(ribbonticks)))
              },
              top={
-               scal <- diff(bb.rib$xrange)/diff(ribbonrange)
-               at <- bb.rib$xrange[1] + scal * (ribbonticks - ribbonrange[1])
+               if(trivial) {
+                 at <- mean(bb.rib$xrange)
+               } else {
+                 scal <- diff(bb.rib$xrange)/diff(ribbonrange)
+                 at <- bb.rib$xrange[1] + scal * (ribbonticks - ribbonrange[1])
+               }
                axisargs <- append(axisargs, list(at=at))
                posargs <- list(pos=bb.rib$yrange[2],
                                xaxp=c(bb.rib$xrange, length(ribbonticks)))
              },
              bottom={
-               scal <- diff(bb.rib$xrange)/diff(ribbonrange)
-               at <- bb.rib$xrange[1] + scal * (ribbonticks - ribbonrange[1])
+               if(trivial) {
+                 at <- mean(bb.rib$xrange)
+               } else {
+                 scal <- diff(bb.rib$xrange)/diff(ribbonrange)
+                 at <- bb.rib$xrange[1] + scal * (ribbonticks - ribbonrange[1])
+               }
                axisargs <- append(axisargs, list(at=at))
                posargs <- list(pos=bb.rib$yrange[1],
                                xaxp=c(bb.rib$xrange, length(ribbonticks)))

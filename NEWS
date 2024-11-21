@@ -1,3 +1,17 @@
+        CHANGES IN spatstat.geom VERSION 3.3-4.001
+
+OVERVIEW
+
+    o Tweaks to plot.im
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o plot.im
+    New argument 'drop.ribbon' determines whether a ribbon will be displayed
+    in the case where the pixel values are all equal.
+    Default behaviour has changed.
+    
+
         CHANGES IN spatstat.geom VERSION 3.3-4
 
 OVERVIEW
@@ -7,12 +21,14 @@ OVERVIEW
     o More control over default colours.
 
     o Minor improvements.
-    
-SIGNIFICANT USER-VISIBLE CHANGES
+
+NEW FUNCTIONS
 
     o default.image.colours, reset.default.image.colours
     Control the default colours used for plotting images in spatstat.
-    
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
     o tess, marks<-.tess
     A tessellation can now have any kind of marks
     (vector, list, data frame or hyperframe).

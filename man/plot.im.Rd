@@ -12,6 +12,7 @@
                    col=NULL, valuesAreColours=NULL, log=FALSE,
                    ncolours=256, gamma=1, 
                    ribbon=show.all, show.all=!add,
+                   drop.ribbon=FALSE,
                    ribside=c("right", "left", "bottom", "top"),
                    ribsep=0.15, ribwid=0.05, ribn=1024,
                    ribscale=1, ribargs=list(), riblab=NULL, colargs=list(),
@@ -25,6 +26,7 @@
                    col=NULL, valuesAreColours=NULL, log=FALSE, 
                    ncolours=256, gamma=1, 
                    ribbon=show.all, show.all=!add,
+                   drop.ribbon=FALSE,
                    ribside=c("right", "left", "bottom", "top"),
                    ribsep=0.15, ribwid=0.05, ribn=1024,
                    ribscale=1, ribargs=list(), riblab=NULL, colargs=list(),
@@ -82,6 +84,10 @@
     Logical value indicating whether to display all plot elements
     including the main title and colour ribbon. Default is \code{TRUE}
     for new plots and \code{FALSE} for added plots.
+  }
+  \item{drop.ribbon}{
+    Logical value. If \code{TRUE}, then a ribbon will not be displayed
+    if all pixel values are equal.
   }
   \item{ribside}{
     Character string indicating where to display the ribbon
