@@ -1,7 +1,7 @@
 #
 #	rotate.S
 #
-#	$Revision: 1.21 $	$Date: 2014/10/24 00:22:30 $
+#	$Revision: 1.22 $	$Date: 2024/11/22 07:39:44 $
 #
 
 rotxy <- function(X, angle=pi/2) {
@@ -88,6 +88,7 @@ rotate.im <- function(X, angle=pi/2, ..., centre=NULL) {
   si <- sin(angle)
   m <- matrix(c(co,si,-si,co), nrow=2, ncol=2)
   Y <- affine(X, mat=m)
+  unitname(Y) <- unitname(X)
   if(!is.null(negorigin))
     Y <- shift(Y, -negorigin)
   return(Y)

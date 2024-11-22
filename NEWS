@@ -1,8 +1,12 @@
-        CHANGES IN spatstat.geom VERSION 3.3-4.001
+        CHANGES IN spatstat.geom VERSION 3.3-4.002
 
 OVERVIEW
 
+    o We thank Stephanie Hogg for contributions.
+    
     o Tweaks to plot.im
+
+    o Bug fix
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -11,6 +15,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     in the case where the pixel values are all equal.
     Default behaviour has changed.
     
+BUG FIXES
+
+    o rotate.im
+    Did not preserve the name of the unit of length.
+    [Spotted by Stephanie Hogg.]
+    Fixed.
 
         CHANGES IN spatstat.geom VERSION 3.3-4
 
