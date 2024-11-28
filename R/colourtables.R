@@ -445,7 +445,7 @@ plot.colourmap <- local({
         lwd0 <- if(separate) 0 else 1
         # draw axis
         do.call.matched(graphics::axis,
-                        resolve.defaults(list(...),
+                        resolve.defaults(dotargs,
                                          list(side = sidecode,
                                               pos = pos,
                                               at = ensurenumeric(at),
@@ -476,7 +476,7 @@ plot.colourmap <- local({
         las0 <- if(separate) 1 else 0
         # draw axis
         do.call.matched(graphics::axis,
-                        resolve.defaults(list(...),
+                        resolve.defaults(dotargs,
                                          list(side=sidecode,
                                               pos=pos,
                                               at=ensurenumeric(at),
