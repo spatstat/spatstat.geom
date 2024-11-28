@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.37 $ $Date: 2024/02/04 08:04:51 $
+##  $Revision: 1.39 $ $Date: 2024/11/28 01:15:40 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
@@ -125,6 +125,20 @@ plot.anylist <- plot.solist <- plot.listof <-
   }
 
   maxassigned <- function(i, values) max(-1, values[i[i > 0]])
+
+  plotadornment <- function(adorn, adorn.args, ...) {
+    aname <- deparse(substitute(adorn))
+    if(is.null(adorn)) {
+      z <- NULL
+    } else if(is.function(adorn)) {
+      z <- do.call(adorn, resolve.defaults(adorn.args, list(...)))
+    } else if(inherits(adorn, c("colourmap", "symbolmap"))) {
+      z <- do.call(plot, resolve.defaults(list(x=adorn),
+                                          adorn.args,
+                                          list(...)))
+    } else warning("Unrecognised format for", sQuote(aname))
+    return(z)
+  }
   
   plot.anylist <- function(x, ..., main, arrange=TRUE,
                             nrows=NULL, ncols=NULL,
@@ -144,6 +158,7 @@ plot.anylist <- plot.solist <- plot.listof <-
                             adorn.top=NULL,
                             adorn.bottom=NULL,
                             adorn.size=0.2,
+                            adorn.args=list(),
                             equal.scales=FALSE,
                             halign=FALSE, valign=FALSE
                            ) {
@@ -164,6 +179,7 @@ plot.anylist <- plot.solist <- plot.listof <-
       return(invisible(eval(cl, envir=parenv)))
     }
 
+    ## determine whether 'fv' objects are present
     if(isSo) {
       allfv <- somefv <- FALSE
     } else {
@@ -212,6 +228,17 @@ plot.anylist <- plot.solist <- plot.listof <-
 
     extrargs.begin <- resolve.defaults(panel.begin.args, extrargs)
     extrargs.end <- resolve.defaults(panel.end.args, extrargs)
+
+    ## adornments
+    adornments <- list(adorn.left   = adorn.left,
+                       adorn.right  = adorn.right,
+                       adorn.top    = adorn.top,
+                       adorn.bottom = adorn.bottom)
+    adornments <- adornments[!sapply(adornments, is.null)]
+    nadorn <- length(adornments)
+    adorable <- all(sapply(adornments, inherits,
+                           what=c("symbolmap", "colourmap")))
+    ## "texturemap" not yet supported by plan.legend.layout
     
     if(!arrange) {
       ## sequence of plots
@@ -228,14 +255,14 @@ plot.anylist <- plot.solist <- plot.listof <-
                     plotcommand=plotcommand) %orifnull% list()
         exec.or.plot(panel.end, i, xi, add=TRUE, extrargs=extrargs.end)
       }
-      if(!is.null(adorn.left))
-        warning("adorn.left was ignored because arrange=FALSE")
-      if(!is.null(adorn.right))
-        warning("adorn.right was ignored because arrange=FALSE")
-      if(!is.null(adorn.top))
-        warning("adorn.top was ignored because arrange=FALSE")
-      if(!is.null(adorn.bottom))
-        warning("adorn.bottom was ignored because arrange=FALSE")
+
+      if(nadorn > 0)
+        warning(paste(ngettext(nadorn, "Argument", "Arguments"),
+                      commasep(sQuote(names(adornments))),
+                      ngettext(nadorn, "was", "were"),
+                      "ignored because arrange=FALSE"),
+                call.=FALSE)
+
       return(invisible(result))
     }
 
@@ -273,6 +300,7 @@ plot.anylist <- plot.solist <- plot.listof <-
       boxes <- getPlotBoxes(x, ..., plotcommand=plotcommand,
                             panel.args=panel.args, extrargs=extrargs)
       sizes.known <- !any(sapply(boxes, inherits, what="try-error"))
+      sizes.known <- sizes.known && (nadorn == 0 || adorable)
       if(sizes.known) {
         extrargs <- resolve.defaults(extrargs, list(claim.title.space=TRUE))
         boxes <- getPlotBoxes(x, ..., plotcommand=plotcommand,
@@ -358,12 +386,33 @@ plot.anylist <- plot.solist <- plot.listof <-
       mainheight <- any(nzchar(main.panel)) * ht/5
       ewidths <- marpar[2] + widths + marpar[4]
       eheights <- marpar[1] + heights + marpar[3] + mainheight
+      ## create box delimiting all panels
       Width <- sum(ewidths) + hsep * (length(ewidths) - 1)
       Height <- sum(eheights) + vsep * (length(eheights) - 1)
       bigbox <- owinInternalRect(c(0, Width), c(0, Height))
+      ## bottom left corner of each panel 
       ox <- marpar[2] + cumsum(c(0, ewidths + hsep))[1:ncols]
       oy <- marpar[1] + cumsum(c(0, rev(eheights) + vsep))[nrows:1]
       panelorigin <- as.matrix(expand.grid(x=ox, y=oy))
+      ## add space for adornments (colour maps or symbol maps)
+      if(nadorn > 0) {
+        ## box containing spatial objects but excluding annotations
+        rx <- c(min(ox), max(ox) + widths[length(widths)])
+        ry <- c(min(oy), max(oy) + heights[length(heights)])
+        actionbox <-  owinInternalRect(rx, ry)
+        ## calculate extensions 
+        sidestrings <- sub("adorn.", "", names(adornments))
+        sideplans <- mapply(plan.legend.layout,
+                            MoreArgs=list(B=actionbox),
+                            side=sidestrings,
+                            map=unname(adornments),
+                            SIMPLIFY=FALSE)
+        ## extract box for each adornment
+        sideboxes <- lapply(sideplans, getElement, name="b")
+        ## update bigbox to contain them all
+        coveringboxes <- lapply(sideplans, getElement, name="A")
+        bigbox <- do.call(boundingbox, append(list(bigbox), coveringboxes))
+      }
       ## initialise, with banner
       cex <- resolve.1.default(list(cex.title=1.5), list(...))/par('cex.main')
       plot(bigbox, type="n", main=main, cex.main=cex)
@@ -393,6 +442,17 @@ plot.anylist <- plot.solist <- plot.listof <-
         exec.or.plotshift(panel.end, i, xishift, add=TRUE,
                           extrargs=extrargs.end,
                           vec=vec)
+      }
+      ## add adornments if any
+      for(i in seq_len(nadorn)) {
+        bi <- sideboxes[[i]]
+        do.call(plot,
+                resolve.defaults(list(x=adornments[[i]]),
+                                 list(...),
+                                 list(add=TRUE,
+                                      xlim=bi$xrange, ylim=bi$yrange,
+                                      side=sidestrings[i]),
+                                 adorn.args))
       }
       return(invisible(result))
     }
@@ -467,20 +527,17 @@ plot.anylist <- plot.solist <- plot.listof <-
     ## adornments
     if(nall > n) {
       par(mar=rep.int(0,4), xpd=TRUE)
-      if(!is.null(adorn.left))
-        adorn.left()
-      if(!is.null(adorn.right))
-        adorn.right()
-      if(!is.null(adorn.bottom))
-        adorn.bottom()
-      if(!is.null(adorn.top))
-        adorn.top()
+      plotadornment(adorn.left, adorn.args)
+      plotadornment(adorn.right, adorn.args)
+      plotadornment(adorn.bottom, adorn.args)
+      plotadornment(adorn.top, adorn.args)
     }
     ## revert
     layout(1)
     return(invisible(result))
   }
 
+  
   plot.anylist
 })
 
@@ -497,7 +554,9 @@ contour.imlist <- contour.listof <- function(x, ...) {
 plot.imlist <- local({
 
   plot.imlist <- function(x, ..., plotcommand="image",
-                          equal.ribbon = FALSE, ribmar=NULL) {
+                          equal.ribbon = FALSE,
+                          equal.scales = FALSE,
+                          ribmar=NULL) {
     xname <- short.deparse(substitute(x))
     force(x)
     if(missing(plotcommand) &&
@@ -505,19 +564,35 @@ plot.imlist <- local({
       plotcommand <- "plot"
     if(equal.ribbon &&
        (list(plotcommand) %in% list("image", "plot", image, plot))) {
-      out <- imagecommon(x, ..., xname=xname, ribmar=ribmar)
+      out <- imagecommon(x, ...,
+                         xname=xname,
+                         ribmar=ribmar,
+                         equal.scales=equal.scales)
     } else {
       out <- do.call(plot.solist,
                      resolve.defaults(list(x=quote(x), plotcommand=plotcommand), 
                                       list(...),
-                                      list(main=xname)))
+                                      list(main=xname,
+                                           equal.scales=equal.scales)))
     }
     return(invisible(out))
+  }
+
+  sideCode <- function(side) {
+    if(is.numeric(side)) {
+      stopifnot(side %in% 1:4)
+      sidecode <- side
+    } else if(is.character(side)) {
+      stopifnot(side %in% c("bottom", "left", "top", "right"))
+      sidecode <- match(side, c("bottom", "left", "top", "right"))
+    } else stop("Unrecognised format for 'side'")
+    return(sidecode)
   }
 
   imagecommon <- function(x, ...,
                           xname,
                           zlim=NULL,
+                          equal.scales=FALSE,
                           ribbon=TRUE,
                           ribside=c("right", "left", "bottom", "top"),
                           ribsep=NULL, ribwid=0.5, ribn=1024,
@@ -556,11 +631,16 @@ plot.imlist <- local({
     ## plot ribbon?
     if(!ribbon) {
       ribadorn <- list()
+    } else if(equal.scales) {
+      ## colour ribbon will be aligned with objects in plot
+      ribadorn <- list(imcolmap)
+      names(ribadorn)[1] <- paste("adorn", ribside, sep=".")
     } else {
-      ## determine plot arguments for colour ribbon
+      ## colour ribbon will be "free-floating"
+      ## Determine plot arguments for ribbon
       vertical <- (ribside %in% c("right", "left"))
       scaleinfo <- if(!is.null(ribscale)) list(labelmap=ribscale) else list()
-      sidecode <- match(ribside, c("bottom", "left", "top", "right"))
+      sidecode <- sideCode(ribside)
       ribstuff <- c(list(x=imcolmap, main="", vertical=vertical),
                     ribargs,
                     scaleinfo,
@@ -593,7 +673,8 @@ plot.imlist <- local({
     result <- do.call(plot.solist,
                       resolve.defaults(list(x=quote(x), plotcommand="image"),
                                        list(...),
-                                       list(mar.panel=mar.panel,
+                                       list(equal.scales=equal.scales,
+                                            mar.panel=mar.panel,
                                             main=xname,
                                             col=imcolmap, zlim=zlim,
                                             ribbon=FALSE),
@@ -609,13 +690,15 @@ plot.imlist <- local({
 })
 
 image.imlist <- image.listof <-
-  function(x, ..., equal.ribbon = FALSE, ribmar=NULL) {
+  function(x, ..., equal.ribbon = FALSE, equal.scales=FALSE, ribmar=NULL) {
     plc <- resolve.1.default(list(plotcommand="image"), list(...))
     if(list(plc) %in% list("image", "plot", image, plot)) {
       out <- plot.imlist(x, ..., plotcommand="image",
-                         equal.ribbon=equal.ribbon, ribmar=ribmar)
+                         equal.ribbon=equal.ribbon,
+                         equal.scales=equal.scales,
+                         ribmar=ribmar)
     } else {
-      out <- plot.solist(x, ..., ribmar=ribmar)
+      out <- plot.solist(x, ..., equal.scales=equal.scales, ribmar=ribmar)
     }
     return(invisible(out))
   }

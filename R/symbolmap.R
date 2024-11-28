@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.58 $  $Date: 2024/07/01 05:57:44 $
+##   $Revision: 1.60 $  $Date: 2024/11/28 00:24:01 $
 ##
 
 symbolmap <- local({
@@ -503,7 +503,11 @@ plot.symbolmap <- function(x, ..., main,
   if(missing(main))
     main <- short.deparse(substitute(x))
   miss.side <- missing(side)
-  side <- match.arg(side)
+  if(is.numeric(side)) {
+    check.1.integer(side)
+    side <- c("bottom", "left", "top", "right")[side]
+  }
+  side <- match.arg(side) # this may be overwritten later if miss.side=TRUE
 
   if(colour.only) {
     ## extract only the colour map and plot it

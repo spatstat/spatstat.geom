@@ -1,11 +1,11 @@
-        CHANGES IN spatstat.geom VERSION 3.3-4.002
+        CHANGES IN spatstat.geom VERSION 3.3-4.003
 
 OVERVIEW
 
     o We thank Stephanie Hogg for contributions.
-    
-    o Tweaks to plot.im
 
+    o Improvements to plotting of images, and arrays of images.
+    
     o Bug fix
 
 SIGNIFICANT USER-VISIBLE CHANGES
@@ -14,6 +14,20 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New argument 'drop.ribbon' determines whether a ribbon will be displayed
     in the case where the pixel values are all equal.
     Default behaviour has changed.
+
+    o plot.imlist, image.imlist, image.listof
+    If equal.ribbon=TRUE and equal.scales=TRUE, the colour ribbon
+    is now neatly aligned with the plotted images.
+
+    o plot.solist, plot.anylist
+    Arguments 'adorn.left', 'adorn.right', 'adorn.bottom', 'adorn.top'
+    may now be objects of class 'colourmap' or 'symbolmap'.
+    
+    o plot.solist, plot.anylist
+    New argument 'adorn.args'.
+    
+    o plot.imlist, image.imlist, image.listof
+    New argument 'equal.scales'.
     
 BUG FIXES
 

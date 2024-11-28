@@ -6,7 +6,8 @@
 }
 \usage{
 \method{plot}{colourmap}(x, ...,
-       main, xlim = NULL, ylim = NULL, vertical = FALSE, axis = TRUE,
+       main, xlim = NULL, ylim = NULL, vertical = FALSE,
+       axis = TRUE, side = if(vertical) "right" else "bottom",
        labelmap=NULL, gap=0.25, add=FALSE, increasing=NULL, nticks=5, box=NULL)
 }
 \arguments{
@@ -24,11 +25,21 @@
     Optional range of \code{y} values for the location of the
     colour ribbon.
   }
-  \item{vertical}{Logical flag determining whether the colour ribbon
+  \item{vertical}{
+    Logical flag determining whether the colour ribbon
     is plotted as a horizontal strip (\code{FALSE}) or a vertical strip
-    (\code{TRUE}).}
-  \item{axis}{Logical flag determining whether an axis should be plotted
+    (\code{TRUE}).
+  }
+  \item{axis}{
+    Logical value determining whether an axis should be plotted
     showing the numerical values that are mapped to the colours.
+  }
+  \item{side}{
+    One of the character strings
+    \code{"bottom"}, \code{"left"}, \code{"top"}  or \code{"right"},
+    or one of the integers from 1 to 4,
+    specifying the position of the axis tick marks and labels,
+    if \code{axis=TRUE}.
   }
   \item{labelmap}{
     Function. If this is present, then the labels on the plot,

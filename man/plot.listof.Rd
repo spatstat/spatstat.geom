@@ -12,7 +12,8 @@
    panel.begin.args=NULL, panel.end.args=NULL, panel.vpad=0.2, 
    plotcommand="plot",
    adorn.left=NULL, adorn.right=NULL, adorn.top=NULL, adorn.bottom=NULL,
-   adorn.size=0.2, equal.scales=FALSE, halign=FALSE, valign=FALSE)
+   adorn.size=0.2, adorn.args=list(),
+   equal.scales=FALSE, halign=FALSE, valign=FALSE)
 }
 \arguments{
   \item{x}{
@@ -88,6 +89,11 @@
   \item{adorn.size}{
     Relative width (as a fraction of the other panels' widths)
     of the margin plots.
+  }
+  \item{adorn.args}{
+    Optional list of arguments passed to the functions
+    \code{adorn.left}, \code{adorn.right}, \code{adorn.top}
+    and \code{adorn.bottom}.
   }
   \item{equal.scales}{
     Logical value indicating whether the components

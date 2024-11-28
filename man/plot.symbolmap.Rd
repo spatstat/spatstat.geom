@@ -36,7 +36,7 @@
   }
   \item{side}{
     Character string specifying the position of the text
-    that annotates the symbols.
+    that annotates the symbols. Alternatively one of the integers 1 to 4.
   }
   \item{annotate}{
     Logical. Whether to annotate the symbols with labels.
