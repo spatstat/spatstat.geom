@@ -3,7 +3,7 @@
 ##
 ##     Texture plots and texture maps
 ##
-##  $Revision: 1.17 $ $Date: 2024/02/04 08:04:51 $
+##  $Revision: 1.19 $ $Date: 2024/11/29 07:44:37 $
 
 ### .................. basic graphics .............................
 
@@ -129,10 +129,24 @@ plot.texturemap <- local({
     (if(separate) (n + (n-1)*gap) else 10) * diff(widthrange) 
   }
 
+  sideCode <- function(side) {
+    if(is.numeric(side)) {
+      stopifnot(side %in% 1:4)
+      sidecode <- side
+    } else if(is.character(side)) {
+      nama <- c("bottom", "left", "top", "right")
+      side <- match.arg(side, nama)
+      sidecode <- match(side, nama)
+    } else stop("Unrecognised format for 'side'")
+    return(sidecode)
+  }
+
   plot.texturemap <- function(x, ..., main,
-                             xlim=NULL, ylim=NULL, vertical=FALSE, axis=TRUE,
-                             labelmap=NULL, gap=0.25,
-                             spacing=NULL, add=FALSE) {
+                              xlim=NULL, ylim=NULL,
+                              vertical=FALSE, axis=TRUE,
+                              side = if(vertical) "right" else "bottom",
+                              labelmap=NULL, gap=0.25,
+                              spacing=NULL, add=FALSE) {
     if(missing(main))
       main <- short.deparse(substitute(x))
     df <- attr(x, "df")
@@ -144,6 +158,8 @@ plot.texturemap <- local({
     if(is.null(labelmap)) {
       labelmap <- function(x) x
     } else stopifnot(is.function(labelmap))
+    if(missing(vertical) && !missing(side))
+      vertical <- (sideCode(side) %in% c(2, 4))
     ## determine rectangular window for display
     rr <- c(0, n + (n-1)*gap)
     if(is.null(xlim) && is.null(ylim)) {
@@ -208,10 +224,10 @@ plot.texturemap <- local({
       if(!vertical) {
         ## add horizontal axis/annotation
         at <- lapply(lapply(boxes, centroid.owin), "getElement", name="x")
-        # default axis position is below the ribbon (side=1)
-        sidecode <- resolve.1.default("side", list(...), list(side=1))
+        sidecode <- sideCode(side)
         if(!(sidecode %in% c(1,3)))
-          warning(paste("side =", sidecode,
+          warning(paste("side =",
+                        if(is.character(side)) sQuote(side) else side,
                         "is not consistent with horizontal orientation"))
         pos <- c(ylim[1], xlim[1], ylim[2], xlim[2])[sidecode]
         # don't draw axis lines if plotting separate blocks
@@ -219,16 +235,18 @@ plot.texturemap <- local({
         # draw axis
         do.call.matched(graphics::axis,
                         resolve.defaults(list(...),
-                                         list(side = 1, pos = pos, at = at),
+                                         list(side = sidecode,
+                                              pos = pos, at = at),
                                          list(labels=la, lwd=lwd0)),
                         extrargs=axisparams)
       } else {
         ## add vertical axis
         at <- lapply(lapply(boxes, centroid.owin), "getElement", name="y")
         # default axis position is to the right of ribbon (side=4)
-        sidecode <- resolve.1.default("side", list(...), list(side=4))
+        sidecode <- sideCode(side)
         if(!(sidecode %in% c(2,4)))
-          warning(paste("side =", sidecode,
+          warning(paste("side =",
+                        if(is.character(side)) sQuote(side) else side,
                         "is not consistent with vertical orientation"))
         pos <- c(ylim[1], xlim[1], ylim[2], xlim[2])[sidecode]
         # don't draw axis lines if plotting separate blocks
@@ -238,7 +256,7 @@ plot.texturemap <- local({
         # draw axis
         do.call.matched(graphics::axis,
                         resolve.defaults(list(...),
-                                         list(side=4, pos=pos, at=at),
+                                         list(side=sidecode, pos=pos, at=at),
                                          list(labels=la, lwd=lwd0, las=las0)),
                         extrargs=axisparams)
       }
@@ -333,8 +351,20 @@ textureplot <- local({
     if(do.plot) {
       ## Plot textures
       if(!add) {
-        plot(bb.all, type="n", main="")
-        fakemaintitle(bb, main, ...)
+        switch(leg.side,
+               left = ,
+               right = {
+                 bb.full <- bb.all
+                 bb.titled <- bb
+               },
+               bottom = ,
+               top = {
+                 bb.full <- grow.rectangle(bb.all, 0,
+                                           c(0, 0.1 * diff(bb.all$yrange)))
+                 bb.titled <- bb.all
+               })
+        plot(bb.full, type="n", main="")
+        fakemaintitle(bb.titled, main, ...)
       }
       if(is.null(spacing)) spacing <- diameter(as.rectangle(x))/50
       areas <- if(is.im(x)) table(x$v) else tile.areas(x)

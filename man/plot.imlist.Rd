@@ -89,7 +89,10 @@
  ## bei.extra is a list of pixel images on the same spatial domain
  Y <- solapply(bei.extra, scaletointerval)
  image(Y, equal.ribbon=TRUE, equal.scales=TRUE,
-          main="", col.ticks="red", col.axis="red")
+          main="",
+          mar.panel=0, hsep=1,
+          ribside="bottom",
+          col.ticks="blue", col.axis="blue", cex.axis=1.2)
 }
 \author{
   \spatstatAuthors.

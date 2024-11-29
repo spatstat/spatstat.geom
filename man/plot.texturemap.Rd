@@ -10,6 +10,7 @@
 \usage{
  \method{plot}{texturemap}(x, \dots, main, xlim = NULL, ylim = NULL,
                            vertical = FALSE, axis = TRUE,
+                           side = if(vertical) "right" else "bottom",
                            labelmap = NULL, gap = 0.25,
                            spacing = NULL, add = FALSE)
 }
@@ -34,8 +35,15 @@
     (\code{vertical=FALSE}, the default).
   }
   \item{axis}{
-    Logical value indicating whether to plot an axis line
-    joining the texture boxes.
+    Logical value indicating whether to plot axis-style labels
+    next to the texture boxes.
+  }
+  \item{side}{
+    One of the character strings
+    \code{"bottom"}, \code{"left"}, \code{"top"}  or \code{"right"},
+    or one of the integers from 1 to 4,
+    specifying the position of the axis-style labels,
+    if \code{axis=TRUE}.
   }
   \item{labelmap}{
     Optional. A \code{function} which will be applied to the

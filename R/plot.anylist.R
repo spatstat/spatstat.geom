@@ -633,7 +633,8 @@ plot.imlist <- local({
       ribadorn <- list()
     } else if(equal.scales) {
       ## colour ribbon will be aligned with objects in plot
-      ribadorn <- list(imcolmap)
+      ribadorn <- list(adorn=imcolmap,
+                       adorn.args=append(ribargs, list(labelmap=ribscale)))
       names(ribadorn)[1] <- paste("adorn", ribside, sep=".")
     } else {
       ## colour ribbon will be "free-floating"

@@ -1,10 +1,12 @@
-        CHANGES IN spatstat.geom VERSION 3.3-4.004
+        CHANGES IN spatstat.geom VERSION 3.3-4.005
 
 OVERVIEW
 
     o We thank Stephanie Hogg for contributions.
 
     o Improvements to plotting of images, and arrays of images.
+
+    o More control over plotting of colour maps, symbol maps and texture maps.
     
     o Bug fix
 
@@ -28,6 +30,15 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o plot.imlist, image.imlist, image.listof
     New argument 'equal.scales'.
+
+    o plot.colourmap
+    New formal argument 'side'.
+
+    o plot.symbolmap
+    New formal argument 'side'.
+
+    o plot.texturemap
+    New formal argument 'side'.
     
 BUG FIXES
 
