@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.3-4.006
+        CHANGES IN spatstat.geom VERSION 3.3-4.007
 
 OVERVIEW
 
@@ -48,6 +48,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.texturemap
     New formal argument 'side'.
+    
+    o persp.im
+    Now recognises argument 'adj.main' controlling the position of main title.
+    
+    o persp.ppp
+    Now recognises argument 'adj.main' controlling the position of main title.
     
 BUG FIXES
 

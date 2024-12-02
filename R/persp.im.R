@@ -123,6 +123,10 @@ persp.im <- function(x, ...,
   dotargs <- list(...)
   if(spatstat.options("monochrome"))
     dotargs <- col.args.to.grey(dotargs)
+
+  ## catch argument 'adj.main' and convert to recognised argument 'adj'
+  if(!is.na(k <- match("adj.main", names(dotargs))))
+    names(dotargs)[k] <- "adj"
     
   xcol <- x$xcol
   yrow <- x$yrow

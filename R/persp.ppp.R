@@ -5,7 +5,7 @@
 #'  Copyright (C) Adrian Baddeley 2024
 #'  GPL Public Licence >= 2.0
 #'
-#' $Revision: 1.5 $ $Date: 2024/10/28 06:10:01 $
+#' $Revision: 1.6 $ $Date: 2024/12/02 04:33:39 $
 
 persp.ppp <- local({
   
@@ -55,6 +55,7 @@ persp.ppp <- local({
            )
     marx <- as.numeric(marx)
     if(is.null(zlim)) zlim <- range(marx, 0)
+    check.range(zlim)
     #' rescale marks to a scale commensurate with window
     #'  (to achieve appropriate default scale in persp.default)
     maxmark <- max(abs(marx))
@@ -66,11 +67,21 @@ persp.ppp <- local({
       scaled.marx <- marx
       scaled.zlim <- zlim
     }
-    #' set up perspective transformation and plot horizontal plane
+    #' Set up objects to be plotted in perspective
     Rplus <- grow.rectangle(R, fraction=1/(2*ngrid))
+    #' base plane image
     Z <- as.im(0, W=Rplus, dimyx=rev(ngrid)+1)
-    check.range(zlim)
+    #' spikes
+    S <- xyzsegmentdata(x$x, x$y, 0,
+                        x$x, x$y, scaled.marx)
+    #' bubbles
+    if(type == "b")
+      P <- data.frame(x=x$x, y=x$y, z=scaled.marx)
+
+    #' Assemble arguments for persp.default
     col.grid.used <- if(grid && (zlim[1] >= 0)) col.grid else NA
+    if(!is.na(k <- match("adj.main", names(dotargs))))
+      names(dotargs)[k] <- "adj"
     argh <- resolve.defaults(list(x=Z, main=main,
                                   border=col.grid.used,
                                   col=col.base),
@@ -81,15 +92,12 @@ persp.ppp <- local({
                                   scale=FALSE,
                                   #' expand=0.1 is default in persp.default
                                   expand=zadjust * 0.1))
+    
+    #' Start perspective plot; plot horizontal plane
     M <- do.call.matched(persp.im, argh,
                          funargs=graphicsPars("persp"))
-    #' create spikes
-    S <- xyzsegmentdata(x$x, x$y, 0,
-                        x$x, x$y, scaled.marx)
-    #' and bubbles
-    if(type == "b")
-      P <- data.frame(x=x$x, y=x$y, z=scaled.marx)
     
+    #' Start drawing objects
     if(grid) {
       if(scaled.zlim[1] < 0) {
         #' first draw downward spikes

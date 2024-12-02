@@ -364,10 +364,21 @@
   If pixel values are interpreted as colours, 
   the arguments \code{col} and \code{ribbon} will be ignored,
   and a ribbon will not be plotted.
-
+}
+\section{Adding contour lines}{
   If \code{addcontour=TRUE}, contour lines will be superimposed on the
   image. Lines will also be superimposed on the colour ribbon at the
-  corresponding positions. 
+  corresponding positions.
+  The display of the contour lines can be controlled by
+  arguments specified in \code{contourargs}.
+}
+\section{Main title, box and white space}{
+  The left-right placement of the main title is controlled by the
+  argument \code{adj.main} passed to \code{\link[spatstat.geom]{plot.owin}}.
+  A rectangular box surrounding the image domain is drawn by default; it can be
+  suppressed by setting \code{box=FALSE}.
+  White space around the plot is controlled by
+  \code{\link[graphics]{par}('mar')}.
 }
 \section{Complex-valued images}{
   If the pixel values in \code{x} are complex numbers,
