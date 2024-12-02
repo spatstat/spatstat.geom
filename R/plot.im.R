@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.159 $   $Date: 2024/11/21 07:44:45 $
+#  $Revision: 1.160 $   $Date: 2024/12/02 01:46:13 $
 #
 #  Plotting code for pixel images
 #
@@ -243,7 +243,8 @@ plot.im <- local({
   PlotIm <- function(x, ...,
                      main, 
                      add=FALSE, clipwin=NULL,
-                     col=NULL, valuesAreColours=NULL, log=FALSE,
+                     col=NULL, reverse.col=FALSE,
+                     valuesAreColours=NULL, log=FALSE,
                      ncolours=256, gamma=1, 
                      ribbon=show.all, show.all=!add,
                      drop.ribbon=FALSE,
@@ -557,6 +558,11 @@ plot.im <- local({
     if(spatstat.options("monochrome")) {
       ## transform to grey scale
       colourinfo$col <- to.grey(colourinfo$col)
+    }
+
+    if(isTRUE(reverse.col) && !valuesAreColours) {
+      ## reverse the colour sequence (using rev.colourmap or rev.default)
+      colourinfo$col <- rev(colourinfo$col)
     }
     
     # colour map to be returned (invisibly)

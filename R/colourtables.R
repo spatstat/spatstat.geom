@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.62 $ $Date: 2024/11/29 07:41:16 $
+# $Revision: 1.63 $ $Date: 2024/12/02 01:41:18 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
@@ -628,6 +628,11 @@ colouroutputs <- function(x) {
   st$outputs[] <- value
   attr(x, "stuff") <- st
   assign("stuff", st, envir=environment(x))
+  return(x)
+}
+
+rev.colourmap <- function(x) {
+  colouroutputs(x) <- rev(colouroutputs(x))
   return(x)
 }
 

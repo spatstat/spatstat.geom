@@ -109,7 +109,8 @@ colourmap(col, \dots, range=NULL, breaks=NULL, inputs=NULL, gamma=1)
   To extract or replace all colour values, see
   \code{\link{colouroutputs}}.
 
-  See also \code{\link{restrict.colourmap}}.
+  See also \code{\link{restrict.colourmap}}
+  and \code{\link{rev.colourmap}}.
   
   See \code{\link[spatstat.geom:colourtools]{colourtools}}
   for more tools to manipulate colour values.

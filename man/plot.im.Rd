@@ -9,7 +9,8 @@
   \method{plot}{im}(x, \dots,
                    main,
                    add=FALSE, clipwin=NULL,
-                   col=NULL, valuesAreColours=NULL, log=FALSE,
+                   col=NULL, reverse.col=FALSE,
+                   valuesAreColours=NULL, log=FALSE,
                    ncolours=256, gamma=1, 
                    ribbon=show.all, show.all=!add,
                    drop.ribbon=FALSE,
@@ -23,7 +24,8 @@
   \method{image}{im}(x, \dots,
                    main,
                    add=FALSE, clipwin=NULL,
-                   col=NULL, valuesAreColours=NULL, log=FALSE, 
+                   col=NULL, reverse.col=FALSE,
+                   valuesAreColours=NULL, log=FALSE, 
                    ncolours=256, gamma=1, 
                    ribbon=show.all, show.all=!add,
                    drop.ribbon=FALSE,
@@ -58,6 +60,10 @@
     Either a character vector of colour values,
     an object of class \code{\link{colourmap}},
     or a \code{function} as described under Details.
+  }
+  \item{reverse.col}{
+    Logical value. If \code{TRUE}, the sequence of colour values
+    specified by \code{col} will be reversed.
   }
   \item{valuesAreColours}{
     Logical value. If \code{TRUE}, the pixel values of \code{x}
@@ -310,6 +316,9 @@
   
   If \code{spatstat.options("monochrome")} has been set to \code{TRUE}
   then \bold{all colours will be converted to grey scale values}.
+
+  If \code{reverse.col=TRUE}, the sequence of colour values specified
+  by \code{col} will be reversed (unless \code{valuesAreColours=TRUE}).
   
   Other graphical parameters controlling the display of both the pixel image
   and the ribbon can be passed through the \code{...} arguments

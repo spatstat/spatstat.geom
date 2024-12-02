@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.3-4.005
+        CHANGES IN spatstat.geom VERSION 3.3-4.006
 
 OVERVIEW
 
@@ -10,12 +10,21 @@ OVERVIEW
     
     o Bug fix
 
+NEW FUNCTIONS
+
+    o rev.colourmap
+    Reverses the sequence of colour values in a colour map.
+    A method for the generic 'rev'.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.im
     New argument 'drop.ribbon' determines whether a ribbon will be displayed
     in the case where the pixel values are all equal.
     Default behaviour has changed.
+
+    o plot.im
+    New argument 'reverse.col' allows the sequence of colours to be reversed.
 
     o plot.imlist, image.imlist, image.listof
     If equal.ribbon=TRUE and equal.scales=TRUE, the colour ribbon
