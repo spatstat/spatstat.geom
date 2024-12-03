@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.160 $   $Date: 2024/12/02 01:46:13 $
+#  $Revision: 1.161 $   $Date: 2024/12/03 01:19:40 $
 #
 #  Plotting code for pixel images
 #
@@ -47,6 +47,8 @@ plot.im <- local({
       }
     }
     extrargs <- setdiff(extrargs, c("claim.title.space", "box"))
+    if(!is.na(k <- match("adj.main", names(aarg))))
+      names(aarg)[k] <- "adj"
     z <- do.call.matched(image.default,
                          append(imagedata, aarg),
                          extrargs=extrargs)
