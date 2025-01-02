@@ -72,12 +72,7 @@ as.hyperframe(x, \dots)
   An object of class \code{"hyperframe"} created by
   \code{\link{hyperframe}}.
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
-}
+\author{\adrian and \rolf.}
 \seealso{
   \code{\link{hyperframe}},
   \code{\link{as.hyperframe.ppx}}

@@ -14,8 +14,9 @@
 \arguments{
   \item{\dots}{
     Arguments of the form \code{value} or \code{tag=value}.
-    Each \code{value} is either an atomic vector, or a list of objects of the
-    same class, or a single atomic value, or a single object.
+    Each \code{value} is either an atomic vector, a factor,
+    a list of objects of the same class, a single atomic value,
+    or a single object.
     Each \code{value} will become a column of the array.
     The \code{tag} determines the name of the column. See Details.
   }
@@ -43,7 +44,8 @@
   \itemize{
     \item an atomic vector or factor
     (i.e. numeric vector, integer vector, character vector, logical
-    vector, complex vector or factor)
+    vector, complex vector, factor, or an
+    object of class \code{"Date"} or \code{"Surv"})
     \item a list of objects which are all of the same class
     \item one atomic value, which will be replicated to make an atomic
     vector or factor

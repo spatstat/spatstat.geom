@@ -1,12 +1,14 @@
-        CHANGES IN spatstat.geom VERSION 3.3-4.008
+        CHANGES IN spatstat.geom VERSION 3.3-4.009
 
 OVERVIEW
 
-    o We thank Stephanie Hogg for contributions.
+    o We thank Stephanie Hogg and Tingting Zhan for contributions.
 
     o Improvements to plotting of images, and arrays of images.
 
     o More control over plotting of colour maps, symbol maps and texture maps.
+
+    o hyperframes handle a 'Surv' object as a single column.
     
     o Bug fix
 
@@ -18,6 +20,12 @@ NEW FUNCTIONS
     
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o hyperframe
+    An object of class 'Surv' from the 'survival' package
+    is now treated as a single column of data
+    (mimicking the behaviour of 'data.frame')
+    [Requested by Tingting Zhan]
+    
     o plot.im
     New argument 'drop.ribbon' determines whether a ribbon will be displayed
     in the case where the pixel values are all equal.
@@ -25,6 +33,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.im
     New argument 'reverse.col' allows the sequence of colours to be reversed.
+    [Suggested by Stephanie Hogg.]
 
     o plot.imlist, image.imlist, image.listof
     If equal.ribbon=TRUE and equal.scales=TRUE, the colour ribbon

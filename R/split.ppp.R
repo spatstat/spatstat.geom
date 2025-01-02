@@ -1,7 +1,7 @@
 #
 # split.ppp.R
 #
-# $Revision: 1.41 $ $Date: 2021/11/15 03:08:49 $
+# $Revision: 1.42 $ $Date: 2024/12/03 02:09:40 $
 #
 # split.ppp and "split<-.ppp"
 #
@@ -335,13 +335,23 @@ print.summary.splitppp <- function(x, ...) {
 }
   
 
-plot.splitppp <- function(x, ..., main) {
-  if(missing(main)) main <- short.deparse(substitute(x))
-  do.call(plot.solist,
-          resolve.defaults(list(x=quote(x), main=main),
-                           list(...),
-                           list(equal.scales=TRUE)))
-}
+plot.splitppp <- local({
+
+  plot.splitppp <- function(x, ..., main) {
+    if(missing(main)) main <- short.deparse(substitute(x))
+    plsplp(x, ..., main=main)
+  }
+
+  plsplp <- function(x, ..., main, plotcommand="plot", equal.scales) {
+    if(missing(equal.scales))
+      equal.scales <- plotcommand %in% c("plot", "image")
+    plot.solist(x, ..., main=main,
+                plotcommand=plotcommand, equal.scales=equal.scales)
+  }
+  
+  plot.splitppp
+})
+
 
 as.layered.splitppp <- function(X) { do.call(layered, X) }
 

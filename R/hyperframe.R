@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.79 $  $Date: 2022/11/03 11:08:33 $
+# $Revision: 1.80 $  $Date: 2025/01/02 01:48:03 $
 #
 
 hyperframe <- local({
@@ -125,7 +125,7 @@ hyperframe <- local({
     is.atomic(x) &&
       (is.vector(x) ||
        is.factor(x) ||
-       inherits(x, c("POSIXlt", "POSIXct", "Date")))
+       inherits(x, c("POSIXlt", "POSIXct", "Date", "Surv")))
   }
   
   is.hypercolumn <- function(x) {
