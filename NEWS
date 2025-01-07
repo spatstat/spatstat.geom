@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.3-4.009
+        CHANGES IN spatstat.geom VERSION 3.3-4.010
 
 OVERVIEW
 
@@ -10,7 +10,7 @@ OVERVIEW
 
     o hyperframes handle a 'Surv' object as a single column.
     
-    o Bug fix
+    o Bug fixes and minor improvements.
 
 NEW FUNCTIONS
 
@@ -63,13 +63,20 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o persp.ppp
     Now recognises argument 'adj.main' controlling the position of main title.
-    
+
 BUG FIXES
 
     o rotate.im
     Did not preserve the name of the unit of length.
     [Spotted by Stephanie Hogg.]
     Fixed.
+
+    o unstack.ppp
+    If 'marks(x)' was a data frame with a single column,
+    the data frame structure was retained, when it should have been dropped.
+    [Spotted by Tingting Zhan.]
+    Fixed.
+    
 
         CHANGES IN spatstat.geom VERSION 3.3-4
 

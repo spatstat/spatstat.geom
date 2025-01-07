@@ -3,12 +3,12 @@
 #'
 #'   Methods for generic 'unstack'
 #' 
-#'   $Revision: 1.6 $  $Date: 2020/11/30 09:40:56 $
+#'   $Revision: 1.7 $  $Date: 2025/01/07 07:12:17 $
 
 unstack.ppp <- unstack.psp <-
     unstack.tess <- function(x, ...) {
   trap.extra.arguments(...)
-  marx <- marks(x)
+  marx <- marks(x, drop=FALSE)
   d <- dim(marx)
   if(is.null(d)) return(solist(x))
   y <- rep(list(unmark(x)), d[2])
