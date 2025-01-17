@@ -35,7 +35,18 @@
   This is generic. Methods are provided for
   point patterns (\code{\link{distmap.ppp}}),
   line segment patterns  (\code{\link{distmap.psp}})
-  and windows (\code{\link{distmap.owin}}).
+  and windows (\code{\link{distmap.owin}}) as well as other classes.
+}
+\section{Distance values}{
+  The pixel values in the image \code{distmap(X)} are distances,
+  expressed as multiples of the unit of length of the spatial
+  coordinates in \code{X}.
+  The unit of length is given by \code{\link{unitname}(X)}.
+
+  Note that, if the unit of length in \code{X} is a composite expression
+  such as \sQuote{2 microns},
+  then the values in \code{distmap(X)} are expressed as multiples
+  of 2 microns, rather than being expressed in microns.
 }
 \seealso{
   \code{\link{distmap.ppp}},

@@ -85,6 +85,18 @@
   It also belongs to the class \code{"funxy"} which has methods
   for \code{plot}, \code{contour} and \code{persp}.
 }
+\section{Distance values}{
+  The values returned by the distance function
+  \code{f <- distfun(X)} are distances,
+  expressed as multiples of the unit of length of the spatial
+  coordinates in \code{X}.
+  The unit of length is given by \code{\link{unitname}(X)}.
+
+  Note that, if the unit of length in \code{X} is
+  a composite expression such as \sQuote{2 microns},
+  then the values of \code{f} are expressed as multiples
+  of 2 microns, rather than being expressed in microns.
+}
 \seealso{
   \code{\link{distmap}},
   \code{\link{summary.distfun}},

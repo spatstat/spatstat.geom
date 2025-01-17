@@ -1,6 +1,6 @@
 Package: spatstat.geom
-Version: 3.3-4.010
-Date: 2025-01-07
+Version: 3.3-4.011
+Date: 2025-01-17
 Title: Geometrical Functionality of the 'spatstat' Family 
 Authors@R: c(person("Adrian", "Baddeley", 
                     role = c("aut", "cre", "cph"),
@@ -25,7 +25,7 @@ Authors@R: c(person("Adrian", "Baddeley",
 	     person("Rasmus",    "Waagepetersen", role = "ctb"))
 Maintainer: Adrian Baddeley <Adrian.Baddeley@curtin.edu.au>
 Depends: R (>= 3.5.0), spatstat.data (>= 3.1), spatstat.univar (>= 3.1-0), stats, graphics, grDevices, utils, methods
-Imports: spatstat.utils (>= 3.1-1.001), deldir (>= 1.0-2), polyclip (>= 1.10-0)
+Imports: spatstat.utils (>= 3.1-2), deldir (>= 1.0-2), polyclip (>= 1.10-0)
 Suggests: spatstat.random (>= 3.3), spatstat.explore (>= 3.3), spatstat.model (>= 3.3), spatstat.linnet (>= 3.2), spatial, fftwtools (>= 0.9-8), spatstat (>= 3.2)
 Description: Defines spatial data types and supports geometrical operations
 	     on them. Data types include point patterns, windows (domains),

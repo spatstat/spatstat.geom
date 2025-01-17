@@ -62,6 +62,17 @@
   to the nearest data point in \code{X}, use \code{\link{distfun}} or 
   \code{\link{nncross}}.
 }
+\section{Distance values}{
+  The pixel values in the image \code{distmap(X)} are distances,
+  expressed as multiples of the unit of length of the spatial
+  coordinates in \code{X}.
+  The unit of length is given by \code{\link{unitname}(X)}.
+
+  Note that, if the unit of length in \code{X} is a composite
+  expression such as \sQuote{2 microns},
+  then the values in \code{distmap(X)} are expressed as multiples
+  of 2 microns, rather than being expressed in microns.
+}
 \seealso{
   Generic function \code{\link{distmap}} and other methods
   \code{\link{distmap.psp}},
@@ -69,7 +80,10 @@
   
   Generic function \code{\link{distfun}}.
 
-  Nearest neighbour distance \code{\link{nncross}}
+  Nearest neighbour distance \code{\link{nncross}}.
+
+  \code{\link{unitname}} and \code{\link{rescale}} to control the unit
+  of length.
 }
 \examples{
   U <- distmap(cells)

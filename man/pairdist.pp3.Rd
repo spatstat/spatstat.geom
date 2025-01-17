@@ -36,8 +36,8 @@
   points in \code{X}, and returns the matrix of distances.
 
   Alternatively if \code{periodic=TRUE} and the window containing \code{X} is a
-  box, then the distances will be computed in the `periodic'
-  sense (also known as `torus' distance): opposite faces of the
+  box, then the distances will be computed in the \sQuote{periodic}
+  sense (also known as \sQuote{torus} distance): opposite faces of the
   box are regarded as equivalent.
   This is meaningless if the window is not a box.
 
@@ -45,6 +45,17 @@
   \eqn{d^2} are returned, instead of the Euclidean distances \eqn{d}.
   The squared distances are faster to calculate, and are sufficient for
   many purposes (such as finding the nearest neighbour of a point).
+}
+\section{Distance values}{
+  The values returned by \code{pairdist(X)} are distances,
+  expressed as multiples of the unit of length of the spatial
+  coordinates in \code{X}.
+  The unit of length is given by \code{\link{unitname}(X)}.
+
+  Note that, if the unit of length in \code{X} is a composite
+  expression such as \sQuote{2 microns},
+  then the values of \code{pairdist(X)} are expressed as multiples
+  of 2 microns, rather than being expressed in microns.
 }
 \seealso{
   \code{\link{pairdist}},

@@ -56,6 +56,17 @@
   (the default) then compiled \code{C} code is used,
   which is somewhat faster.
 }
+\section{Distance values}{
+  The values returned by \code{pairdist(X)} are distances,
+  expressed as multiples of the unit of length of the spatial
+  coordinates in \code{X}.
+  The unit of length is given by \code{\link{unitname}(X)}.
+
+  Note that, if the unit of length in \code{X} is a composite
+  expression such as \sQuote{2 microns},
+  then the values of \code{pairdist(X)} are expressed as multiples
+  of 2 microns, rather than being expressed in microns.
+}
 \seealso{
   \code{\link{crossdist}},
   \code{\link{nndist}},
@@ -68,10 +79,7 @@
 }
 \author{
   \adrian
-  
-  
   and \rolf
-  
 }
 \keyword{spatial}
 \keyword{math}
