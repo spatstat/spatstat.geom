@@ -1,3 +1,14 @@
+        CHANGES IN spatstat.geom VERSION 3.3-5.001
+
+OVERVIEW
+
+    o Minor improvements.
+    
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o as.mask
+    Corrected a warning message.
+    
         CHANGES IN spatstat.geom VERSION 3.3-5
 
 OVERVIEW

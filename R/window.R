@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.212 $	$Date: 2024/10/06 10:11:07 $
+#	$Revision: 4.213 $	$Date: 2025/02/16 00:03:14 $
 #
 #
 #	A window may be either
@@ -668,9 +668,10 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL,
       }
     }
     if((mpix <- (nr * nc)/1048576) >= 10) {
+      mpix <- round(mpix, 1)
       whinge <- paste("Creating",
                       articlebeforenumber(mpix),
-                      paste0(round(mpix, 1), "-megapixel"),
+                      paste0(mpix, "-megapixel"),
                       "window mask")
       message(whinge)
       warning(whinge, call.=FALSE)
