@@ -4,7 +4,7 @@
 ##   Simple objects for the elements of a diagram (text, arrows etc)
 ##    that are compatible with plot.layered and plot.solist
 ##
-##   $Revision: 1.18 $ $Date: 2024/06/16 02:03:14 $
+##   $Revision: 1.19 $ $Date: 2025/02/19 07:13:33 $
 
 # ......... internal class 'diagramobj' supports other classes  .........
 
@@ -175,47 +175,99 @@ plot.yardstick <- local({
   }
 
   plot.yardstick <- function(x, ...,
+                             style=c("arrows", "zebra"),
                              angle=20,
                              frac=1/8,
                              split=FALSE,
                              shrink=1/4,
+                             zebra.step=NULL,
+                             zebra.width=NULL,
+                             zebra.col="black",
                              pos=NULL,
                              txt.args=list(),
                              txt.shift=c(0,0),
                              do.plot=TRUE) {
+    style <- match.arg(style)
     if(do.plot) {
       txt <- attr(x, "txt")
       argh <- resolve.defaults(list(...), attr(x, "otherargs"))
       A <- as.numeric(coords(x)[1L,])
       B <- as.numeric(coords(x)[2L,])
       M <- (A+B)/2
-      if(!split) {
-        ## double-headed arrow
-        myarrows(A[1L], A[2L], B[1L], y1=B[2L],
-                 angle=angle, frac=frac, moreargs=argh)
-        if(is.null(pos) && !("adj" %in% names(txt.args)))
-          pos <- if(abs(A[1L] - B[1L]) < abs(A[2L] - B[2L])) 4 else 3
+      if(is.null(txt.shift)) {
+        txt.shift <- rep(0, 2)
       } else {
-        ## two single-headed arrows with text 
-        dM <- (shrink/2) * (B - A)
-        AM <- M - dM
-        BM <- M + dM
-        newfrac <- frac/((1-shrink)/2)
-        myarrows(AM[1L], AM[2L], A[1L], A[2L],
-                 angle=angle, frac=newfrac, left=FALSE, moreargs=argh)
-        myarrows(BM[1L], BM[2L], B[1L], B[2L], 
-                 angle=angle, frac=newfrac, left=FALSE, moreargs=argh)
+        txt.shift <- ensure2vector(unlist(txt.shift))
       }
-      if(is.null(txt.shift)) txt.shift <- rep(0, 2) else 
-                             txt.shift <- ensure2vector(unlist(txt.shift))
-      do.call.matched(text.default,
-                      resolve.defaults(list(x=M[1L] + txt.shift[1L],
-                                            y=M[2L] + txt.shift[2L]),
-                                       txt.args,
-                                       list(labels=txt, pos=pos),
-                                       argh,
-                                       .MatchNull=FALSE),
-                      funargs=graphicsPars("text"))
+      switch(style,
+             arrows = {
+               if(!split) {
+                 ## double-headed arrow
+                 myarrows(A[1L], A[2L], B[1L], y1=B[2L],
+                          angle=angle, frac=frac, moreargs=argh)
+                 if(is.null(pos) && !("adj" %in% names(txt.args)))
+                   pos <- if(abs(A[1L] - B[1L]) < abs(A[2L] - B[2L])) 4 else 3
+               } else {
+                 ## two single-headed arrows with text 
+                 dM <- (shrink/2) * (B - A)
+                 AM <- M - dM
+                 BM <- M + dM
+                 newfrac <- frac/((1-shrink)/2)
+                 myarrows(AM[1L], AM[2L], A[1L], A[2L],
+                          angle=angle, frac=newfrac, left=FALSE, moreargs=argh)
+                 myarrows(BM[1L], BM[2L], B[1L], B[2L], 
+                          angle=angle, frac=newfrac, left=FALSE, moreargs=argh)
+               }
+               do.call.matched(text.default,
+                               resolve.defaults(list(x=M[1L] + txt.shift[1L],
+                                                     y=M[2L] + txt.shift[2L]),
+                                                txt.args,
+                                                list(labels=txt, pos=pos),
+                                                argh,
+                                                .MatchNull=FALSE),
+                               funargs=graphicsPars("text"))
+             },
+             zebra = {
+               ## total length and direction
+               D <- B-A
+               totlen <- sqrt(sum(D^2))
+               theta <- atan2(D[2L], D[1L])
+               ## length and width of each bar
+               if(missing(zebra.step))
+                 zebra.step <- totlen/5
+               if(missing(zebra.width))
+                 zebra.width <- totlen/25
+               ## construct rectangles, then shift + rotate
+               breaks <- seq(0, totlen, by=zebra.step)
+               if(breaks[length(breaks)] < totlen * 0.95)
+                 breaks <- c(breaks, totlen)
+               yr <- zebra.width * c(-1,1)/2  
+               filled <- TRUE
+               if(length(breaks) > 1) {
+                 for(i in 2:length(breaks)) {
+                   block <- owin(c(breaks[i-1], breaks[i]), yr)
+                   block <- rotate(shift(block, A), angle=theta, centre=M)
+                   if(filled) {
+                     plot(block, add=TRUE, col=zebra.col)
+                   } else {
+                     plot(block, add=TRUE, border=zebra.col)
+                   }
+                   vb <- vertices(block)
+                   x3 <- vb$x[3L]
+                   y3 <- vb$y[3L]
+                   do.call.matched(text.default,
+                                   resolve.defaults(list(x=x3 + txt.shift[1L],
+                                                         y=y3 + txt.shift[2L]),
+                                                    txt.args,
+                                                    list(labels=breaks[i],
+                                                         pos=pos),
+                                                    argh,
+                                                    .MatchNull=FALSE),
+                                   funargs=graphicsPars("text"))
+                   filled <- !filled
+                 }
+               }
+             })
     }
     return(invisible(Window(x)))
   }
@@ -240,6 +292,7 @@ print.yardstick <- function(x, ...) {
   return(invisible(NULL))
 }
 
+## ...........  'onearrow' ..............................................
 
 ## code to draw a decent-looking arrow in spatstat diagrams
 ## (works in layered objects)
