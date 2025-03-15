@@ -311,6 +311,7 @@
 \alias{symbolmaptype}
 \alias{symbol.sizes.default}
 \alias{tail.hyperframe}
+\alias{tessfunvalues}
 \alias{thickSegments}
 \alias{tilecentroids}        
 \alias{trianglediameters}
@@ -677,6 +678,7 @@ symbolmapparnames(x)
 symbolmaptype(x)
 symbol.sizes.default(markvalues, \dots)
 \method{tail}{hyperframe}(x,n,\dots)
+tessfunvalues(f)
 thickSegments(x, widths, \dots,
              add, main, do.plot, show.all, show.window,
              scale, adjust, negative.args,
