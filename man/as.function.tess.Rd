@@ -37,12 +37,18 @@
 }
 \value{
   A function in the \R language, also belonging to the
-  class \code{"funxy"}.
+  class \code{"funxy"} and \code{"tessfun"}.
+
+  The class \code{"tessfun"}
+  has methods for \code{plot}, \code{print}, \code{as.tess}
+  and \code{integral}.
 }
 \author{
   \spatstatAuthors
 }
 \seealso{
+  \code{\link{integral.tessfun}} for integration of the function.
+  
   \code{\link{tileindex}} for the low-level calculation of tile index.
 
   \code{\link{cut.ppp}} and \code{\link{split.ppp}} to

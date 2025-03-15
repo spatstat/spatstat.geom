@@ -1,8 +1,19 @@
-        CHANGES IN spatstat.geom VERSION 3.3-5.002
+        CHANGES IN spatstat.geom VERSION 3.3-5.003
 
 OVERVIEW
 
+    o Methods for functions which are constant on each tile of a tessellation.
+
     o Minor improvements.
+
+NEW FUNCTIONS
+
+    o integral.tessfun
+    Integral of a function which is constant on each tile of a tessellation
+
+    o print.tessfun, plot.tessfun, as.tess.tessfun
+    Methods for the class 'tessfun' of functions which are constant
+    on each tile of a tessellation.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

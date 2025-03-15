@@ -29,6 +29,7 @@
 \alias{as.list.hyperframe}
 \alias{as.listof}
 \alias{as.ppplist}
+\alias{as.tess.tessfun}
 \alias{as.unitname}
 \alias{avenndist}
 \alias{bbEngine}
@@ -197,6 +198,7 @@
 \alias{plotWidthMap}
 \alias{plot.barplotdata}
 \alias{plot.indicfun}
+\alias{plot.tessfun}
 \alias{pointgrid}
 \alias{ppllengine}
 \alias{pppdist.mat}
@@ -235,7 +237,8 @@
 \alias{print.summary.splitppx}
 \alias{print.summary.symbolmap}       
 \alias{print.summary.unitname}
-\alias{print.symbolmap}       
+\alias{print.symbolmap}
+\alias{print.tessfun}
 \alias{print.textstring}
 \alias{print.texturemap}
 \alias{print.tess}
@@ -381,6 +384,7 @@ as.linimlist(x, check)
 \method{as.list}{hyperframe}(x, \dots)
 as.listof(x)
 as.ppplist(x, check)
+\method{as.tess}{tessfun}(X)
 as.unitname(s)
 avenndist(X)
 bbEngine(\dots)
@@ -558,6 +562,7 @@ plotPolygonBdry(x, \dots)
 plotWidthMap(bb.leg, zlim, phys.scale, leg.scale, leg.side, leg.args, grafpar)
 \method{plot}{barplotdata}(x, \dots)
 \method{plot}{indicfun}(x, W, \dots, main)
+\method{plot}{tessfun}(x, \dots)
 pointgrid(W, ngrid)
 ppllengine(X, Y, action="project", check=FALSE)
 pppdist.mat(X, Y, cutoff = 1, q = 1, matching = TRUE,
@@ -599,6 +604,7 @@ prepareTitle(main)
 \method{print}{summary.symbolmap}(x, \dots)
 \method{print}{summary.unitname}(x, \dots)
 \method{print}{symbolmap}(x, \dots)
+\method{print}{tessfun}(x, \dots)
 \method{print}{textstring}(x, \dots)
 \method{print}{texturemap}(x, \dots)
 \method{print}{tess}(x, \dots, brief=FALSE)

@@ -97,6 +97,17 @@
   then the values of \code{f} are expressed as multiples
   of 2 microns, rather than being expressed in microns.
 }
+\section{Domain of the function}{
+  The domain of the distance function is unbounded,
+  that is, the distance function can be evaluated at any spatial location.
+
+  However, when the distance function is plotted by \code{plot},
+  \code{contour} or \code{persp}, the function domain is assumed to
+  be the rectangular frame surrounding the original object \code{X}.
+  To generate a plot of the distance function
+  on a different region, use the argument \code{W} in the plot command,
+  as explained in the help for \code{\link{plot.funxy}}.
+}
 \seealso{
   \code{\link{distmap}},
   \code{\link{summary.distfun}},

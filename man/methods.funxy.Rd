@@ -44,7 +44,10 @@
   control the spatial resolution of the pixel image, or passed to 
   \code{\link{contour.im}},
   \code{\link{persp.im}} or 
-  \code{\link{plot.im}} to control the appearance of the plot. 
+  \code{\link{plot.im}} to control the appearance of the plot.
+
+  In particular the argument \code{W} specifies the spatial domain
+  over which the function will be plotted. See the Examples.
 }
 \value{
   \code{NULL}.
@@ -64,6 +67,7 @@
 \examples{
    f <- distfun(letterR)
    contour(f)
+   ## plot it on a larger region
    B <- owin(c(1,5), c(-1, 4))
    contour(f, W=B)
    persp(f, W=B, theta=40, phi=40, border=NA, shade=0.7)
