@@ -1,6 +1,6 @@
 Package: spatstat.geom
-Version: 3.3-5.004
-Date: 2025-03-15
+Version: 3.3-5.005
+Date: 2025-03-17
 Title: Geometrical Functionality of the 'spatstat' Family 
 Authors@R: c(person("Adrian", "Baddeley", 
                     role = c("aut", "cre", "cph"),
@@ -14,8 +14,10 @@ Authors@R: c(person("Adrian", "Baddeley",
                     role = c("aut", "cph"),
 		    email = "rubak@math.aau.dk",
 		    comment=c(ORCID="0000-0002-6675-533X")),
+	     person("Warick",    "Brown" ,        role = "ctb"),
 	     person("Tilman",    "Davies",        role = "ctb"),
 	     person("Ute",       "Hahn",          role = "ctb"),
+	     person("Martin",    "Hazelton",      role = "ctb"),
 	     person("Abdollah",  "Jalilian",      role = "ctb"),
  	     person("Greg",      "McSwiggan",     role = c("ctb", "cph")),
  	     person("Sebastian", "Meyer",         role = c("ctb", "cph")),

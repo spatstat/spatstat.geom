@@ -1,7 +1,10 @@
-        CHANGES IN spatstat.geom VERSION 3.3-5.004
+        CHANGES IN spatstat.geom VERSION 3.3-5.005
 
 OVERVIEW
 
+    o We thank Warick Brown, Tilman Davies and Martin Hazelton
+    for contributions.
+    
     o Methods for functions which are constant on each tile of a tessellation.
 
     o Minor improvements.

@@ -470,6 +470,14 @@
       \code{\link{affine.tess}} \tab apply affine transformation 
     }
 
+    Functions which are constant on each tile of a tessellation:
+    \tabular{ll}{
+      \code{\link{as.function.tess}} \tab convert tessellation to function\cr
+      \code{\link{plot.tessfun}} \tab plot the function \cr
+      \code{\link{integral.tessfun}} \tab integrate the function \cr
+      \code{\link{as.tess.tessfun}} \tab retrieve the original tessellation
+    }
+
     \bold{Three-dimensional point patterns}
 
     An object of class \code{"pp3"} represents a three-dimensional
