@@ -8,7 +8,7 @@
   to the values of corresponding pixels in several pixel images.
 }
 \usage{
-im.apply(X, FUN, \dots, fun.handles.na=FALSE, check=TRUE)
+im.apply(X, FUN, \dots, fun.handles.na=FALSE, check=TRUE, verbose=TRUE)
 }
 \arguments{
   \item{X}{
@@ -30,6 +30,9 @@ im.apply(X, FUN, \dots, fun.handles.na=FALSE, check=TRUE)
     \code{X} are compatible (for example that they have the same
     grid of pixel locations) and to convert them to compatible images
     if necessary.
+  }
+  \item{verbose}{
+    Logical value specifying whether to print informative messages.
   }
 }
 \details{
@@ -54,6 +57,15 @@ im.apply(X, FUN, \dots, fun.handles.na=FALSE, check=TRUE)
     If \code{fun.handles.na=TRUE}, the function \code{FUN} will be applied to
     all pixel data, including those which contain \code{NA} values.
   }
+}
+\section{Computation details}{
+  The computation is performed efficiently
+  using matrix operations where possible,
+  by constructing a large matrix containing all the pixel data for all images.
+  However, if this matrix would exceed the maximum permitted size of matrices
+  (as given in \code{\link{spatstat.options}("maxmatrix")}),
+  then the calculation is performed on smaller sub-images,
+  and this is reported in a message if \code{verbose=TRUE}.
 }
 \value{
   A pixel image (object of class \code{"im"}).

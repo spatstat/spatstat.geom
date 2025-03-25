@@ -5,6 +5,7 @@
 \alias{[.pp3}
 \alias{[.splitppx}
 \alias{[<-.splitppx}
+\alias{ImApplyEngine}
 \alias{acedist.show}
 \alias{acedist.noshow}
 \alias{affine.diagramobj}
@@ -358,6 +359,7 @@
 \method{[}{pp3}(x, i, drop, \dots)
 \method{[}{splitppx}(x, \dots)
 \method{[}{splitppx}(x, \dots) <- value
+ImApplyEngine(vals, fun, funtype, fun.handles.na, \dots, na.rm)
 acedist.show(X, Y, n, d, timelag)
 acedist.noshow(X, Y, n, d)
 \method{affine}{diagramobj}(X, \dots)

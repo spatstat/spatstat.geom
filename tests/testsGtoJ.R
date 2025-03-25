@@ -299,7 +299,13 @@ local({
   
   #' im.apply
   Z <- im.apply(bei.extra, sd)
-
+  #' code for large matrices
+  spatstat.options(maxmatrix=1200)
+  Z2 <- im.apply(bei.extra, sd)
+  reset.spatstat.options()
+  if(max(abs(Z-Z2)) > sqrt(.Machine$double.eps))
+    stop("Inconsistent results from im.apply (parallel vs batch-wise)")
+  
   #' Math.imlist, Ops.imlist, Complex.imlist
   U <- Z+2i
   B <- U * (2+1i)

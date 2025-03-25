@@ -8,7 +8,7 @@
 #        harmonise.im()       Harmonise images
 #        commonGrid()
 #
-#     $Revision: 1.55 $     $Date: 2020/12/06 03:58:18 $
+#     $Revision: 1.56 $     $Date: 2025/03/23 10:39:41 $
 #
 
 eval.im <- local({
@@ -213,7 +213,8 @@ commonGrid <- local({
   commonGrid
 })
 
-im.apply <- function(X, FUN, ..., fun.handles.na=FALSE, check=TRUE) {
+im.apply <- function(X, FUN, ...,
+                     fun.handles.na=FALSE, check=TRUE, verbose=TRUE) {
   if(!inherits(X, "imlist")) {
     stopifnot(is.list(X))
     if(!all(sapply(X, is.im)))
@@ -230,28 +231,91 @@ im.apply <- function(X, FUN, ..., fun.handles.na=FALSE, check=TRUE) {
                         stats::sd),
                    nomatch=0L)
   funtype <- c("general", "sum", "mean", "mean", "var", "sd")[funcode+1L]
-  if(funcode != 0)
-    na.rm <- resolve.1.default(list(na.rm=FALSE), list(...))
   ## ensure images are compatible
   if(check && !do.call(compatible, unname(X)))
     X <- do.call(harmonise.im, X)
   template <- X[[1L]]
   d <- dim(template)
-  ## extract numerical values and convert to matrix with one column per image
-  vals <- sapply(X, getElement, name="v")
-  ## apply to all pixels ?
+  ## First check memory limits
+  maxmat <- spatstat.options("maxmatrix")
+  nvalues <- length(X) * prod(d)
+  if(nvalues < maxmat) {
+    ## Memory limit is not exceeded.
+    ## Extract numerical values and convert to a matrix
+    ## with one column per image (one row per pixel)
+    vals <- sapply(X, getElement, name="v")
+    ## apply function pixelwise
+    y <- ImApplyEngine(vals, fun, funtype, fun.handles.na, ...)
+    ## pack up (preserving type of 'y')
+    result <- im(y,
+                 xcol=template$xcol, yrow=template$yrow,
+                 xrange=template$xrange, yrange=template$yrange,
+                 unitname=template$unitname)
+  } else {
+    ## Memory limit is exceeded
+    ## Split raster into pieces and process piecewise
+    npieces <- ceiling(1.1 * nvalues/maxmat)
+    rowblocksize <- min(d[1], ceiling(d[1]/sqrt(npieces)))
+    colblocksize <- min(d[2], ceiling(d[2]/sqrt(npieces)))
+    rowpiecemap <- ceiling(seq_len(d[1])/rowblocksize)
+    colpiecemap <- ceiling(seq_len(d[2])/colblocksize)
+    rowpieces <- unique(rowpiecemap)
+    colpieces <- unique(colpiecemap)
+    npieces <- length(rowpieces) * length(colpieces)
+    if(verbose)
+      message(paste("Large array",
+                    paren(paste(d[1], "rows x",
+                                d[2], "columns x",
+                                length(X), "images")),
+                    "broken into", npieces, "pieces to avoid memory limits"))
+    if(verbose) 
+      message(paste("Each piece of the raster consists of",
+                    rowblocksize, "rows and",
+                    colblocksize, "columns"))
+                          
+    result <- NULL
+    for(currentrowpiece in rowpieces) {
+      ii <- (rowpiecemap == currentrowpiece)
+      for(currentcolpiece in colpieces) {
+        jj <- (colpiecemap == currentcolpiece)
+        #' extract values for this block
+        vsub <- sapply(X, function(z) as.vector(z[ii, jj, drop=FALSE]))
+        #' apply function
+        ysub <- ImApplyEngine(vsub, fun, funtype, fun.handles.na, ...)
+        #' save 
+        if(is.null(result)) {
+          ## create space for result (preserving type of 'y')
+          result <- im(rep(RelevantNA(ysub), prod(d)),
+                       xcol=template$xcol, yrow=template$yrow,
+                       xrange=template$xrange, yrange=template$yrange,
+                       unitname=template$unitname)
+        }
+        result[ii, jj] <- ysub
+      }
+    }
+  }
+  return(result)
+}
+
+ImApplyEngine <- function(vals, fun, funtype, fun.handles.na,
+                          ..., na.rm=FALSE) {
+  #' Input:
+  #'     vals: matrix of values, one column per image (one row per pixel)
+  #' Output:
+  #'     vector containing the result for each pixel
+  n <- nrow(vals)
+  #' Apply function to all pixels ?
   full <- fun.handles.na || !anyNA(vals)
   if(!full) {
-    ## NA present
+    ## NA present in data and must be avoided
     ok <- complete.cases(vals)
     if(!any(ok)) {
       ## empty result
-      return(as.im(NA, W=template))
+      return(rep(RelevantNA(vals), n))
     }
     ## restrict to pixels where all data are non-NA
     vals <- vals[ok, , drop=FALSE]
   }
-  n <- nrow(vals)
   ## calculate
   y <- switch(funtype,
               general = apply(vals, 1L, fun, ...),
@@ -275,16 +339,10 @@ im.apply <- function(X, FUN, ..., fun.handles.na=FALSE, check=TRUE) {
   
   if(!full) {
     ## put the NA's back (preserving type of 'y')
-    yfull <- rep(y[1L], prod(d))
+    yfull <- rep(y[1L], n)
     yfull[ok] <- y
     yfull[!ok] <- NA
     y <- yfull
   }
-  
-  ## pack up (preserving type of 'y')
-  result <- im(y,
-               xcol=template$xcol, yrow=template$yrow,
-               xrange=template$xrange, yrange=template$yrange,
-               unitname=template$unitname)
-  return(result)
+  return(y)
 }
