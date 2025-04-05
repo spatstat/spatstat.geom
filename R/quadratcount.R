@@ -1,7 +1,7 @@
 #
 #  quadratcount.R
 #
-#  $Revision: 1.67 $  $Date: 2023/08/15 13:21:39 $
+#  $Revision: 1.68 $  $Date: 2025/04/05 06:28:43 $
 #
 
 quadratcount <- function(X, ...) {
@@ -13,7 +13,7 @@ quadratcount.splitppp <- function(X, ...) {
 }
 
 quadratcount.ppp <- function(X, nx=5, ny=nx, ...,
-                             xbreaks=NULL, ybreaks=NULL,
+                             xbreaks=NULL, ybreaks=NULL, left.open=TRUE, 
                              tess=NULL)  {
   verifyclass(X, "ppp")
   W <- X$window
@@ -26,7 +26,8 @@ quadratcount.ppp <- function(X, nx=5, ny=nx, ...,
     tess <- quadrats(as.rectangle(W),
                      nx=nx, ny=ny, xbreaks=xbreaks, ybreaks=ybreaks)
     ## fast code for counting points in rectangular grid
-    Xcount <- rectquadrat.countEngine(X$x, X$y, tess$xgrid, tess$ygrid)
+    Xcount <- rectquadrat.countEngine(X$x, X$y, tess$xgrid, tess$ygrid,
+                                      left.open=left.open)
     ## 
     if(W$type != "rectangle") {
       # intersections of rectangles with window including empty intersections
@@ -58,7 +59,8 @@ quadratcount.ppp <- function(X, nx=5, ny=nx, ...,
     }
     if(tess$type == "rect") {
       # fast code for counting points in rectangular grid
-      Xcount <- rectquadrat.countEngine(X$x, X$y, tess$xgrid, tess$ygrid)
+      Xcount <- rectquadrat.countEngine(X$x, X$y, tess$xgrid, tess$ygrid,
+                                        left.open=left.open)
     } else {
       # quadrats are another type of tessellation
       Y <- cut(X, tess)
@@ -124,7 +126,8 @@ rectquadrat.breaks <- function(xr, yr, nx=5, ny=nx, xbreaks=NULL, ybreaks=NULL) 
   return(list(xbreaks=xbreaks, ybreaks=ybreaks))
 }
 
-rectquadrat.countEngine <- function(x, y, xbreaks, ybreaks, weights) {
+rectquadrat.countEngine <- function(x, y, xbreaks, ybreaks, weights,
+                                    left.open=TRUE) {
   if(length(x) > 0) {
     # check validity of breaks
     if(!all(inside.range(range(x), range(xbreaks))))
@@ -135,8 +138,8 @@ rectquadrat.countEngine <- function(x, y, xbreaks, ybreaks, weights) {
   # WAS: 
   # xg <- cut(x, breaks=xbreaks, include.lowest=TRUE)
   # yg <- cut(y, breaks=ybreaks, include.lowest=TRUE)
-  xg <- fastFindInterval(x, xbreaks, labels=TRUE)
-  yg <- fastFindInterval(y, ybreaks, labels=TRUE)
+  xg <- fastFindInterval(x, xbreaks, labels=TRUE, left.open=left.open)
+  yg <- fastFindInterval(y, ybreaks, labels=TRUE, left.open=left.open)
   if(missing(weights)) {
     sumz <- table(list(y=yg, x=xg))
   } else {

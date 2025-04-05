@@ -1,13 +1,20 @@
-        CHANGES IN spatstat.geom VERSION 3.3-6.002
+        CHANGES IN spatstat.geom VERSION 3.3-6.003
 
 OVERVIEW
 
     o Improvement to im.apply for large datasets.
 
+    o Extension to quadratcount.ppp
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o im.apply
     Algorithm has been improved so that it avoids violating memory limits.
+
+    o quadratcount.ppp
+    New argument 'left.open' controls the treatment of data points
+    which lie on the boundary between two rectangular quadrats.
+    
     
         CHANGES IN spatstat.geom VERSION 3.3-6
 

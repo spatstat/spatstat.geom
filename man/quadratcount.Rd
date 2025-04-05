@@ -23,29 +23,26 @@
   }
   \item{nx,ny}{
     Numbers of rectangular quadrats in the \eqn{x} and \eqn{y} directions.
-    Incompatible with \code{xbreaks}, \code{ybreaks} or \code{tess}.
+    Incompatible with \code{xbreaks} and \code{ybreaks}.
   }
   \item{\dots}{Additional arguments passed to \code{quadratcount.ppp}.}
   \item{xbreaks}{
     Numeric vector giving the \eqn{x} coordinates of the
-    boundaries of the rectangular quadrats. Incompatible with \code{nx}
-    and \code{tess}.
+    boundaries of the rectangular quadrats. Incompatible with \code{nx}.
   }
   \item{ybreaks}{
     Numeric vector giving the \eqn{y} coordinates of the
-    boundaries of the rectangular quadrats. Incompatible with \code{ny}
-    and \code{tess}.
-  }
-  \item{left.open}{
-    Logical value specifying whether rectangular cells are left-open and
-    right-closed (\code{left.open=TRUE}, the default) or
-    left-closed and right-open (\code{left.open=FALSE}).
-    Ignored if \code{tess} is given.
+    boundaries of the rectangular quadrats. Incompatible with \code{ny}.
   }
   \item{tess}{
     Tessellation (object of class \code{"tess"} or something acceptable
     to \code{\link{as.tess}}) determining the quadrats. Incompatible
     with \code{nx,ny,xbreaks,ybreaks}.
+  }
+  \item{left.open}{
+    Logical value specifying whether rectangular quadrats are left-open and
+    right-closed (\code{left.open=TRUE}, the default) or
+    left-closed and right-open (\code{left.open=FALSE}).
   }
 }
 \value{
@@ -120,16 +117,14 @@
   then apply \code{quadratcount.splitppp}. See the Examples.
 }
 \section{Treament of data points on the boundary}{
-  When \code{tess} is not given or is \code{NULL},
-  the quadrats are rectangular, and are considered to be
+  If the quadrats are rectangular, they are assumed to be 
   left-open and right-closed, by default (\code{left.open=TRUE}).
-  Alternatively if \code{left.open=FALSE} then the quadrats are
+  Alternatively if \code{left.open=FALSE} then rectangular quadrats are
   left-closed and right-open.
 
-  When \code{tess} is given, the treatment of points which lie
-  on the boundary of a quadrat is undefined, and may depend on the
-  hardware, except that for rectangular tessellations the quadrats
-  are always left-open and right-closed.
+  If the quadrats are not rectangular, the treatment of points which lie
+  on the boundary of two quadrats is undefined, and may depend on the
+  hardware.
 }
 \section{Hypothesis testing}{
   To perform a chi-squared test based on the quadrat counts,
