@@ -11,7 +11,8 @@
   quadratcount(X, \dots)
 
   \method{quadratcount}{ppp}(X, nx=5, ny=nx, \dots,
-               xbreaks=NULL, ybreaks=NULL, tess=NULL)
+               xbreaks=NULL, ybreaks=NULL, left.open=TRUE,
+               tess=NULL)
 
   \method{quadratcount}{splitppp}(X, \dots)
 }
@@ -22,16 +23,24 @@
   }
   \item{nx,ny}{
     Numbers of rectangular quadrats in the \eqn{x} and \eqn{y} directions.
-    Incompatible with \code{xbreaks} and \code{ybreaks}.
+    Incompatible with \code{xbreaks}, \code{ybreaks} or \code{tess}.
   }
   \item{\dots}{Additional arguments passed to \code{quadratcount.ppp}.}
   \item{xbreaks}{
     Numeric vector giving the \eqn{x} coordinates of the
-    boundaries of the rectangular quadrats. Incompatible with \code{nx}.
+    boundaries of the rectangular quadrats. Incompatible with \code{nx}
+    and \code{tess}.
   }
   \item{ybreaks}{
     Numeric vector giving the \eqn{y} coordinates of the
-    boundaries of the rectangular quadrats. Incompatible with \code{ny}.
+    boundaries of the rectangular quadrats. Incompatible with \code{ny}
+    and \code{tess}.
+  }
+  \item{left.open}{
+    Logical value specifying whether rectangular cells are left-open and
+    right-closed (\code{left.open=TRUE}, the default) or
+    left-closed and right-open (\code{left.open=FALSE}).
+    Ignored if \code{tess} is given.
   }
   \item{tess}{
     Tessellation (object of class \code{"tess"} or something acceptable
@@ -110,7 +119,19 @@
   first separate the different points using \code{\link{split.ppp}},
   then apply \code{quadratcount.splitppp}. See the Examples.
 }
-\note{
+\section{Treament of data points on the boundary}{
+  When \code{tess} is not given or is \code{NULL},
+  the quadrats are rectangular, and are considered to be
+  left-open and right-closed, by default (\code{left.open=TRUE}).
+  Alternatively if \code{left.open=FALSE} then the quadrats are
+  left-closed and right-open.
+
+  When \code{tess} is given, the treatment of points which lie
+  on the boundary of a quadrat is undefined, and may depend on the
+  hardware, except that for rectangular tessellations the quadrats
+  are always left-open and right-closed.
+}
+\section{Hypothesis testing}{
   To perform a chi-squared test based on the quadrat counts,
   use \code{\link[spatstat.explore]{quadrat.test}}.
 }
