@@ -82,7 +82,7 @@ local({
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.43 $   $Date: 2023/08/29 01:03:59 $
+#   $Revision: 1.44 $   $Date: 2025/04/05 05:47:54 $
 #
 
 
@@ -298,13 +298,22 @@ local({
   cc <- lookup.im(Z, X)
   
   #' im.apply
-  Z <- im.apply(bei.extra, sd)
-  #' code for large matrices
+  #' image data with some NA's
+  BE <- bei.extra
+  BE[[1]][square(c(200, 300))] <- NA
+  #' 'parallel' code: process data as one huge matrix
+  Z <- im.apply(BE, sd)  # recognised operation => special code
+  Y <- im.apply(BE, max) # unrecognised op => generic code
+  #' 'big data' code: break data into several matrices
   spatstat.options(maxmatrix=1200)
-  Z2 <- im.apply(bei.extra, sd)
+  Z2 <- im.apply(BE, sd)
+  Y2 <- im.apply(BE, max)
   reset.spatstat.options()
+  #' check agreement
+  if(max(abs(Y-Y2)) > sqrt(.Machine$double.eps))
+    stop("Inconsistent results from im.apply max (parallel vs batch-wise)")
   if(max(abs(Z-Z2)) > sqrt(.Machine$double.eps))
-    stop("Inconsistent results from im.apply (parallel vs batch-wise)")
+    stop("Inconsistent results from im.apply sd (parallel vs batch-wise)")
   
   #' Math.imlist, Ops.imlist, Complex.imlist
   U <- Z+2i

@@ -8,7 +8,7 @@
 #        harmonise.im()       Harmonise images
 #        commonGrid()
 #
-#     $Revision: 1.56 $     $Date: 2025/03/23 10:39:41 $
+#     $Revision: 1.57 $     $Date: 2025/04/05 05:34:56 $
 #
 
 eval.im <- local({
@@ -303,7 +303,7 @@ ImApplyEngine <- function(vals, fun, funtype, fun.handles.na,
   #'     vals: matrix of values, one column per image (one row per pixel)
   #' Output:
   #'     vector containing the result for each pixel
-  n <- nrow(vals)
+  nfull <- n <- nrow(vals)
   #' Apply function to all pixels ?
   full <- fun.handles.na || !anyNA(vals)
   if(!full) {
@@ -315,6 +315,7 @@ ImApplyEngine <- function(vals, fun, funtype, fun.handles.na,
     }
     ## restrict to pixels where all data are non-NA
     vals <- vals[ok, , drop=FALSE]
+    n <- nrow(vals)
   }
   ## calculate
   y <- switch(funtype,
@@ -339,7 +340,7 @@ ImApplyEngine <- function(vals, fun, funtype, fun.handles.na,
   
   if(!full) {
     ## put the NA's back (preserving type of 'y')
-    yfull <- rep(y[1L], n)
+    yfull <- rep(y[1L], nfull)
     yfull[ok] <- y
     yfull[!ok] <- NA
     y <- yfull
