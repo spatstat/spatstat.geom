@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.161 $   $Date: 2024/12/03 01:19:40 $
+#  $Revision: 1.163 $   $Date: 2025/04/11 10:35:57 $
 #
 #  Plotting code for pixel images
 #
@@ -214,6 +214,10 @@ plot.im <- local({
     return(y)
   }
 
+  TenPower <- function(x) { 10^x }
+
+  Ident <- function(x) { x }
+  
   Ticks <- function(usr, log=FALSE, nint=NULL, ..., clip=TRUE) {
     #' modification of grDevices::axisTicks
     #'      constrains ticks to be inside the specified range if clip=TRUE
@@ -292,6 +296,9 @@ plot.im <- local({
       stop(paste("Log transform is undefined for an image of type",
                  sQuote(xtype)))
 
+    ## secret interface for handling log-transformed data
+    already.log <- identical(log, "already")
+    
     # determine whether pixel values are to be treated as colours
     if(!is.null(valuesAreColours)) {
       # argument given - validate
@@ -368,16 +375,23 @@ plot.im <- local({
                         "omitted from logarithmic colour map;",
                         "range of values =", prange(rx)),
                   call.=FALSE)
-        if(do.plot && !all(rx < 0))
+        if(do.plot && !all(rx > 0))
           warning("Zero pixel values omitted from logarithmic colour map",
                   call.=FALSE)
         x <- eval.im(log10orNA(x))
       } 
       xtype <- x$type
+      values.are.log <- TRUE
+      ## functions 'Log' and 'Exp' are used to determine tick marks and labels
       Log <- log10
-      Exp <- function(x) { 10^x }
+      Exp <- TenPower
+    } else if(already.log) {
+      values.are.log <- TRUE
+      Log <- log10
+      Exp <- TenPower
     } else {
-      Log <- Exp <- function(x) { x }
+      values.are.log <- FALSE
+      Log <- Exp <- Ident
     }
     
     imagebreaks <- NULL
@@ -436,7 +450,7 @@ plot.im <- local({
                ribbonrange <- vrange
                nominalrange <- Log(ribscale * Exp(ribbonrange))
                nominalmarks <- user.ticks %orifnull% Ticks(nominalrange,
-                                                         log=do.log,
+                                                         log=values.are.log,
                                                          nint=user.nint)
              }
              ribbonticks <- Log(nominalmarks/ribscale)
@@ -646,7 +660,7 @@ plot.im <- local({
                  list(useRaster=useRaster),
                  colourinfo,
                  list(zlim=vrange, asp = 1, main = main),
-                 list(values.are.log=do.log))
+                 list(values.are.log=values.are.log))
 ##      if(add && show.all)
 ##        fakemaintitle(x, main, dotargs)
 
@@ -731,7 +745,7 @@ plot.im <- local({
                list(useRaster=useRaster),
                colourinfo,
                list(zlim=vrange, asp = 1, main = main),
-               list(values.are.log=do.log))
+               list(values.are.log=values.are.log))
 
 ##    if(add && show.all)
 ##      fakemaintitle(bb.all, main, ...)
@@ -777,7 +791,7 @@ plot.im <- local({
                list(main="", sub="", xlab="", ylab=""),
                dotargs,
                colourinfo,
-               list(values.are.log=do.log))
+               list(values.are.log=values.are.log))
     # box around ribbon?
     resol <- resolve.defaults(ribargs, dotargs)
     if(!identical(resol$box, FALSE))

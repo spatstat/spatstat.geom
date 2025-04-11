@@ -1,10 +1,12 @@
-        CHANGES IN spatstat.geom VERSION 3.3-6.003
+        CHANGES IN spatstat.geom VERSION 3.3-6.004
 
 OVERVIEW
 
     o Improvement to im.apply for large datasets.
 
     o Extension to quadratcount.ppp
+
+    o Bug fix.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -15,6 +17,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New argument 'left.open' controls the treatment of data points
     which lie on the boundary between two rectangular quadrats.
     
+BUG FIXES
+
+    o plot.solist, plot.imlist
+    When 'equal.scales=TRUE' and 'equal.ribbon=TRUE',
+    the argument 'log=TRUE' was ignored.
+    Fixed.
     
         CHANGES IN spatstat.geom VERSION 3.3-6
 
