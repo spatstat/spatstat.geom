@@ -21,7 +21,7 @@ colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
 }
 
 lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL,
-                gamma=1, stretch=NULL, invstretch=NULL) {
+                gamma=1, compress=NULL, decompress=NULL) {
   if(nargs() == 0) {
     ## null lookup table
     f <- function(x, what="value"){NULL}
@@ -30,11 +30,11 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL,
     return(f)
   }
   if(is.null(gamma)) gamma <- 1
-  if(is.null(stretch)) {
-    invstretch <- NULL
+  if(is.null(compress)) {
+    decompress <- NULL
   } else {
-    stopifnot(is.function(stretch))
-    stopifnot(is.function(invstretch))
+    stopifnot(is.function(compress))
+    stopifnot(is.function(decompress))
   }
   n <- length(outputs)
   given <- c(!is.null(range), !is.null(breaks), !is.null(inputs))
@@ -58,10 +58,14 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL,
       outputs <- rep(outputs, n)
     } else stopifnot(length(inputs) == length(outputs))
     stuff <- list(n=n, discrete=TRUE, inputs=inputs, outputs=outputs,
-                  stretch=stretch, invstretch=invstretch)
+                  compress=compress, decompress=decompress)
     f <- function(x, what="value") {
-      if(is.function(stretch <- stuff$stretch)) x <- stretch(x)
-      m <- match(x, stuff$inputs)
+      inputs <- stuff$inputs
+      if(is.function(compress <- stuff$compress)) {
+        x <- compress(x)
+        inputs <- compress(inputs)
+      }
+      m <- match(x, inputs)
       if(what == "index")
         return(m)
       cout <- stuff$outputs[m]
@@ -87,13 +91,17 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL,
       gamma.used <- NULL
     }
     stuff <- list(n=n, discrete=FALSE, breaks=breaks, outputs=outputs,
-                  gamma=gamma.used, stretch=stretch, invstretch=invstretch)
+                  gamma=gamma.used, compress=compress, decompress=decompress)
     #' use appropriate function
     if(is.time) {
       f <- function(x, what="value") {
-        if(is.function(stretch <- stuff$stretch)) x <- stretch(x)
+        breaks <- stuff$breaks
+        if(is.function(compress <- stuff$compress)) {
+          x <- compress(x)
+          breaks <- compress(breaks)
+        }
         x <- as.vector(as.numeric(x))
-        z <- findInterval(x, stuff$breaks, rightmost.closed=TRUE)
+        z <- findInterval(x, breaks, rightmost.closed=TRUE)
         oo <- stuff$outputs
         z[z <= 0 | z > length(oo)] <- NA
         if(what == "index")
@@ -103,11 +111,14 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL,
       }
     } else {
       f <- function(x, what="value") {
-        if(is.function(stretch <- stuff$stretch)) x <- stretch(x)
+        breaks <- stuff$breaks
+        if(is.function(compress <- stuff$compress)) {
+          x <- compress(x)
+          breaks <- compress(breaks)
+        }
         stopifnot(is.numeric(x))
         x <- as.vector(x)
-        z <- findInterval(x, stuff$breaks,
-                          rightmost.closed=TRUE)
+        z <- findInterval(x, breaks, rightmost.closed=TRUE)
         oo <- stuff$outputs
         z[z <= 0 | z > length(oo)] <- NA
         if(what == "index")
@@ -139,10 +150,9 @@ print.lut <- function(x, ...) {
   }
   if(stuff$discrete) {
     cat(paste(tablename, "for discrete set of input values\n"))
-    inputs <- (stuff$invstretch %orifnull% identity)(stuff$inputs)
-    out <- data.frame(input=inputs, output=stuff$outputs)
+    out <- data.frame(input=stuff$inputs, output=stuff$outputs)
   } else {
-    b <- (stuff$invstretch %orifnull% identity)(stuff$breaks)
+    b <- stuff$breaks
     cat(paste(tablename, "for the range", prange(b[c(1L,n+1L)]), "\n"))
     leftend  <- rep("[", n)
     rightend <- c(rep(")", n-1), "]")
@@ -153,12 +163,12 @@ print.lut <- function(x, ...) {
   print(out)
   if(!is.null(gamma <- stuff$gamma) && gamma != 1)
     splat("Generated using gamma =", gamma)
-  if(!is.null(stretch <- stuff$stretch)) {
-    if(samefunction(stretch, log10)) {
+  if(!is.null(compress <- stuff$compress)) {
+    if(samefunction(compress, log10)) {
       splat("Logarithmic", tolower(tablename))
     } else {
-      splat("Inputs are transformed by stretch map:")
-      print(stuff$stretch)
+      splat("Input compression map:")
+      print(stuff$compress)
     }
   }
   invisible(NULL)
@@ -189,10 +199,9 @@ print.summary.lut <- function(x, ...) {
   }
   if(x$discrete) {
     cat(paste(x$tablename, "for discrete set of input values\n"))
-    inputs <- (x$invstretch %orifnull% identity)(x$inputs)
-    out <- data.frame(input=inputs, output=x$outputs)
+    out <- data.frame(input=x$inputs, output=x$outputs)
   } else {
-    b <- (x$invstretch %orifnull% identity)(x$breaks)
+    b <- x$breaks
     cat(paste(x$tablename, "for the range", prange(b[c(1L,n+1L)]), "\n"))
     leftend  <- rep("[", n)
     rightend <- c(rep(")", n-1L), "]")
@@ -201,12 +210,12 @@ print.summary.lut <- function(x, ...) {
   }
   colnames(out)[2L] <- x$outputname
   print(out)  
-  if(!is.null(stretch <- x$stretch)) {
-    if(samefunction(stretch, log10)) {
+  if(!is.null(compress <- x$compress)) {
+    if(samefunction(compress, log10)) {
       splat("Logarithmic", tolower(x$tablename))
     } else {
-      splat("Inputs are transformed by stretch map:")
-      print(stretch)
+      splat("Input compression map:")
+      print(compress)
     }
   }
   return(invisible(NULL))
@@ -281,7 +290,7 @@ plot.colourmap <- local({
                              axis=TRUE,
                              side = if(vertical) "right" else "bottom",
                              labelmap=NULL, gap=0.25, add=FALSE,
-                             increasing=NULL, nticks=5, box=NULL) {
+                             increasing=NULL, nticks=5, at=NULL, box=NULL) {
     if(missing(main))
       main <- short.deparse(substitute(x))
     if(missing(vertical) && !missing(side)) 
@@ -305,6 +314,9 @@ plot.colourmap <- local({
     }
     separate <- discrete && (gap > 0)
 
+    compress <- stuff$compress %orifnull% identity
+    decompress <- stuff$decompress %orifnull% identity
+
     if(is.null(labelmap)) {
       labelmap <- identity
     } else if(is.numeric(labelmap) && length(labelmap) == 1L && !discrete) {
@@ -313,8 +325,7 @@ plot.colourmap <- local({
     } else stopifnot(is.function(labelmap))
 
     #' map values back to original scale
-    invstretch <- stuff$invstretch %orifnull% identity
-    Labelmap <- function(x) { labelmap(invstretch(x)) }
+    Labelmap <- function(x) { labelmap(decompress(x)) }
 
     if(is.null(increasing))
       increasing <- !(discrete && vertical)
@@ -325,7 +336,7 @@ plot.colourmap <- local({
     trivial <- FALSE
     if(!discrete) {
       # real numbers: continuous ribbon
-      bks <- stuff$breaks
+      bks <- compress(stuff$breaks)
       rr <- range(bks)
       trivial <- (diff(rr) == 0)
       v <- if(trivial) rr[1] else
@@ -464,7 +475,7 @@ plot.colourmap <- local({
           la <- paste(Labelmap(stuff$inputs))
           at <- linmap(v, rr, xlim)
         } else {
-          la <- Ticks(rr, nint=nticks)
+          la <- if(!is.null(at)) compress(at) else Ticks(rr, nint=nticks)
           at <- linmap(la, rr, xlim)
           la <- Labelmap(la)
         }
@@ -493,7 +504,7 @@ plot.colourmap <- local({
           la <- paste(Labelmap(stuff$inputs))
           at <- linmap(v, rr, ylim)
         } else {
-          la <- Ticks(rr, nint=nticks)
+          la <- if(!is.null(at)) compress(at) else Ticks(rr, nint=nticks)
           at <- linmap(la, rr, ylim)
           la <- Labelmap(la)
         }
@@ -574,7 +585,7 @@ interp.colourmap <- function(m, n=512) {
   }
   # done
   f <- colourmap(yy, breaks=xbreaks,
-                 stretch=st$stretch, invstretch=st$invstretch)
+                 compress=st$compress, decompress=st$decompress)
   return(f)
 }
 
@@ -697,8 +708,8 @@ restrict.colourmap <- function(x, ..., range=NULL, breaks=NULL, inputs=NULL) {
     if(any(is.na(m)))
       stop("New inputs are not a subset of the old inputs", call.=FALSE)
     result <- colourmap(oldoutputs[m], inputs=inputs,
-                        stretch=stuff$stretch,
-                        invstretch=stuff$invstretch)
+                        compress=stuff$compress,
+                        decompress=stuff$decompress)
   } else if(!is.null(range)) {
     ## colour map for continuous domain
     ## range specified
@@ -716,8 +727,8 @@ restrict.colourmap <- function(x, ..., range=NULL, breaks=NULL, inputs=NULL) {
     newmid <- newbreaks[-length(newbreaks)] + diff(newbreaks)/2
     newout <- x(newmid)
     result <- colourmap(newout, breaks=newbreaks,
-                        stretch=stuff$stretch,
-                        invstretch=stuff$invstretch)
+                        compress=stuff$compress,
+                        decompress=stuff$decompress)
   } else {
     ## colour map for continuous domain
     ## breaks specified
@@ -731,8 +742,8 @@ restrict.colourmap <- function(x, ..., range=NULL, breaks=NULL, inputs=NULL) {
     newmid <- breaks[-length(breaks)] + diff(breaks)/2
     newout <- x(newmid)
     result <- colourmap(newout, breaks=breaks,
-                        stretch=stuff$stretch,
-                        invstretch=stuff$invstretch)
+                        compress=stuff$compress,
+                        decompress=stuff$decompress)
   }
   return(result)
 }

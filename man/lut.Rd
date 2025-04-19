@@ -6,7 +6,7 @@
 }
 \usage{
 lut(outputs, ..., range=NULL, breaks=NULL, inputs=NULL,
-    gamma=1, stretch=NULL, invstretch=NULL)
+    gamma=1, compress=NULL, decompress=NULL)
 }
 \arguments{
   \item{outputs}{Vector of output values}
@@ -32,15 +32,15 @@ lut(outputs, ..., range=NULL, breaks=NULL, inputs=NULL,
     A single positive number.
     See Details.
   }
-  \item{stretch}{
+  \item{compress}{
     Optional. Experimental.
-    An \R function that will be applied to the input data
-    before they are mapped to the outputs.
+    An \R function determining a nonlinear transformation of the
+    domain of the colour map. 
   }
-  \item{invstretch}{
+  \item{decompress}{
     Experimental.
-    An \R function giving the inverse function of \code{stretch},
-    if \code{stretch} is specified.
+    An \R function giving the inverse function of \code{compress},
+    if \code{compress} is specified.
   }
 }
 \details{

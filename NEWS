@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.3-6.006
+        CHANGES IN spatstat.geom VERSION 3.3-6.007
 
 OVERVIEW
 
@@ -13,7 +13,7 @@ OVERVIEW
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o lut
-    New arguments 'stretch', 'invstretch' for nonlinear lookup tables.
+    New arguments 'compress', 'decompress' for nonlinear lookup tables.
     
     o im.apply
     Algorithm has been improved so that it avoids violating memory limits.

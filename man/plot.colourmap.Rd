@@ -8,7 +8,8 @@
 \method{plot}{colourmap}(x, ...,
        main, xlim = NULL, ylim = NULL, vertical = FALSE,
        axis = TRUE, side = if(vertical) "right" else "bottom",
-       labelmap=NULL, gap=0.25, add=FALSE, increasing=NULL, nticks=5, box=NULL)
+       labelmap=NULL, gap=0.25, add=FALSE, increasing=NULL, nticks=5,
+       at=NULL, box=NULL)
 }
 \arguments{
   \item{x}{Colour map to be plotted. An object of class \code{"colourmap"}.}
@@ -64,8 +65,12 @@
   \item{nticks}{
     Optional. Integer specifying the approximate number of tick marks
     (representing different values of the numerical input) that should be
-    drawn next to the colour map. Applies only when the colour map
-    inputs are numeric values.
+    drawn next to the colour map.
+    Applies only when the colour map inputs are numeric values.
+  }
+  \item{at}{
+    Optional. Numeric values at which tick marks should be drawn.
+    Applies only when the colour map inputs are numeric values.
   }
   \item{box}{
     Optional. Logical value specifying whether to draw a black box
