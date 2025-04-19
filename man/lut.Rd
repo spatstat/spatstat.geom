@@ -5,7 +5,8 @@
   Create a lookup table.
 }
 \usage{
-lut(outputs, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1)
+lut(outputs, ..., range=NULL, breaks=NULL, inputs=NULL,
+    gamma=1, stretch=NULL, invstretch=NULL)
 }
 \arguments{
   \item{outputs}{Vector of output values}
@@ -30,6 +31,16 @@ lut(outputs, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1)
     Exponent for gamma correction, when \code{range} is given.
     A single positive number.
     See Details.
+  }
+  \item{stretch}{
+    Optional. Experimental.
+    An \R function that will be applied to the input data
+    before they are mapped to the outputs.
+  }
+  \item{invstretch}{
+    Experimental.
+    An \R function giving the inverse function of \code{stretch},
+    if \code{stretch} is specified.
   }
 }
 \details{

@@ -20,7 +20,8 @@ colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
   f
 }
 
-lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
+lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL,
+                gamma=1, stretch=NULL, invstretch=NULL) {
   if(nargs() == 0) {
     ## null lookup table
     f <- function(x, what="value"){NULL}
@@ -29,6 +30,12 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
     return(f)
   }
   if(is.null(gamma)) gamma <- 1
+  if(is.null(stretch)) {
+    invstretch <- NULL
+  } else {
+    stopifnot(is.function(stretch))
+    stopifnot(is.function(invstretch))
+  }
   n <- length(outputs)
   given <- c(!is.null(range), !is.null(breaks), !is.null(inputs))
   names(given) <- nama <- c("range", "breaks", "inputs")
@@ -50,8 +57,10 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
       n <- length(inputs)
       outputs <- rep(outputs, n)
     } else stopifnot(length(inputs) == length(outputs))
-    stuff <- list(n=n, discrete=TRUE, inputs=inputs, outputs=outputs)
+    stuff <- list(n=n, discrete=TRUE, inputs=inputs, outputs=outputs,
+                  stretch=stretch, invstretch=invstretch)
     f <- function(x, what="value") {
+      if(is.function(stretch <- stuff$stretch)) x <- stretch(x)
       m <- match(x, stuff$inputs)
       if(what == "index")
         return(m)
@@ -78,10 +87,11 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
       gamma.used <- NULL
     }
     stuff <- list(n=n, discrete=FALSE, breaks=breaks, outputs=outputs,
-                  gamma=gamma.used)
+                  gamma=gamma.used, stretch=stretch, invstretch=invstretch)
     #' use appropriate function
     if(is.time) {
       f <- function(x, what="value") {
+        if(is.function(stretch <- stuff$stretch)) x <- stretch(x)
         x <- as.vector(as.numeric(x))
         z <- findInterval(x, stuff$breaks, rightmost.closed=TRUE)
         oo <- stuff$outputs
@@ -93,6 +103,7 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
       }
     } else {
       f <- function(x, what="value") {
+        if(is.function(stretch <- stuff$stretch)) x <- stretch(x)
         stopifnot(is.numeric(x))
         x <- as.vector(x)
         z <- findInterval(x, stuff$breaks,
@@ -128,9 +139,10 @@ print.lut <- function(x, ...) {
   }
   if(stuff$discrete) {
     cat(paste(tablename, "for discrete set of input values\n"))
-    out <- data.frame(input=stuff$inputs, output=stuff$outputs)
+    inputs <- (stuff$invstretch %orifnull% identity)(stuff$inputs)
+    out <- data.frame(input=inputs, output=stuff$outputs)
   } else {
-    b <- stuff$breaks
+    b <- (stuff$invstretch %orifnull% identity)(stuff$breaks)
     cat(paste(tablename, "for the range", prange(b[c(1L,n+1L)]), "\n"))
     leftend  <- rep("[", n)
     rightend <- c(rep(")", n-1), "]")
@@ -140,7 +152,15 @@ print.lut <- function(x, ...) {
   colnames(out)[2L] <- outputname
   print(out)
   if(!is.null(gamma <- stuff$gamma) && gamma != 1)
-    cat(paste("Generated using gamma =", gamma, "\n"))
+    splat("Generated using gamma =", gamma)
+  if(!is.null(stretch <- stuff$stretch)) {
+    if(samefunction(stretch, log10)) {
+      splat("Logarithmic", tolower(tablename))
+    } else {
+      splat("Inputs are transformed by stretch map:")
+      print(stuff$stretch)
+    }
+  }
   invisible(NULL)
 }
 
@@ -169,9 +189,10 @@ print.summary.lut <- function(x, ...) {
   }
   if(x$discrete) {
     cat(paste(x$tablename, "for discrete set of input values\n"))
-    out <- data.frame(input=x$inputs, output=x$outputs)
+    inputs <- (x$invstretch %orifnull% identity)(x$inputs)
+    out <- data.frame(input=inputs, output=x$outputs)
   } else {
-    b <- x$breaks
+    b <- (x$invstretch %orifnull% identity)(x$breaks)
     cat(paste(x$tablename, "for the range", prange(b[c(1L,n+1L)]), "\n"))
     leftend  <- rep("[", n)
     rightend <- c(rep(")", n-1L), "]")
@@ -180,6 +201,15 @@ print.summary.lut <- function(x, ...) {
   }
   colnames(out)[2L] <- x$outputname
   print(out)  
+  if(!is.null(stretch <- x$stretch)) {
+    if(samefunction(stretch, log10)) {
+      splat("Logarithmic", tolower(x$tablename))
+    } else {
+      splat("Inputs are transformed by stretch map:")
+      print(stretch)
+    }
+  }
+  return(invisible(NULL))
 }
 
 plot.colourmap <- local({
@@ -274,12 +304,17 @@ plot.colourmap <- local({
       explain.ifnot(gap >= 0, "In plot.colourmap")
     }
     separate <- discrete && (gap > 0)
+
     if(is.null(labelmap)) {
-      labelmap <- function(x) x
+      labelmap <- identity
     } else if(is.numeric(labelmap) && length(labelmap) == 1L && !discrete) {
       labscal <- labelmap
       labelmap <- function(x) { x * labscal }
     } else stopifnot(is.function(labelmap))
+
+    #' map values back to original scale
+    invstretch <- stuff$invstretch %orifnull% identity
+    Labelmap <- function(x) { labelmap(invstretch(x)) }
 
     if(is.null(increasing))
       increasing <- !(discrete && vertical)
@@ -426,12 +461,12 @@ plot.colourmap <- local({
       if(!vertical) {
           # add horizontal axis/annotation
         if(discrete) {
-          la <- paste(labelmap(stuff$inputs))
+          la <- paste(Labelmap(stuff$inputs))
           at <- linmap(v, rr, xlim)
         } else {
           la <- Ticks(rr, nint=nticks)
           at <- linmap(la, rr, xlim)
-          la <- labelmap(la)
+          la <- Labelmap(la)
         }
         if(reverse)
           at <- rev(at)
@@ -455,12 +490,12 @@ plot.colourmap <- local({
       } else {
         # add vertical axis
         if(discrete) {
-          la <- paste(labelmap(stuff$inputs))
+          la <- paste(Labelmap(stuff$inputs))
           at <- linmap(v, rr, ylim)
         } else {
           la <- Ticks(rr, nint=nticks)
           at <- linmap(la, rr, ylim)
-          la <- labelmap(la)
+          la <- Labelmap(la)
         }
         if(reverse)
           at <- rev(at)
