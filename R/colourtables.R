@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.63 $ $Date: 2024/12/02 01:41:18 $
+# $Revision: 1.64 $ $Date: 2025/04/19 09:52:35 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
@@ -573,7 +573,8 @@ interp.colourmap <- function(m, n=512) {
     yy <- hsv(yy.hue, yy.sat, yy.val, yy.alpha)    
   }
   # done
-  f <- colourmap(yy, breaks=xbreaks)
+  f <- colourmap(yy, breaks=xbreaks,
+                 stretch=st$stretch, invstretch=st$invstretch)
   return(f)
 }
 
@@ -695,7 +696,9 @@ restrict.colourmap <- function(x, ..., range=NULL, breaks=NULL, inputs=NULL) {
     m <- match(inputs, oldinputs)
     if(any(is.na(m)))
       stop("New inputs are not a subset of the old inputs", call.=FALSE)
-    result <- colourmap(oldoutputs[m], inputs=inputs)
+    result <- colourmap(oldoutputs[m], inputs=inputs,
+                        stretch=stuff$stretch,
+                        invstretch=stuff$invstretch)
   } else if(!is.null(range)) {
     ## colour map for continuous domain
     ## range specified
@@ -712,7 +715,9 @@ restrict.colourmap <- function(x, ..., range=NULL, breaks=NULL, inputs=NULL) {
     ## evaluate current colour at midpoint of each new interval
     newmid <- newbreaks[-length(newbreaks)] + diff(newbreaks)/2
     newout <- x(newmid)
-    result <- colourmap(newout, breaks=newbreaks)
+    result <- colourmap(newout, breaks=newbreaks,
+                        stretch=stuff$stretch,
+                        invstretch=stuff$invstretch)
   } else {
     ## colour map for continuous domain
     ## breaks specified
@@ -725,7 +730,9 @@ restrict.colourmap <- function(x, ..., range=NULL, breaks=NULL, inputs=NULL) {
            call.=FALSE)
     newmid <- breaks[-length(breaks)] + diff(breaks)/2
     newout <- x(newmid)
-    result <- colourmap(newout, breaks=breaks)
+    result <- colourmap(newout, breaks=breaks,
+                        stretch=stuff$stretch,
+                        invstretch=stuff$invstretch)
   }
   return(result)
 }
