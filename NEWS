@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.3-6.009
+        CHANGES IN spatstat.geom VERSION 3.3-6.010
 
 OVERVIEW
 
@@ -33,6 +33,11 @@ BUG FIXES
     o plot.solist, plot.imlist
     When 'equal.scales=TRUE' and 'equal.ribbon=TRUE',
     the argument 'log=TRUE' was ignored.
+    Fixed.
+
+    o plot.im
+    If log=TRUE, the resulting colour map represented
+    the colours applied to log10(x) rather than x.
     Fixed.
     
         CHANGES IN spatstat.geom VERSION 3.3-6

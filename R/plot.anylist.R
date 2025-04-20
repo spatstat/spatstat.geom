@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.41 $ $Date: 2025/04/11 10:35:46 $
+##  $Revision: 1.43 $ $Date: 2025/04/20 09:37:01 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
@@ -605,7 +605,6 @@ plot.imlist <- local({
     stopifnot(is.list(ribargs))
     if(!is.null(ribsep))
       warning("Argument ribsep is not yet implemented for image arrays")
-    do.log <- isTRUE(log)
     ## ascertain types of pixel values
     xtypes <- sapply(x, getElement, name="type")
     ischar <- (xtypes == "character")
@@ -618,28 +617,16 @@ plot.imlist <- local({
     isfactor <- xtypes == "factor"
     isnumeric <- xtypes %in% c("real", "integer", "logical")
     if(all(isnumeric)) {
-      ## handle logarithmic colour map here
-      if(do.log) {
-        ## compute log of pixel values
-        x <- lapply(x, log10image)
-        if(!is.null(zlim))
-          zlim <- log10(zlim)
-        ## appropriate mapping of axis values to axis labels
-        if(is.null(ribscale)) ribscale <- 1
-        labelmap <- function(x) { ribscale * 10^x }
-      } else {
-        labelmap <- ribscale
-      }
       ## determine range of values for colour map
       if(is.null(zlim))
         zlim <- range(unlist(lapply(x, range)))
       ## determine common colour map based on zlim
-      imcolmap <- plot.im(x[[1L]], do.plot=FALSE, zlim=zlim, ..., ribn=ribn)
+      imcolmap <- plot.im(x[[1L]], do.plot=FALSE, zlim=zlim, ...,
+                          log=log, ribn=ribn)
     } else if(all(isfactor)) {
       x <- harmoniseLevels(x)
       ## determine common colour map based on factor levels
       imcolmap <- plot.im(x[[1L]], do.plot=FALSE, ..., ribn=ribn)
-      labelmap <- NULL
     } else warning("Could not determine a common colour map for these images",
                    call.=FALSE)
     ## plot ribbon?
@@ -648,13 +635,13 @@ plot.imlist <- local({
     } else if(equal.scales) {
       ## colour ribbon will be aligned with objects in plot
       ribadorn <- list(adorn=imcolmap,
-                       adorn.args=append(ribargs, list(labelmap=labelmap)))
+                       adorn.args=append(ribargs, list(labelmap=ribscale)))
       names(ribadorn)[1] <- paste("adorn", ribside, sep=".")
     } else {
       ## colour ribbon will be "free-floating"
       ## Determine plot arguments for ribbon
       vertical <- (ribside %in% c("right", "left"))
-      scaleinfo <- if(!is.null(labelmap)) list(labelmap=labelmap) else list()
+      scaleinfo <- if(!is.null(ribscale)) list(labelmap=ribscale) else list()
       sidecode <- sideCode(ribside)
       ribstuff <- c(list(x=imcolmap, main="", vertical=vertical),
                     ribargs,
@@ -693,38 +680,12 @@ plot.imlist <- local({
                                             main=xname,
                                             col=imcolmap, zlim=zlim,
                                             ribbon=FALSE),
-                                       if(do.log) list(log="already") else NULL,
                                        ribadorn))
     return(invisible(result))
   }
 
   factorimage <- function(X, levels=NULL) {
     eval.im(factor(X, levels=levels))
-  }
-
-  log10image <- function(X) {
-    rx <- range(X, finite=TRUE)
-    if(all(rx > 0)) {
-      y <- eval.im(log10(X))
-    } else {
-      if(do.plot && any(rx < 0)) 
-        warning(paste("Negative pixel values",
-                      "omitted from logarithmic colour map;",
-                      "range of values =", prange(rx)),
-                call.=FALSE)
-      if(do.plot && !all(rx > 0))
-        warning("Zero pixel values omitted from logarithmic colour map",
-                call.=FALSE)
-      y <- eval.im(log10orNA(X))
-    } 
-    return(y)
-  }
-
-  log10orNA <- function(x) {
-    y <- rep(NA_real_, length(x))
-    ok <- !is.na(x) & (x > 0)
-    y[ok] <- log10(x[ok])
-    return(y)
   }
 
   plot.imlist

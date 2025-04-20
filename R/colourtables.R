@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.65 $ $Date: 2025/04/20 03:22:51 $
+# $Revision: 1.66 $ $Date: 2025/04/20 08:06:58 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1,
@@ -78,11 +78,16 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL,
     #' determine type of domain
     timeclasses <- c("Date", "POSIXt")
     is.time <- inherits(range, timeclasses) || inherits(breaks, timeclasses)
-    #' determine breaks
     if(is.null(breaks)) {
-      breaks <- gammabreaks(range, n + 1L, gamma)
+      #' determine breaks
+      if(is.null(compress)) {
+        breaks <- gammabreaks(range, n + 1L, gamma)
+      } else {
+        breaks <- decompress(gammabreaks(compress(range), n + 1L, gamma))
+      }
       gamma.used <- gamma
     } else {
+      #' check user-specified breaks
       stopifnot(length(breaks) >= 2)
       if(length(outputs) == 1L) {
         n <- length(breaks) - 1L

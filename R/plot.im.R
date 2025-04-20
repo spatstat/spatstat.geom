@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.163 $   $Date: 2025/04/11 10:35:57 $
+#  $Revision: 1.167 $   $Date: 2025/04/20 10:04:52 $
 #
 #  Plotting code for pixel images
 #
@@ -216,8 +216,6 @@ plot.im <- local({
 
   TenPower <- function(x) { 10^x }
 
-  Ident <- function(x) { x }
-  
   Ticks <- function(usr, log=FALSE, nint=NULL, ..., clip=TRUE) {
     #' modification of grDevices::axisTicks
     #'      constrains ticks to be inside the specified range if clip=TRUE
@@ -385,14 +383,17 @@ plot.im <- local({
       ## functions 'Log' and 'Exp' are used to determine tick marks and labels
       Log <- log10
       Exp <- TenPower
+      if(!is.null(zlim))
+        dotargs$zlim <- zlim <- log10(zlim)
     } else if(already.log) {
       values.are.log <- TRUE
       Log <- log10
       Exp <- TenPower
     } else {
       values.are.log <- FALSE
-      Log <- Exp <- Ident
+      Log <- Exp <- identity
     }
+    compress <- decompress <- identity
     
     imagebreaks <- NULL
 #    ribbonvalues <- ribbonbreaks <- NULL
@@ -428,12 +429,20 @@ plot.im <- local({
              if(!is.null(colmap)) {
                # explicit colour map
                s <- summary(colmap)
+               col <- s$outputs
                if(s$discrete)
                  stop("Discrete colour map is not applicable to real values")
                imagebreaks <- s$breaks
+               if(is.function(s$compress)) {
+                 ## remember these transformations
+                 compress <- s$compress
+                 decompress <- s$decompress
+                 ## transform pixel values to the compressed scale
+                 x <- eval.im(compress(x))
+                 imagebreaks <- compress(imagebreaks)
+               }
                vrange <- range(imagebreaks)
-               col <- s$outputs
-             } 
+             }
              trivial <- (diff(vrange) <= zap * .Machine$double.eps)
              #' ribbonvalues: a sequence of pixel values, mapped to colours
              #' ribbonrange:  (min, max) of pixel values mapped by ribbon
@@ -449,16 +458,35 @@ plot.im <- local({
                                    length.out=ribn)
                ribbonrange <- vrange
                nominalrange <- Log(ribscale * Exp(ribbonrange))
-               nominalmarks <- user.ticks %orifnull% Ticks(nominalrange,
+               nominalmarks <- user.ticks %orifnull% decompress(Ticks(nominalrange,
                                                          log=values.are.log,
-                                                         nint=user.nint)
+                                                         nint=user.nint))
              }
-             ribbonticks <- Log(nominalmarks/ribscale)
+             ribbonticks <- compress(Log(nominalmarks/ribscale))
              ribbonlabels <- user.ribbonlabels %orifnull% paste(nominalmarks)
            },
            integer = {
              vrange <- numericalRange(x, zlim)
-             trivial <- (diff(vrange) < 1)
+             if(!is.null(colmap)) {
+               # explicit colour map
+               s <- summary(colmap)
+               col <- s$outputs
+               if(s$discrete) {
+                 imagebreaks <- c(s$inputs[1] - 0.5, s$inputs + 0.5)
+               } else {
+                 imagebreaks <- s$breaks
+                 if(is.function(s$compress)) {
+                   ## remember these transformations
+                   compress <- s$compress
+                   decompress <- s$decompress
+                   ## transform pixel values to the compressed scale
+                   x <- eval.im(compress(x))
+                   imagebreaks <- compress(imagebreaks)
+                   vrange <- range(imagebreaks)
+                 }
+               }
+             } 
+             trivial <- (diff(vrange) < sqrt(.Machine$double.eps))
              nominalrange <- Log(ribscale * Exp(vrange))
              if(!is.null(user.ticks)) {
                nominalmarks <- user.ticks
@@ -467,8 +495,9 @@ plot.im <- local({
                                      log=do.log,
                                      nint = user.nint)
                nominalmarks <- nominalmarks[nominalmarks %% 1 == 0]
+               nominalmarks <- decompress(nominalmarks)
              }
-             ribbonticks <- Log(nominalmarks/ribscale)
+             ribbonticks <- compress(Log(nominalmarks/ribscale))
              ribbonlabels <- user.ribbonlabels %orifnull% paste(nominalmarks)
              if(!do.log && isTRUE(all.equal(ribbonticks,
                                             vrange[1]:vrange[2]))) {
@@ -484,14 +513,6 @@ plot.im <- local({
                ribbonvalues <- seq(from=vrange[1], to=vrange[2],
                                    length.out=ribn)
                ribbonrange <- vrange
-             }
-             if(!is.null(colmap)) {
-               # explicit colour map
-               s <- summary(colmap)
-               imagebreaks <-
-                 if(!s$discrete) s$breaks else
-                 c(s$inputs[1] - 0.5, s$inputs + 0.5)
-               col <- s$outputs
              }
            },
            logical = {
@@ -587,13 +608,30 @@ plot.im <- local({
     output.colmap <-
       if(is.null(i.col)) NULL else
       if(inherits(i.col, "colourmap")) i.col else
+      if(inherits(colmap, "colourmap")) colmap else
       if(valuesAreColours) colourmap(col=i.col, inputs=i.col) else
       switch(xtype,
              integer=,
              real= {
-               if(!is.null(i.bks)) {
-                 colourmap(col=i.col, breaks=i.bks)
-               } else colourmap(col=i.col, range=vrange, gamma=gamma)
+               if(!do.log) {
+                 ## linear colour map 
+                 if(!is.null(i.bks)) {
+                   ## possibly uneven breaks
+                   colourmap(col=i.col, breaks=i.bks)
+                 } else {
+                   colourmap(col=i.col, range=vrange, gamma=gamma)
+                 }
+               } else {
+                 ## logarithmic colour map
+                 if(!is.null(i.bks)) {
+                   colourmap(col=i.col, breaks=TenPower(i.bks),
+                             compress=log10, decompress=TenPower)
+                 } else {
+                   colourmap(col=i.col, range=TenPower(vrange),
+                             gamma=gamma,
+                             compress=log10, decompress=TenPower)
+                 }
+               }
              },
              logical={
                colourmap(col=i.col, inputs=c(FALSE,TRUE))
