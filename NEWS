@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.3-6.007
+        CHANGES IN spatstat.geom VERSION 3.3-6.008
 
 OVERVIEW
 
@@ -8,19 +8,25 @@ OVERVIEW
 
     o Nonlinear colour maps.
 
-    o Bug fix.
+    o Minor improvements and bug fixes.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o colourmap
+    New arguments 'compress', 'decompress' for nonlinear colour maps.
+
     o lut
     New arguments 'compress', 'decompress' for nonlinear lookup tables.
-    
+
     o im.apply
     Algorithm has been improved so that it avoids violating memory limits.
 
     o quadratcount.ppp
     New argument 'left.open' controls the treatment of data points
     which lie on the boundary between two rectangular quadrats.
+    
+    o plot.colourmap
+    New argument 'at'
     
 BUG FIXES
 

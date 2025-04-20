@@ -3,10 +3,11 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.64 $ $Date: 2025/04/19 09:52:35 $
+# $Revision: 1.65 $ $Date: 2025/04/20 03:22:51 $
 #
 
-colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
+colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1,
+                      compress=NULL, decompress=NULL) {
   if(nargs() == 0) {
     ## null colour map
     f <- lut()
@@ -14,7 +15,8 @@ colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1) {
     ## validate colour data 
     col2hex(col)
     ## store without conversion
-    f <- lut(col, ..., range=range, breaks=breaks, inputs=inputs, gamma=gamma)
+    f <- lut(col, ..., range=range, breaks=breaks, inputs=inputs, gamma=gamma,
+             compress=compress, decompress=decompress)
   }
   class(f) <- c("colourmap", class(f))
   f

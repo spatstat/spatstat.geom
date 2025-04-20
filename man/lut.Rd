@@ -9,7 +9,7 @@ lut(outputs, ..., range=NULL, breaks=NULL, inputs=NULL,
     gamma=1, compress=NULL, decompress=NULL)
 }
 \arguments{
-  \item{outputs}{Vector of output values}
+  \item{outputs}{Vector of output values.}
   \item{\dots}{Ignored.}
   \item{range}{
     Interval of numbers to be mapped.
@@ -35,7 +35,8 @@ lut(outputs, ..., range=NULL, breaks=NULL, inputs=NULL,
   \item{compress}{
     Optional. Experimental.
     An \R function determining a nonlinear transformation of the
-    domain of the colour map. 
+    domain of the lookup table.
+    See section on \emph{Nonlinear lookup tables}.
   }
   \item{decompress}{
     Experimental.
@@ -74,6 +75,8 @@ lut(outputs, ..., range=NULL, breaks=NULL, inputs=NULL,
     mapped to an entry of \code{outputs}. (If \code{gamma} is given,
     then the bands are equally spaced on a scale where the original values
     are raised to the power \code{gamma}.)
+    (See the section on \emph{Nonlinear lookup tables} for the case
+    where \code{compress} and \code{decompress} are given.)
     \item
     If \code{breaks} is given, then it determines intervals
     of the real number line
@@ -99,6 +102,32 @@ lut(outputs, ..., range=NULL, breaks=NULL, inputs=NULL,
   That is, \code{f(x)} returns the output value assigned
   to \code{x}. This also works for vectors of input data values.
 }
+\section{Nonlinear lookup tables}{
+  If the arguments \code{compress} and \code{decompress} are given,
+  they define a transformation of the range of numbers.
+  A typical example would be a logarithmic lookup table defined
+  by \code{compress = log10} and
+  \code{decompress = function(x) { 10^xg }}.
+
+  These functions have no effect on the interpretation of the
+  arguments \code{range}, \code{breaks} and \code{inputs}. However,
+  if \code{range} is given, then the range of values will be divided
+  into intervals which have equal length on the scale defined by
+  \code{compress}. That is, the range of numbers determined by
+  \code{compress(range)} will be evenly divided into intervals,
+  and these intervals will be mapped back to the original scale by
+  \code{decompress} to determine the \code{breaks}.
+  For a logarithmic lookup table with \code{compress=log10},
+  the specified range will be divided into intervals which are equal
+  on a logarithmic scale.
+
+  The arguments \code{compress} and \code{decompress}
+  should be functions which are vectorised (i.e. if \code{x} is a
+  vector then \code{compress(x)} and
+  \code{decompress(x)} are also vectors of the same length as \code{x})
+  and increasing (if \code{x < y} then \code{compress(x) < compress(y)}
+  and \code{decompress(x) < decompress(y)}.
+}
 \value{
   A function, which is also an object of class \code{"lut"}.
 }
@@ -106,14 +135,17 @@ lut(outputs, ..., range=NULL, breaks=NULL, inputs=NULL,
   \code{\link{colourmap}}.
 }
 \examples{
-  # lookup table for real numbers, using breakpoints
+  ## lookup table for real numbers, using breakpoints
   cr <- lut(factor(c("low", "medium", "high")), breaks=c(0,5,10,15))
   cr
   cr(3.2)
   cr(c(3,5,7))
-  # lookup table for discrete set of values
+  ## lookup table for discrete set of values
   ct <- lut(c(0,1), inputs=c(FALSE, TRUE))
   ct(TRUE)
+  ## logarithmic lookup table
+  cl <- lut(letters[1:3], range=c(0.1, 100),
+            compress=log10, decompress=function(x) { 10^x })
 }
 \author{
   \spatstatAuthors.

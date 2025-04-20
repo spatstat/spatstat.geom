@@ -127,6 +127,10 @@
   plot(co, col.ticks="pink")
   ca <- colourmap(rainbow(8), inputs=letters[1:8])
   plot(ca, vertical=TRUE)
+  ## logarithmic colour map
+  cl <- colourmap(rainbow(25), range=c(0.1, 1000),
+                  compress=log10, decompress=function(x) { 10^x })
+  plot(cl)
 }
 \author{
   \adrian

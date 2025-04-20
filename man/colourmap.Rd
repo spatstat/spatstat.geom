@@ -5,7 +5,8 @@
   Create a colour map (colour lookup table).
 }
 \usage{
-colourmap(col, \dots, range=NULL, breaks=NULL, inputs=NULL, gamma=1)
+colourmap(col, \dots, range=NULL, breaks=NULL, inputs=NULL, gamma=1,
+          compress=NULL, decompress=NULL)
 }
 \arguments{
   \item{col}{Vector of values specifying colours}
@@ -30,6 +31,17 @@ colourmap(col, \dots, range=NULL, breaks=NULL, inputs=NULL, gamma=1)
     Exponent for the gamma correction, when \code{range} is given.
     A single positive number.
     See Details.
+  }
+  \item{compress}{
+    Optional. Experimental.
+    An \R function determining a nonlinear transformation of the
+    domain of the colour map.
+    See section on \emph{Nonlinear colour maps}.
+  }
+  \item{decompress}{
+    Experimental.
+    An \R function giving the inverse function of \code{compress},
+    if \code{compress} is specified.
   }
 }
 \details{
@@ -67,6 +79,8 @@ colourmap(col, \dots, range=NULL, breaks=NULL, inputs=NULL, gamma=1)
     assigned one of the colours in \code{col}. (If \code{gamma} is given,
     then the bands are equally spaced on a scale where the original values
     are raised to the power \code{gamma}.)
+    (See the section on \emph{Nonlinear colour maps} for the case
+    where \code{compress} and \code{decompress} are given.)
     \item
     If \code{breaks} is given, then it determines the precise intervals
     of the real number line
@@ -92,8 +106,41 @@ colourmap(col, \dots, range=NULL, breaks=NULL, inputs=NULL, gamma=1)
   That is, \code{f(x)} returns the character value of the colour assigned
   to \code{x}. This also works for vectors of data values.
 }
+\section{Nonlinear colour maps}{
+  If the arguments \code{compress} and \code{decompress} are given,
+  they define a transformation of the range of numbers.
+  A typical example would be a logarithmic colour map defined
+  by \code{compress = log10} and
+  \code{decompress = function(x) { 10^x }}.
+
+  These functions have no effect on the interpretation of the
+  arguments \code{range}, \code{breaks} and \code{inputs}. However,
+  if \code{range} is given, then the range of values will be divided
+  into intervals which have equal length on the scale defined by
+  \code{compress}. That is, the range of numbers determined by
+  \code{compress(range)} will be evenly divided into intervals,
+  and these intervals will be mapped back to the original scale by
+  \code{decompress} to determine the \code{breaks}.
+  For a logarithmic colour map with \code{compress=log10},
+  the specified range will be divided into intervals which are equal
+  on a logarithmic scale.
+
+  The arguments \code{compress} and \code{decompress} affect the way
+  in which the colour map is plotted by \code{\link{plot.colourmap}}.
+  For a continuous colour map, the range of input values is plotted on
+  the compressed scale, but annotated on the original scale.
+  See the Examples.
+
+  The arguments \code{compress} and \code{decompress}
+  should be functions which are vectorised (i.e. if \code{x} is a
+  vector then \code{compress(x)} and
+  \code{decompress(x)} are also vectors of the same length as \code{x})
+  and increasing (if \code{x < y} then \code{compress(x) < compress(y)}
+  and \code{decompress(x) < decompress(y)}.
+}
 \value{
-  A function, which is also an object of class \code{"colourmap"}.
+  A function, which is also an object of class \code{"colourmap"}
+  and \code{"lut"}.
 }
 \seealso{
   The plot method \code{\link{plot.colourmap}}.
@@ -118,17 +165,21 @@ colourmap(col, \dots, range=NULL, breaks=NULL, inputs=NULL, gamma=1)
   See \code{\link{lut}} for lookup tables.
 }
 \examples{
-  # colour map for real numbers, using breakpoints
+  ## colour map for real numbers, using breakpoints
   cr <- colourmap(c("red", "blue", "green"), breaks=c(0,5,10,15))
   cr
   cr(3.2)
   cr(c(3,5,7))
-  # a large colour map
+  ## a large colour map
   co <- colourmap(rainbow(100), range=c(-1,1))
   co(0.2)
-  # colour map for discrete set of values
+  ## colour map for discrete set of values
   ct <- colourmap(c("red", "green"), inputs=c(FALSE, TRUE))
   ct(TRUE)
+  ## logarithmic colour map
+  cl <- colourmap(rainbow(25), range=c(0.1, 1000),
+                  compress=log10, decompress=function(x) { 10^x })
+  plot(cl)
 }
 \author{
   \spatstatAuthors.
