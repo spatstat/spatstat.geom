@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.68 $ $Date: 2025/04/21 02:13:14 $
+# $Revision: 1.69 $ $Date: 2025/04/21 09:14:24 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1,
@@ -338,6 +338,7 @@ plot.colourmap <- local({
 
     compress <- stuff$compress %orifnull% identity
     decompress <- stuff$decompress %orifnull% identity
+    is.log <- samefunction(compress, log10)
 
     if(is.null(labelmap)) {
       labelmap <- identity
@@ -497,9 +498,9 @@ plot.colourmap <- local({
           la <- paste(Labelmap(stuff$inputs))
           at <- linmap(v, rr, xlim)
         } else {
-          la <- if(!is.null(at)) compress(at) else Ticks(rr, nint=nticks)
-          at <- linmap(la, rr, xlim)
-          la <- Labelmap(la)
+          atpos <- compress(at %orifnull% Ticks(rr, log=is.log, nint=nticks))
+          at <- linmap(atpos, rr, xlim)
+          la <- Labelmap(atpos)
         }
         if(reverse)
           at <- rev(at)
@@ -526,9 +527,9 @@ plot.colourmap <- local({
           la <- paste(Labelmap(stuff$inputs))
           at <- linmap(v, rr, ylim)
         } else {
-          la <- if(!is.null(at)) compress(at) else Ticks(rr, nint=nticks)
-          at <- linmap(la, rr, ylim)
-          la <- Labelmap(la)
+          atpos <- compress(at %orifnull% Ticks(rr, log=is.log, nint=nticks))
+          at <- linmap(atpos, rr, ylim)
+          la <- Labelmap(atpos)
         }
         if(reverse)
           at <- rev(at)

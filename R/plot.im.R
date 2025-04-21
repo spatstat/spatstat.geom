@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.167 $   $Date: 2025/04/20 10:04:52 $
+#  $Revision: 1.168 $   $Date: 2025/04/21 09:56:11 $
 #
 #  Plotting code for pixel images
 #
@@ -214,7 +214,7 @@ plot.im <- local({
     return(y)
   }
 
-  Ticks <- function(usr, log=FALSE, nint=NULL, ..., clip=TRUE) {
+  Ticks <- function(usr, log=FALSE, nint=NULL, ..., clip=TRUE, deco=identity) {
     #' modification of grDevices::axisTicks
     #'      constrains ticks to be inside the specified range if clip=TRUE
     #'      accepts nint=NULL as if it were missing
@@ -224,6 +224,7 @@ plot.im <- local({
       zlimits <- if(log) 10^usr else usr
       z <- z[inside.range(z, zlimits)]
     }
+    if(!log) z <- deco(z)
     return(unique(z))
   }
 
@@ -438,6 +439,7 @@ plot.im <- local({
                  ## transform pixel values to the compressed scale
                  x <- eval.im(compress(x))
                  imagebreaks <- compress(imagebreaks)
+                 values.are.log <- samefunction(compress, log10)
                }
                vrange <- range(imagebreaks)
              }
@@ -450,15 +452,16 @@ plot.im <- local({
              #' ribbonlabels: text displayed at tick marks
              if(trivial) {
                ribbonvalues <- mean(vrange)
-               nominalmarks <- Log(ribscale * Exp(ribbonvalues))
+               nominalmarks <- compress(Log(ribscale * Exp(decompress(ribbonvalues))))
              } else {
                ribbonvalues <- seq(from=vrange[1L], to=vrange[2L],
                                    length.out=ribn)
                ribbonrange <- vrange
-               nominalrange <- Log(ribscale * Exp(ribbonrange))
-               nominalmarks <- user.ticks %orifnull% decompress(Ticks(nominalrange,
-                                                         log=values.are.log,
-                                                         nint=user.nint))
+               nominalrange <- compress(Log(ribscale * Exp(decompress(ribbonrange))))
+               nominalmarks <- user.ticks %orifnull% Ticks(nominalrange,
+                                                           log=values.are.log,
+                                                           nint=user.nint,
+                                                           deco=decompress)
              }
              ribbonticks <- compress(Log(nominalmarks/ribscale))
              ribbonlabels <- user.ribbonlabels %orifnull% paste(nominalmarks)
@@ -481,6 +484,7 @@ plot.im <- local({
                    x <- eval.im(compress(x))
                    imagebreaks <- compress(imagebreaks)
                    vrange <- range(imagebreaks)
+                   values.are.log <- samefunction(compress, log10)
                  }
                }
              } 
@@ -491,7 +495,8 @@ plot.im <- local({
              } else {
                nominalmarks <- Ticks(nominalrange,
                                      log=do.log,
-                                     nint = user.nint)
+                                     nint = user.nint,
+                                     deco = decompress)
                nominalmarks <- nominalmarks[nominalmarks %% 1 == 0]
                nominalmarks <- decompress(nominalmarks)
              }
