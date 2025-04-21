@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.66 $ $Date: 2025/04/20 08:06:58 $
+# $Revision: 1.67 $ $Date: 2025/04/21 00:47:19 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1,
@@ -759,5 +759,10 @@ as.colourmap <- function(x, ...) {
   UseMethod("as.colourmap")
 }
 
-as.colourmap.colourmap <- function(x, ...) { x }
+as.colourmap.colourmap <- function(x, ...) {
+  #' remove attributes which are not part of class 'colourmap'
+  atr <- attributes(x)
+  attributes(x) <- atr[names(atr) %in% c("stuff", "class")]
+  return(x)
+}
 
