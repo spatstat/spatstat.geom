@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.67 $ $Date: 2025/04/21 00:47:19 $
+# $Revision: 1.68 $ $Date: 2025/04/21 02:13:14 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1,
@@ -36,7 +36,22 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL,
     decompress <- NULL
   } else {
     stopifnot(is.function(compress))
-    stopifnot(is.function(decompress))
+    if(!is.null(decompress)) {
+      stopifnot(is.function(decompress))
+    } else {
+      ## Argument decompress is missing
+      ## Try to construct it from 'compress'
+      if(is.primitive(compress) && samefunction(compress, log10)) {
+        ## logarithmic lookup table
+        decompress <- TenPower
+      } else if(inherits(compress, c("ecdf", "ewcdf", "interpolatedCDF"))) {
+        ## histogram-equalised lookup table
+        decompress <- quantilefun(compress)
+      } else {
+        ## not recognised
+        stop("Argument 'decompress' is required", call.=FALSE)
+      }
+    } 
   }
   n <- length(outputs)
   given <- c(!is.null(range), !is.null(breaks), !is.null(inputs))

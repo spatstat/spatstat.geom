@@ -214,8 +214,6 @@ plot.im <- local({
     return(y)
   }
 
-  TenPower <- function(x) { 10^x }
-
   Ticks <- function(usr, log=FALSE, nint=NULL, ..., clip=TRUE) {
     #' modification of grDevices::axisTicks
     #'      constrains ticks to be inside the specified range if clip=TRUE
@@ -1108,7 +1106,10 @@ contour.im <- function (x, ..., main, axes=FALSE, add=FALSE,
   return(invisible(result))
 }
 
+
 ## not exported:
+
+TenPower <- function(x) { 10^x }
 
 log10orNA <- function(x) {
   y <- rep(NA_real_, length(x))

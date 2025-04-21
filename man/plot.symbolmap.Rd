@@ -90,6 +90,19 @@
   \code{nsymbols} possible inputs, a warning will be issued (if
   \code{warn=TRUE}, the default).
 }
+\section{Nonlinear transformation}{
+  For a map of continuous values, if \code{representatives} is not
+  specified, then the default is to choose approximately \code{nsymbols}
+  values equally spaced within the numerical range.
+
+  However, if the symbol map includes a nonlinear transformation
+  (arguments \code{compress} and \code{decompress} were passed to
+  \code{\link{symbolmap}}) or if one of its graphical parameters
+  is a colour map which includes a nonlinear transformation 
+  (arguments \code{compress} and \code{decompress} were passed to
+  \code{\link{colourmap}}) then the representative values will
+  be equally spaced on the compressed scale. 
+}
 \value{
   None.
 }
@@ -106,12 +119,31 @@
   g <- symbolmap(inputs=letters[1:10], pch=11:20)
   plot(g)
 
+  ## squares and circles with area proportional to |x|
+  ## For 'squares', size is side length; size = sqrt(area)
+  ## For 'circles', size is diameter;    size = sqrt(area * 4/pi)
   g2 <- symbolmap(range=c(-1,1),
-                    shape=function(x) ifelse(x > 0, "circles", "squares"),
-                    size=function(x) sqrt(ifelse(x > 0, x/pi, -x)),
-                    bg = function(x) ifelse(abs(x) < 1, "red", "black"))
+                  shape=function(x) ifelse(x > 0, "circles", "squares"),
+                  size=function(x) ifelse(x > 0,
+                                          sqrt(abs(x)*4/pi),
+                                          sqrt(abs(x))),
+                  bg = function(x) ifelse(abs(x) < 1, "red", "black"))
   plot(g2, vertical=TRUE, side="left", col.axis="blue", cex.axis=2)
   plot(g2, representatives=c(-1,0,1))
+
+  ## logarithmic symbol maps
+  ## when plotted, representative values are equally spaced on a log scale
+  gl <- symbolmap(range=c(1,1000), pch=21,
+                  bg=function(x) ifelse(x < 50, "red", "blue"),
+                  cex=function(x) ifelse(x < 100, 1, 2),
+                  compress=log10)
+  gl(10)
+  plot(gl, nsymbols=4)
+
+  gll <- symbolmap(range=c(1,1000), size=function(x) { 1 + log10(x) },
+                   compress=log10)
+  gll(10)
+  plot(gll, nsymbols=4)
 }
 \keyword{spatial}
 \keyword{hplot}

@@ -1,8 +1,8 @@
-        CHANGES IN spatstat.geom VERSION 3.3-6.011
+        CHANGES IN spatstat.geom VERSION 3.3-6.014
 
 OVERVIEW
 
-    o Nonlinear colour maps.
+    o Nonlinear colour maps and symbol maps.
 
     o `im.apply` handles larger datasets.
 
@@ -28,6 +28,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New argument 'left.open' controls the treatment of data points
     which lie on the boundary between two rectangular quadrats.
     
+    o symbolmap
+    New arguments 'compress', 'decompress' for nonlinear symbol maps.
+
 BUG FIXES
 
     o plot.solist, plot.imlist

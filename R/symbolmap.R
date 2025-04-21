@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.60 $  $Date: 2024/11/28 00:24:01 $
+##   $Revision: 1.62 $  $Date: 2025/04/21 04:02:35 $
 ##
 
 symbolmap <- local({
@@ -17,7 +17,8 @@ symbolmap <- local({
     try(colourmap(...), silent=TRUE)
   }
 
-  symbolmap <- function(..., range=NULL, inputs=NULL) {
+  symbolmap <- function(..., range=NULL, inputs=NULL,
+                        compress=NULL, decompress=NULL) {
     if(!is.null(range) && !is.null(inputs))
       stop("Arguments range and inputs are incompatible")
     ## graphics parameters
@@ -73,7 +74,7 @@ symbolmap <- local({
       }
       if(type == "constant" && any(functions))
         type <- "continuous"
-    } 
+    }
     switch(type,
            constant ={
              ## set of constant graphics parameters defining a single symbol
@@ -106,6 +107,29 @@ symbolmap <- local({
                            parlist=parlist)
              f <- function(x) ApplyContinuousSymbolMap(x, stuff)
            })
+    ## nonlinear transformation?
+    if(is.null(compress)) {
+      decompress <- NULL
+    } else {
+      stopifnot(is.function(compress))
+      if(!is.null(decompress)) {
+        stopifnot(is.function(decompress))
+      } else {
+        ## Argument decompress is missing
+        ## Try to construct it from 'compress'
+        if(is.primitive(compress) && samefunction(compress, log10)) {
+          ## logarithmic lookup table
+          decompress <- TenPower
+        } else if(inherits(compress, c("ecdf", "ewcdf", "interpolatedCDF"))) {
+          ## histogram-equalised lookup table
+          decompress <- quantilefun(compress)
+        } else {
+          ## not recognised
+          stop("Argument 'decompress' is required", call.=FALSE)
+        }
+      } 
+    }
+    stuff <- append(stuff, list(compress=compress, decompress=decompress))
     attr(f, "stuff") <- stuff
     class(f) <- c("symbolmap", class(f))
     f
@@ -193,8 +217,16 @@ print.symbolmap <- function(x, ...) {
           cat(pari, fill=TRUE) else print(pari)
       }
     }
-    return(invisible(NULL))
+    if(!is.null(compress)) {
+      if(samefunction(compress, log10)) {
+        splat("Logarithmic scale")
+      } else {
+        splat("Input compression map:")
+        print(compress)
+      }
+    }
   })
+  return(invisible(NULL))
 }
 
 ## Function which actually plots the symbols.
@@ -546,6 +578,7 @@ plot.symbolmap <- function(x, ..., main,
          },
          continuous = {
            ra <- stuff$range
+           vv <- NULL
            if(!is.null(representatives)) {
              vv <- representatives
              if(!all(ok <- inside.range(vv, ra))) {
@@ -562,10 +595,36 @@ plot.symbolmap <- function(x, ..., main,
                        call.=FALSE)
              }
            } else {
-             if(is.null(ra))
-               stop("Cannot plot symbolmap with an infinite range")
-             vv <- if(is.null(nsymbols)) prettyinside(ra) else
-                 prettyinside(ra, n = nsymbols)
+             compress <- stuff$compress
+             decompress <- stuff$decompress
+             ## check for colour map information 
+             if(!is.null(cmap <- as.colourmap(x, warn=FALSE))) {
+               st <- attr(cmap, "stuff")
+               if(st$discrete) {
+                 ## use discrete inputs as representative values
+                 vv <- st$inputs
+               } else {
+                 ## use colour map to determine default range and transformation
+                 if(is.null(ra)) ra <- range(st$breaks)
+                 if(is.null(compress) && !is.null(st$compress)) {
+                   ## nonlinear colour map
+                   compress <- st$compress 
+                   decompress <- st$decompress
+                 }
+               }
+             }
+             if(is.null(vv)) {
+               ## representative values not yet determined
+               if(is.null(ra))
+                 stop("Cannot plot symbolmap with an infinite range")
+               if(is.null(compress)) {
+                 ## representative values evenly spaced 
+                 vv <- prettyinside(ra, n = nsymbols)
+               } else {
+                 ## representative values evenly spaced on compressed scale
+                 vv <- decompress(prettyinside(compress(ra), n = nsymbols))
+               }
+             }
              if(is.numeric(vv))
                vv <- signif(vv, 4)
            }

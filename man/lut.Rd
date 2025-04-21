@@ -127,6 +127,17 @@ lut(outputs, ..., range=NULL, breaks=NULL, inputs=NULL,
   \code{decompress(x)} are also vectors of the same length as \code{x})
   and increasing (if \code{x < y} then \code{compress(x) < compress(y)}
   and \code{decompress(x) < decompress(y)}.
+
+  The argument \code{decompress} is not needed in the following cases:
+  \itemize{
+    \item If \code{compress} is the function \code{log10},
+    then \code{decompress} is taken to be its inverse
+    \code{function(x) { 10^x }}.
+    \item If \code{compress} is a cumulative distribution function
+    (of class \code{"ecdf"}, \code{"ewcdf"} or \code{"interpolatedCDF"})
+    then \code{decompress} is taken to be its inverse function
+    \code{decompress = \link[spatstat.univar]{quantilefun}(compress)}.
+  }
 }
 \value{
   A function, which is also an object of class \code{"lut"}.
@@ -144,8 +155,7 @@ lut(outputs, ..., range=NULL, breaks=NULL, inputs=NULL,
   ct <- lut(c(0,1), inputs=c(FALSE, TRUE))
   ct(TRUE)
   ## logarithmic lookup table
-  cl <- lut(letters[1:3], range=c(0.1, 100),
-            compress=log10, decompress=function(x) { 10^x })
+  cl <- lut(letters[1:3], range=c(0.1, 100), compress=log10)
 }
 \author{
   \spatstatAuthors.
