@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.168 $   $Date: 2025/04/21 09:56:11 $
+#  $Revision: 1.169 $   $Date: 2025/04/22 01:31:45 $
 #
 #  Plotting code for pixel images
 #
@@ -450,6 +450,7 @@ plot.im <- local({
              #' nominalmarks: (scaled) values shown on ribbon at tick marks
              #' ribbonticks: pixel values corresponding to tick marks 
              #' ribbonlabels: text displayed at tick marks
+             #' reusableticks: reusable value of user.ticks
              if(trivial) {
                ribbonvalues <- mean(vrange)
                nominalmarks <- compress(Log(ribscale * Exp(decompress(ribbonvalues))))
@@ -465,6 +466,7 @@ plot.im <- local({
              }
              ribbonticks <- compress(Log(nominalmarks/ribscale))
              ribbonlabels <- user.ribbonlabels %orifnull% paste(nominalmarks)
+             reusableticks <- nominalmarks
            },
            integer = {
              vrange <- numericalRange(x, zlim)
@@ -500,6 +502,7 @@ plot.im <- local({
                nominalmarks <- nominalmarks[nominalmarks %% 1 == 0]
                nominalmarks <- decompress(nominalmarks)
              }
+             reusableticks <- nominalmarks
              ribbonticks <- compress(Log(nominalmarks/ribscale))
              ribbonlabels <- user.ribbonlabels %orifnull% paste(nominalmarks)
              if(!do.log && isTRUE(all.equal(ribbonticks,
@@ -527,6 +530,7 @@ plot.im <- local({
 #             ribbonbreaks <- imagebreaks
              ribbonticks <- user.ticks %orifnull% ribbonvalues
              ribbonlabels <- user.ribbonlabels %orifnull% c("FALSE", "TRUE")
+             reusableticks <- ribbonticks
              if(!is.null(colmap)) 
                col <- colmap(c(FALSE,TRUE))
            },
@@ -543,6 +547,7 @@ plot.im <- local({
 #             ribbonbreaks <- imagebreaks
              ribbonticks <- user.ticks %orifnull% ribbonvalues
              ribbonlabels <- user.ribbonlabels %orifnull% paste(lev)
+             reusableticks <- ribbonticks
              vrange <- range(intlev)
              if(!is.null(colmap) && !valuesAreColours) 
                col <- colmap(fac)
@@ -561,6 +566,7 @@ plot.im <- local({
 #             ribbonbreaks <- imagebreaks
              ribbonticks <- user.ticks %orifnull% ribbonvalues
              ribbonlabels <- user.ribbonlabels %orifnull% paste(lev)
+             reusableticks <- ribbonticks
              vrange <- range(intlev)
              if(!is.null(colmap)) 
                col <- colmap(fac)
@@ -645,6 +651,9 @@ plot.im <- local({
              },
              NULL)
 
+    ## save tickmark values
+    attr(output.colmap, "at") <- reusableticks
+    
     ## gamma correction
     soc <- summary(output.colmap)
     if(!is.null(gamma <- soc$gamma) && gamma != 1)

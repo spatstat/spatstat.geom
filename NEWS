@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.3-6.015
+        CHANGES IN spatstat.geom VERSION 3.3-6.016
 
 OVERVIEW
 
@@ -23,6 +23,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.colourmap
     New argument 'at' determines the position of tick marks on the axis.
+    
+    o plot.im
+    Return value has attribute 'at' giving the position of tick marks
+    on the axis next to the colour ribbon.
     
     o quadratcount.ppp
     New argument 'left.open' controls the treatment of data points

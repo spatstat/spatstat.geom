@@ -175,6 +175,9 @@
   If a ribbon was plotted, there is also an attribute
   \code{"bbox.legend"} giving a bounding box for the ribbon image.
   Text annotation occurs outside these bounding boxes.
+
+  Also has an attribute \code{"at"} giving the axis positions
+  of the tick marks next to the colour ribbon.
 }
 \details{
   This is the \code{plot} method for the class \code{"im"}.
