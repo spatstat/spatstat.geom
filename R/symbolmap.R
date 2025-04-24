@@ -18,7 +18,7 @@ symbolmap <- local({
   }
 
   symbolmap <- function(..., range=NULL, inputs=NULL,
-                        compress=NULL, decompress=NULL) {
+                        transform=NULL, compress=NULL, decompress=NULL) {
     if(!is.null(range) && !is.null(inputs))
       stop("Arguments range and inputs are incompatible")
     ## graphics parameters
@@ -33,6 +33,16 @@ symbolmap <- local({
     parnames <- names(parlist)
     type <- if(is.null(inputs) && is.null(range)) "constant" else
             if(!is.null(inputs)) "discrete" else "continuous"
+    ## transformation applied to input data
+    if(!is.null(transform)) {
+      if(type != "continuous") {
+        warning(paste("Argument 'transform' is ignored for",
+                      type, "symbol maps"), call.=FALSE)
+        transform <- NULL
+      } else stopifnot(is.function(transform))
+    }
+    Transform <- transform %orifnull% identity
+    ## 
     if(got.pars) {
       ## validate parameters
       if(is.null(parnames) || !all(nzchar(parnames)))
@@ -55,7 +65,8 @@ symbolmap <- local({
             (names(parlist) %in% c("cols", "col", "fg", "bg"))
           ## convert colour values to colour map
           if(any(iscol)) {
-            cmap <- lapply(parlist[iscol], trycolourmap, range=range)
+            Trange <- Transform(range)
+            cmap <- lapply(parlist[iscol], trycolourmap, range=Trange)
             success <- sapply(cmap, inherits, what="colourmap")
             iscol[iscol] <- success
             if(any(iscol)) {
@@ -107,7 +118,7 @@ symbolmap <- local({
                            parlist=parlist)
              f <- function(x) ApplyContinuousSymbolMap(x, stuff)
            })
-    ## nonlinear transformation?
+    ## nonlinear transformation for display
     if(is.null(compress)) {
       decompress <- NULL
     } else {
@@ -129,7 +140,10 @@ symbolmap <- local({
         }
       } 
     }
-    stuff <- append(stuff, list(compress=compress, decompress=decompress))
+    stuff <- append(stuff,
+                    list(transform=transform,
+                         compress=compress,
+                         decompress=decompress))
     attr(f, "stuff") <- stuff
     class(f) <- c("symbolmap", class(f))
     f
@@ -147,6 +161,7 @@ symbolmap <- local({
 
   ApplyContinuousSymbolMap <- function(x, stuff) {
     with(stuff, {
+      if(is.function(transform)) x <- transform(x)
       y <- as.data.frame(lapply(parlist, MapContinuous, x=x),
                          stringsAsFactors=FALSE)
       return(y)

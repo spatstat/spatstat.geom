@@ -131,8 +131,7 @@
   plot(g2, vertical=TRUE, side="left", col.axis="blue", cex.axis=2)
   plot(g2, representatives=c(-1,0,1))
 
-  ## logarithmic symbol maps
-  ## when plotted, representative values are equally spaced on a log scale
+  ## logarithmic display scale
   gl <- symbolmap(range=c(1,1000), pch=21,
                   bg=function(x) ifelse(x < 50, "red", "blue"),
                   cex=function(x) ifelse(x < 100, 1, 2),
@@ -140,7 +139,9 @@
   gl(10)
   plot(gl, nsymbols=4)
 
-  gll <- symbolmap(range=c(1,1000), size=function(x) { 1 + log10(x) },
+  ## logarithmic symbol map
+  gll <- symbolmap(range=c(1,1000),
+                   transform=log10, size=function(x) { 1 + x },
                    compress=log10)
   gll(10)
   plot(gll, nsymbols=4)

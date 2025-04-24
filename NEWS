@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.3-6.016
+        CHANGES IN spatstat.geom VERSION 3.3-6.017
 
 OVERVIEW
 
@@ -33,7 +33,8 @@ SIGNIFICANT USER-VISIBLE CHANGES
     which lie on the boundary between two rectangular quadrats.
     
     o symbolmap
-    New arguments 'compress', 'decompress' for nonlinear symbol maps.
+    New arguments 'transform', 'compress', 'decompress'
+    for nonlinear symbol maps.
 
 BUG FIXES
 
