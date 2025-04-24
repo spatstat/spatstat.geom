@@ -11,7 +11,7 @@
       chars = NULL, cols = NULL, 
       fixsize = FALSE,
       maxsize = NULL, meansize = NULL, markscale = NULL,
-      minsize = NULL, zerosize = NULL, marktransform = NULL)
+      minsize = NULL, zerosize = NULL, transform = NULL)
 }
 \arguments{
   \item{x}{
@@ -72,9 +72,9 @@
     Incompatible with \code{minsize}.
     Defaults to zero.
   }
-  \item{marktransform}{
-    Experimental. A function that should be applied to the mark values
-    before the symbol mapping is applied.
+  \item{transform}{
+    Experimental. A function that will be applied to the mark values
+    before the symbol map scale is determined.
   }
 }
 \details{
@@ -84,7 +84,7 @@
   \code{\link{plot.ppp}}.
 
   Users can modify the behaviour of \code{\link{plot.ppp}} by
-  saving the symbol map produced by \code{default.symbolmap},
+  saving the symbol map produced by \code{default.symbolmap.ppp},
   modifying the symbol map using \code{\link{update.symbolmap}} or other
   tools, and passing the modified symbol map to \code{\link{plot.ppp}}
   as the argument \code{symap}.

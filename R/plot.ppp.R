@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.123 $	$Date: 2024/06/26 06:56:32 $
+#	$Revision: 1.124 $	$Date: 2025/04/24 03:33:11 $
 #
 #
 #--------------------------------------------------------------------------
@@ -268,7 +268,7 @@ default.symbolmap.ppp <- local({
                                     fixsize=FALSE,
                                     maxsize=NULL, meansize=NULL, markscale=NULL,
                                     minsize=NULL, zerosize=NULL,
-                                    marktransform=NULL) {
+                                    transform=NULL) {
     Y <- lapply(unstack(x),
                 dsmEngine,
                 ...,
@@ -280,7 +280,7 @@ default.symbolmap.ppp <- local({
                 markscale=markscale,
                 minsize=minsize,
                 zerosize=zerosize,
-                marktransform=marktransform)
+                transform=transform)
     if(length(Y) == 1)
       Y <- Y[[1L]]
     return(Y)
@@ -299,9 +299,9 @@ default.symbolmap.ppp <- local({
                         zerosize=NULL,
                         markrange=NULL,
                         marklevels=NULL,
-                        marktransform=NULL) {
+                        transform=NULL) {
     marx <- marks(x)
-    if(is.null(marx)) {
+    if(is.null(marx) || npoints(x) == 0) {
       ## null or constant symbol map
       ## consider using transparent colours
       if(is.null(cols) && is.null(col) && 
@@ -315,7 +315,7 @@ default.symbolmap.ppp <- local({
       pnames <- symbolmapparnames(symap)
       if("shape" %in% pnames && !("size" %in% pnames)) {
         ## symbols require a size parameter
-        m <- symbol.sizes.default(rep(1, npoints(x)), Window(x),
+        m <- symbol.sizes.default(rep(1, max(1, npoints(x))), Window(x),
                                   maxsize=maxsize, meansize=meansize,
                                   minsize=minsize,
                                   zerosize=zerosize)
@@ -324,7 +324,7 @@ default.symbolmap.ppp <- local({
       return(symap)
     }
     if(!is.null(dim(marx)))
-      stop("Internal error: multivariate marks in default.symap.points")
+      stop("Internal error: multivariate marks in dsmEngine")
 
     ## understand user's wishes
     argnames <- names(list(...))
@@ -339,50 +339,45 @@ default.symbolmap.ppp <- local({
     ## set defaults
     shapedefault <- if(!assumecircles) list() else list(shape="circles")
 
-    ## pre-transformation of mark values
-    transforming <- is.function(marktransform) && !fixsize
-    Tmarx <- if(transforming) marktransform(marx) else marx
-
-    transformedsizeargs <- list()
-    if(transforming && sizegiven) {
-      ## Given arguments 'size' or 'cex'
-      ## are meant to apply to the transformed mark values.
-      ## Insert the transformation 
-      if("size" %in% argnames) {
-        siz <- list(...)$size
-        if(is.function(siz)) {
-          newsiz <- function(x, tra=marktransform, oldsize=siz) {
-            oldsize(tra(x))
-          }
-          transformedsizeargs$size <- newsiz
-        }
-      }
-      if(("cex" %in% argnames) && !shapegiven) {
-        cx <- list(...)$cex
-        if(is.function(cx)) {
-          newcex <- function(x, tra=marktransform, oldcex=cx) {oldcex(tra(x))}
-          transformedsizeargs$cex <- newcex
-        }
-      }
+    ## potential range of mark values
+    if(is.factor(marx)) {
+      if(is.null(marklevels)) marklevels <- levels(marx)
+    } else {
+      if(is.null(markrange)) markrange <- range(marx, na.rm=TRUE, finite=TRUE)
     }
     
-    
-    if(inherits(marx, c("Date", "POSIXt"))) {
-      ## ......... marks are dates or date/times .....................
-      timerange <- range(marx, na.rm=TRUE)
+    ## pre-transformation of mark values
+    if(!is.null(transform)) stopifnot(is.function(transform))
+    transforming <- is.function(transform) && !fixsize
+    if(transforming) {
+      Tmarx <- transform(marx)
+    } else {
+      Tmarx <- marx
+      transform <- NULL
+    }
+    if(transforming && (is.factor(marx) || is.factor(Tmarx)))
+      stop("Sorry, transformations are not yet implemented for factors")
+    if(is.factor(Tmarx)) {
+      Tmarklevels <- levels(Tmarx)
+    } else {
+      Tmarkrange <- if(is.null(markrange)) NULL else transform(markrange)
+      Tmarkrange <- range(Tmarx, Tmarkrange, na.rm=TRUE, finite=TRUE)
+    }
+
+    if(inherits(Tmarx, c("Date", "POSIXt"))) {
+      ## ......... transformed marks are dates or date/times ..............
       if(sizegiven) {
         g <- do.call(symbolmap,
-          resolve.defaults(list(range=timerange),
-                           transformedsizeargs,
-                           list(...),
-                           shapedefault,
-                           list(chars=chars, cols=cols)))
+                     resolve.defaults(list(range=markrange,
+                                           transform=transform),
+                                      list(...),
+                                      shapedefault,
+                                      list(chars=chars, cols=cols)))
         return(g)
       }
       ## attempt to determine a scale for the marks
-      if(transforming)
-        stop("Argument marktransform is not yet supported for Date-time values")
-      y <- scaletointerval(marx, 0, 1, timerange)
+      Timerange <- range(Tmarx, Tmarkrange, na.rm=TRUE, finite=TRUE)
+      y <- scaletointerval(Tmarx, 0, 1, Timerange)
       y <- y[is.finite(y)]
       if(length(y) == 0) return(symbolmap(..., chars=chars, cols=cols))
       scal <- mark.scale.default(y, as.owin(x), markrange=c(0,1),
@@ -391,41 +386,35 @@ default.symbolmap.ppp <- local({
                                  characters=chargiven)
       if(is.na(scal)) return(symbolmap(..., chars=chars, cols=cols))
       ## scale determined
-      sizefun <- function(x, scal=1, timerange=NULL) {
-        (scal/2) * scaletointerval(x, 0, 1, timerange)
+      sizefun <- function(x, scal=1, Timerange=NULL) {
+        (scal/2) * scaletointerval(x, 0, 1, Timerange)
       }
       formals(sizefun)[[2]] <- scal  ## ensures value of 'scal' is printed
-      formals(sizefun)[[3]] <- timerange
+      formals(sizefun)[[3]] <- Timerange
       ##
       g <- do.call(symbolmap,
-                   resolve.defaults(list(range=timerange),
+                   resolve.defaults(list(range=markrange,
+                                         transform=transform),
                                     list(...),
                                     shapedefault,
                                     list(size=sizefun)))
       return(g)
     }
-    if(is.numeric(marx)) {
+    if(is.numeric(Tmarx)) {
       ## ............. marks are numeric values ...................
-      marx <- marx[is.finite(marx)]
-      if(is.null(markrange)) {
-        #' usual case
-        if(length(marx) == 0)
-          return(symbolmap(..., chars=chars, cols=cols))
-        markrange <- range(marx)
-      } else {
-        if(!all(inside.range(marx, markrange)))
-          warning("markrange does not encompass the range of mark values",
-                  call.=FALSE)
-      }
+      Tmarx <- Tmarx[is.finite(Tmarx)]
+      if(length(Tmarx) == 0)
+        return(symbolmap(..., chars=chars, cols=cols))
+      Tmarkrange <- range(Tmarx, Tmarkrange, na.rm=TRUE, finite=TRUE)
       ## 
       if(sizegiven) {
         ## size function is given
         g <- do.call(symbolmap,
-          resolve.defaults(list(range=markrange),
-                           transformedsizeargs,
-                           list(...),
-                           shapedefault,
-                           list(chars=chars, cols=cols)))
+                     resolve.defaults(list(range=markrange,
+                                           transform=transform),
+                                      list(...),
+                                      shapedefault,
+                                      list(chars=chars, cols=cols)))
         return(g)
       } else if(fixsize) {
         ## require symbols of equal size
@@ -451,20 +440,14 @@ default.symbolmap.ppp <- local({
           size <- min(size1, size2, size3)
         }
         g <- do.call(symbolmap,
-                     resolve.defaults(list(range=markrange),
+                     resolve.defaults(list(range=markrange,
+                                           transform=transform),
                                       list(...),
                                       list(size=size, chars=chars, cols=cols),
                                       shapedefault))
         return(g)
       }
       ## attempt to determine a scale for the (transformed) marks 
-      if(transforming) {
-        if(!is.numeric(Tmarx))
-          stop(paste("Function", sQuote("marktransform"),
-                     "should map numeric values to numeric values"),
-               call.=FALSE)
-        Tmarkrange <- range(Tmarx, marktransform(markrange))
-      } else Tmarkrange <- markrange
       ## degenerate?
       if(all(Tmarkrange == 0))
         return(symbolmap(..., chars=chars, cols=cols))
@@ -481,12 +464,10 @@ default.symbolmap.ppp <- local({
       scal <- as.numeric(scal)
       if(Tmarkrange[1] >= 0) {
         ## all (transformed) marks are nonnegative
-        cexfun <- function(x, scal=1, zerosize=0, tra=I) { zerosize + scal * tra(x) }
-        circfun <- function(x, scal=1, zerosize=0, tra=I) { zerosize + scal * tra(x) }
+        cexfun <- function(x, scal=1, zerosize=0) { zerosize + scal * x }
+        circfun <- function(x, scal=1, zerosize=0) { zerosize + scal * x }
         formals(cexfun)[[2]] <- formals(circfun)[[2]] <- scal
         formals(cexfun)[[3]] <- formals(circfun)[[3]] <- zerosize
-        if(transforming)
-          formals(cexfun)[[4]] <- formals(circfun)[[4]] <- marktransform
         sizedefault <-
           if(sizegiven) list() else
           if(chargiven) list(cex=cexfun) else list(size=circfun)
@@ -495,18 +476,17 @@ default.symbolmap.ppp <- local({
         shapedefault <-
           if(!assumecircles) list() else
           list(shape=function(x) { ifelse(x >= 0, "circles", "squares") })
-        cexfun <- function(x, scal=1, zerosize=0, tra=I) { zerosize + scal * abs(tra(x)) }
-        circfun <- function(x, scal=1, zerosize=0, tra=I) { zerosize + scal * abs(tra(x)) }
+        cexfun <- function(x, scal=1, zerosize=0) { zerosize + scal * abs(x) }
+        circfun <- function(x, scal=1, zerosize=0) { zerosize + scal * abs(x) }
         formals(cexfun)[[2]] <- formals(circfun)[[2]] <- scal
         formals(cexfun)[[3]] <- formals(circfun)[[3]] <- zerosize
-        if(transforming)
-          formals(cexfun)[[4]] <- formals(circfun)[[4]] <- marktransform
         sizedefault <-
           if(sizegiven) list() else
           if(chargiven) list(cex=cexfun) else list(size=circfun)
       }
       g <- do.call(symbolmap,
-                   resolve.defaults(list(range=markrange),
+                   resolve.defaults(list(range=markrange,
+                                         transform=transform),
                                     list(...),
                                     shapedefault,
                                     sizedefault,
@@ -515,7 +495,7 @@ default.symbolmap.ppp <- local({
     }
     ##  ...........  non-numeric marks .........................
     if(transforming)
-      stop(paste("Argument", sQuote("marktransform"),
+      stop(paste("Argument", sQuote("transform"),
                  "is not yet supported for non-numeric marks"),
            call.=FALSE)
     um <- marklevels %orifnull%

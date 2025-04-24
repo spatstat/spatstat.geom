@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.62 $  $Date: 2025/04/21 04:02:35 $
+##   $Revision: 1.63 $  $Date: 2025/04/24 03:35:46 $
 ##
 
 symbolmap <- local({
@@ -224,6 +224,10 @@ print.symbolmap <- function(x, ...) {
                  if(!is.null(range)) paste("in", prange(range)) else NULL,
                  fill=TRUE)
            })
+    if(!is.null(transform)) {
+      splat("Transformation of input values:")
+      print(transform)
+    }
     if(length(parlist) > 0) {
       for(i in seq_along(parlist)) {
         cat(paste0(names(parlist)[i], ": "))
