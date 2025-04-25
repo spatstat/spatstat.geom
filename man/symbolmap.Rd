@@ -9,7 +9,7 @@
 }
 \usage{
 symbolmap(\dots, range = NULL, inputs = NULL,
-                 transform = NULL, compress = NULL, decompress = NULL)
+                 transform = NULL, compress = transform, decompress = NULL)
 }
 \arguments{
   \item{\dots}{
@@ -173,6 +173,16 @@ symbolmap(\dots, range = NULL, inputs = NULL,
     the compressed scale, but annotated on the original scale.
     See the Examples.
   }
+
+  If \code{transform} is given, then the default value of
+  \code{compress} is the same function \code{transform}. This reflects
+  the fact that, when the user has specified that the input data
+  should be transformed to another scale in order to determine their
+  graphical representation, it would
+  usually be appropriate to display the symbol map legend on the same
+  transformed scale. However this can be overridden by specifying
+  another value for \code{compress}, including \code{NULL}.
+  
   The arguments \code{transform}, \code{compress} and \code{decompress}
   should be functions which are vectorised (i.e. if \code{x} is a
   vector then \code{compress(x)} and
@@ -227,10 +237,12 @@ symbolmap(\dots, range = NULL, inputs = NULL,
 
   ## logarithmic symbol map
   gm <- symbolmap(range=c(1,1000), pch=21, transform=log10,
-                  size=function(x) { x + 1 }, compress=log10)
+                  size=function(x) { x + 1 })
+  ## input value x is plotted as a circle of diameter = log10(x) + 1.
   gm(100)
   plot(gm, nsymbols=4)
-
+  ## note logarithmic scale of legend, because compress=transform by default.
+  
   ## logarithmic display scale only
   gl <- symbolmap(range=c(1,1000), pch=21, compress=log10)
   gl(10)

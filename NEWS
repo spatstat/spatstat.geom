@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.3-6.018
+        CHANGES IN spatstat.geom VERSION 3.3-6.019
 
 OVERVIEW
 
@@ -15,6 +15,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o colourmap
     New arguments 'compress', 'decompress' for nonlinear colour maps.
 
+    o default.symbolmap.pp
+    Argument 'marktransform' renamed 'transform' for consistency.
+    
     o im.apply
     Improved algorithm avoids violating memory limits, handles larger datasets.
 

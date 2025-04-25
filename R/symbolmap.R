@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.63 $  $Date: 2025/04/24 03:35:46 $
+##   $Revision: 1.65 $  $Date: 2025/04/25 02:14:46 $
 ##
 
 symbolmap <- local({
@@ -18,7 +18,7 @@ symbolmap <- local({
   }
 
   symbolmap <- function(..., range=NULL, inputs=NULL,
-                        transform=NULL, compress=NULL, decompress=NULL) {
+                        transform=NULL, compress=transform, decompress=NULL) {
     if(!is.null(range) && !is.null(inputs))
       stop("Arguments range and inputs are incompatible")
     ## graphics parameters
@@ -196,8 +196,9 @@ symbolmapparnames <- function(x) { names(attr(x, "stuff")[["parlist"]]) }
 
 update.symbolmap <- function(object, ...) {
   y <- attr(object, "stuff")
-  oldargs <- append(y[["parlist"]], y[c("inputs", "range")])
-  do.call(symbolmap, resolve.defaults(list(...), oldargs))
+  gpars <- y[["parlist"]]
+  oldargs <- y[names(y) %in% names(formals(symbolmap))]
+  do.call(symbolmap, resolve.defaults(list(...), append(oldargs, gpars)))
 }
 
 print.symbolmap <- function(x, ...) {
@@ -225,9 +226,12 @@ print.symbolmap <- function(x, ...) {
                  fill=TRUE)
            })
     if(!is.null(transform)) {
-      splat("Transformation of input values:")
-      print(transform)
+      parbreak()
+      PrintTransformation("Transformation of input values:", transform)
+      parbreak()
     }
+
+    ## print graphics parameters
     if(length(parlist) > 0) {
       for(i in seq_along(parlist)) {
         cat(paste0(names(parlist)[i], ": "))
@@ -236,17 +240,30 @@ print.symbolmap <- function(x, ...) {
           cat(pari, fill=TRUE) else print(pari)
       }
     }
+
     if(!is.null(compress)) {
-      if(samefunction(compress, log10)) {
-        splat("Logarithmic scale")
-      } else {
-        splat("Input compression map:")
-        print(compress)
-      }
+      parbreak()
+      PrintTransformation("Scale compression for legend:", compress)
     }
   })
   return(invisible(NULL))
 }
+
+PrintTransformation <- function(header, f) {
+  cdfclasses <- c("interpolatedCDF", "ewcdf", "ecdf")
+  if(samefunction(f, log10)) {
+    splat(header, "log10")
+  } else if(inherits(f, cdfclasses)) {
+    hit <- inherits(f, cdfclasses, which=TRUE)
+    classname <- cdfclasses[min(hit[hit != 0])]
+    splat(header, paren(classname, "["))
+  } else {
+    splat(header)
+    print(f)
+  }
+  invisible(NULL)
+}
+  
 
 ## Function which actually plots the symbols.
 ## Called by plot.ppp and plot.symbolmap
@@ -521,7 +538,7 @@ invoke.symbolmap <- local({
                                      list(do.plot=do.plot)))
       ## value is max(cex)
       ## guess size of one character
-      charsize <- if(started) max(par('cxy')) else
+      charsize <- if(started || do.plot) max(par('cxy')) else
                   if(hasxy) max(sidelengths(boundingbox(x,y))/40) else 1/40
       maxsize <- max(maxsize, charsize * ms)
     }

@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.124 $	$Date: 2025/04/24 03:33:11 $
+#	$Revision: 1.126 $	$Date: 2025/04/25 04:41:09 $
 #
 #
 #--------------------------------------------------------------------------
@@ -348,7 +348,7 @@ default.symbolmap.ppp <- local({
     
     ## pre-transformation of mark values
     if(!is.null(transform)) stopifnot(is.function(transform))
-    transforming <- is.function(transform) && !fixsize
+    transforming <- is.function(transform) 
     if(transforming) {
       Tmarx <- transform(marx)
     } else {
@@ -418,7 +418,7 @@ default.symbolmap.ppp <- local({
         return(g)
       } else if(fixsize) {
         ## require symbols of equal size
-        ## determine fixed physical size
+        ## determine fixed size
         if(!is.null(meansize)) {
           size <- meansize
         } else if(!is.null(minsize) && !is.null(maxsize)) {
@@ -429,8 +429,11 @@ default.symbolmap.ppp <- local({
           size <- maxsize
         } else if(!is.null(zerosize) && zerosize > 0) {
           size <- zerosize
+        } else if(chargiven) {
+          ## size means cex
+          size <- 1
         } else {
-          ## choose suitable size
+          ## choose suitable physical size
           bb <- Frame(x)
           nn <- nndist(x)
           nn <- nn[nn > 0]
