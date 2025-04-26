@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.65 $  $Date: 2025/04/25 02:14:46 $
+##   $Revision: 1.68 $  $Date: 2025/04/26 09:57:55 $
 ##
 
 symbolmap <- local({
@@ -254,8 +254,8 @@ PrintTransformation <- function(header, f) {
   if(samefunction(f, log10)) {
     splat(header, "log10")
   } else if(inherits(f, cdfclasses)) {
-    hit <- inherits(f, cdfclasses, which=TRUE)
-    classname <- cdfclasses[min(hit[hit != 0])]
+    hit <- (inherits(f, cdfclasses, which=TRUE) != 0)
+    classname <- cdfclasses[which(hit)][1L]
     splat(header, paren(classname, "["))
   } else {
     splat(header)
