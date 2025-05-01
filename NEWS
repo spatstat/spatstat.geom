@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.3-6.020
+        CHANGES IN spatstat.geom VERSION 3.3-6.021
 
 OVERVIEW
 
@@ -49,6 +49,10 @@ BUG FIXES
     o plot.im
     If log=TRUE, the colour map returned by plot.im
     represented the colours applied to log10(x) rather than x.
+    Fixed.
+
+    o flipxy.psp
+    The line segments were unchanged.
     Fixed.
     
         CHANGES IN spatstat.geom VERSION 3.3-6
