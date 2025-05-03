@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.3-6.021
+        CHANGES IN spatstat.geom VERSION 3.3-6.022
 
 OVERVIEW
 
@@ -30,6 +30,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.im
     Return value has attribute 'at' giving the position of tick marks
     on the axis next to the colour ribbon.
+
+    o plot.yardstick
+    New arguments 'zebra.scale' and 'do.txt'.
     
     o quadratcount.ppp
     New argument 'left.open' controls the treatment of data points

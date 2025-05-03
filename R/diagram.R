@@ -4,7 +4,7 @@
 ##   Simple objects for the elements of a diagram (text, arrows etc)
 ##    that are compatible with plot.layered and plot.solist
 ##
-##   $Revision: 1.19 $ $Date: 2025/02/19 07:13:33 $
+##   $Revision: 1.20 $ $Date: 2025/05/03 03:21:06 $
 
 # ......... internal class 'diagramobj' supports other classes  .........
 
@@ -180,13 +180,17 @@ plot.yardstick <- local({
                              frac=1/8,
                              split=FALSE,
                              shrink=1/4,
-                             zebra.step=NULL,
-                             zebra.width=NULL,
-                             zebra.col="black",
                              pos=NULL,
                              txt.args=list(),
                              txt.shift=c(0,0),
-                             do.plot=TRUE) {
+                             zebra.step=NULL,
+                             zebra.width=NULL,
+                             zebra.col="black",
+                             zebra.scale=1,
+                             zebra.args=list(),
+                             zebra.shift=c(0,0),
+                             do.plot=TRUE,
+                             do.txt=TRUE) {
     style <- match.arg(style)
     if(do.plot) {
       txt <- attr(x, "txt")
@@ -218,14 +222,16 @@ plot.yardstick <- local({
                  myarrows(BM[1L], BM[2L], B[1L], B[2L], 
                           angle=angle, frac=newfrac, left=FALSE, moreargs=argh)
                }
-               do.call.matched(text.default,
-                               resolve.defaults(list(x=M[1L] + txt.shift[1L],
-                                                     y=M[2L] + txt.shift[2L]),
-                                                txt.args,
-                                                list(labels=txt, pos=pos),
-                                                argh,
-                                                .MatchNull=FALSE),
-                               funargs=graphicsPars("text"))
+               if(do.txt) {
+                 do.call.matched(text.default,
+                                 resolve.defaults(list(x=M[1L] + txt.shift[1L],
+                                                       y=M[2L] + txt.shift[2L]),
+                                                  txt.args,
+                                                  list(labels=txt, pos=pos),
+                                                  argh,
+                                                  .MatchNull=FALSE),
+                                 funargs=graphicsPars("text"))
+               }
              },
              zebra = {
                ## total length and direction
@@ -255,17 +261,34 @@ plot.yardstick <- local({
                    vb <- vertices(block)
                    x3 <- vb$x[3L]
                    y3 <- vb$y[3L]
-                   do.call.matched(text.default,
-                                   resolve.defaults(list(x=x3 + txt.shift[1L],
-                                                         y=y3 + txt.shift[2L]),
-                                                    txt.args,
-                                                    list(labels=breaks[i],
-                                                         pos=pos),
-                                                    argh,
-                                                    .MatchNull=FALSE),
-                                   funargs=graphicsPars("text"))
+                   if(do.txt) {
+                     ## label the i-th zebra bar
+                     lab.i <- breaks[i]/zebra.scale
+                     xi <- x3 + zebra.shift[1L]
+                     yi <- y3 + zebra.shift[2L]
+                     do.call.matched(text.default,
+                                     resolve.defaults(list(x=xi, y=yi),
+                                                      zebra.args,
+                                                      list(labels=lab.i,
+                                                           pos=pos),
+                                                      argh,
+                                                      .MatchNull=FALSE),
+                                     funargs=graphicsPars("text"))
+                   }
                    filled <- !filled
                  }
+               }
+               if(do.txt) {
+                 xt <- B[1L] + 0.2 * (B[1L] - A[1L]) + txt.shift[1L]
+                 yt <- B[2L] + 0.2 * (B[2L] - A[2L]) + txt.shift[2L]
+                 do.call.matched(text.default,
+                                 resolve.defaults(list(x=xt, y=yt),
+                                                  txt.args,
+                                                  list(labels=txt,
+                                                       pos=pos),
+                                                  argh,
+                                                  .MatchNull=FALSE),
+                                 funargs=graphicsPars("text"))
                }
              })
     }

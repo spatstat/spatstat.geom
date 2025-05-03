@@ -11,11 +11,13 @@
         style=c("arrows", "zebra"),
         angle = 20, frac = 1/8, 
         split = FALSE, shrink = 1/4,
-        zebra.step=NULL, zebra.width=NULL, zebra.col="black",
         pos = NULL,
         txt.args=list(),
         txt.shift=c(0,0),
-        do.plot = TRUE)
+        zebra.step=NULL, zebra.width=NULL,
+        zebra.col="black", zebra.scale=1,
+        zebra.args=list(), zebra.shift=c(0,0),
+        do.plot = TRUE, do.txt=TRUE)
 }
 \arguments{
   \item{x}{
@@ -50,18 +52,6 @@
     line segment, if \code{split=TRUE}.
     Applies when \code{style="arrows"}.
   }
-  \item{zebra.step}{
-    Length of each bar in the zebra pattern.
-    Applies when \code{style="zebra"}.
-  }
-  \item{zebra.width}{
-    Width of each bar in the zebra pattern.
-    Applies when \code{style="zebra"}.
-  }
-  \item{zebra.col}{
-    Colour of each bar in the zebra pattern.
-    Applies when \code{style="zebra"}.
-  }
   \item{pos}{
     Integer (passed to \code{\link[graphics]{text}}) determining the
     position of the annotation text relative to the line segment,
@@ -79,8 +69,40 @@
     Optional numeric vector of length 2 specifying displacement
     of the text position relative to the centre of the yardstick.
   }
+  \item{zebra.step}{
+    Length of each bar in the zebra pattern.
+    Applies when \code{style="zebra"}.
+  }
+  \item{zebra.width}{
+    Width of each bar in the zebra pattern.
+    Applies when \code{style="zebra"}.
+  }
+  \item{zebra.col}{
+    Colour of each bar in the zebra pattern.
+    Applies when \code{style="zebra"}.
+  }
+  \item{zebra.scale}{
+    Scale value for numerical labels in the zebra pattern.
+    Physical lengths will be divided by \code{zebra.scale}
+    to determine the corresponding numerical labels.
+  }
+  \item{zebra.args}{
+    Optional list of additional arguments passed to
+    \code{\link[graphics]{text}} controlling the appearance of the
+    text annotation for each bar in the zebra pattern.
+    Examples include \code{adj}, \code{srt}, \code{col}, \code{cex},
+    \code{font}.
+  }
+  \item{zebra.shift}{
+    Optional numeric vector of length 2 specifying displacement
+    of the text annotation for each bar in the zebra pattern.
+  }
   \item{do.plot}{
-    Logical. Whether to actually perform the plot (\code{do.plot=TRUE}).
+    Logical values specifying whether
+    to actually perform the plot.
+  }
+  \item{do.txt}{
+    Logical value specifying whether to draw text annotation.
   }
 }
 \details{
