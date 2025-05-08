@@ -1,8 +1,10 @@
-        CHANGES IN spatstat.geom VERSION 3.3-6.022
+        CHANGES IN spatstat.geom VERSION 3.3-6.024
 
 OVERVIEW
 
     o Nonlinear colour maps and symbol maps.
+
+    o Backgrounds for image plots.
 
     o `im.apply` handles larger datasets.
 
@@ -27,6 +29,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.colourmap
     New argument 'at' determines the position of tick marks on the axis.
     
+    o plot.im
+    New arguments 'background' and 'clip.background' allow the user to specify
+    an object that will be plotted before the image x, and will therefore appear
+    underneath it.
+
     o plot.im
     Return value has attribute 'at' giving the position of tick marks
     on the axis next to the colour ribbon.

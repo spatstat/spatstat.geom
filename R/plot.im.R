@@ -256,7 +256,8 @@ plot.im <- local({
                      ribscale=1, ribargs=list(), riblab=NULL, colargs=list(),
                      useRaster=NULL, workaround=FALSE, zap=1,
                      do.plot=TRUE,
-                     addcontour=FALSE, contourargs=list()) {
+                     addcontour=FALSE, contourargs=list(),
+                     background=NULL, clip.background=FALSE) {
     if(missing(main)) main <- short.deparse(substitute(x))
     verifyclass(x, "im")
     if(x$type == "complex") {
@@ -685,15 +686,37 @@ plot.im <- local({
 
     ## ........ catch old usage (undocumented ) ................
     contourargs <- resolve.defaults(contourargs, dotargs$args.contour)
+
+    ## ........ background object ..............................
+    if(!is.null(background)) {
+      if(isTRUE(clip.background)) {
+        bkg <- try(background[as.rectangle(x), drop=FALSE], silent=TRUE)
+        if(inherits(bkg, "try-error")) {
+          warning("Unable to clip the background object", call.=FALSE)
+        } else {
+          background <- bkg
+        }
+      }
+      backbox <- Frame(background)
+    } else {
+      backbox <- NULL
+    }
     
     ## ........ start plotting .................
 
     if(!isTRUE(ribbon) || (trivial && isTRUE(drop.ribbon))) {
       ## no ribbon wanted
 
-      attr(output.colmap, "bbox") <- as.rectangle(x)
+      attr(output.colmap, "bbox") <- boundingbox(as.rectangle(x), backbox)
       if(!do.plot)
         return(output.colmap)
+
+      ## plot background if specified
+      if(!is.null(background)) {
+        plot(background, main=main)
+        add <- TRUE
+        main <- ""
+      }
 
       ## plot image without ribbon
       image.doit(imagedata=list(x=cellbreaks(x$xcol, x$xstep),
@@ -749,7 +772,7 @@ plot.im <- local({
                             bb$yrange[1] - c(ribsep+ribwid, ribsep) * Size)
              rib.iside <- 1
            })
-    bb.all <- boundingbox(bb.rib, bb)
+    bb.all <- boundingbox(bb.rib, bb, backbox)
 
     attr(output.colmap, "bbox") <- bb.all
     attr(output.colmap, "bbox.legend") <- bb.rib
@@ -779,6 +802,10 @@ plot.im <- local({
                                        dotargs),
                       extrargs=graphicsPars("owin"))
       main <- ""
+    }
+    if(!is.null(background)) {
+      ## plot background
+      plot(background, add=TRUE)
     }
     # plot image
     image.doit(imagedata=list(x=cellbreaks(x$xcol, x$xstep),

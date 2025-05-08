@@ -19,7 +19,8 @@
                    ribscale=1, ribargs=list(), riblab=NULL, colargs=list(),
                    useRaster=NULL, workaround=FALSE, zap=1,
                    do.plot=TRUE,
-                   addcontour=FALSE, contourargs=list()) 
+                   addcontour=FALSE, contourargs=list(),
+                   background=NULL, clip.background=FALSE)
 
   \method{image}{im}(x, \dots,
                    main,
@@ -34,7 +35,8 @@
                    ribscale=1, ribargs=list(), riblab=NULL, colargs=list(),
                    useRaster=NULL, workaround=FALSE, zap=1,
                    do.plot=TRUE,
-                   addcontour=FALSE, contourargs=list())
+                   addcontour=FALSE, contourargs=list(),
+                   background=NULL, clip.background=FALSE)
 }
 \arguments{
   \item{x}{
@@ -165,13 +167,21 @@
     Optional list of arguments to be passed to
     \code{\link[graphics]{contour.default}} to control the contour plot.
   }
+  \item{background}{
+    Optional. An object to be plotted underneath the image.
+    See the section on \emph{Background}.
+  }
+  \item{clip.background}{
+    Logical value specifying whether \code{background} should be
+    intersected with the rectangular frame of \code{x}.
+  }
 }
 \value{
   The colour map used. An object of class \code{"colourmap"}.
 
   Also has an attribute \code{"bbox"} giving a bounding box
-  for the plot (containing the main colour image and the
-  colour ribbon if plotted).
+  for the plot (containing the main colour image, the
+  colour ribbon if plotted, and the background if given).
   If a ribbon was plotted, there is also an attribute
   \code{"bbox.legend"} giving a bounding box for the ribbon image.
   Text annotation occurs outside these bounding boxes.
@@ -402,7 +412,16 @@
   when starting a new graphics device, or in a call to
   \code{\link{ps.options}} or \code{\link{pdf.options}}.
 }
-\section{Image Looks Like Noise}{
+\section{Background}{
+  The argument \code{background} specifies an object that will be
+  plotted before the image \code{x} is plotted, and will therefore appear
+  underneath it. The background can be any spatial object in the
+  \pkg{spatstat} package family. To specify graphical arguments
+  for the background, make it into a \code{\link{layered}} object
+  using \code{\link{layered}} or \code{\link{as.layered}},
+  and assign graphical parameters to it using \code{\link{layerplotargs}}.
+}
+\section{Troubleshooting: Image Looks Like Noise}{
   An image plot which looks like digital noise
   can be produced when the pixel values are almost exactly equal
   but include a tiny amount of numerical error.
@@ -411,7 +430,7 @@
   of pixel values is almost zero. The behaviour can be suppressed
   by picking a larger value of the argument \code{zap}.
 }
-\section{Image Rendering Errors and Problems}{
+\section{Troubleshooting: Image Rendering Errors and Problems}{
   The help for \code{\link[graphics]{image.default}}
   and \code{\link[graphics]{rasterImage}} explains that
   errors may occur, or images may be rendered incorrectly, on some
@@ -435,7 +454,7 @@
   To repair the coordinates in an image \code{X}, type
   \code{X <- as.im(X)}.
 }
-\section{Image is Displayed in Wrong Spatial Orientation}{
+\section{Troubleshooting: Image is Displayed in Wrong Spatial Orientation}{
   If the image is displayed in the wrong spatial orientation,
   and you created the image data directly, 
   please check that you understand the \pkg{spatstat} convention for
