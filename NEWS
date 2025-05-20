@@ -1,3 +1,15 @@
+        CHANGES IN spatstat.geom VERSION 3.4-1
+
+OVERVIEW
+
+    o Bug fix.
+
+BUG FIXES
+
+    o default.symbolmap.ppp
+    Crashed in some cases, for marks of class 'Date'.
+    Fixed.
+    
         CHANGES IN spatstat.geom VERSION 3.4-0
 
 OVERVIEW
@@ -17,7 +29,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o colourmap
     New arguments 'compress', 'decompress' for nonlinear colour maps.
 
-    o default.symbolmap.pp
+    o default.symbolmap.ppp
     Argument 'marktransform' renamed 'transform' for consistency.
     
     o im.apply

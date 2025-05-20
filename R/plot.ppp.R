@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.126 $	$Date: 2025/04/25 04:41:09 $
+#	$Revision: 1.127 $	$Date: 2025/05/20 02:42:10 $
 #
 #
 #--------------------------------------------------------------------------
@@ -360,7 +360,8 @@ default.symbolmap.ppp <- local({
     if(is.factor(Tmarx)) {
       Tmarklevels <- levels(Tmarx)
     } else {
-      Tmarkrange <- if(is.null(markrange)) NULL else transform(markrange)
+      Tmarkrange <- if(is.null(markrange)) NULL else
+                    if(transforming) transform(markrange) else markrange
       Tmarkrange <- range(Tmarx, Tmarkrange, na.rm=TRUE, finite=TRUE)
     }
 
