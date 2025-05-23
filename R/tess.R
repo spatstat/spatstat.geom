@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.114 $ $Date: 2025/03/15 02:34:37 $
+#   $Revision: 1.115 $ $Date: 2025/05/23 03:38:48 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -1213,4 +1213,30 @@ connected.tess <- function(X, ...) {
   #' form tessellation
   result <- tess(tiles=shards, window=as.owin(Xim))
   result
+}
+
+identify.tess <- function(x, ...) {
+  verifyclass(x, "tess")
+  if (dev.cur() == 1 && interactive()) {
+    eval(substitute(plot(X), list(X = substitute(x))))
+  }
+  ## Find a representative point inside each tile of the tessellation
+  til <- tiles(x)
+  incircles <- lapply(til, incircle)
+  xc <- sapply(incircles, getElement, name="x")
+  yc <- sapply(incircles, getElement, name="y")
+  ## go
+  id <- identify(xc, yc, ...)
+  if(!is.marked(x)) {
+    return(id)
+  }
+  marx <- marks(x)
+  ## ensure data frame
+  if(markformat(marx) == "vector") marx <- data.frame(marks=marx)
+  ## select rows that were identified
+  marxid <- marx[id, , drop=FALSE]
+  ## add row number
+  out <- cbind(data.frame(id = id), marxid)
+  row.names(out) <- NULL
+  return(out)
 }
