@@ -9,7 +9,9 @@
   if there is no mark).
 }
 \usage{
-  \method{identify}{tess}(x, \dots)
+  \method{identify}{tess}(x, \dots,
+                  labels=seq_len(nobjects(x)),
+                  n=nobjects(x), plot=TRUE)
 }
 \arguments{
   \item{x}{
@@ -17,13 +19,26 @@
     (object of class \code{"tess"}).
   }
   \item{\dots}{
-    Arguments passed to \code{\link[graphics]{identify.default}}.
+    Arguments passed to \code{\link{plot.owin}}
+    and \code{\link[graphics]{text.default}} controlling the graphical
+    display.
+  }
+  \item{labels}{
+    Labels associated with the tiles, to be plotted when the
+    tiles are identified. A character vector or numeric vector
+    of length equal to the number of tiles in \code{x}.
+  }
+  \item{n}{
+    Maximum number of tiles to be identified.
+  }
+  \item{plot}{
+    Logical. Whether to plot the labels when a tile is identified.
   }
 }
 \value{
   If \code{x} is unmarked, the result is 
   a vector containing the serial numbers of the tiles of
-  \code{x} that were identified.
+  \code{x} that were identified, in the order that they were identified.
   If \code{x} is marked, the result is a 
   data frame, the first column containing the serial numbers
   and the subsequent columns containing the marks for these tiles.
@@ -42,6 +57,7 @@
   will be returned as part of the value of the call.
 
   Each time a tile is identified,
+  the tile will be plotted in light blue fill colour, and 
   text will be displayed inside the tile
   showing its serial number.
 }
