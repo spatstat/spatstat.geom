@@ -3,7 +3,7 @@
 #'
 #' Interface to deldir package
 #'
-#'  $Revision: 1.40 $ $Date: 2022/05/21 09:52:11 $
+#'  $Revision: 1.41 $ $Date: 2025/05/28 06:31:35 $
 #'
 
 #' ..............................................
@@ -95,7 +95,7 @@ delaunay <- function(X) {
             PACKAGE="spatstat.geom")
     if(z$status != 0)
       stop("Internal error: overflow in trigrafS")
-    tlist <- with(z, cbind(it, jt, kt)[1:nt, ])
+    tlist <- with(z, cbind(it, jt, kt)[1:nt, , drop=FALSE])
   } else if(use.trigraf) {
     nv <- nX
     ne <- length(a)
@@ -114,7 +114,7 @@ delaunay <- function(X) {
             PACKAGE="spatstat.geom")
     if(z$status != 0)
       stop("Internal error: overflow in trigraf")
-    tlist <- with(z, cbind(it, jt, kt)[1:nt, ])
+    tlist <- with(z, cbind(it, jt, kt)[1:nt, , drop=FALSE])
   } else {
     tlist <- matrix(integer(0), 0, 3)
     for(i in seq_len(nX)) {
@@ -140,7 +140,10 @@ delaunay <- function(X) {
   # with vertices given in ascending order i < j < k in the 3 columns of tlist.
   # Some of these triangles may not belong to the Delaunay triangulation.
   # They will be weeded out later.
+
+  #' safety check
   
+  if(!is.matrix(tlist)) tlist <- matrix(tlist, nrow=1)
   # Assemble coordinates of triangles
   x <- X$x
   y <- X$y
@@ -157,16 +160,16 @@ delaunay <- function(X) {
     xc <- xtri[clockwise, , drop=FALSE]
     yc <- ytri[clockwise, , drop=FALSE]
     tc <- tlist[clockwise, , drop=FALSE]
-    xtri[clockwise,]  <- xc[,c(1L,3L,2L)]
-    ytri[clockwise,]  <- yc[,c(1L,3L,2L)]
-    tlist[clockwise,] <- tc[, c(1L,3L,2L)]
+    xtri[clockwise,]  <- xc[,c(1L,3L,2L), drop=FALSE]
+    ytri[clockwise,]  <- yc[,c(1L,3L,2L), drop=FALSE]
+    tlist[clockwise,] <- tc[, c(1L,3L,2L), drop=FALSE]
   }
   # At this point, triangle vertices are listed in anticlockwise order.
   # The same directed edge (i, j) cannot appear twice.
   # To weed out invalid triangles, check for such duplication
-  triedges <- rbind(tlist[, c(1L,2L)],
-                    tlist[, c(2L,3L)],
-                    tlist[, c(3L,1L)])
+  triedges <- rbind(tlist[, c(1L,2L), drop=FALSE],
+                    tlist[, c(2L,3L), drop=FALSE],
+                    tlist[, c(3L,1L), drop=FALSE])
   if(any(bad <- duplicated(triedges))) {
     badedges <- unique(triedges[bad, , drop=FALSE])
     ntri <- nrow(tlist)

@@ -1,13 +1,19 @@
-        CHANGES IN spatstat.geom VERSION 3.4-1.002
+        CHANGES IN spatstat.geom VERSION 3.4-1.003
 
 OVERVIEW
 
     o Interactively identify tiles of a tessellation.
 
+    o Bug fixes.
+    
 NEW FUNCTIONS
 
     o identify.tess
     Interactively identify tiles of a tessellation.
+
+    o delaunay
+    Crashed in some cases when X contained exactly 3 points.
+    Fixed.
 
         CHANGES IN spatstat.geom VERSION 3.4-1
 
