@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.116 $ $Date: 2025/05/25 09:24:47 $
+#   $Revision: 1.117 $ $Date: 2025/05/31 04:55:28 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -1221,6 +1221,14 @@ identify.tess <- function(x, ..., labels=seq_len(nobjects(x)),
   if (dev.cur() == 1 && interactive()) {
     eval(substitute(plot(X), list(X = substitute(x))))
   }
+  if(!missing(labels)) {
+    if(!is.null(dim(labels))) labels <- labels[,1]
+    labels <- unname(unlist(labels))
+    if(length(labels) != nobjects(x))
+      stop(paste("The number of", sQuote("labels"),
+                 "should equal the number of tiles"),
+           call.=FALSE)
+  }
   ## Find a representative point for each tile for plotting labels
   til <- tiles(x)
   incircles <- lapply(til, incircle)
@@ -1236,7 +1244,7 @@ identify.tess <- function(x, ..., labels=seq_len(nobjects(x)),
     if(length(mouse$x) == 0)
       break
     ## determine tile
-    ident <- tileindex(mouse$x, mouse$y, x)
+    ident <- as.integer(tileindex(mouse$x, mouse$y, x))
     if(length(ident) == 0) {
       cat("Query location is too far away\n")
     } else if(ident %in% out) {
