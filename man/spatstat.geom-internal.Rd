@@ -72,6 +72,7 @@
 \alias{do.call.plotfun}
 \alias{drawSignedPoly}
 \alias{emptywindow}
+\alias{ensureModelSupport}
 \alias{equalpairs.quad}          
 \alias{equals.quad}          
 \alias{equalsfun.quad}          
@@ -180,6 +181,7 @@
 \alias{names<-.hyperframe}
 \alias{nearest.pixel}
 \alias{nearest.valid.pixel}
+\alias{needpackage}
 \alias{n.quad}
 \alias{numberwithunit}
 \alias{numeric.columns}
@@ -429,6 +431,7 @@ do.as.im(x, action, \dots, W, eps, dimyx, xy, rule.eps, na.replace)
 do.call.plotfun(fun, arglist, \dots, envir)
 drawSignedPoly(x,y,pars,sgn)
 emptywindow(w)
+ensureModelSupport(model, loaded)
 equalpairs.quad(Q)
 equals.quad(Q)          
 equalsfun.quad(Q)
@@ -538,6 +541,7 @@ na.handle.im(X, na.replace)
 \method{names}{hyperframe}(x) <- value
 nearest.pixel(x, y, Z)
 nearest.valid.pixel(x, y, Z, method, nsearch)
+needpackage(pkg, loaded, fatal, purpose)
 n.quad(Q)
 numberwithunit(x, u)
 numeric.columns(M, logical, others)

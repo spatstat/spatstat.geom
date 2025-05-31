@@ -127,11 +127,13 @@ local({
 #'    tests/trigraph.R
 #'
 #'   Tests for C code in trigraf.c
+#'   and related code in delaunay()
 #'   
-#'  $Revision: 1.5 $  $Date: 2020/06/12 00:35:44 $
+#'  $Revision: 1.7 $  $Date: 2025/05/31 03:11:47 $
 #'
 if(ALWAYS) { # depends on C code 
 local({
+  U <- delaunay(runifrect(3)) # previously crashed due to 'drop=TRUE' error
   #' called from deldir.R
   spatstat.deldir.setopt(FALSE, TRUE)
   A <- delaunay(redwood)
