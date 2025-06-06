@@ -1,15 +1,20 @@
-        CHANGES IN spatstat.geom VERSION 3.4-1.007
+        CHANGES IN spatstat.geom VERSION 3.4-1.008
 
 OVERVIEW
 
     o Interactively identify tiles of a tessellation.
 
-    o Bug fixes.
+    o Bug fixes and minor improvements.
     
 NEW FUNCTIONS
 
     o identify.tess
     Interactively identify tiles of a tessellation.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o pixellate.psp
+    New option: what='indicator'
 
 BUG FIXES
 

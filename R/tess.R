@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.117 $ $Date: 2025/05/31 04:55:28 $
+#   $Revision: 1.119 $ $Date: 2025/06/06 04:05:43 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -1215,7 +1215,7 @@ connected.tess <- function(X, ...) {
   result
 }
 
-identify.tess <- function(x, ..., labels=seq_len(nobjects(x)),
+identify.tess <- function(x, ..., labels=tilenames(x),
                           n=nobjects(x), plot=TRUE) {
   verifyclass(x, "tess")
   if (dev.cur() == 1 && interactive()) {
@@ -1237,8 +1237,8 @@ identify.tess <- function(x, ..., labels=seq_len(nobjects(x)),
   gpo <- graphicsPars("owin")
   gpt <- graphicsPars("text")
   ## start loop
-  out <- integer(0)
-  while(length(out) < n) {
+  id <- integer(0)
+  while(length(id) < n) {
     mouse <- spatstatLocator(1, type="n")
     ## check for interrupt exit
     if(length(mouse$x) == 0)
@@ -1247,7 +1247,7 @@ identify.tess <- function(x, ..., labels=seq_len(nobjects(x)),
     ident <- as.integer(tileindex(mouse$x, mouse$y, x))
     if(length(ident) == 0) {
       cat("Query location is too far away\n")
-    } else if(ident %in% out) {
+    } else if(ident %in% id) {
       cat(paste("Tile", ident, "already selected\n"))
     } else {
       ## add to list
@@ -1280,16 +1280,17 @@ identify.tess <- function(x, ..., labels=seq_len(nobjects(x)),
                                          list(...)),
                         extrargs=gpt)
       }
-      out <- c(out, ident)
+      id <- c(id, ident)
     }
   }
   marx <- marks(x)
+  out <- data.frame(id=id, name=tilenames(x)[id])
   switch(markformat(marx),
          vector = {
-           out <- data.frame(id=out, marks=marx[out])
+           out <- cbind(out, data.frame(marks=marx[id]))
          },
          dataframe = {
-           out <- cbind(data.frame(id=out), marx[out, , drop=FALSE])
+           out <- cbind(out, marx[id, , drop=FALSE])
          },
          {})
   return(out)

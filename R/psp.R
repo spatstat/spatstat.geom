@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.117 $ $Date: 2025/06/05 07:43:11 $
+#  $Revision: 1.118 $ $Date: 2025/06/06 05:50:46 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -609,7 +609,7 @@ identify.psp <- function(x, ..., labels=seq_len(nsegments(x)),
         li <- labels[ident]
         ## mi <- mids[ident]
         Dother <- distmap(Y[-ident])
-        bestplace <- where.max(Dother * (pixellate(Y[ident]) > 0))
+        bestplace <- where.max(Dother * pixellate(Y[ident], what="indicator"))
         ## po <- poz[ident]
         mix <- bestplace$x
         miy <- bestplace$y

@@ -1,7 +1,7 @@
 #
 # psp2pix.R
 #
-#  $Revision: 1.16 $  $Date: 2023/05/04 00:58:27 $
+#  $Revision: 1.19 $  $Date: 2025/06/06 06:01:42 $
 #
 #
 
@@ -49,7 +49,7 @@ psp2mask <- as.mask.psp <- function(x, W=NULL, ...) {
 
 
 pixellate.psp <- function(x, W=NULL, ..., weights=NULL,
-                          what=c("length", "number"),
+                          what=c("length", "number", "indicator"),
                           DivideByPixelArea=FALSE) {
   L <- as.psp(x)
   what <- match.arg(what)
@@ -110,7 +110,7 @@ pixellate.psp <- function(x, W=NULL, ..., weights=NULL,
                     out=as.double(numeric(nr * nc)),
                     PACKAGE="spatstat.geom")
          },
-           number = {
+         number = {
            zz <- .C(SG_seg2pixN,
                     ns=as.integer(nseg),
                     x0=as.double(x0),
@@ -121,6 +121,18 @@ pixellate.psp <- function(x, W=NULL, ..., weights=NULL,
                     nx=as.integer(nc),
                     ny=as.integer(nr),
                     out=as.double(numeric(nr * nc)),
+                    PACKAGE="spatstat.geom")
+         },
+         indicator = {
+           zz <- .C(SG_seg2pixI,
+                    ns=as.integer(nseg),
+                    x0=as.double(x0),
+                    y0=as.double(y0),
+                    x1=as.double(x1),
+                    y1=as.double(y1),
+                    nx=as.integer(nc),
+                    ny=as.integer(nr),
+                    out=as.integer(integer(nr * nc)),
                     PACKAGE="spatstat.geom")
          })
   mm <- matrix(zz$out, nr, nc)

@@ -9,7 +9,7 @@
 }
 \usage{
 \method{pixellate}{psp}(x, W=NULL, ..., weights = NULL,
-                        what=c("length", "number"),
+                        what=c("length", "number", "indicator"),
                         DivideByPixelArea=FALSE)
 }
 \arguments{
@@ -25,13 +25,17 @@
     the pixel resolution.
   }
   \item{weights}{
-    Optional vector of weights associated with each line segment.
+    Optional vector of weights associated with each line segment,
+    used when \code{what="length"}.
   }
   \item{what}{
     String (partially matched) indicating whether to compute the
-    total length of intersection (\code{what="length"}, the default)
-    or the total number of segments intersecting each pixel
-    (\code{what="number"}).
+    total length of intersection of segments with each pixel
+    (\code{what="length"}, the default),
+    the total number of segments intersecting each pixel
+    (\code{what="number"}) or an indicator variable that equals 1 if
+    any segments intersect the pixel, and 0 otherwise
+    (\code{code="indicator"}).
   }
   \item{DivideByPixelArea}{
     Logical value, indicating whether the resulting pixel values
@@ -57,7 +61,8 @@
   \code{\dots} are passed to \code{\link[spatstat.geom]{as.mask}} to
   control the pixel resolution.
 
-  If \code{weights} are given, then the length of the intersection
+  If \code{weights} are given and \code{what="length"},
+  then the length of the intersection
   between line segment \code{i} and pixel \code{j} is multiplied by
   \code{weights[i]} before the lengths are summed for each pixel.
 }

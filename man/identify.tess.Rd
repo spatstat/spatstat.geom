@@ -10,7 +10,7 @@
 }
 \usage{
   \method{identify}{tess}(x, \dots,
-                  labels=seq_len(nobjects(x)),
+                  labels=tilenames(x),
                   n=nobjects(x), plot=TRUE)
 }
 \arguments{
@@ -36,12 +36,10 @@
   }
 }
 \value{
-  If \code{x} is unmarked, the result is 
-  a vector containing the serial numbers of the tiles of
-  \code{x} that were identified, in the order that they were identified.
-  If \code{x} is marked, the result is a 
-  data frame, the first column containing the serial numbers
-  and the subsequent columns containing the marks for these tiles.
+  A \code{data.frame} with columns \code{id} and \code{name}
+  containing the serial numbers and names of the tiles of
+  \code{x} that were identified, in the order that they were identified;
+  If \code{x} is marked, subsequent columns contain the marks for these tiles.
 }
 \details{
   This is a method for the generic function \code{\link[graphics]{identify}}
@@ -59,7 +57,7 @@
   Each time a tile is identified,
   the tile will be plotted in light blue fill colour, and 
   text will be displayed inside the tile
-  showing its serial number.
+  showing the name of the tile.
 }
 \seealso{
   \code{\link[graphics]{identify}},
