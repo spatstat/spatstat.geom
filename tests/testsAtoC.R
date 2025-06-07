@@ -251,7 +251,7 @@ reset.spatstat.options()
 #'   Tests of "click*" functions
 #'   using queueing feature of spatstatLocator
 #'
-#'   $Revision: 1.8 $ $Date: 2022/10/23 00:45:36 $
+#'   $Revision: 1.9 $ $Date: 2025/06/07 03:56:07 $
 
 local({
   #' clickppp
@@ -282,6 +282,15 @@ local({
     PB <- clickpoly(np=2, nv=6)
   }
   if(ALWAYS) {
+    #' identify.ppp
+    X <- cells[sample(npoints(cells), 4)]
+    X <- rjitter(X, 0.05)
+    spatstat.utils::queueSpatstatLocator(X)
+    identify(cells)
+    #' identify.tess
+    Y <- runifrect(4, Window(cells))
+    spatstat.utils::queueSpatstatLocator(Y)
+    identify(dirichlet(cells))
     #' identify.psp
     E <- edges(letterR)[c(FALSE, TRUE)]
     Z <- ppp(c(2.86, 3.65, 3.15), c(1.69, 1.98, 2.56), window=Frame(letterR))
