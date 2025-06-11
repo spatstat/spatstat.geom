@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.4-1.009
+        CHANGES IN spatstat.geom VERSION 3.4-1.010
 
 OVERVIEW
 
@@ -15,6 +15,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o pixellate.psp
     New option: what='indicator'
+
+    o nnmark
+    New arguments 'ties' and 'distinct'.
 
 BUG FIXES
 

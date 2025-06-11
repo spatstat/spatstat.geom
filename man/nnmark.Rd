@@ -11,7 +11,9 @@
   or the point pattern \code{X} itself.
 }
 \usage{
-nnmark(X, \dots, k = 1, at=c("pixels", "points"))
+nnmark(X, \dots, k = 1, at=c("pixels", "points"),
+                 ties=c("first", "mean", "min", "max"),
+                 distinct=FALSE)
 }
 \arguments{
   \item{X}{
@@ -28,6 +30,17 @@ nnmark(X, \dots, k = 1, at=c("pixels", "points"))
     String specifying whether to compute the values
     at a grid of pixel locations (\code{at="pixels"}) or
     only at the points of \code{X} (\code{at="points"}).
+  }
+  \item{ties}{
+    Character string (partially matched) indicating how to handle
+    the case of ties, where there are two or more data points at the same
+    location. See Details.
+  }
+  \item{distinct}{
+    Logical value specifying how to define nearest neighbours
+    if there are two or more data points at the same location.
+    Applies only when \code{at="points"}.
+    See Details.
   }
 }
 \details{
@@ -60,7 +73,29 @@ nnmark(X, \dots, k = 1, at=c("pixels", "points"))
 
   If the argument \code{k} is given, then the \code{k}-th nearest
   neighbour will be used.
-}
+
+  The arguments \code{ties} and \code{distinct} specify how to handle
+  the case where two or more data points are at the same spatial
+  location.
+  \itemize{
+    \item
+    \code{ties} determines how to pool the mark values.
+    If \code{ties="first"} (the default), the mark value for
+    this location is taken to be the mark of the data point that is listed
+    first in sequence in the dataset \code{X}. If \code{ties="mean"},
+    \code{ties="max"} or \code{ties="min"}, the mark value for this
+    location is taken to be the mean, maximum or minimum (respectively) of
+    the mark values of all the data points at this location (after
+    converting the mark values to numerical values). 
+    \item
+    \code{distinct} determines how to define nearest neighbours,
+    when \code{at="points"}.
+    If \code{distinct=TRUE}, the nearest neighbour of a data point
+    must be another data point lying a nonzero distance away from it.
+    If \code{distinct=FALSE} (the default), then two data points
+    occupying the exact same spatial location can be nearest neighbours.
+  }
+}  
 \value{
   \emph{If \code{X} has a single column of marks:}
   \itemize{
@@ -89,14 +124,7 @@ nnmark(X, \dots, k = 1, at=c("pixels", "points"))
     nearest neighbours of each point of \code{X}.
   }
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
-}
+\author{\spatstatAuthors.}
 \seealso{
   \code{\link[spatstat.explore]{Smooth.ppp}},
   \code{\link[spatstat.explore]{marktable}},
