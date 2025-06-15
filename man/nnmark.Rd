@@ -13,7 +13,7 @@
 \usage{
 nnmark(X, \dots, k = 1, at=c("pixels", "points"),
                  ties=c("first", "mean", "min", "max"),
-                 distinct=FALSE)
+                 proper=FALSE)
 }
 \arguments{
   \item{X}{
@@ -36,7 +36,7 @@ nnmark(X, \dots, k = 1, at=c("pixels", "points"),
     the case of ties, where there are two or more data points at the same
     location. See Details.
   }
-  \item{distinct}{
+  \item{proper}{
     Logical value specifying how to define nearest neighbours
     if there are two or more data points at the same location.
     Applies only when \code{at="points"}.
@@ -74,7 +74,7 @@ nnmark(X, \dots, k = 1, at=c("pixels", "points"),
   If the argument \code{k} is given, then the \code{k}-th nearest
   neighbour will be used.
 
-  The arguments \code{ties} and \code{distinct} specify how to handle
+  The arguments \code{ties} and \code{proper} specify how to handle
   the case where two or more data points are at the same spatial
   location.
   \itemize{
@@ -88,11 +88,11 @@ nnmark(X, \dots, k = 1, at=c("pixels", "points"),
     the mark values of all the data points at this location (after
     converting the mark values to numerical values). 
     \item
-    \code{distinct} determines how to define nearest neighbours,
+    \code{proper} determines how to define nearest neighbours,
     when \code{at="points"}.
-    If \code{distinct=TRUE}, the nearest neighbour of a data point
+    If \code{proper=TRUE}, the nearest neighbour of a data point
     must be another data point lying a nonzero distance away from it.
-    If \code{distinct=FALSE} (the default), then two data points
+    If \code{proper=FALSE} (the default), then two data points
     occupying the exact same spatial location can be nearest neighbours.
   }
 }  

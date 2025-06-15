@@ -10,7 +10,7 @@
 }
 \usage{
   nndist(X, \dots)
-  \method{nndist}{ppp}(X, \dots, k=1, by=NULL, method="C", metric=NULL)
+  \method{nndist}{ppp}(X, \dots, k=1, by=NULL, proper=FALSE, method="C", metric=NULL)
   \method{nndist}{default}(X, Y=NULL, \dots, k=1, by=NULL, method="C")
 }
 \arguments{
@@ -42,6 +42,13 @@
     Optional. A factor, which separates \code{X} into groups.
     The algorithm will compute the distance to the nearest point in each
     group. See Details.
+  }
+  \item{proper}{
+    Logical value specifying whether to measure distances
+    only between distinct points (\code{proper=TRUE}) or
+    to include distances between data points at the same spatial
+    location (\code{proper=FALSE}, the default).
+    See Details.
   }
   \item{method}{String specifying which method of calculation to use.
     Values are \code{"C"} and \code{"interpreted"}.
@@ -117,6 +124,14 @@
   The algorithm will then compute, for each point of \code{X},
   the distance to the nearest neighbour \emph{in each subset}.
 
+  If \code{proper=FALSE} (the default),
+  data points which lie at the same spatial location
+  are treated as different individuals, and the
+  nearest-neighbour distance for any such point is defined to be zero.
+  If \code{proper=TRUE}, only distances between distinct points are
+  included in the calculation, so the nearest-neighbour distance is
+  always nonzero (or \code{NA} if there are not enough data points).
+  
   The argument \code{method} is not normally used. It is
   retained only for checking the validity of the software.
   If \code{method = "interpreted"} then the distances are

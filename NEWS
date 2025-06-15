@@ -1,8 +1,10 @@
-        CHANGES IN spatstat.geom VERSION 3.4-1.010
+        CHANGES IN spatstat.geom VERSION 3.4-1.011
 
 OVERVIEW
 
     o Interactively identify tiles of a tessellation.
+
+    o New options for defining nearest neighbours.
 
     o Bug fixes and minor improvements.
     
@@ -17,7 +19,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New option: what='indicator'
 
     o nnmark
-    New arguments 'ties' and 'distinct'.
+    New arguments 'ties' and 'proper'.
+
+    o nndist
+    New argument 'proper'.
 
 BUG FIXES
 
