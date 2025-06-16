@@ -8,7 +8,7 @@
 }
 \usage{
   nnwhich(X, \dots)
-  \method{nnwhich}{ppp}(X, \dots, k=1, by=NULL, method="C", metric=NULL)
+  \method{nnwhich}{ppp}(X, \dots, k=1, by=NULL, proper=FALSE, method="C", metric=NULL)
   \method{nnwhich}{default}(X, Y=NULL, \dots, k=1, by=NULL, method="C")
 }
 \arguments{
@@ -34,6 +34,13 @@
   \item{by}{
     Optional. A factor, which separates \code{X} into groups.
     The algorithm will find the nearest neighbour in each group.
+    See Details.
+  }
+  \item{proper}{
+    Logical value specifying whether to measure distances
+    only between distinct points (\code{proper=TRUE}) or
+    to include distances between data points at the same spatial
+    location (\code{proper=FALSE}, the default).
     See Details.
   }
   \item{method}{String specifying which method of calculation to use.
@@ -110,6 +117,15 @@
   is returned. In general if the number of points is less than or equal
   to \code{k}, then a vector of \code{NA}'s is returned.
 
+  If \code{proper=FALSE} (the default),
+  data points which lie at the same spatial location
+  are treated as different individuals, and the
+  nearest neighbour of any such point is one of the other individuals
+  at the same location.
+  If \code{proper=TRUE}, points lying at the same location are
+  treated as identical, so that nearest neighbours
+  are always separated by a nonzero distance.
+  
   The argument \code{method} is not normally used. It is
   retained only for checking the validity of the software.
   If \code{method = "interpreted"} then the distances are

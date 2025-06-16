@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.4-1.011
+        CHANGES IN spatstat.geom VERSION 3.4-1.012
 
 OVERVIEW
 
@@ -22,6 +22,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New arguments 'ties' and 'proper'.
 
     o nndist
+    New argument 'proper'.
+
+    o nnwhich
     New argument 'proper'.
 
 BUG FIXES

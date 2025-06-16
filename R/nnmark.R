@@ -1,13 +1,13 @@
 #
 # nnmark.R
 #
-# $Revision: 1.8 $ $Date: 2025/06/11 02:33:12 $
+# $Revision: 1.9 $ $Date: 2025/06/16 05:49:56 $
 
 nnmark <- local({
 
   nnmark <- function(X, ..., k=1, at=c("pixels", "points"),
                      ties=c("first", "mean", "min", "max"),
-                     distinct=FALSE) {
+                     proper=FALSE) {
     stopifnot(is.ppp(X))
     stopifnot(is.marked(X))
     at <- match.arg(at)
@@ -49,7 +49,7 @@ nnmark <- local({
                     stop("Marks must be a vector or dataframe"))
            },
            points = {
-             if(!distinct) {
+             if(!proper) {
                Y <- nnwhich(X, k=k)
              } else {
                ## find distinct points
