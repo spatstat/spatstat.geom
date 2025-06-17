@@ -11,7 +11,7 @@
 \usage{
   \method{identify}{tess}(x, \dots,
                   labels=tilenames(x),
-                  n=nobjects(x), plot=TRUE)
+                  n=nobjects(x), plot=TRUE, paint=plot, paint.args=list())
 }
 \arguments{
   \item{x}{
@@ -34,6 +34,16 @@
   \item{plot}{
     Logical. Whether to plot the labels when a tile is identified.
   }
+  \item{paint}{
+    Logical. Whether to redraw each identified tile, using a
+    different colour.
+  }
+  \item{paint.args}{
+    Optional list of arguments passed to \code{\link{plot.owin}} determining the
+    colour and style in which each identified tile will be
+    redrawn, if \code{paint=TRUE}.
+  }
+
 }
 \value{
   A \code{data.frame} with columns \code{id} and \code{name}

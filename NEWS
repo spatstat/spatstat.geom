@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.4-1.012
+        CHANGES IN spatstat.geom VERSION 3.4-1.013
 
 OVERVIEW
 
@@ -26,6 +26,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o nnwhich
     New argument 'proper'.
+
+    o identify.psp
+    New arguments 'paint' and 'paint.args'.
 
 BUG FIXES
 

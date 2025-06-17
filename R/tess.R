@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.119 $ $Date: 2025/06/06 04:05:43 $
+#   $Revision: 1.120 $ $Date: 2025/06/17 07:37:21 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -1216,7 +1216,8 @@ connected.tess <- function(X, ...) {
 }
 
 identify.tess <- function(x, ..., labels=tilenames(x),
-                          n=nobjects(x), plot=TRUE) {
+                          n=nobjects(x), plot=TRUE,
+                          paint=plot, paint.args=list()) {
   verifyclass(x, "tess")
   if (dev.cur() == 1 && interactive()) {
     eval(substitute(plot(X), list(X = substitute(x))))
@@ -1251,34 +1252,39 @@ identify.tess <- function(x, ..., labels=tilenames(x),
       cat(paste("Tile", ident, "already selected\n"))
     } else {
       ## add to list
-      if(plot) {
+      if(plot || paint) {
         ## Plot label
         mix <- xc[ident]
         miy <- yc[ident]
         li <- labels[ident]
         dont.complain.about(li, mix, miy)
         tili <- til[[ident]]
-        if(is.rectangle(tili) || is.polygonal(tili)) {
-          do.call.matched(plot.owin,
-                          resolve.defaults(list(x=tili, add=TRUE),
-                                           list(...),
-                                           list(col="#AAAAE6"),
-                                           list(border=1, lwd=2)),
-                          extrargs=gpo)
-        } else {
-          do.call.matched(plot.owin,
-                          resolve.defaults(list(x=tili, add=TRUE),
-                                           list(...),
-                                           list(col="#AAAAE6")),
-                          extrargs=gpo)
-          plot(edges(tili), add=TRUE, col=1, lwd=2)
+        if(paint) {
+          if(is.rectangle(tili) || is.polygonal(tili)) {
+            do.call.matched(plot.owin,
+                            resolve.defaults(list(x=tili, add=TRUE),
+                                             paint.args,
+                                             list(...),
+                                             list(col="#AAAAE6"),
+                                             list(border=1, lwd=2)),
+                            extrargs=gpo)
+          } else {
+            do.call.matched(plot.owin,
+                            resolve.defaults(list(x=tili, add=TRUE),
+                                             paint.args,
+                                             list(...),
+                                             list(col="#AAAAE6")),
+                            extrargs=gpo)
+            plot(edges(tili), add=TRUE, col=1, lwd=2)
+          }
         }
-        do.call.matched(graphics::text.default,
-                        resolve.defaults(list(x=quote(mix), 
-                                              y=quote(miy), 
-                                              labels=quote(li)),
-                                         list(...)),
-                        extrargs=gpt)
+        if(plot) 
+          do.call.matched(graphics::text.default,
+                          resolve.defaults(list(x=quote(mix), 
+                                                y=quote(miy), 
+                                                labels=quote(li)),
+                                           list(...)),
+                          extrargs=gpt)
       }
       id <- c(id, ident)
     }

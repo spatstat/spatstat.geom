@@ -7,7 +7,8 @@
   the mouse position, and print its serial number.
 }
 \usage{
-  \method{identify}{psp}(x, \dots, labels=seq_len(nsegments(x)), n=nsegments(x), plot=TRUE)
+  \method{identify}{psp}(x, \dots, labels=seq_len(nsegments(x)), n=nsegments(x),
+         plot=TRUE, paint=plot, paint.args=list())
 }
 \arguments{
   \item{x}{
@@ -26,7 +27,16 @@
   }
   \item{\dots}{
     Arguments passed to \code{\link[graphics]{text.default}}
-    controlling the plotting of the labels.
+    controlling the plotting of the labels, if \code{plot=TRUE}.
+  }
+  \item{paint}{
+    Logical. Whether to redraw each identified segment, using a
+    different colour.
+  }
+  \item{paint.args}{
+    Optional list of arguments passed to \code{\link{plot.psp}} determining the
+    colour and style in which each identified segment will be
+    redrawn, if \code{paint=TRUE}.
   }
 }
 \value{
@@ -47,6 +57,8 @@
   Each time a segment is identified,
   text will be displayed next to the point,
   showing its serial number (or the relevant entry of \code{labels}).
+
+  The procedure terminates when the right mouse button is pressed.
 }
 \seealso{
   \code{\link[graphics]{identify}},

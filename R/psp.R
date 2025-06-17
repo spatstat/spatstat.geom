@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.118 $ $Date: 2025/06/06 05:50:46 $
+#  $Revision: 1.120 $ $Date: 2025/06/17 07:48:49 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -577,7 +577,8 @@ rotate.psp <- function(X, angle=pi/2, ..., centre=NULL) {
 is.empty.psp <- function(x) { return(x$n == 0) } 
 
 identify.psp <- function(x, ..., labels=seq_len(nsegments(x)),
-                         n=nsegments(x), plot=TRUE) {
+                         n=nsegments(x), plot=TRUE,
+                         paint=plot, paint.args=list()) {
   if(dev.cur() == 1 && interactive()) {
     eval(substitute(plot(X), list(X=substitute(x))))
   }
@@ -604,7 +605,7 @@ identify.psp <- function(x, ..., labels=seq_len(nsegments(x)),
       cat(paste("Segment", ident, "already selected\n"))
     } else {
       ## add to list
-      if(plot) {
+      if(plot || paint) {
         ## Display
         li <- labels[ident]
         ## mi <- mids[ident]
@@ -614,17 +615,20 @@ identify.psp <- function(x, ..., labels=seq_len(nsegments(x)),
         mix <- bestplace$x
         miy <- bestplace$y
         dont.complain.about(li, mix, miy)
-        do.call.matched(graphics::text.default,
-                        resolve.defaults(list(x=quote(mix), 
-                                              y=quote(miy), 
-                                              labels=quote(li)),
-                                         list(...),
-                                         list(pos=3)))
-        do.call.matched(plot.psp,
-                        resolve.defaults(list(x=Y[ident], add=TRUE),
-                                         list(...),
-                                         list(col="blue", lwd=2)),
-                        extrargs=gp)
+        if(plot)
+          do.call.matched(graphics::text.default,
+                          resolve.defaults(list(x=quote(mix), 
+                                                y=quote(miy), 
+                                                labels=quote(li)),
+                                           list(...),
+                                           list(pos=3)))
+        if(paint) 
+          do.call.matched(plot.psp,
+                          resolve.defaults(list(x=Y[ident], add=TRUE),
+                                           paint.args,
+                                           list(col="blue", lwd=2),
+                                           list(...)),
+                          extrargs=gp)
       }
       out <- c(out, ident)
     }
