@@ -1,7 +1,7 @@
 #
 # nnmark.R
 #
-# $Revision: 1.9 $ $Date: 2025/06/16 05:49:56 $
+# $Revision: 1.11 $ $Date: 2025/06/20 05:26:24 $
 
 nnmark <- local({
 
@@ -11,7 +11,14 @@ nnmark <- local({
     stopifnot(is.ppp(X))
     stopifnot(is.marked(X))
     at <- match.arg(at)
-    ties <- match.arg(ties)
+    if(!missing(ties) && is.function(ties)) {
+      #' undocumented option: 'ties' is a function
+      tiesfun <- ties
+      ties <- "functie"
+    } else {
+      #' usual case
+      ties <- match.arg(ties)
+    }
     mX <- marks(X)
     if(ties != "first" && anyDuplicated(P <- unmark(X))) {
       ## pool marks of coincident points
@@ -28,6 +35,9 @@ nnmark <- local({
                     },
                     min =  {
                       lapply(smX, function(z) { apply(z, 2, min) })
+                    },
+                    functie = {
+                      lapply(smX, function(z, f=tiesfun) { apply(z, 2, f) })
                     })
       pmX <- do.call(rbind, unname(pmX))
       ## reassign to original pattern
