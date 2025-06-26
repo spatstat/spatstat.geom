@@ -102,7 +102,7 @@ For a full list of functions, see the help file for `spatstat.geom-package`.
 
 #### Image Processing
 
-- pixel-by-pixel arithmetic (`Math.im`)
+- pixel-by-pixel computation (`Math.im`, `eval.im`, `im.apply`)
 - set covariance function (`setcov`)
 - convolution of images (`imcov`)
 
