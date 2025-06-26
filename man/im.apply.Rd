@@ -4,8 +4,8 @@
   Apply Function Pixelwise to List of Images 
 }
 \description{
-  Returns a pixel image obtained by applying a function
-  to the values of corresponding pixels in several pixel images.
+  Returns a pixel image obtained by applying a given function
+  to corresponding pixels in several pixel images.
 }
 \usage{
 im.apply(X, FUN, \dots, fun.handles.na=FALSE, check=TRUE, verbose=TRUE)
@@ -42,9 +42,17 @@ im.apply(X, FUN, \dots, fun.handles.na=FALSE, check=TRUE, verbose=TRUE)
   grid using \code{\link{harmonise.im}}.
 
   At each pixel location, the values of the images in \code{X}
-  at that pixel will be extracted as a vector. The function
-  \code{FUN} will be applied to this vector. The result (which should be
-  a single value) becomes the pixel value of the resulting image.
+  at that pixel will be extracted as a vector; the function
+  \code{FUN} will be applied to this vector; and the return value of
+  \code{FUN} will become the pixel value of the resulting image.
+  For example \code{im.apply(X, mean)} will return a pixel image
+  in which the value of each pixel is the average of the corresponding
+  pixel values in the images in \code{X}.
+
+  If the result of \code{FUN} is a vector, then the result of
+  \code{im.apply} will be a list of images. For example \code{im.apply(X, range)} will
+  return a list of two images containing the pixelwise minimum
+  and pixelwise maximum, respectively, of the input images in \code{X}.
 
   The argument \code{fun.handles.na} specifies what to do
   when some of the pixel values are \code{NA}.
@@ -68,7 +76,7 @@ im.apply(X, FUN, \dots, fun.handles.na=FALSE, check=TRUE, verbose=TRUE)
   and this is reported in a message if \code{verbose=TRUE}.
 }
 \value{
-  A pixel image (object of class \code{"im"}).
+  A pixel image (object of class \code{"im"}) or a list of pixel images.
 }
 \seealso{
   \code{\link{eval.im}} for algebraic operations with images.
@@ -79,6 +87,7 @@ im.apply(X, FUN, \dots, fun.handles.na=FALSE, check=TRUE, verbose=TRUE)
   plot(Y)
   im.apply(Y, max)
   im.apply(Y, sum)
+  im.apply(Y, range)
 
   ## Example with incompatible patterns of NA values
   B <- owin(c(438, 666), c(80, 310))

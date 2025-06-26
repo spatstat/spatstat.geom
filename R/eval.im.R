@@ -10,7 +10,7 @@
 #'
 #'        im.apply()           Pixelwise 'apply'
 #' 
-#'     $Revision: 1.57 $     $Date: 2025/04/05 05:34:56 $
+#'     $Revision: 1.59 $     $Date: 2025/06/26 09:59:24 $
 #'
 
 eval.im <- local({
@@ -267,10 +267,21 @@ im.apply <- function(X, FUN, ...,
     ## apply function pixelwise
     y <- ImApplyEngine(vals, fun, funtype, fun.handles.na, ...)
     ## pack up (preserving type of 'y')
-    result <- im(y,
-                 xcol=template$xcol, yrow=template$yrow,
-                 xrange=template$xrange, yrange=template$yrange,
-                 unitname=template$unitname)
+    if(single <- is.null(dim(y))) {
+      ## one numeric value per pixel
+      result <- im(y,
+                   xcol=template$xcol, yrow=template$yrow,
+                   xrange=template$xrange, yrange=template$yrange,
+                   unitname=template$unitname)
+    } else {
+      ## rows are pixels, columns are different values
+      result <- vector(mode="list", length=ncol(y))
+      for(j in 1:ncol(y))
+        result[[j]] <- im(y[,j],
+                          xcol=template$xcol, yrow=template$yrow,
+                          xrange=template$xrange, yrange=template$yrange,
+                          unitname=template$unitname)
+    }
   } else {
     ## Memory limit is exceeded
     ## Split raster into pieces and process piecewise
@@ -282,17 +293,16 @@ im.apply <- function(X, FUN, ...,
     rowpieces <- unique(rowpiecemap)
     colpieces <- unique(colpiecemap)
     npieces <- length(rowpieces) * length(colpieces)
-    if(verbose)
+    if(verbose) {
       message(paste("Large array",
                     paren(paste(d[1], "rows x",
                                 d[2], "columns x",
                                 length(X), "images")),
                     "broken into", npieces, "pieces to avoid memory limits"))
-    if(verbose) 
       message(paste("Each piece of the raster consists of",
                     rowblocksize, "rows and",
                     colblocksize, "columns"))
-                          
+    }
     result <- NULL
     for(currentrowpiece in rowpieces) {
       ii <- (rowpiecemap == currentrowpiece)
@@ -302,18 +312,33 @@ im.apply <- function(X, FUN, ...,
         vsub <- sapply(X, function(z) as.vector(z[ii, jj, drop=FALSE]))
         #' apply function
         ysub <- ImApplyEngine(vsub, fun, funtype, fun.handles.na, ...)
-        #' save 
+        single <- is.null(dim(ysub))
+        ny <- ncol(ysub) %orifnull% 1
         if(is.null(result)) {
-          ## create space for result (preserving type of 'y')
+          ## create space for result (preserving type of 'ysub')
           result <- im(rep(RelevantNA(ysub), prod(d)),
                        xcol=template$xcol, yrow=template$yrow,
                        xrange=template$xrange, yrange=template$yrange,
                        unitname=template$unitname)
+          if(!single)
+            result <- rep(list(result), ny)
+          ny.previous <- ny
+        } else {
+          ## check dimensions of ysub are consistent with previous partial results
+          if(ny != ny.previous)
+            stop("FUN returned results with different lengths for different pixels", call.=FALSE)
         }
-        result[ii, jj] <- ysub
+        ## save partial results
+        if(single) {
+          result[ii, jj] <- ysub
+        } else {
+          for(k in 1:ny)
+            result[[k]][ii, jj] <- ysub[,k]
+        }
       }
     }
   }
+  if(!single) result <- as.solist(result)
   return(result)
 }
 
@@ -355,15 +380,33 @@ ImApplyEngine <- function(vals, fun, funtype, fun.handles.na,
                 }
                 if(funtype == "var") v else sqrt(v)
               })
-  if(funtype == "general" && length(y) != n)
-    stop("FUN should yield one value per pixel")
-  
-  if(!full) {
-    ## put the NA's back (preserving type of 'y')
-    yfull <- rep(y[1L], nfull)
-    yfull[ok] <- y
-    yfull[!ok] <- NA
-    y <- yfull
+
+  ## determine whether the result from each pixel is a single value or a vector
+  single <- (funtype != "general") || is.null(dim(y))
+  if(single) {
+    ## check that dimensions match
+    if(length(y) != n)
+      stop("FUN should yield one value per pixel", call.=FALSE)
+    if(!full) {
+      ## put the NA's back (preserving type of 'y')
+      yfull <- rep(y[1L], nfull)
+      yfull[ok] <- y
+      yfull[!ok] <- NA
+      y <- yfull
+    }
+  } else {
+    ## by a quirk of 'apply', each *column* contains the result from one pixel
+    if(ncol(y) != n)
+      stop("FUN should return one vector of values for each pixel", call.=FALSE)
+    if(!full) {
+      yfull <- matrix(y[1L], nrow(y), nfull)
+      yfull[, ok] <- y
+      yfull[, !ok] <- NA
+      y <- yfull
+    }
+    ## transpose matrix so that rows of y correspond to pixels
+    y <- t(y)
   }
+  
   return(y)
 }

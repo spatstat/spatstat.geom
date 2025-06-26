@@ -1,10 +1,12 @@
-        CHANGES IN spatstat.geom VERSION 3.4-1.015
+        CHANGES IN spatstat.geom VERSION 3.4-1.016
 
 OVERVIEW
 
     o Interactively identify tiles of a tessellation.
 
     o New options for defining nearest neighbours.
+
+    o im.apply handles vector-valued functions.
 
     o Bug fixes and minor improvements.
     
@@ -20,6 +22,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o harmonise.im
     Accelerated in the common case where all rasters are identical.
+
+    o im.apply
+    Now handles vector-valued functions.
     
     o pixellate.psp
     New option: what='indicator'
