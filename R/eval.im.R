@@ -1,15 +1,17 @@
-#
-#     eval.im.R
-#
-#        eval.im()             Evaluate expressions involving images
-#
-#        compatible.im()       Check whether two images are compatible
-#
-#        harmonise.im()       Harmonise images
-#        commonGrid()
-#
-#     $Revision: 1.57 $     $Date: 2025/04/05 05:34:56 $
-#
+#'
+#'     eval.im.R
+#'
+#'        eval.im()             Evaluate expressions involving images
+#'
+#'        compatible.im()       Check whether two images are compatible
+#'
+#'        harmonise.im()       Harmonise images
+#'        commonGrid()
+#'
+#'        im.apply()           Pixelwise 'apply'
+#' 
+#'     $Revision: 1.57 $     $Date: 2025/04/05 05:34:56 $
+#'
 
 eval.im <- local({
 
@@ -82,27 +84,40 @@ eval.im <- local({
 })
 
 compatible.im <- function(A, B, ..., tol=1e-6) {
-  verifyclass(A, "im")
-  if(missing(B)) return(TRUE)
-  verifyclass(B, "im")
-  if(!all(A$dim == B$dim))
-    return(FALSE)
-  xdiscrep <- max(abs(A$xrange - B$xrange),
-                 abs(A$xstep - B$xstep),
-                 abs(A$xcol - B$xcol))
-  ydiscrep <- max(abs(A$yrange - B$yrange),
-                 abs(A$ystep - B$ystep),
-                 abs(A$yrow - B$yrow))
-  xok <- (xdiscrep < tol * min(A$xstep, B$xstep))
-  yok <- (ydiscrep < tol * min(A$ystep, B$ystep))
-  uok <- compatible.unitname(unitname(A), unitname(B))
-  if(!(xok && yok && uok))
-    return(FALSE)
-  ## A and B are compatible
-  if(length(list(...)) == 0)
+  AllArgs <- if(missing(B)) list(A, ...) else list(A, B, ...)
+  ## expand any argument which is a list of images
+  AllArgs <- unname(expandSpecialLists(AllArgs))
+  ## check all arguments are images
+  if(!all(sapply(AllArgs, is.im)))
+    stop("Some arguments are not pixel images", call.=FALSE)
+  ## trivial cases
+  nA <- length(AllArgs)
+  if(nA <= 1)
     return(TRUE)
-  ## recursion
-  return(compatible.im(B, ..., tol=tol))
+  ## extract raster information 
+  rasterstuff <- lapply(AllArgs, getrasterinfo, exclude="type")
+  ## quick check for completely identical rasters (frequent case)
+  if(length(unique(rasterstuff)) == 1)
+    return(TRUE)
+  ## not exactly identical rasters
+  A <- rasterstuff[[1]]
+  for(i in 2:nA) {
+    B <- rasterstuff[[i]]
+    if(!all(A$dim == B$dim))
+      return(FALSE)
+    xdiscrep <- max(abs(A$xrange - B$xrange),
+                    abs(A$xstep - B$xstep),
+                    abs(A$xcol - B$xcol))
+    ydiscrep <- max(abs(A$yrange - B$yrange),
+                    abs(A$ystep - B$ystep),
+                    abs(A$yrow - B$yrow))
+    xok <- (xdiscrep < tol * min(A$xstep, B$xstep))
+    yok <- (ydiscrep < tol * min(A$ystep, B$ystep))
+    uok <- compatible.unitname(A$units, B$units)
+    if(!(xok && yok && uok))
+      return(FALSE)
+  }
+  return(TRUE)
 }
 
 ## force a list of images to be compatible
@@ -123,18 +138,23 @@ harmonize.im <- harmonise.im <- function(...) {
   ## if any windows are present, extract bounding box
   iswin <- unlist(lapply(argz, is.owin))
   bb0 <- if(!any(iswin)) NULL else do.call(boundingbox, unname(argz[iswin]))
+  imgrasters <- lapply(imgs, getrasterinfo, exclude="type")
   if(length(imgs) == 1L && is.null(bb0)) {
     ## only one 'true' image: use it as template.
     result[isim] <- imgs
     Wtemplate <- imgs[[1L]]
+  } else if(length(unique(imgrasters)) == 1) {
+    ## all rasters are completely identical
+    Wtemplate <- imgs[[1L]]
   } else {
+    ## rasters are not completely identical - harmonisation required
     ## test for compatible units
-    un <- lapply(imgs, unitname)
-    uok <- unlist(lapply(un, compatible.unitname, y=un[[1L]]))
+    un <- lapply(imgrasters, getElement, name="units")
+    uok <- sapply(un, compatible.unitname, y=un[[1L]])
     if(!all(uok))
       stop("Images have incompatible units of length")
     ## find the image with the highest resolution
-    xsteps <- unlist(lapply(imgs, getElement, name="xstep"))
+    xsteps <- unlist(lapply(imgrasters, getElement, name="xstep"))
     which.finest <- which.min(xsteps)
     finest <- imgs[[which.finest]]
     ## get the bounding box

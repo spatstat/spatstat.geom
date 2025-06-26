@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.180 $     $Date: 2023/11/04 04:39:23 $
+#      $Revision: 1.181 $     $Date: 2025/06/26 02:37:53 $
 #
 #      The class "im" of raster images
 #
@@ -107,6 +107,12 @@ im <- function(mat, xcol=seq_len(ncol(mat)), yrow=seq_len(nrow(mat)),
               units   = unitname)
   class(out) <- "im"
   return(out)
+}
+
+getrasterinfo <- function(x, exclude=character(0)) {
+  wanted <- c("dim", "xrange", "yrange", "xstep", "ystep", "xcol", "yrow", "type", "units")
+  wanted <- setdiff(wanted, exclude)
+  unclass(x)[wanted]
 }
 
 is.im <- function(x) {

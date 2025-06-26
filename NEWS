@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.4-1.014
+        CHANGES IN spatstat.geom VERSION 3.4-1.015
 
 OVERVIEW
 
@@ -15,6 +15,12 @@ NEW FUNCTIONS
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o compatible.im
+    Accelerated in the common case where all rasters are identical.
+
+    o harmonise.im
+    Accelerated in the common case where all rasters are identical.
+    
     o pixellate.psp
     New option: what='indicator'
 

@@ -94,6 +94,7 @@
 \alias{genericNNdistBy}
 \alias{getfields}
 \alias{getlastshift}
+\alias{getrasterinfo}
 \alias{getSpatstatVariable}
 \alias{gridindex}            
 \alias{grid1index}
@@ -453,6 +454,7 @@ gammabreaks(ra, n, gamma)
 genericNNdistBy(X, by, k)
 getfields(X, L, fatal = TRUE)
 getlastshift(X)
+getrasterinfo(x, exclude)
 getSpatstatVariable(name, default)
 gridindex(x, y, xrange, yrange, nx, ny)            
 grid1index(x, xrange, nx)
