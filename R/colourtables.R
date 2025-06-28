@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.69 $ $Date: 2025/04/21 09:14:24 $
+# $Revision: 1.70 $ $Date: 2025/06/28 02:23:09 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1,
@@ -278,18 +278,6 @@ plot.colourmap <- local({
   heightrule <- function(widthrange, separate, n, gap) {
     dw <- diff(widthrange)
     if(dw == 0) 1 else (dw * (if(separate) (n + (n-1)*gap) else 10))
-  }
-
-  sideCode <- function(side) {
-    if(is.numeric(side)) {
-      stopifnot(side %in% 1:4)
-      sidecode <- side
-    } else if(is.character(side)) {
-      nama <- c("bottom", "left", "top", "right")
-      side <- match.arg(side, nama)
-      sidecode <- match(side, nama)
-    } else stop("Unrecognised format for 'side'")
-    return(sidecode)
   }
 
   Ticks <- function(usr, log=FALSE, nint=NULL, ..., clip=TRUE) {

@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.169 $   $Date: 2025/04/22 01:31:45 $
+#  $Revision: 1.171 $   $Date: 2025/06/28 02:53:00 $
 #
 #  Plotting code for pixel images
 #
@@ -934,10 +934,46 @@ plot.im <- local({
                       resolve.defaults(axisargs, ribargs, dotargs, posargs),
                       extrargs=graphicsPars("axis"))
     }
+    ## label next to ribbon
     if(!is.null(riblab)) {
-      riblabel <- if(is.list(riblab)) riblab else list(text=riblab)
-      riblabel$side <- rib.iside
-      do.call(mtext, riblabel)
+      if(!is.list(riblab)) riblab <- list(text=riblab)
+      riblab <- resolve.defaults(riblab, list(side=rib.iside))
+      if(sideCode(riblab$side) == sideCode(rib.iside)) {
+        ## use 'mtext'
+        do.call(mtext, riblab)
+      } else {
+        ## will use 'text'
+        rls <- sideCode(riblab$side, "word")
+        ## conform to formal arguments of 'text'
+        riblab <- riblab[names(riblab) != "side"]
+        names(riblab) <- sub("text", "labels", names(riblab))
+        ## determine spatial position arguments for 'text'
+        switch(rls,
+               bottom = {
+                 x0 <- mean(bb.rib$xrange)
+                 y0 <- bb.rib$yrange[1L]
+                 srt <- 0
+               },
+               left = {
+                 x0 <- bb.rib$xrange[1L]
+                 y0 <- mean(bb.rib$yrange)
+                 srt <- 90
+               },
+               top = {
+                 x0 <- mean(bb.rib$xrange)
+                 y0 <- bb.rib$yrange[2L]
+                 srt <- 0
+               },
+               right = {
+                 x0 <- bb.rib$xrange[2L]
+                 y0 <- mean(bb.rib$yrange)
+                 srt <- -90
+               })
+        rlpos <- sideCode(rls)
+        do.call(text,
+                resolve.defaults(riblab,
+                                 list(x=x0, y=y0, pos=rlpos, srt=srt)))
+      }
     }
     #
     return(invisible(output.colmap))

@@ -229,8 +229,13 @@
   where \code{N} is the desired number of intervals (so there will
   be \code{N+1} tickmarks, subject to the vagaries of \R internal code). 
 
-  The argument \code{riblab} contains text that will be displayed
-  in the margin next to the ribbon. 
+  The argument \code{riblab} contains text that should be displayed 
+  in the margin next to the ribbon. Alternatively \code{riblab} may be a
+  list of arguments to be passed to
+  \code{\link[graphics]{mtext}}; in that case \code{riblab$text} should
+  specify the text to be displayed, while other arguments can specify a different
+  location for the text (e.g. \code{riblab$side = 1} for text at the
+  bottom of the ribbon) and a different font and colour if desired.
   
   The argument \code{ribscale} is used
   to rescale the numerical values printed next to the colour map,
@@ -498,7 +503,8 @@
    # tweaking the plot
    plot(Z, main="La vie en bleu", col.main="blue", cex.main=1.5,
         box=FALSE,
-        ribargs=list(col.axis="blue", col.ticks="blue", cex.axis=0.75))
+        ribargs=list(col.axis="blue", col.ticks="blue", cex.axis=0.75),
+        riblab=list(text="couleur", side=1, col="blue", offset=1, font=2))
    # add axes and axis labels
    plot(Z, axes=TRUE, ann=TRUE, xlab="Easting", ylab="Northing")
    # add contour lines

@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.4-1.016
+        CHANGES IN spatstat.geom VERSION 3.4-1.017
 
 OVERVIEW
 
@@ -23,12 +23,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o harmonise.im
     Accelerated in the common case where all rasters are identical.
 
+    o identify.psp
+    New arguments 'paint' and 'paint.args'.
+
     o im.apply
     Now handles vector-valued functions.
     
-    o pixellate.psp
-    New option: what='indicator'
-
     o nnmark
     New arguments 'ties' and 'proper'.
 
@@ -38,14 +38,22 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o nnwhich
     New argument 'proper'.
 
-    o identify.psp
-    New arguments 'paint' and 'paint.args'.
+    o pixellate.psp
+    New option: what='indicator'
+
+    o plot.im
+    The position of text next to the colour ribbon can now be controlled by 'riblab$side'.
 
 BUG FIXES
 
     o delaunay
     Crashed in some cases when X contained exactly 3 points.
     Fixed.
+
+    o plot.im
+    riblab$side was ignored.
+    Fixed.
+
 
         CHANGES IN spatstat.geom VERSION 3.4-1
 
