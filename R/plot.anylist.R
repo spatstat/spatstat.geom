@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.43 $ $Date: 2025/04/20 09:37:01 $
+##  $Revision: 1.44 $ $Date: 2025/06/28 03:20:57 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
@@ -576,17 +576,6 @@ plot.imlist <- local({
                                            equal.scales=equal.scales)))
     }
     return(invisible(out))
-  }
-
-  sideCode <- function(side) {
-    if(is.numeric(side)) {
-      stopifnot(side %in% 1:4)
-      sidecode <- side
-    } else if(is.character(side)) {
-      stopifnot(side %in% c("bottom", "left", "top", "right"))
-      sidecode <- match(side, c("bottom", "left", "top", "right"))
-    } else stop("Unrecognised format for 'side'")
-    return(sidecode)
   }
 
   imagecommon <- function(x, ...,

@@ -3,7 +3,7 @@
 ##
 ##     Texture plots and texture maps
 ##
-##  $Revision: 1.19 $ $Date: 2024/11/29 07:44:37 $
+##  $Revision: 1.20 $ $Date: 2025/06/28 03:21:21 $
 
 ### .................. basic graphics .............................
 
@@ -127,18 +127,6 @@ plot.texturemap <- local({
   }
   heightrule <- function(widthrange, separate, n, gap) {
     (if(separate) (n + (n-1)*gap) else 10) * diff(widthrange) 
-  }
-
-  sideCode <- function(side) {
-    if(is.numeric(side)) {
-      stopifnot(side %in% 1:4)
-      sidecode <- side
-    } else if(is.character(side)) {
-      nama <- c("bottom", "left", "top", "right")
-      side <- match.arg(side, nama)
-      sidecode <- match(side, nama)
-    } else stop("Unrecognised format for 'side'")
-    return(sidecode)
   }
 
   plot.texturemap <- function(x, ..., main,
