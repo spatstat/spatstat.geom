@@ -1,7 +1,7 @@
 #
 #	wingeom.R	Various geometrical computations in windows
 #
-#	$Revision: 4.142 $	$Date: 2024/02/04 08:04:51 $
+#	$Revision: 4.146 $	$Date: 2025/06/29 07:20:53 $
 #
 
 volume.owin <- function(x) { area.owin(x) }
@@ -997,10 +997,34 @@ inpoint <- function(W) {
 
 simplify.owin <- function(W, dmin) {
   verifyclass(W, "owin")
-  if(is.empty(W))
+  if(is.empty(W) || is.rectangle(W))
     return(W)
   W <- as.polygonal(W)
   W$bdry <- lapply(W$bdry, simplify.xypolygon, dmin=dmin)
+  return(W)
+}
+
+fillholes.owin <- function(W, amin) {
+  verifyclass(W, "owin")
+  switch(W$type,
+         rectangle = { },
+         polygonal = {
+           a <- sapply(W$bdry, Area.xypolygon)
+           if(any(tinyhole <- (a <= 0 & abs(a) < amin)))
+             W$bdry <- W$bdry[!tinyhole]
+         },
+         mask = {
+           co <- connected(complement.owin(W))
+           te <- tess(image=co)
+           a <- tile.areas(te)
+           if(any(tinyhole <- (a < amin))) {
+             lev <- levels(co)
+             for(i in which(tinyhole)) {
+               levi <- lev[i]
+               W$m[(co == levi)$v] <- TRUE
+             }
+           }
+         })
   return(W)
 }
 

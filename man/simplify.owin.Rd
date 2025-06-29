@@ -2,10 +2,10 @@
 \Rdversion{1.1}
 \alias{simplify.owin}
 \title{
-  Approximate a Polygon by a Simpler Polygon
+  Approximate a Window by a Simpler Polygon
 }
 \description{
-  Given a polygonal window, this function finds a simpler polygon
+  Given a window, this function finds a simpler polygon
   that approximates it.
 }
 \usage{
@@ -13,7 +13,7 @@ simplify.owin(W, dmin)
 }
 \arguments{
   \item{W}{
-    The polygon which is to be simplied.
+    The window which is to be simplied.
     An object of class \code{"owin"}.
   }
   \item{dmin}{
@@ -27,11 +27,9 @@ simplify.owin(W, dmin)
   minimum length \code{dmin}, or until there are only three edges left.
 
   The argument \code{W} must be a window (object of class
-  \code{"owin"}). It should be of type \code{"polygonal"}.
-  If \code{W} is a rectangle, it is returned without alteration.
-
-  The simplification algorithm is not yet implemented for
-  binary masks. If \code{W} is a mask, an error is generated.
+  \code{"owin"}). If \code{W} is a rectangle, it is returned without alteration.
+  If \code{W} is a binary mask, it is first converted to a polygonal
+  window (with many small vertical and horizontal edges), then simplified.
 }
 \value{
   Another window (object of class \code{"owin"})
@@ -41,6 +39,7 @@ simplify.owin(W, dmin)
   \spatstatAuthors.
 }
 \seealso{
+  \code{\link{fillholes.owin}},
   \code{\link{owin}}
 }
 \examples{

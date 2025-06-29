@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.4-1.020
+        CHANGES IN spatstat.geom VERSION 3.4-1.021
 
 OVERVIEW
 
@@ -8,10 +8,15 @@ OVERVIEW
 
     o im.apply handles vector-valued functions.
 
+    o Remove small holes from a window.
+
     o Bug fixes and minor improvements.
     
 NEW FUNCTIONS
 
+    o fillholes.owin
+    Remove small holes from a window.
+    
     o identify.tess
     Interactively identify tiles of a tessellation.
 
