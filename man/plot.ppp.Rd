@@ -366,6 +366,19 @@
   To modify a symbol map, for example to change the colours used
   without changing anything else, use \code{\link{update.symbolmap}}.
 }
+\section{Troubleshooting: text is clipped}{
+  Text that is intended to be drawn in the margins of the plot
+  can sometimes be clipped so that it is only partly visible
+  or is completely missing. Clipping is not an artefact of
+  \pkg{spatstat}; it is a feature of base graphics in R.
+  To prevent clipping of text, first ensure that the plot margins
+  are large enough by setting \code{\link{par}('mar')}.
+  In base graphics, some plot functions have the side-effect that they
+  re-set the clipping region to be a sub-rectangle of the plotting
+  region. To override this and ensure that the clipping region
+  is as large as possible,
+  set \code{par(xpd=NA)} immediately before calling \code{plot.ppp}.
+}
 \seealso{
   \code{\link{ppp.object}},
   \code{\link{plot}},

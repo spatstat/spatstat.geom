@@ -233,7 +233,8 @@
   in the margin next to the ribbon. Alternatively \code{riblab} may be a
   list of arguments to be passed to
   \code{\link[graphics]{mtext}}; in that case \code{riblab$text} should
-  specify the text to be displayed, while other arguments can specify a different
+  specify the text to be displayed, while other arguments
+  can specify a different
   location for the text (e.g. \code{riblab$side = 1} for text at the
   bottom of the ribbon) and a different font and colour if desired.
   
@@ -476,6 +477,19 @@
   both. This bug is reported to occur only when \code{useRaster=TRUE}.
   To fix this, try setting \code{workaround=TRUE}, or if that is
   unsuccessful, \code{useRaster=FALSE}.
+}
+\section{Troubleshooting: text is clipped}{
+  Text that is intended to be drawn in the margins of the plot
+  can sometimes be clipped so that it is only partly visible
+  or is completely missing. Clipping is not an artefact of
+  \pkg{spatstat}; it is a feature of base graphics in R.
+  To prevent clipping of text, first ensure that the plot margins
+  are large enough by setting \code{\link{par}('mar')}.
+  In base graphics, some plot functions have the side-effect that they
+  re-set the clipping region to be a sub-rectangle of the plotting
+  region. To override this and ensure that the clipping region
+  is as large as possible,
+  set \code{par(xpd=NA)} immediately before calling \code{plot.im}.
 }
 \seealso{
   \code{\link{im.object}},

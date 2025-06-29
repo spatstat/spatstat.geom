@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.4-1.019
+        CHANGES IN spatstat.geom VERSION 3.4-1.020
 
 OVERVIEW
 
@@ -42,7 +42,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New option: what='indicator'
 
     o plot.im
-    The position of text next to the colour ribbon can now be controlled by 'riblab$side'.
+    The position of text next to the colour ribbon can now be
+    controlled by 'riblab$side'.
+
 
 BUG FIXES
 

@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.171 $   $Date: 2025/06/28 02:53:00 $
+#  $Revision: 1.173 $   $Date: 2025/06/29 00:59:59 $
 #
 #  Plotting code for pixel images
 #
@@ -936,8 +936,12 @@ plot.im <- local({
     }
     ## label next to ribbon
     if(!is.null(riblab)) {
+      ## assemble arguments
       if(!is.list(riblab)) riblab <- list(text=riblab)
       riblab <- resolve.defaults(riblab, list(side=rib.iside))
+      ## temporarily suppress clipping 
+      opa <- par(xpd=NA)
+      on.exit(par(opa))
       if(sideCode(riblab$side) == sideCode(rib.iside)) {
         ## use 'mtext'
         do.call(mtext, riblab)
