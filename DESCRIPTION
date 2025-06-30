@@ -1,6 +1,6 @@
 Package: spatstat.geom
-Version: 3.4-1.021
-Date: 2025-06-29
+Version: 3.4-1.022
+Date: 2025-06-30
 Title: Geometrical Functionality of the 'spatstat' Family 
 Authors@R: c(person("Adrian", "Baddeley", 
                     role = c("aut", "cre", "cph"),

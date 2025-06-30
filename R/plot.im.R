@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.173 $   $Date: 2025/06/29 00:59:59 $
+#  $Revision: 1.174 $   $Date: 2025/06/30 03:04:23 $
 #
 #  Plotting code for pixel images
 #
@@ -713,8 +713,23 @@ plot.im <- local({
 
       ## plot background if specified
       if(!is.null(background)) {
-        plot(background, main=main)
+        plot(background, main="")
         add <- TRUE
+      }
+
+      ## plot title centred over main image area
+      if(show.all && sum(nzchar(main))) {
+        mainargnames <- c("cex.main", "adj.main", "col.main")
+        mainargs <- dotargs[names(dotargs) %in% mainargnames]
+        do.call.plotfun(plot.owin,
+                        resolve.defaults(list(x=quote(xbox),
+                                              type="n",
+                                              main=main,
+                                              add=TRUE,
+                                              show.all=TRUE),
+                                         mainargs,
+                                         list(claim.title.space=TRUE)),
+                        extrargs=graphicsPars("owin"))
         main <- ""
       }
 
@@ -799,7 +814,8 @@ plot.im <- local({
                                             main=main,
                                             add=TRUE,
                                             show.all=TRUE),
-                                       dotargs),
+                                       dotargs,
+                                       list(claim.title.space=TRUE)),
                       extrargs=graphicsPars("owin"))
       main <- ""
     }

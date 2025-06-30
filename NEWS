@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.4-1.021
+        CHANGES IN spatstat.geom VERSION 3.4-1.022
 
 OVERVIEW
 
@@ -50,6 +50,8 @@ SIGNIFICANT USER-VISIBLE CHANGES
     The position of text next to the colour ribbon can now be
     controlled by 'riblab$side'.
 
+    o plot.im
+    Placement of main title improved, in some cases.
 
 BUG FIXES
 
