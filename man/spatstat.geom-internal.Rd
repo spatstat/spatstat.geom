@@ -124,6 +124,7 @@
 \alias{is.marked.quad}
 \alias{is.multitype.default}    
 \alias{is.multitype.quad}    
+\alias{is.na.hyperframe}
 \alias{is.na.im}
 \alias{is.na.NAobject}
 \alias{is.na.ppp}
@@ -491,6 +492,7 @@ is.infline(x)
 \method{is.marked}{quad}(X, na.action="warn", \dots)
 \method{is.multitype}{default}(X, \dots)  
 \method{is.multitype}{quad}(X, na.action="warn", \dots)
+\method{is.na}{hyperframe}(x)
 \method{is.na}{im}(x)
 \method{is.na}{NAobject}(x)
 \method{is.na}{ppp}(x)

@@ -131,6 +131,8 @@ hyperframe <- local({
   is.hypercolumn <- function(x) {
     if(!is.list(x))
       return(FALSE)
+    if(inherits(x, "NAobject"))
+      return(FALSE)
     if(inherits(x, c("listof", "anylist")))
       return(TRUE)
     if(length(x) <= 1)
@@ -139,9 +141,9 @@ hyperframe <- local({
     return(length(unique(cla)) == 1)
   }
 
-  class1 <- function(x) { class(x)[1L] }
+  class1 <- function(x) { setdiff(class(x), "NAobject")[1L] }
 
-  class1of1 <- function(x) { class(x[[1L]])[1L] }
+  class1of1 <- function(x) { class1(x[[1L]]) }
   
   hyperframe
 })
@@ -338,18 +340,51 @@ as.data.frame.hyperframe <- function(x, row.names = NULL,
                     "discarded in conversion to data frame"))
     df <- as.data.frame(ux$df, row.names=row.names, optional=optional, ...)
   } else {
+    ## convert to a list to be passed to 'data.frame'
     lx <- as.list(x)
-    nrows <- ux$ncases
-    vclassstring <- paren(vclass)
-    if(any(!dfcol)) 
+    ## handle non-data-frame columns
+    if(hasobjects <- any(!dfcol)) {
+      ## objects of class 'foo' are represented by "(foo)"
+      vclassstring <- paren(vclass)
+      nrows <- ux$ncases
       lx[!dfcol] <- lapply(as.list(vclassstring[!dfcol]),
                            rep.int, times=nrows)
+    }
     df <- do.call(data.frame, append(lx, list(row.names=row.names)))
     colnames(df) <- ux$vname
+    ## detect NA objects using is.na.hyperframe
+    if(hasobjects)
+      df[is.na(x)] <- NA
   }
   return(df)
 }
 
+is.na.hyperframe <- function(x) {
+  y <- matrix(FALSE, nrow(x), ncol(x), dimnames=dimnames(x))
+  ux <- unclass(x)
+  vname <- ux$vname
+  vtype <- ux$vtype
+  vtype <- levels(vtype)[as.integer(vtype)]
+  hyperatoms <- ux$hyperatoms
+  hypercolumns <- ux$hypercolumns
+  for(j in seq_len(ncol(x))) {
+    switch(vtype[j],
+           dfcolumn = {
+             y[,j] <- is.na(x[,j,drop=TRUE])
+           },
+           hyperatom = {
+             vn <- vname[[j]]
+             if(inherits(hyperatoms[[vn]], "NAobject"))
+               y[,j] <- TRUE
+           },
+           hypercolumn = {
+             vn <- vname[[j]]
+             y[,j] <- sapply(hypercolumns[[vn]], inherits, what="NAobject")
+           })
+  }
+  return(y)
+}
+             
 as.list.hyperframe <- function(x, ...) {
   ux <- unclass(x)
   out <- vector(mode="list", length=ux$nvars)
