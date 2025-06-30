@@ -124,8 +124,9 @@
 \alias{is.marked.quad}
 \alias{is.multitype.default}    
 \alias{is.multitype.quad}    
-\alias{is.na.ppp}
 \alias{is.na.im}
+\alias{is.na.NAobject}
+\alias{is.na.ppp}
 \alias{is.ppplist}
 \alias{is.pp3}
 \alias{is.ppx}
@@ -204,6 +205,7 @@
 \alias{plotWidthMap}
 \alias{plot.barplotdata}
 \alias{plot.indicfun}
+\alias{plot.NAobject}
 \alias{plot.tessfun}
 \alias{pointgrid}
 \alias{ppllengine}
@@ -221,6 +223,7 @@
 \alias{print.lut}
 \alias{print.metric}
 \alias{print.metricfun}
+\alias{print.NAobject}
 \alias{print.nnfun}
 \alias{print.numberwithunit}
 \alias{print.onearrow}
@@ -235,6 +238,7 @@
 \alias{print.summary.listof}
 \alias{print.summary.logiquad}
 \alias{print.summary.lut}
+\alias{print.summary.NAobject}
 \alias{print.summary.owin}
 \alias{print.summary.ppp}
 \alias{print.summary.psp}
@@ -307,6 +311,7 @@
 \alias{summary.logiquad}
 \alias{summary.lut}
 \alias{summary.metric}
+\alias{summary.NAobject}
 \alias{summary.pppmatching}
 \alias{summary.ppx}
 \alias{summary.splitppx}
@@ -486,8 +491,9 @@ is.infline(x)
 \method{is.marked}{quad}(X, na.action="warn", \dots)
 \method{is.multitype}{default}(X, \dots)  
 \method{is.multitype}{quad}(X, na.action="warn", \dots)
-\method{is.na}{ppp}(x)
 \method{is.na}{im}(x)
+\method{is.na}{NAobject}(x)
+\method{is.na}{ppp}(x)
 is.ppplist(x)
 is.pp3(x)
 is.ppx(x)
@@ -575,6 +581,7 @@ plotPolygonBdry(x, \dots)
 plotWidthMap(bb.leg, zlim, phys.scale, leg.scale, leg.side, leg.args, grafpar)
 \method{plot}{barplotdata}(x, \dots)
 \method{plot}{indicfun}(x, W, \dots, main)
+\method{plot}{NAobject}(x, \dots)
 \method{plot}{tessfun}(x, \dots)
 pointgrid(W, ngrid)
 ppllengine(X, Y, action="project", check=FALSE)
@@ -594,6 +601,7 @@ prepareTitle(main)
 \method{print}{lut}(x, \dots)
 \method{print}{metric}(x, \dots)
 \method{print}{metricfun}(x, \dots)
+\method{print}{NAobject}(x, \dots)
 \method{print}{nnfun}(x, \dots)
 \method{print}{numberwithunit}(x, \dots)
 \method{print}{onearrow}(x, \dots)
@@ -608,6 +616,7 @@ prepareTitle(main)
 \method{print}{summary.listof}(x, \dots)
 \method{print}{summary.logiquad}(x, \dots, dp=3)
 \method{print}{summary.lut}(x, \dots)
+\method{print}{summary.NAobject}(x, \dots)
 \method{print}{summary.owin}(x, \dots)
 \method{print}{summary.ppp}(x, \dots, dp)
 \method{print}{summary.psp}(x, \dots)
@@ -680,6 +689,7 @@ store.versionstring.spatstat()
 \method{summary}{logiquad}(object, \dots, checkdup=FALSE)
 \method{summary}{lut}(object, \dots)
 \method{summary}{metric}(object, \dots)
+\method{summary}{NAobject}(object, \dots)
 \method{summary}{pppmatching}(object, \dots)
 \method{summary}{ppx}(object, \dots)
 \method{summary}{splitppx}(object, \dots)

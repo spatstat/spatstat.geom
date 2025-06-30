@@ -39,10 +39,8 @@ fillholes.owin(W, amin)
 \examples{
   ## make object with small hole
   A <- meningitis$kreise
-  ta <- tile.areas(A)
-  smalltile <- tiles(A)[[which.min(ta)]]
-  W <- setminus.owin(Window(A), smalltile)
-  amin <- sort(ta)[3]
+  W <- setminus.owin(Window(A), tiles(A)[[102]])
+  amin <- 500
 
   opa <- par(mfrow=c(1,2))
   plot(W)

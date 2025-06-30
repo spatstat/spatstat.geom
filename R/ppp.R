@@ -4,7 +4,7 @@
 #	A class 'ppp' to define point patterns
 #	observed in arbitrary windows in two dimensions.
 #
-#	$Revision: 4.121 $	$Date: 2025/06/30 06:43:54 $
+#	$Revision: 4.123 $	$Date: 2025/06/30 12:03:33 $
 #
 #	A point pattern contains the following entries:	
 #
@@ -161,15 +161,6 @@ ppp <- function(x, y, ..., window, marks,
 #
 
 is.ppp <- function(x) { inherits(x, "ppp") }
-
-#
-#--------------------------------------------------------------------------
-                                        #
-NA_ppp_ <- structure(list(input = NA_character_,
-                          wkt = NA_character_),
-                     class="ppp")
-
-is.na.ppp <- function(x) { identical(x, NA_ppp_) }
 
 #
 #--------------------------------------------------------------------------
@@ -465,10 +456,6 @@ scanpp <- function(filename, window, header=TRUE, dir="",
 
 print.ppp <- function(x, ...) {
   verifyclass(x, "ppp")
-  if(is.na(x)) {
-    splat("<NA ppp>")
-    return(invisible(NULL))
-  }
   ism <- is.marked(x, dfok=TRUE)
   nx <- x$n
   splat(if(ism) "Marked planar" else "Planar",
@@ -522,7 +509,6 @@ print.ppp <- function(x, ...) {
 
 summary.ppp <- function(object, ..., checkdup=TRUE) {
   verifyclass(object, "ppp")
-  if(is.na(object)) return(object)
   result <- list()
   result$is.marked <- is.marked(object, dfok=TRUE)
   result$n <- object$n
