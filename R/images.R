@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.181 $     $Date: 2025/06/26 02:37:53 $
+#      $Revision: 1.183 $     $Date: 2025/06/30 06:43:22 $
 #
 #      The class "im" of raster images
 #
@@ -129,6 +129,12 @@ levels.im <- function(x) {
   levels(x$v) <- value
   x
 }
+
+NA_im_ <- structure(list(input = NA_character_,
+                          wkt = NA_character_),
+                     class="im")
+
+is.na.im <- function(x) { identical(x, NA_im_) }
 
 ################################################################
 ########   methods for class "im"

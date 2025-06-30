@@ -3,7 +3,7 @@
 #
 #    summary() method for class "im"
 #
-#    $Revision: 1.22 $   $Date: 2022/01/04 05:30:06 $
+#    $Revision: 1.24 $   $Date: 2025/06/30 06:36:11 $
 #
 #    summary.im()
 #    print.summary.im()
@@ -11,6 +11,7 @@
 #
 summary.im <- function(object, ...) {
   verifyclass(object, "im")
+  if(is.na(object)) return(object)
 
   x <- object
 
@@ -138,6 +139,10 @@ print.summary.im <- function(x, ...) {
 }
 
 print.im <- function(x, ...) {
+  if(is.na(x)) {
+    splat("<NA im>")
+    return(invisible(NULL))
+  }
   splat(paste0(x$type, "-valued"), "pixel image")
   if(x$type == "factor") {
     splat("factor levels:")

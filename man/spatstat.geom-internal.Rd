@@ -124,6 +124,8 @@
 \alias{is.marked.quad}
 \alias{is.multitype.default}    
 \alias{is.multitype.quad}    
+\alias{is.na.ppp}
+\alias{is.na.im}
 \alias{is.ppplist}
 \alias{is.pp3}
 \alias{is.ppx}
@@ -484,6 +486,8 @@ is.infline(x)
 \method{is.marked}{quad}(X, na.action="warn", \dots)
 \method{is.multitype}{default}(X, \dots)  
 \method{is.multitype}{quad}(X, na.action="warn", \dots)
+\method{is.na}{ppp}(x)
+\method{is.na}{im}(x)
 is.ppplist(x)
 is.pp3(x)
 is.ppx(x)

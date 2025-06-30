@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.4-1.023
+        CHANGES IN spatstat.geom VERSION 3.4-1.024
 
 OVERVIEW
 
@@ -10,7 +10,17 @@ OVERVIEW
 
     o Remove small holes from a window.
 
+    o Missing or unavailable (NA) objects of class 'ppp' and 'im'
+
     o Bug fixes and minor improvements.
+
+NEW OBJECTS
+
+    o NA_ppp_
+    A missing or unavailable object of class 'ppp'.
+
+    o NA_im_
+    A missing or unavailable object of class 'im'.
     
 NEW FUNCTIONS
 
