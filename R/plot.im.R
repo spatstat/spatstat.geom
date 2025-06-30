@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.174 $   $Date: 2025/06/30 03:04:23 $
+#  $Revision: 1.176 $   $Date: 2025/06/30 04:12:26 $
 #
 #  Plotting code for pixel images
 #
@@ -260,6 +260,8 @@ plot.im <- local({
                      background=NULL, clip.background=FALSE) {
     if(missing(main)) main <- short.deparse(substitute(x))
     verifyclass(x, "im")
+    force(show.all)
+    force(ribbon)
     if(x$type == "complex") {
       cl <- match.call()
       cl$x <- solist(Re=Re(x), Im=Im(x), Mod=Mod(x), Arg=Arg(x))
@@ -725,12 +727,13 @@ plot.im <- local({
                         resolve.defaults(list(x=quote(xbox),
                                               type="n",
                                               main=main,
-                                              add=TRUE,
+                                              add=add,
                                               show.all=TRUE),
                                          mainargs,
                                          list(claim.title.space=TRUE)),
                         extrargs=graphicsPars("owin"))
         main <- ""
+        add <- TRUE
       }
 
       ## plot image without ribbon
@@ -805,6 +808,7 @@ plot.im <- local({
                                             main=pt$blank),
                                        dotargs),
                       extrargs=graphicsPars("owin"))
+      add <- TRUE
     }
     if(show.all) {
       ## plot title centred over main image area 'bb'
@@ -812,12 +816,13 @@ plot.im <- local({
                       resolve.defaults(list(x=quote(bb),
                                             type="n",
                                             main=main,
-                                            add=TRUE,
+                                            add=add,
                                             show.all=TRUE),
                                        dotargs,
                                        list(claim.title.space=TRUE)),
                       extrargs=graphicsPars("owin"))
       main <- ""
+      add <- TRUE
     }
     if(!is.null(background)) {
       ## plot background
