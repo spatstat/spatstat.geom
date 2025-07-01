@@ -4,9 +4,13 @@
 #'   inherits class c('NAobject', 'foo')
 #'
 #'   Methods for class 'NAobject' capture dispatch of print, plot, summary
+#'   so that we don't need to tinker with print.ppp, plot.ppp etc.
 #' 
 #'   $Revision: 1.3 $ $Date: 2025/06/30 12:30:36 $
 #' 
+#'   ------------------------------------------------------------
+#'               specific NA objects 
+#'   ------------------------------------------------------------
 
 NA_ppp_ <- structure(list(input = NA_character_,
                           wkt = NA_character_),
@@ -16,12 +20,34 @@ NA_im_ <- structure(list(input = NA_character_,
                           wkt = NA_character_),
                      class=c("NAobject", "im"))
 
-is.na.NAobject <- function(x) { TRUE }
+NA_owin_ <- structure(list(input = NA_character_,
+                          wkt = NA_character_),
+                     class=c("NAobject", "owin"))
 
-is.na.ppp <- function(x) { identical(x, NA_ppp_) }  # could probably be set to return FALSE
+
+#'   ------------------------------------------------------------
+#'        Recognise any 'NA object'
+#'   ------------------------------------------------------------
+
+is.NAobject <- function(x) { inherits(x, "NAobject") }
+
+
+#'   ------------------------------------------------------------
+#'      methods for is.na (use only when the class is known)
+#'   ------------------------------------------------------------
+
+is.na.NAobject <- function(x) { TRUE }  # will generally be dispatched first
+
+is.na.ppp <- function(x) { identical(x, NA_ppp_) } 
 
 is.na.im <- function(x) { identical(x, NA_im_) }
 
+is.na.owin <- function(x) { identical(x, NA_owin_) }
+
+
+#'   ------------------------------------------------------------
+#'       methods for class 'NAobject'
+#'   ------------------------------------------------------------
 
 plot.NAobject <- function(x, ...) {
   splat("NA object: nothing plotted")

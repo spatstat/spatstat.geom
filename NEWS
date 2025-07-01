@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.4-1.026
+        CHANGES IN spatstat.geom VERSION 3.4-1.027
 
 OVERVIEW
 
@@ -29,6 +29,12 @@ NEW FUNCTIONS
     
     o identify.tess
     Interactively identify tiles of a tessellation.
+
+    o is.NAobject
+    Recognise whether an object is a missing or unavailable (NA) object.
+
+    o is.na.ppp, is.na.im, is.na.owin
+    Recognise whether an object is a missing or unavailable (NA) object.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 

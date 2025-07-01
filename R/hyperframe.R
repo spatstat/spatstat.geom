@@ -131,7 +131,7 @@ hyperframe <- local({
   is.hypercolumn <- function(x) {
     if(!is.list(x))
       return(FALSE)
-    if(inherits(x, "NAobject"))
+    if(is.NAobject(x))
       return(FALSE)
     if(inherits(x, c("listof", "anylist")))
       return(TRUE)
@@ -374,12 +374,12 @@ is.na.hyperframe <- function(x) {
            },
            hyperatom = {
              vn <- vname[[j]]
-             if(inherits(hyperatoms[[vn]], "NAobject"))
+             if(is.NAobject(hyperatoms[[vn]]))
                y[,j] <- TRUE
            },
            hypercolumn = {
              vn <- vname[[j]]
-             y[,j] <- sapply(hypercolumns[[vn]], inherits, what="NAobject")
+             y[,j] <- sapply(hypercolumns[[vn]], is.NAobject)
            })
   }
   return(y)
