@@ -82,7 +82,7 @@ local({
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.44 $   $Date: 2025/04/05 05:47:54 $
+#   $Revision: 1.45 $   $Date: 2025/07/03 02:00:14 $
 #
 
 
@@ -271,6 +271,12 @@ local({
   #' pairs.im 
   pairs(solist(Z))
   pairs(solist(A=Z))
+
+  #' harmonise.im (cases)
+  H <- harmonise(A=Z)
+  H <- harmonise(A=Z, B=Z)
+  Zcoarse <- as.im(Z, dimyx=16)
+  H <- harmonise(A=Z, B=Zcoarse, D=Z)
   
   #' handling and plotting of character and factor images
   Afactor    <- as.im(col2hex("green"), letterR, na.replace=col2hex("blue"))

@@ -10,7 +10,7 @@
 #'
 #'        im.apply()           Pixelwise 'apply'
 #' 
-#'     $Revision: 1.59 $     $Date: 2025/06/26 09:59:24 $
+#'     $Revision: 1.60 $     $Date: 2025/07/03 01:55:43 $
 #'
 
 eval.im <- local({
@@ -145,6 +145,7 @@ harmonize.im <- harmonise.im <- function(...) {
     Wtemplate <- imgs[[1L]]
   } else if(length(unique(imgrasters)) == 1) {
     ## all rasters are completely identical
+    result[isim] <- imgs
     Wtemplate <- imgs[[1L]]
   } else {
     ## rasters are not completely identical - harmonisation required
