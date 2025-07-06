@@ -30,6 +30,11 @@
   cases).
 
   An NA object can be recognised by \code{\link{is.NAobject}}.
+
+  NA entries in a hyperframe can be recognised by
+  \code{\link{is.na.hyperframe}}.
+  NA entries in a spatial object list can be recognised by
+  \code{\link{is.na.solist}}.
 }
 \value{
   An object belonging to the classes \code{"NAobject"} and \code{cls}.
@@ -38,7 +43,9 @@
   \adrian and \ege.
 }
 \seealso{
-  \code{\link{is.NAobject}}, \code{\link{NA_ppp_}}
+  \code{\link{is.NAobject}},
+  \code{\link{is.na.hyperframe}},
+  \code{\link{is.na.solist}}.
 }
 \examples{
   NAobject("tess")

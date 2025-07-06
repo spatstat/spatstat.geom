@@ -37,7 +37,7 @@
 }
 \examples{
   A <- c(1, NA, 3)
-  B <- solist(cells, cells, NA_ppp_)
+  B <- solist(cells, cells, NA)
   h <- hyperframe(A=A, B=B)
   h
   is.na(h)

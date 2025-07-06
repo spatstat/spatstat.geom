@@ -7,7 +7,7 @@
 ##
 ## plot.solist is defined in plot.solist.R
 ##
-## $Revision: 1.32 $ $Date: 2025/07/06 02:49:42 $
+## $Revision: 1.33 $ $Date: 2025/07/06 04:33:54 $
 
 anylist <- function(...) {
   x <- list(...)
@@ -168,7 +168,9 @@ print.solist <- function (x, ...) {
   ## check again
   return(do.call(solist, y))
 }
-  
+
+is.na.solist <- function(x) { sapply(x, is.NAobject) }
+
 summary.solist <- function(object, ...) {
   x <- lapply(object, summary, ...)
   attr(x, "otype") <-
