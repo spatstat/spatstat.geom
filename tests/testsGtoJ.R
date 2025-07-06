@@ -17,7 +17,7 @@ cat(paste("--------- Executing",
 #
 # test "[.hyperframe" etc
 #
-#  $Revision: 1.11 $  $Date: 2023/02/03 06:17:16 $
+#  $Revision: 1.14 $  $Date: 2025/07/06 03:28:54 $
 #
 
 if(FULLTEST) {
@@ -78,6 +78,46 @@ local({
   a <- junk[[10,1]]
   a <- junk[[10,"Neurons"]] 
 })
+}
+
+if(FULLTEST) {
+  local({
+    ## NA entries in hyperframes and solists
+    h <- hyperframe(A=1:4,
+                    B=rep(list(cells), 4),
+                    C=letters[1:4],
+                    D=rep(list(redwood), 4))
+    ## "$<-.hyperframe" 
+    h$A[2] <- NA
+    h$A[2:3] <- NA
+    h$B[[2]] <- NA
+    h$B[[2]] <- cells
+    h$B[2:3] <- NA
+    stopifnot(all(sapply(h$B, is.ppp)))
+    ## "[<-.hyperframe"
+    h[2,"A"] <- NA
+    h[2:3, "A"] <- NA
+    h[2,"B"] <- NA
+    h[2,"B"] <- cells
+    stopifnot(all(sapply(h$B, is.ppp)))
+    h[2:3,"B"] <- NA
+    stopifnot(all(sapply(h$B, is.ppp)))
+    h[3,] <- NA
+    stopifnot(all(sapply(h$B, is.ppp)))
+    ## solist
+    x <- solist(cells, NA, cells)
+    x[[1]] <- NA
+    stopifnot(all(sapply(x, is.ppp)))
+    y <- solist(NA, NA, cells)
+    stopifnot(all(sapply(y, is.ppp)))
+    DC <- as.im(function(x,y){x}, owin())
+    z <- solist(DC, DC, NA)
+    stopifnot(all(sapply(z, is.im)))
+    u <- solist(NA, DC, DC)
+    stopifnot(all(sapply(u, is.im)))
+    u[[2]] <- NA
+    stopifnot(all(sapply(u, is.im)))
+  })
 }
 #
 #  tests/imageops.R

@@ -38,6 +38,8 @@
 \alias{boundingbox.list}
 \alias{bounding.box3}
 \alias{break.holes}
+\alias{can.be.dfcolumn}
+\alias{can.be.hypercolumn}
 \alias{cartesian}
 \alias{cellmiddles}
 \alias{checkbigmatrix}          
@@ -45,12 +47,14 @@
 \alias{check.arc}
 \alias{check.finespacing}
 \alias{circunion}
+\alias{classIgnoringNA}
 \alias{clip.psp}
 \alias{cliprect.psp}
 \alias{clippoly.psp}
 \alias{closethresh}
 \alias{cocoEngine}
 \alias{coerce.marks.numeric}
+\alias{coerceNAtoObject}
 \alias{crosspairquad}
 \alias{cobble.xy}
 \alias{codetime}
@@ -124,7 +128,6 @@
 \alias{is.marked.quad}
 \alias{is.multitype.default}    
 \alias{is.multitype.quad}    
-\alias{is.na.hyperframe}
 \alias{is.ppplist}
 \alias{is.pp3}
 \alias{is.ppx}
@@ -392,7 +395,7 @@ AsymmDistance.psp(X, Y, metric, method)
 \method{as.double}{im}(x, \dots)
 as.imlist(x, check)
 as.linimlist(x, check)
-\method{as.list}{hyperframe}(x, \dots)
+\method{as.list}{hyperframe}(x, \dots, expandatoms)
 as.listof(x)
 as.ppplist(x, check)
 \method{as.tess}{tessfun}(X)
@@ -403,6 +406,8 @@ bdry.mask(W)
 \method{boundingbox}{list}(\dots)
 bounding.box3(\dots)
 break.holes(x, splitby, depth, maxdepth)
+can.be.dfcolumn(x)
+can.be.hypercolumn(x)
 cartesian(pp, markset, fac = TRUE)
 cellmiddles(W, nx, ny, npix, distances)
 checkbigmatrix(n, m, fatal, silent)
@@ -410,12 +415,14 @@ checkfields(X,L)
 check.arc(arc, fatal)
 check.finespacing(r, eps, win, rmaxdefault, context, action, rname)
 circunion(arcs)
+classIgnoringNA(x, first)
 clip.psp(x, window, check, fragments)
 cliprect.psp(x, window, fragments)
 clippoly.psp(s, window, fragments)
 closethresh(X,R,S,twice,\dots)
 cocoEngine(nv, ie, je, algoname)
 coerce.marks.numeric(X, warn)
+coerceNAtoObject(x, cls)
 crosspairquad(Q,rmax,what)
 cobble.xy(x, y, f, fatal, \dots)
 codetime(x, hms, what)
@@ -489,7 +496,6 @@ is.infline(x)
 \method{is.marked}{quad}(X, na.action="warn", \dots)
 \method{is.multitype}{default}(X, \dots)  
 \method{is.multitype}{quad}(X, na.action="warn", \dots)
-\method{is.na}{hyperframe}(x)
 is.ppplist(x)
 is.pp3(x)
 is.ppx(x)

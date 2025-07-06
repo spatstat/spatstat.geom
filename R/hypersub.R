@@ -4,7 +4,7 @@
 ##
 ##  subset operations for hyperframes
 ##
-##  $Revision: 1.29 $    $Date: 2023/02/03 00:45:34 $
+##  $Revision: 1.35 $    $Date: 2025/07/06 02:39:03 $
 ##
 
 "[.hyperframe" <- function(x, i, j, drop=FALSE, strip=drop, ...) {
@@ -97,7 +97,7 @@
 }
 
 "$<-.hyperframe" <- function(x, name, value) {
-  y <- as.list(x)
+  y <- as.list(x, expandatoms=FALSE)
   if(is.hyperframe(value)) {
     if(ncol(value) == 1) {
       y[name] <- as.list(value)
@@ -105,9 +105,11 @@
       y <- insertinlist(y, name, as.list(value))
     }
   } else {
-    dfcol <- is.atomic(value) && (is.vector(value) || is.factor(value))
-    if(!dfcol && !is.null(value))
+    if(!is.null(value) && !can.be.dfcolumn(value)) {
       value <- as.list(value)
+      ## catch vanilla NA entries and coerce to appropriate type
+      value <- coerceNAtoObject(value)
+    }
     y[[name]] <- value
   }
   z <- do.call(hyperframe, append(y, list(row.names=row.names(x),
@@ -115,18 +117,22 @@
   return(z)
 }
 
+
+
 "[<-.hyperframe" <- 
 function (x, i, j, value)
 {
   sumry <- summary(x)
   colnam <- sumry$col.names
   dimx <- sumry$dim
+  coltype <- sumry$storage
+  colclass <- sumry$classes
   igiven <- !missing(i)
   jgiven <- !missing(j)
   if(igiven) {
     if(length(dim(i)) > 1)
       stop("Matrix index i is not supported in '[<-.hyperframe'", call.=FALSE)
-    singlerow    <- ((is.integer(i) && length(i) == 1 && i > 0)
+    singlerow    <- ((check.1.integer(i, fatal=FALSE, warn=FALSE) && i > 0)
                     || (is.character(i) && length(i) == 1)
                     || (is.logical(i) && sum(i) == 1))
   } else {
@@ -136,7 +142,7 @@ function (x, i, j, value)
   if(jgiven) {
     if(length(dim(j)) > 1)
       stop("Matrix index j is not supported in '[<-.hyperframe'", call.=FALSE)
-    singlecolumn <- ((is.integer(j) && length(j) == 1 && j > 0)
+    singlecolumn <- ((check.1.integer(j, fatal=FALSE, warn=FALSE) && j > 0)
                     || (is.character(j) && length(j) == 1)
                     || (is.logical(j) && sum(j) == 1))
   } else {
@@ -165,48 +171,86 @@ function (x, i, j, value)
     colseq <- seq_len(dimx[2L])
     names(rowseq) <- row.names(x)
     names(colseq) <- colnam
-    I <- rowseq[i]
-    J <- colseq[j]
-    ## convert to lists 
+    I <- unname(rowseq[i])
+    J <- unname(colseq[j])
+    ## convert to lists (automatically replicates hyperatoms to make columns)
     xlist <- as.list(x)
+    ## modify xlist
     if(singlerow && singlecolumn) {
-      vlist <- list(anylist(value))
-      nrowV <- ncolV <- 1
+      ## modify single entry x[I,J]
+      if(coltype[J] != "dfcolumn") {
+        classJ <- colclass[J]
+        ## ensure replacement entry belongs to same class as other entries
+        if(identical(value, NA)) {
+          ## coerce 'NA' to an NA object of the appropriate class
+          value <- NAobject(classJ)
+        } else {
+          ## check replacement value has correct class
+          if(!inherits(value, classJ)) {
+            ## perhaps a list of 1 item of the required class
+            if(is.list(value) && length(value) == 1 &&
+               inherits(value[[1L]], classJ)) {
+              value <- value[[1L]]
+            } else {
+              stop(paste("Replacement value does not have class",
+                         sQuote(classJ)),
+                   call.=FALSE)
+            }
+          }
+        }
+      }
+      xlist[[J]][[I]] <- value
     } else {
+      ## modify multiple entries
       hv <- if(is.hyperframe(value)) value else
+            if(is.atomic(value)) as.hyperframe(as.data.frame(value)) else
             as.hyperframe(as.solist(value, demote=TRUE))
       vlist <- as.list(hv)
       nrowV <- dim(hv)[1L]
       ncolV <- dim(hv)[2L]
+      if(nrowV != length(I)) {
+        if(nrowV == 1) {
+          ## replicate
+          vlist <- lapply(vlist, rep, times=length(I))
+        } else stop(paste("Replacement value has wrong number of rows:",
+                          nrowV, "should be", length(I)),
+                    call.=FALSE)
+      }
+      if(ncolV != length(J)) {
+        if(ncolV == 1) {
+          ## replicate
+          vlist <- rep(vlist, times=length(J))
+        } else stop(paste("Replacement value has wrong number of columns:",
+                          ncolV, "should be", length(J)),
+                    call.=FALSE)
+      }
+      ## replace entries
+      for(k in seq_along(J)) {
+        jj <- J[k]
+        valuesjjI <- vlist[[k]]
+        ## replace entries in column jj, rows I with entries of 'valuesjjI'
+        if(coltype[jj] != "dfcolumn") {
+          ## catch vanilla NA entries and coerce to spatial objects
+          valuesjjI <- coerceNAtoObject(valuesjjI, colclass[jj])
+        }
+        xlist[[jj]][I] <- valuesjjI
+      }
     }
-    if(nrowV != length(I)) {
-      if(nrowV == 1) {
-        ## replicate
-        vlist <- lapply(vlist, rep, times=nrowV)
-      } else stop(paste("Replacement value has wrong number of rows:",
-                        nrowV, "should be", length(I)),
-                  call.=FALSE)
-    }
-    if(ncolV != length(J)) {
-      if(ncolV == 1) {
-        ## replicate
-        vlist <- rep(vlist, times=ncolV)
-      } else stop(paste("Replacement value has wrong number of columns:",
-                        ncolV, "should be", length(J)),
-                  call.=FALSE)
-    }
-    ## replace entries
-    for(k in seq_along(J)) {
-      jj <- J[k]
-      xlist[[jj]][I] <- vlist[[k]]
+    ## re-compress any hyperatoms that were not affected
+    isatom <- (coltype == "hyperatom")
+    changed <- seq_len(dimx[2L]) %in% J
+    if(any(ha <- isatom & !changed)) {
+      for(k in which(ha))
+        xlist[[k]] <- xlist[[k]][[1L]]
     }
     ## put back together
     y <- do.call(hyperframe, append(xlist,
                                       list(row.names=row.names(x))))
-  } 
+  }
   return(y)
 }
 
+    
 "[[.hyperframe" <-
 function(x, ...)
 {
@@ -314,12 +358,16 @@ function(x, i, j, value)
     ## single item
     xj <- x[[chosen.cols]]
     if(!is.atomic(xj)) {
-      ## check class of replacement value
+      ## ensure replacement value has same class
       vcj <- unclass(x)$vclass[[chosen.cols]]
-      if(!inherits(value, vcj))
+      if(identical(value, NA)) {
+        ## coerce to NA object of required class
+        value <- NAobject(vcj)
+      } else if(!inherits(value, vcj)) {
         stop(paste("Replacement value does not have required class",
                    sQuote(vcj)),
              call.=FALSE)
+      }
     }
     xj[[chosen.rows]] <- value
     x[,chosen.cols] <- xj

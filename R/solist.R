@@ -7,7 +7,7 @@
 ##
 ## plot.solist is defined in plot.solist.R
 ##
-## $Revision: 1.29 $ $Date: 2024/06/16 02:20:05 $
+## $Revision: 1.32 $ $Date: 2025/07/06 02:49:42 $
 
 anylist <- function(...) {
   x <- list(...)
@@ -78,15 +78,18 @@ is.sob <- local({
   
 solist <- function(..., check=TRUE, promote=TRUE, demote=FALSE, .NameBase) {
   stuff <- list(...)
-  if(length(stuff) && !missing(.NameBase) && !any(nzchar(names(stuff))))
-    names(stuff) <- paste(.NameBase, seq_along(stuff))
-  if((check || demote) && !all(sapply(stuff, is.sob))) {
-    if(demote)
-      return(as.anylist(stuff))
-    stop("Some arguments of solist() are not 2D spatial objects")
+  if(length(stuff)) {
+    if(!missing(.NameBase) && !any(nzchar(names(stuff))))
+      names(stuff) <- paste(.NameBase, seq_along(stuff))
+    if(check || promote)
+      stuff <- coerceNAtoObject(stuff)
+    if((check || demote) && !all(sapply(stuff, is.sob))) {
+      if(demote) return(as.anylist(stuff)) else
+      stop("Some arguments of solist() are not 2D spatial objects")
+    }
   }
   class(stuff) <- unique(c("solist", "anylist", "listof", class(stuff)))
-  if(promote) {
+  if(promote && length(stuff)) {
     if(all(sapply(stuff, is.ppp))) {
       class(stuff) <- c("ppplist", class(stuff))
     } else if(all(sapply(stuff, is.im))) {
@@ -96,6 +99,20 @@ solist <- function(..., check=TRUE, promote=TRUE, demote=FALSE, .NameBase) {
     }
   }
   return(stuff)
+}
+
+coerceNAtoObject <- function(x, cls=NULL) {
+  ## coerce vanilla NA entries x[[i]]
+  ## to a spatial NA object, if class is unambiguous
+  if(any(isvna <- sapply(x, identical, y=NA))) {
+    if(is.null(cls)) 
+      cls <- unique(sapply(x[!isvna], classIgnoringNA, first=TRUE))
+    if(length(cls) == 1) {
+      nao <- NAobject(cls)
+      x[isvna] <- rep(list(nao), sum(isvna))
+    }
+  }
+  return(x)
 }
 
 as.solist <- function(x, ...) {
@@ -141,6 +158,13 @@ print.solist <- function (x, ...) {
 "[<-.solist" <- function(x, i, value) {
   ## invoke list method
   y <- NextMethod("[<-")
+  ## check again
+  return(do.call(solist, y))
+}
+  
+"[[<-.solist" <- function(x, i, value) {
+  ## invoke list method
+  y <- NextMethod("[[<-")
   ## check again
   return(do.call(solist, y))
 }

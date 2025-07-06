@@ -1,153 +1,155 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.80 $  $Date: 2025/01/02 01:48:03 $
+# $Revision: 1.81 $  $Date: 2025/07/06 01:28:39 $
 #
 
-hyperframe <- local({
+## ------------------  utilities -------------------------
 
-  hyperframe <- function(...,
-                         row.names=NULL, check.rows=FALSE, check.names=TRUE,
-                         stringsAsFactors=NULL) {
-    aarg <- list(...)
-    nama <- names(aarg)
+## recognise data that would be acceptable to data.frame
 
-    stringsAsFactors <- resolve.stringsAsFactors(stringsAsFactors)
+can.be.dfcolumn <- function(x) {
+  is.atomic(x) &&
+    (is.vector(x) ||
+     is.factor(x) ||
+     inherits(x, c("POSIXlt", "POSIXct", "Date", "Surv")))
+}
+
+## recognise data that would require a hypercolumn
+
+can.be.hypercolumn <- function(x) {
+  if(!is.list(x))
+    return(FALSE)
+  if(is.NAobject(x))
+    return(FALSE)
+  if(inherits(x, c("listof", "anylist")))
+    return(TRUE)
+  if(length(x) <= 1)
+    return(TRUE)
+  cla <- lapply(x, class)
+  return(length(unique(cla)) == 1)
+}
+
+
+## ---------------  main definition -------------------------
+
+hyperframe <- function(...,
+                       row.names=NULL, check.rows=FALSE, check.names=TRUE,
+                       stringsAsFactors=NULL) {
+  aarg <- list(...)
+  nama <- names(aarg)
+
+  stringsAsFactors <- resolve.stringsAsFactors(stringsAsFactors)
     
-    ## number of columns (= variables)
-    nvars <- length(aarg)
+  ## number of columns (= variables)
+  nvars <- length(aarg)
   
-    if(nvars == 0) {
-      ## zero columns - return
-      result <- list(nvars=0,
-                     ncases=0,
-                     vname=character(0),
-                     vtype=factor(,
-                       levels=c("dfcolumn","hypercolumn","hyperatom")),
-                     vclass=character(0),
-                     df=data.frame(),
-                     hyperatoms=list(),
-                     hypercolumns=list())
-      class(result) <- c("hyperframe", class(result))
-      return(result)
-    }
-
-    ## check column names
-    if(is.null(nama))
-      nama <- paste("V", 1:nvars, sep="")
-    else if(any(unnamed <- (nama == ""))) 
-      nama[unnamed] <- paste("V", seq_len(sum(unnamed)), sep="")
-    nama <- make.names(nama, unique=TRUE)
-    names(aarg) <- nama
-  
-    ## Each argument must be either
-    ##    - a vector suitable as a column in a data frame
-    ##    - a list of objects of the same class
-    ##    - a single object of some class
-  
-    dfcolumns    <- sapply(aarg, is.dfcolumn)
-    hypercolumns <- sapply(aarg, is.hypercolumn)
-    hyperatoms   <- !(dfcolumns | hypercolumns)
-
-    ## Determine number of rows (= cases) 
-    columns <- dfcolumns | hypercolumns
-    if(!any(columns)) {
-      ncases <- 1
-    } else {
-      heights <- rep.int(1, nvars)
-      heights[columns] <-  lengths(aarg[columns])
-      u <- unique(heights)
-      if(length(u) > 1) {
-        u <- u[u != 1]
-        if(length(u) > 1)
-          stop(paste("Column lengths are inconsistent:",
-                     paste(u, collapse=",")))
-      }
-      ncases <- u
-      if(ncases > 1 && all(heights[dfcolumns] == 1)) {
-        ## force the data frame to have 'ncases' rows
-        aarg[dfcolumns] <- lapply(aarg[dfcolumns], rep, ncases)
-        heights[dfcolumns] <- ncases
-      }
-      if(any(stubs <- hypercolumns & (heights != ncases))) {
-        ## hypercolumns of height 1 should be hyperatoms
-        aarg[stubs] <- lapply(aarg[stubs], "[[", i=1L)
-        hypercolumns[stubs] <- FALSE
-        hyperatoms[stubs] <- TRUE
-      }
-    }
-  
-    ## Collect the data frame columns into a data frame
-    if(!any(dfcolumns))
-      df <- as.data.frame(matrix(, ncases, 0))
-    else {
-      df <- do.call(data.frame,
-                    append(aarg[dfcolumns],
-                           list(check.rows=check.rows,
-                                check.names=check.names,
-                                stringsAsFactors=stringsAsFactors)))
-      names(df) <- nama[dfcolumns]
-    }
-    if(length(row.names)) row.names(df) <- row.names
-
-    ## Storage type of each variable
-    vtype <- character(nvars)
-    vtype[dfcolumns] <- "dfcolumn"
-    vtype[hypercolumns] <- "hypercolumn"
-    vtype[hyperatoms] <- "hyperatom"
-    vtype=factor(vtype, levels=c("dfcolumn","hypercolumn","hyperatom"))
-
-    ## Class of each variable
-    vclass <- character(nvars)
-    if(any(dfcolumns))
-      vclass[dfcolumns] <- unlist(lapply(as.list(df), class1))
-    if(any(hyperatoms))
-      vclass[hyperatoms] <- unlist(lapply(aarg[hyperatoms], class1))
-    if(any(hypercolumns))
-      vclass[hypercolumns] <- unlist(lapply(aarg[hypercolumns], class1of1))
-    ## Put the result together
-    result <- list(nvars=nvars,
-                   ncases=ncases,
-                   vname=nama,
-                   vtype=vtype,
-                   vclass=vclass,
-                   df=df,
-                   hyperatoms=aarg[hyperatoms],
-                   hypercolumns=aarg[hypercolumns])
-    
+  if(nvars == 0) {
+    ## zero columns - return
+    result <- list(nvars=0,
+                   ncases=0,
+                   vname=character(0),
+                   vtype=factor(,
+                                levels=c("dfcolumn","hypercolumn","hyperatom")),
+                   vclass=character(0),
+                   df=data.frame(),
+                   hyperatoms=list(),
+                   hypercolumns=list())
     class(result) <- c("hyperframe", class(result))
     return(result)
   }
 
-  dateclasses <- 
+  ## check column names
+  if(is.null(nama)) {
+    nama <- paste("V", 1:nvars, sep="")
+  } else if(any(unnamed <- (nama == ""))) {
+    nama[unnamed] <- paste("V", seq_len(sum(unnamed)), sep="")
+  }
+  nama <- make.names(nama, unique=TRUE)
+  names(aarg) <- nama
   
-  is.dfcolumn <- function(x) {
-    is.atomic(x) &&
-      (is.vector(x) ||
-       is.factor(x) ||
-       inherits(x, c("POSIXlt", "POSIXct", "Date", "Surv")))
+  ## Each argument must be either
+  ##    - a vector suitable as a column in a data frame
+  ##    - a list of objects of the same class
+  ##    - a single object of some class
+  
+  dfcolumns    <- sapply(aarg, can.be.dfcolumn)
+  hypercolumns <- sapply(aarg, can.be.hypercolumn)
+  hyperatoms   <- !(dfcolumns | hypercolumns)
+  
+  ## Determine number of rows (= cases) 
+  columns <- dfcolumns | hypercolumns
+  if(!any(columns)) {
+    ncases <- 1
+  } else {
+    heights <- rep.int(1, nvars)
+    heights[columns] <-  lengths(aarg[columns])
+    u <- unique(heights)
+    if(length(u) > 1) {
+      u <- u[u != 1]
+      if(length(u) > 1)
+        stop(paste("Column lengths are inconsistent:",
+                   paste(u, collapse=",")))
+    }
+    ncases <- u
+    if(ncases > 1 && all(heights[dfcolumns] == 1)) {
+      ## force the data frame to have 'ncases' rows
+      aarg[dfcolumns] <- lapply(aarg[dfcolumns], rep, ncases)
+      heights[dfcolumns] <- ncases
+    }
+    if(any(stubs <- hypercolumns & (heights != ncases))) {
+      ## hypercolumns of height 1 should be hyperatoms
+      aarg[stubs] <- lapply(aarg[stubs], "[[", i=1L)
+      hypercolumns[stubs] <- FALSE
+      hyperatoms[stubs] <- TRUE
+    }
   }
   
-  is.hypercolumn <- function(x) {
-    if(!is.list(x))
-      return(FALSE)
-    if(is.NAobject(x))
-      return(FALSE)
-    if(inherits(x, c("listof", "anylist")))
-      return(TRUE)
-    if(length(x) <= 1)
-      return(TRUE)
-    cla <- lapply(x, class)
-    return(length(unique(cla)) == 1)
+  ## Collect the data frame columns into a data frame
+  if(!any(dfcolumns)) {
+    df <- as.data.frame(matrix(, ncases, 0))
+  } else {
+    df <- do.call(data.frame,
+                  append(aarg[dfcolumns],
+                         list(check.rows=check.rows,
+                              check.names=check.names,
+                              stringsAsFactors=stringsAsFactors)))
+    names(df) <- nama[dfcolumns]
   }
+  if(length(row.names)) row.names(df) <- row.names
 
-  class1 <- function(x) { setdiff(class(x), "NAobject")[1L] }
-
-  class1of1 <- function(x) { class1(x[[1L]]) }
+  ## Storage type of each variable
+  vtype <- character(nvars)
+  vtype[dfcolumns] <- "dfcolumn"
+  vtype[hypercolumns] <- "hypercolumn"
+  vtype[hyperatoms] <- "hyperatom"
+  vtype=factor(vtype, levels=c("dfcolumn","hypercolumn","hyperatom"))
   
-  hyperframe
-})
+  ## Class of each variable
+  vclass <- character(nvars)
+  if(any(dfcolumns))
+    vclass[dfcolumns] <- sapply(as.list(df), classIgnoringNA, first=TRUE)
+  if(any(hyperatoms))
+    vclass[hyperatoms] <- sapply(aarg[hyperatoms], classIgnoringNA, first=TRUE)
+  if(any(hypercolumns))
+    vclass[hypercolumns] <- sapply(lapply(aarg[hypercolumns], "[[", i=1L),
+                                   classIgnoringNA, first=TRUE)
+  ## Put the result together
+  result <- list(nvars=nvars,
+                 ncases=ncases,
+                 vname=nama,
+                 vtype=vtype,
+                 vclass=vclass,
+                 df=df,
+                 hyperatoms=aarg[hyperatoms],
+                 hypercolumns=aarg[hypercolumns])
+    
+  class(result) <- c("hyperframe", class(result))
+  return(result)
+}
 
+
+## ...................   methods -------------------------
 
 is.hyperframe <- function(x) inherits(x, "hyperframe")
 
@@ -385,7 +387,7 @@ is.na.hyperframe <- function(x) {
   return(y)
 }
              
-as.list.hyperframe <- function(x, ...) {
+as.list.hyperframe <- function(x, ..., expandatoms=TRUE) {
   ux <- unclass(x)
   out <- vector(mode="list", length=ux$nvars)
   vtype <- ux$vtype
@@ -399,12 +401,17 @@ as.list.hyperframe <- function(x, ...) {
   if(any(hatom <- (vtype == "hyperatom"))) {
     ha <- ux$hyperatoms
     names(ha) <- NULL
-    hacol <- lapply(ha, list)
-    hacol <- lapply(hacol, rep.int, times=ux$ncases)
-    hacol <- lapply(hacol, as.solist, demote=TRUE)
-    out[hatom] <- hacol
+    if(expandatoms) {
+      hacol <- lapply(ha, list)
+      hacol <- lapply(hacol, rep.int, times=ux$ncases)
+      hacol <- lapply(hacol, as.solist, demote=TRUE)
+      out[hatom] <- hacol
+    } else {
+      out[hatom] <- ha
+    }
   }
-  out <- lapply(out, "names<-", value=row.names(df))
+  fullrows <- !hatom | expandatoms
+  out[fullrows] <- lapply(out[fullrows], "names<-", value=row.names(df))
   names(out) <- names(x)
   return(out)
 }

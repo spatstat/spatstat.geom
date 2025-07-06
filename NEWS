@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.4-1.028
+        CHANGES IN spatstat.geom VERSION 3.4-1.030
 
 OVERVIEW
 
@@ -33,8 +33,15 @@ NEW FUNCTIONS
     o is.NAobject
     Recognise whether an object is a missing or unavailable (NA) object.
 
+    o is.na.hyperframe
+    Returns a logical matrix indicating which entries of the hyperframe
+    are NA values or NA objects.
+    
     o is.na.ppp, is.na.im, is.na.owin
     Recognise whether an object is a missing or unavailable (NA) object.
+
+    o NAobject
+    Create an NA object of a specified class.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -69,6 +76,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.im
     Placement of main title improved, in some cases.
 
+    o "[<-.hyperframe"
+    In an assignment like x[i,j] <- NA, if column j contains
+    spatial objects, the NA value will be coerced to an 'NAobject'
+    of the appropriate class.
+
 BUG FIXES
 
     o delaunay
@@ -77,6 +89,12 @@ BUG FIXES
 
     o plot.im
     riblab$side was ignored.
+    Fixed.
+
+    o "[<-.hyperframe"
+    Results of x[i,j] <- value were malformed if i and j were
+    single numeric values equivalent to integers but not stored as integers,
+    i.e. values with is.integer(i) = FALSE.
     Fixed.
 
 
