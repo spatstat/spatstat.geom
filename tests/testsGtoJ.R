@@ -17,7 +17,7 @@ cat(paste("--------- Executing",
 #
 # test "[.hyperframe" etc
 #
-#  $Revision: 1.14 $  $Date: 2025/07/06 03:28:54 $
+#  $Revision: 1.15 $  $Date: 2025/07/07 06:41:24 $
 #
 
 if(FULLTEST) {
@@ -87,24 +87,37 @@ if(FULLTEST) {
                     B=rep(list(cells), 4),
                     C=letters[1:4],
                     D=rep(list(redwood), 4))
-    ## "$<-.hyperframe" 
+    ## check that column entries all have the same class
+    ck <- function(context, x, cls) {
+      xname <- deparse(substitute(x))
+      if(!all(sapply(x, inherits, what=cls)))
+        stop(paste(paste0(context, ","),
+                   "some entries of", xname,
+                   "do not belong to class", sQuote(cls)))
+      invisible(NULL)
+    }
+    ## cases of "$<-.hyperframe" 
     h$A[2] <- NA
     h$A[2:3] <- NA
     h$B[[2]] <- NA
+    ck("After h$B[[2]] <- NA", h$B, "ppp")
     h$B[[2]] <- cells
+    ck("After h$B[[2]] <- NA and h$B[[2]] <- cells", h$B, "ppp")
     h$B[2:3] <- NA
-    stopifnot(all(sapply(h$B, is.ppp)))
-    ## "[<-.hyperframe"
+    ck("After h$B[2:3] <- NA", h$B, "ppp")
+    ## cases of "[<-.hyperframe"
     h[2,"A"] <- NA
     h[2:3, "A"] <- NA
     h[2,"B"] <- NA
+    ck("After h[2, 'B'] <- NA", h$B, "ppp")
     h[2,"B"] <- cells
-    stopifnot(all(sapply(h$B, is.ppp)))
+    ck("After h[2, 'B'] <- NA and <- cells", h$B, "ppp")
     h[2:3,"B"] <- NA
-    stopifnot(all(sapply(h$B, is.ppp)))
+    ck("After h[2:3, 'B'] <- NA", h$B, "ppp")
     h[3,] <- NA
+    ck("After h[3, ] <- NA", h$B, "ppp")
     stopifnot(all(sapply(h$B, is.ppp)))
-    ## solist
+    ## cases of solist() and "[<-.solist" and "[[<-.solist"
     x <- solist(cells, NA, cells)
     x[[1]] <- NA
     stopifnot(all(sapply(x, is.ppp)))
@@ -116,7 +129,23 @@ if(FULLTEST) {
     u <- solist(NA, DC, DC)
     stopifnot(all(sapply(u, is.im)))
     u[[2]] <- NA
-    stopifnot(all(sapply(u, is.im)))
+    ck("After u[[2]] <- NA", u, "im")
+    ## 
+    h <- hyperframe(A=1:4,
+                    B=rep(list(cells), 4),
+                    C=letters[1:4],
+                    D=rep(list(redwood), 4))
+    shouldfail <- function(words, expr) {
+      a <- try(eval(expr), silent=TRUE)
+      if(!inherits(a, "try-error"))
+        stop(paste(words, "did not generate an error"), call.=FALSE)
+      invisible(NULL)
+    }
+    shouldfail("Assigning an owin into a ppp column",
+               {h$B[[2]] <- owin()})
+    shouldfail("Assigning two owins into two entries in a ppp column",
+               {h$B[2:3] <- rep(list(owin()), 2)})
+    
   })
 }
 #

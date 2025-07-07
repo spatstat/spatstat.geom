@@ -26,7 +26,7 @@ can.be.hypercolumn <- function(x) {
     return(TRUE)
   if(length(x) <= 1)
     return(TRUE)
-  cla <- lapply(x, class)
+  cla <- sapply(x, classIgnoringNA, first=TRUE)
   return(length(unique(cla)) == 1)
 }
 
@@ -455,7 +455,8 @@ with.hyperframe <- function(data, expr, ..., simplify=TRUE, ee=NULL,
       return(out)
     }
   }
-  out <- hyperframe(result=out, row.names=row.names(data))$result
+  ## apply rules for a column in a hyperframe 
+  out <- hyperframe(result=as.anylist(out), row.names=row.names(data))$result
   return(out)
 }
 

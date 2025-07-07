@@ -4,7 +4,7 @@
 ##
 ##  subset operations for hyperframes
 ##
-##  $Revision: 1.35 $    $Date: 2025/07/06 02:39:03 $
+##  $Revision: 1.37 $    $Date: 2025/07/07 06:14:38 $
 ##
 
 "[.hyperframe" <- function(x, i, j, drop=FALSE, strip=drop, ...) {
@@ -107,8 +107,17 @@
   } else {
     if(!is.null(value) && !can.be.dfcolumn(value)) {
       value <- as.list(value)
-      ## catch vanilla NA entries and coerce to appropriate type
-      value <- coerceNAtoObject(value)
+      if(inherits(value, "anylist")) {
+        ## all entries must have common class
+        ## catch vanilla NA entries and coerce to appropriate type
+        value <- coerceNAtoObject(value)
+        ## check for conflicting types
+        cls <- unique(sapply(value, classIgnoringNA, first=TRUE))
+        if(length(cls) > 1)
+          stop(paste("Column entries have conflicting types",
+                     commasep(sQuote(cls))),
+               call.=FALSE)
+      }
     }
     y[[name]] <- value
   }
@@ -171,8 +180,8 @@ function (x, i, j, value)
     colseq <- seq_len(dimx[2L])
     names(rowseq) <- row.names(x)
     names(colseq) <- colnam
-    I <- unname(rowseq[i])
-    J <- unname(colseq[j])
+    I <- as.integer(unname(rowseq[i]))
+    J <- as.integer(unname(colseq[j]))
     ## convert to lists (automatically replicates hyperatoms to make columns)
     xlist <- as.list(x)
     ## modify xlist
@@ -224,14 +233,34 @@ function (x, i, j, value)
                           ncolV, "should be", length(J)),
                     call.=FALSE)
       }
+      ## 
+      fullcolumn <- identical(I, rowseq)
       ## replace entries
       for(k in seq_along(J)) {
         jj <- J[k]
         valuesjjI <- vlist[[k]]
-        ## replace entries in column jj, rows I with entries of 'valuesjjI'
-        if(coltype[jj] != "dfcolumn") {
-          ## catch vanilla NA entries and coerce to spatial objects
-          valuesjjI <- coerceNAtoObject(valuesjjI, colclass[jj])
+        ## replace entries in subset I of column jj by entries of 'valuesjjI'   
+        if(!can.be.dfcolumn(valuesjjI)) {
+          ## replacement values are objects
+          if(fullcolumn) {
+            ## Replace entire column jj by another list of objects
+            ## (possibly of a different class)
+            ## Coerce vanilla NA entries to appropriate class, whatever that is
+            xlist[[jj]] <- coerceNAtoObject(valuesjjI)
+          } else {
+            ## Replace entries in proper subset of column jj by objects
+            if(coltype[jj] == "dfcolumn")
+              stop("Cannot replace entries in an atomic vector by objects",
+                   call.=FALSE)
+            ## Replacing objects by objects
+            classjj <- colclass[jj]
+            ## catch vanilla NA entries and coerce to spatial objects
+            valuesjjI <- coerceNAtoObject(valuesjjI, classjj)
+            if(!all(sapply(valuesjjI, inherits, what=classjj)))
+            stop(paste("Replacement value in column", jj,
+                       "is not of the required class", classjj),
+                 call.=FALSE)
+          }
         }
         xlist[[jj]][I] <- valuesjjI
       }
