@@ -63,12 +63,12 @@ layered(..., plotargs = NULL, LayerList=NULL)
   A list, belonging to the class \code{"layered"}.
   There are methods for \code{plot}, \code{"["},
   \code{"shift"}, \code{"affine"}, \code{"rotate"} and \code{"rescale"}.
+
+  There is a method for \code{\link{c}} which makes it possible
+  to concatenate two or more layered objects.
 }
 \author{\adrian
-  
-  
   and \rolf
-  
 }
 \seealso{
   \code{\link{plot.layered}},

@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.4-1.032
+        CHANGES IN spatstat.geom VERSION 3.4-1.033
 
 OVERVIEW
 
@@ -13,6 +13,8 @@ OVERVIEW
     o im.apply handles vector-valued functions.
 
     o Backgrounds for plots of point patterns.
+
+    o Concatenate layered objects.
     
     o Bug fixes and minor improvements.
 
@@ -33,6 +35,11 @@ NEW FUNCTIONS
     o is.na.hyperframe
     Returns a logical matrix indicating which entries of the hyperframe
     are NA values or NA objects.
+
+    o c.layered
+    Method for the generic 'c' for layered objects.
+    Enables two or more layered objects to be concatenated,
+    correctly retaining their plot arguments.
     
 SIGNIFICANT USER-VISIBLE CHANGES
 

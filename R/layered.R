@@ -3,7 +3,7 @@
 #
 # Simple mechanism for layered plotting
 #
-#  $Revision: 1.40 $  $Date: 2022/01/04 05:30:06 $
+#  $Revision: 1.42 $  $Date: 2025/07/12 08:55:22 $
 #
 
 layered <- function(..., plotargs=NULL, LayerList=NULL) {
@@ -27,6 +27,24 @@ layered <- function(..., plotargs=NULL, LayerList=NULL) {
   }
   names(plotargs) <- names(out)
   attr(out, "plotargs") <- plotargs
+  class(out) <- c("layered", class(out))
+  return(out)
+}
+
+c.layered <- function(...) {
+  argh <- list(...)
+  ## force all objects to be layered
+  notlayered <- !sapply(argh, inherits, what="layered")
+  if(any(notlayered))
+    argh[notlayered] <- lapply(argh[notlayered], layered)
+  ## from each layered object, extract the list of lists of plot args
+  plarglists <- lapply(argh, layerplotargs)
+  ## concatenate the lists of layers
+  out <- unlist(lapply(argh, unclass), recursive=FALSE)
+  ## concatenate the lists of plot args
+  plargs <- unlist(plarglists, recursive=FALSE)
+  names(plargs) <- names(out)
+  attr(out, "plotargs") <- plargs
   class(out) <- c("layered", class(out))
   return(out)
 }

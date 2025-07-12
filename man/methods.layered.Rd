@@ -1,6 +1,7 @@
 \name{methods.layered} 
 \Rdversion{1.1}
 \alias{methods.layered} %DoNotExport
+\alias{c.layered}
 \alias{shift.layered}
 \alias{reflect.layered}
 \alias{flipxy.layered}
@@ -16,11 +17,13 @@
   layered objects (class \code{"layered"}).
 }
 \usage{
-  \method{shift}{layered}(X, vec=c(0,0), ...)
+  \method{c}{layered}(\dots)
 
-  \method{rotate}{layered}(X, ..., centre=NULL)
+  \method{shift}{layered}(X, vec=c(0,0), \dots)
 
-  \method{affine}{layered}(X, ...)
+  \method{rotate}{layered}(X, \dots, centre=NULL)
+
+  \method{affine}{layered}(X, \dots)
 
   \method{reflect}{layered}(X)
 
@@ -28,7 +31,7 @@
 
   \method{rescale}{layered}(X, s, unitname)
 
-  \method{scalardilate}{layered}(X, ...)
+  \method{scalardilate}{layered}(X, \dots)
 }
 \arguments{
   \item{X}{
@@ -59,6 +62,7 @@
 }
 \details{
   These are methods for the generic functions
+  \code{\link{c}},
   \code{\link{shift}},
   \code{\link{rotate}},
   \code{\link{reflect}},
@@ -71,15 +75,20 @@
   A layered object represents data that should be plotted in
   successive layers, for example, a background and a foreground.
   See \code{\link{layered}}.
+
+  The method for \code{c} can be used to concatenate two or more
+  layered objects \code{\dots} into a single layered object, retaining the plot
+  arguments.
+
+  The other methods apply geometrical operations to each of the layers
+  of the layered object \code{X}.
 }
 \value{
   Another object of class \code{"layered"}.
 }
-\author{\adrian
-  
-  
+\author{
+  \adrian
   and \rolf
-  
 }
 \seealso{
   \code{\link{layered}}
