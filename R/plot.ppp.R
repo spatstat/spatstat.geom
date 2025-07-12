@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.127 $	$Date: 2025/05/20 02:42:10 $
+#	$Revision: 1.128 $	$Date: 2025/07/12 07:45:39 $
 #
 #
 #--------------------------------------------------------------------------
@@ -14,7 +14,8 @@ plot.ppp <- function(x, main, ..., clipwin=NULL,
                      symap=NULL, maxsize=NULL, meansize=NULL, markscale=NULL,
                      minsize=NULL, zerosize=NULL, zap=0.01, 
                      show.window=show.all, show.all=!add, do.plot=TRUE,
-                     multiplot=TRUE)
+                     multiplot=TRUE,
+                     background=NULL, clip.background=FALSE)
 {
   if(missing(main))
     main <- short.deparse(substitute(x))
@@ -28,6 +29,21 @@ plot.ppp <- function(x, main, ..., clipwin=NULL,
     clippy <- if(is.mask(W)) intersect.owin(W, clipwin) else edges(W)[clipwin]
     x <- x[clipwin]
   } else clippy <- NULL
+
+  ## ........ background object ..............................
+  if(!is.null(background)) {
+    if(isTRUE(clip.background)) {
+      bkg <- try(background[Frame(x), drop=FALSE], silent=TRUE)
+      if(inherits(bkg, "try-error")) {
+        warning("Unable to clip the background object", call.=FALSE)
+      } else {
+        background <- bkg
+      }
+    }
+    backbox <- Frame(background)
+  } else {
+    backbox <- NULL
+  }
   
   ## sensible default position
   legend <- legend && show.all
@@ -55,7 +71,8 @@ plot.ppp <- function(x, main, ..., clipwin=NULL,
                                            symap=symap),
                                       list(...),
                                       list(equal.scales=TRUE),
-                                      list(panel.end=clippy),
+                                      list(panel.end=clippy,
+                                           background=background),
                                       list(legend=legend,
                                            leg.side=leg.side,
                                            leg.args=leg.args),
@@ -115,7 +132,7 @@ plot.ppp <- function(x, main, ..., clipwin=NULL,
   }
 
   ## Determine bounding box for main plot
-  BB <- as.rectangle(x)
+  BB <- boundingbox(as.rectangle(x), backbox)
   sick <- inherits(x, "ppp") && !is.null(rejects <- attr(x, "rejects"))
   if(sick) {
     ## Get relevant parameters
@@ -189,10 +206,17 @@ plot.ppp <- function(x, main, ..., clipwin=NULL,
   dflt <- list(cex.main=1, xlim=NULL, ylim=NULL,
                ann=FALSE, axes=FALSE, xlab="", ylab="")
   rez <- resolve.defaults(list(...), dflt)[names(dflt)]
+  ## initialise plot, create space
   do.call(plot.owin,
           append(list(x=quote(BB), type="n", add=add,
                       main=blankmain, show.all=show.all),
                  rez))
+  ## plot background if specified
+  if(!is.null(background)) {
+    plot(background, add=TRUE, main="")
+    add <- TRUE
+  }
+  ## plot reject points if any
   if(sick) {
     if(show.window) {
       ## plot windows

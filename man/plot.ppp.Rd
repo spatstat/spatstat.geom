@@ -16,7 +16,8 @@
                     minsize=NULL, zerosize=NULL,
                     zap=0.01,
                     show.window=show.all, show.all=!add, do.plot=TRUE,
-                    multiplot=TRUE)
+                    multiplot=TRUE,
+                    background=NULL, clip.background=FALSE)
 }
 \arguments{
   \item{x}{
@@ -162,6 +163,14 @@
   }
   \item{multiplot}{
     Logical value giving permission to display multiple plots.
+  }
+  \item{background}{
+    Optional. An object to be plotted underneath the main plot.
+    See the section on \emph{Background}.
+  }
+  \item{clip.background}{
+    Logical value specifying whether \code{background} should be
+    intersected with the rectangular frame of \code{x}.
   }
 }
 \value{
@@ -366,6 +375,16 @@
   To modify a symbol map, for example to change the colours used
   without changing anything else, use \code{\link{update.symbolmap}}.
 }
+\section{Background}{
+  The argument \code{background} specifies an object that will be
+  plotted before the point pattern \code{x} is plotted,
+  and will therefore appear
+  underneath it. The background can be any spatial object in the
+  \pkg{spatstat} package family. To specify graphical arguments
+  for the background, make it into a \code{\link{layered}} object
+  using \code{\link{layered}} or \code{\link{as.layered}},
+  and assign graphical parameters to it using \code{\link{layerplotargs}}.
+}
 \section{Troubleshooting: text is clipped}{
   Text that is intended to be drawn in the margins of the plot
   can sometimes be clipped so that it is only partly visible
@@ -475,6 +494,9 @@
 
    ## plot only the colour map (since the symbols have fixed size and shape)
    plot(longleaf, symap=sy, leg.args=list(colour.only=TRUE))
+
+   ## plot with a background
+   plot(bei \%mark\% nndist(bei), background=bei.extra$elev)
 
    ## clipping
    plot(humberside)

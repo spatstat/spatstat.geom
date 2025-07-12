@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.4-1.031
+        CHANGES IN spatstat.geom VERSION 3.4-1.032
 
 OVERVIEW
 
@@ -12,6 +12,8 @@ OVERVIEW
 
     o im.apply handles vector-valued functions.
 
+    o Backgrounds for plots of point patterns.
+    
     o Bug fixes and minor improvements.
 
 NEW FUNCTIONS
@@ -65,6 +67,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.im
     Placement of main title improved, in some cases.
 
+    o plot.ppp
+    New arguments 'background' and 'clip.background' allow the user to specify
+    an object that will be plotted before the point pattern x, and will
+    therefore appear underneath it.
+    
     o "[<-.hyperframe"
     In an assignment like x[i,j] <- NA, if column j contains
     spatial objects, the NA value will be coerced to an 'NAobject'
