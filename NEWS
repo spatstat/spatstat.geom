@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.4-1.033
+        CHANGES IN spatstat.geom VERSION 3.4-1.035
 
 OVERVIEW
 
@@ -15,6 +15,8 @@ OVERVIEW
     o Backgrounds for plots of point patterns.
 
     o Concatenate layered objects.
+
+    o Connected components of polygonal windows.
     
     o Bug fixes and minor improvements.
 
@@ -46,6 +48,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o compatible.im
     Accelerated in the common case where all rasters are identical.
 
+    o connected.owin
+    New argument 'polygonal' allows calculation of connected components
+    using polygonal geometry instead of pixel-based algorithm.
+    
     o harmonise.im
     Accelerated in the common case where all rasters are identical.
 

@@ -13,7 +13,7 @@
 \usage{
 connected(X, \dots)
 
-\method{connected}{owin}(X, \dots, method="C", connect=8)
+\method{connected}{owin}(X, \dots, polygonal=FALSE, method="C", connect=8)
 
 \method{connected}{im}(X, \dots, background = NA, method="C", connect=8)
 }
@@ -21,6 +21,10 @@ connected(X, \dots)
   \item{X}{
     A spatial object such as a pixel image (object of class \code{"im"})
     or a window (object of class \code{"owin"}).
+  }
+  \item{polygonal}{
+    Logical value specifying whether to use polygonal geometry.
+    See Details.
   }
   \item{background}{
     Optional. Treat pixels with this value 
@@ -77,13 +81,22 @@ connected(X, \dots)
   (1966). If \code{method="interpreted"}, the computation is performed
   by an \R implementation of the algorithm of Park et al (2000). 
 
-  The result is a factor-valued image, with levels that correspond to
+  By default, the result is a factor-valued image,
+  with levels that correspond to
   the connected components. The Examples show how to extract each
   connected component as a separate window object.
+
+  If \code{X} is a window and \code{polygonal=TRUE},
+  the result is a tessellation
+  (object of class \code{"tess"}) whose tiles are the connected components.
 }
 \value{
   A pixel image (object of class \code{"im"}) with factor values.
   The levels of the factor correspond to the connected components.
+
+  For \code{connected.owin}, if \code{polygonal=TRUE},
+  the result is a tessellation
+  (object of class \code{"tess"}) whose tiles are the connected components.
 }
 \references{
   Park, J.-M., Looney, C.G. and Chen, H.-C. (2000)
@@ -130,6 +143,15 @@ connected(X, \dots)
 
   # how to extract the components as a list of windows
   W <- tiles(tess(image=Z))
+
+  ## polygonal algorithm
+  A <- regularpolygon(7)
+  B <- regularpolygon(13, 0.3)
+  D <- owin(c(-1, -0.6), c(1, 1.4))
+  E <- regularpolygon(5, 0.3)
+  Funky <- union.owin(D, E, setminus.owin(A, B))
+  plot(Funky, col="blue")
+  plot(connected(Funky, polygonal=TRUE), do.col=TRUE)
 }
 \author{
   Original \R code by Julian Burgos, University of Washington.

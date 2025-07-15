@@ -3,7 +3,7 @@
 #
 # connected component transform
 #
-#    $Revision: 1.29 $  $Date: 2023/07/18 03:59:12 $
+#    $Revision: 1.30 $  $Date: 2025/07/15 03:22:49 $
 #
 # Interpreted code for pixel images by Julian Burgos <jmburgos@u.washington.edu>
 # Rewritten in C by Adrian Baddeley
@@ -26,7 +26,14 @@ connected.im <- function(X, ..., background=NA, method="C", connect=8) {
   connected.owin(W, method=method, ..., connect=connect)
 }
 
-connected.owin <- function(X, ..., method="C", connect=8) {
+connected.owin <- function(X, ..., polygonal=FALSE, method="C", connect=8) {
+  if(polygonal) {
+    P <- as.polygonal(X)
+    A <- xypolycomponents(P)
+    W <- if(is.mask(X)) P else X
+    result <- tess(tiles=A, window=W)
+    return(result)
+  }
   method <- pickoption("algorithm choice", method,
                        c(C="C", interpreted="interpreted"))
   if(!missing(connect)) {

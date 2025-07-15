@@ -355,6 +355,11 @@
 \alias{XDtoNN}
 \alias{xypolygon2psp}
 \alias{xypolyselfint}
+\alias{xypolycomponents}
+\alias{xypoly2owin}
+\alias{xypolysub2owin}
+\alias{xypolyNesting}
+\alias{xypolycoco}
 \alias{ZeroValue}
 \alias{ZeroValue.im}
 
@@ -735,9 +740,14 @@ x.quad(Q)
 y.quad(Q)
 xy.grid(xr, yr, nx, ny, dx, dy)
 \method{xtfrm}{im}(x)
-xypolyselfint(p, eps, proper, yesorno, checkinternal)
 XDtoNN(d, what, iX, iY, k, \dots)
 xypolygon2psp(p, w, check)
+xypolyselfint(p, eps, proper, yesorno, checkinternal)
+xypolycomponents(W)
+xypoly2owin(p, check, \dots)
+xypolysub2owin(i, B, \dots)
+xypolyNesting(W)
+xypolycoco(M, h, id)
 ZeroValue(x)
 \method{ZeroValue}{im}(x)
 
