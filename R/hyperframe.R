@@ -333,9 +333,9 @@ as.data.frame.hyperframe <- function(x, row.names = NULL,
     row.names <- row.names(ux$df)
   vtype <- ux$vtype
   vclass <- ux$vclass
-  dfcol <- (vtype == "dfcolumn")
+  ishyper <- (vtype != "dfcolumn")
+  nhyper <- sum(ishyper)
   if(discard) { 
-    nhyper <- sum(!dfcol)
     if(nhyper > 0 && warn)
       warning(paste(nhyper, 
                     ngettext(nhyper, "variable", "variables"),
@@ -345,18 +345,28 @@ as.data.frame.hyperframe <- function(x, row.names = NULL,
     ## convert to a list to be passed to 'data.frame'
     lx <- as.list(x)
     ## handle non-data-frame columns
-    if(hasobjects <- any(!dfcol)) {
+    if(nhyper > 0) {
       ## objects of class 'foo' are represented by "(foo)"
       vclassstring <- paren(vclass)
       nrows <- ux$ncases
-      lx[!dfcol] <- lapply(as.list(vclassstring[!dfcol]),
-                           rep.int, times=nrows)
+      lx[ishyper] <- lapply(as.list(vclassstring[ishyper]),
+                            rep.int, times=nrows)
     }
     df <- do.call(data.frame, append(lx, list(row.names=row.names)))
     colnames(df) <- ux$vname
     ## detect NA objects using is.na.hyperframe
-    if(hasobjects)
-      df[is.na(x)] <- NA
+    if(nhyper > 0 && any(isna <- is.na(x))) {
+      if(TRUE) {
+        ## print <NA> for each missing object
+        df[isna] <- NA
+      } else {
+        ## print <NA foo> for missing object of class foo
+        J <- col(df)
+        isnaobj <- isna & (ishyper[J])
+        if(any(isnaobj))
+          df[isnaobj] <- paste0("<NA_", vclass[J[isnaobj]], ">")
+      }
+    }
   }
   return(df)
 }
