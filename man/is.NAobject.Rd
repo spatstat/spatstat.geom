@@ -44,5 +44,6 @@
 
    X <- solist(cells, NA, cells)
    is.NAobject(X[[2]])
+   sapply(X, is.NAobject)
 }
 \keyword{methods}
