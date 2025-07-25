@@ -2,17 +2,27 @@
 # clickpoly.R
 #
 #
-# $Revision: 1.12 $  $Date: 2024/02/04 08:04:51 $
+# $Revision: 1.13 $  $Date: 2025/07/25 06:22:09 $
 #
 #
 
-clickpoly <- function(add=FALSE, nv=NULL, np=1, ...) {
+clickpoly <- function(add=FALSE, nv=NULL, np=1, ...,
+                      snap.step=NULL, snap.origin=c(0,0)) {
   if((!add) | dev.cur() == 1L) {
     plot(0,0,type="n", xlab="", ylab="", xlim=c(0,1), ylim=c(0,1), asp=1.0,
          axes=FALSE)
     rect(0,0,1,1)
   }
   spatstatLocator(0) ## check locator is enabled
+  if(snappy <- !is.null(snap.step)) {
+    ## draw guide lines
+    usr <- par('usr')
+    snap.step <- ensure2vector(snap.step)
+    botleft <- snapxy(usr[1], usr[3], snap.step, snap.origin)
+    upright <- snapxy(usr[2], usr[4], snap.step, snap.origin)
+    abline(v=seq(botleft$x, upright$x, by=snap.step[1]), lty=3, col=8)
+    abline(h=seq(botleft$y, upright$y, by=snap.step[2]), lty=3, col=8)
+  }
   gon <- list()
   stopifnot(np >= 1)
   #
@@ -28,6 +38,8 @@ clickpoly <- function(add=FALSE, nv=NULL, np=1, ...) {
     xy <- do.call(spatstatLocator,
                   resolve.defaults(if(!is.null(nv)) list(n=nv) else list(),
                                    list(...),
+                                   list(snap.step=snap.step,
+                                        snap.origin=snap.origin),
                                    list(type="o")))
     if(Area.xypolygon(xy) < 0)
       xy <- lapply(xy, rev)

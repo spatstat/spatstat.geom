@@ -6,7 +6,7 @@
   point-and-click in the display.
 }
 \usage{
-  clickpoly(add=FALSE, nv=NULL, np=1, \dots)
+  clickpoly(add=FALSE, nv=NULL, np=1, \dots, snap.step=NULL, snap.origin=c(0,0))
 }
 \arguments{
   \item{add}{
@@ -23,6 +23,16 @@
     Arguments passed to \code{\link[graphics]{locator}} to control the
     interactive plot, and to \code{\link[graphics]{polygon}} to plot the
     polygons.
+  }
+  \item{snap.step}{
+    Optional. Spatial coordinates will be rounded to the nearest
+    multiple of \code{snap.step}. A positive number specifying the step
+    length, or a vector of 2 positive numbers specifying step lengths
+    for the \eqn{x} and \eqn{y} coordinates.
+  }
+  \item{snap.origin}{
+    Optional. Numeric vector of length 2. Coordinates of the origin
+    that will be used when rounding coordinates.
   }
 }
 \value{
@@ -52,6 +62,10 @@
   Multiple polygons can also be drawn, by specifying
   \code{np > 1}. The polygons must be disjoint. The result is 
   a single window object consisting of all the polygons.
+
+  If \code{snap.step} is given, a grid of lines will be drawn with
+  the specified spacing, and the clicked locations will be 
+  snapped (rounded) to the nearest grid point.
 }
 \seealso{
   \code{\link{identify.ppp}},

@@ -1,3 +1,15 @@
+        CHANGES IN spatstat.geom VERSION 3.5-0.001
+
+OVERVIEW
+
+    o clickpoly allows vertices to be snapped (rounded) onto a grid
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o clickpoly
+    Allows user-selected locations of vertices to be snapped (rounded)
+    to the nearest grid points. New arguments 'snap.step' and 'snap.origin'.
+
         CHANGES IN spatstat.geom VERSION 3.5-0
 
 OVERVIEW
