@@ -7,6 +7,7 @@ Creates a circular window
 \usage{
  disc(radius=1, centre=c(0,0), \dots,
       mask=FALSE, npoly=128, delta=NULL,
+      type=c("inscribed", "circumscribed", "approx"),
       metric=NULL)
 }
 \arguments{
@@ -22,6 +23,13 @@ Creates a circular window
     Tolerance of polygonal approximation: the length of arc
     that will be replaced by one edge of the polygon.
     Incompatible with \code{npoly}.
+  }
+  \item{type}{
+    Optional. Character string (partially matched) indicating whether
+    the polygonal approximation should be an inscribed polygon
+    (\code{type="inscribed"}, the default), a circumscribed polygon
+    (\code{type="circumscribed"}) or a polygon which is between the
+    inscribed and circumscribed polygons (\code{type="approx"}).
   }
   \item{\dots}{Arguments passed to \code{as.mask} determining the
     pixel resolution, if \code{mask=TRUE}.
@@ -53,6 +61,16 @@ Creates a circular window
   point pattern (object of class \code{"ppp"}) containing exactly one
   point.
 
+  If \code{type="inscribed"} (the default), the polygon is inscribed in
+  the perfect circle of radius \code{radius}, that is, all vertices of the
+  polygon are points on the circle, and the circle contains the
+  polygon. If \code{type="circumscribed"}, the
+  polygon is circumscribed around the circle, that is, the polygon
+  contains the circle, and all edges of the polygon are tangent to the
+  circle. If \code{type="approx"}, the polygon is constructed to lie
+  between the inscribed and circumscribed polygons, giving a better
+  approximation to the circle.
+
   If the argument \code{metric} is given, it should be a distance metric
   (object of class \code{"metric"}). The disc with respect to this
   metric will be computed. 
@@ -83,6 +101,11 @@ Creates a circular window
  # check accuracy of approximation
  area(disc())/pi
  area(disc(mask=TRUE))/pi
+ # inscribed and circumscribed
+ plot(disc(npoly=256), main="Inscribed and circumscribed", border="green")
+ plot(disc(npoly=7, type="i"), add=TRUE, border="red")
+ plot(disc(npoly=7, type="c"), add=TRUE, border="blue")
+ plot(disc(npoly=7, type="a"), add=TRUE, border="grey")
 }
 \author{
   \spatstatAuthors.

@@ -1,10 +1,12 @@
-        CHANGES IN spatstat.geom VERSION 3.5-0.002
+        CHANGES IN spatstat.geom VERSION 3.5-0.003
 
 OVERVIEW
 
     o more facilities for handling NA objects.
     
     o clickpoly allows vertices to be snapped (rounded) onto a grid
+
+    o more options for disc windows.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
@@ -21,6 +23,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o clickpoly
     Allows user-selected locations of vertices to be snapped (rounded)
     to the nearest grid points. New arguments 'snap.step' and 'snap.origin'.
+
+    o disc
+    New argument 'type' allows the user to specify an inscribed polygon
+    or a circumscribed polygon.
 
         CHANGES IN spatstat.geom VERSION 3.5-0
 

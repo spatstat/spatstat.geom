@@ -3,7 +3,7 @@
 ##
 ##  discs and ellipses
 ##
-## $Revision: 1.22 $ $Date: 2024/02/04 08:04:51 $
+## $Revision: 1.24 $ $Date: 2025/07/26 03:25:22 $
 ##
 
 disc <- local({
@@ -11,7 +11,9 @@ disc <- local({
   indic <- function(x,y,x0,y0,r) { as.integer((x-x0)^2 + (y-y0)^2 < r^2) }
   
   disc <- function(radius=1, centre=c(0,0), ...,
-                   mask=FALSE, npoly=128, delta=NULL, metric=NULL) {
+                   mask=FALSE, npoly=128, delta=NULL,
+                   type=c("inscribed", "circumscribed", "approx"),
+                   metric=NULL) {
     check.1.real(radius)
     stopifnot(radius > 0)
     centre <- as2vector(centre)
@@ -20,27 +22,39 @@ disc <- local({
                          mask=mask, npoly=npoly, delta=delta)
       return(W)
     }
-    if(!missing(npoly) && !is.null(npoly) && !is.null(delta))
-      stop("Specify either npoly or delta")
-    if(!missing(npoly) && !is.null(npoly)) {
-      stopifnot(length(npoly) == 1)
-      stopifnot(npoly >= 3)
-    } else if(!is.null(delta)) {
-      check.1.real(delta)
-      stopifnot(delta > 0)
-      npoly <- pmax(16, ceiling(2 * pi * radius/delta))
-    } else npoly <- 128
-    if(!mask) {
-      theta <- seq(from=0, to=2*pi, length.out=npoly+1)[-(npoly+1L)]
-      x <- centre[1L] + radius * cos(theta)
-      y <- centre[2L] + radius * sin(theta)
-      W <- owin(poly=list(x=x, y=y), check=FALSE)
-    } else {
+    if(mask) {
+      ## pixel approximation
       xr <- centre[1L] + radius * c(-1,1)
       yr <- centre[2L] + radius * c(-1,1)
       B <- owinInternalRect(xr,yr)
       IW <- as.im(indic, B, x0=centre[1L], y0=centre[2L], r=radius, ...)
       W <- levelset(IW, 1, "==")
+    } else {
+      ## polygonal approximation
+      if(!missing(npoly) && !is.null(npoly) && !is.null(delta))
+        stop("Specify either npoly or delta")
+      if(!missing(npoly) && !is.null(npoly)) {
+        stopifnot(length(npoly) == 1)
+        stopifnot(npoly >= 3)
+      } else if(!is.null(delta)) {
+        check.1.real(delta)
+        stopifnot(delta > 0)
+        npoly <- pmax(16, ceiling(2 * pi * radius/delta))
+      } else npoly <- 128
+      ## inscribed?
+      type <- match.arg(type)
+      if(type != "inscribed") {
+        #' inflate 'radius' to make a circumscribed polygon
+        circradius <- radius/cos(pi/npoly)
+        radius <- switch(type,
+                         inscribed     = radius,
+                         circumscribed = circradius,
+                         approx        = (radius + circradius)/2)
+      }
+      theta <- seq(from=0, to=2*pi, length.out=npoly+1)[-(npoly+1L)]
+      x <- centre[1L] + radius * cos(theta)
+      y <- centre[2L] + radius * sin(theta)
+      W <- owin(poly=list(x=x, y=y), check=FALSE)
     }
     return(W)
   }
