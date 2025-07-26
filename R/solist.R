@@ -7,7 +7,7 @@
 ##
 ## plot.solist is defined in plot.solist.R
 ##
-## $Revision: 1.33 $ $Date: 2025/07/06 04:33:54 $
+## $Revision: 1.35 $ $Date: 2025/07/26 01:37:39 $
 
 anylist <- function(...) {
   x <- list(...)
@@ -103,12 +103,24 @@ solist <- function(..., check=TRUE, promote=TRUE, demote=FALSE, .NameBase) {
 
 coerceNAtoObject <- function(x, cls=NULL) {
   ## coerce vanilla NA entries x[[i]]
-  ## to a spatial NA object, if class is unambiguous
+  ## to a spatial NA object (or atomic NA value), if class is unambiguous
   if(any(isvna <- sapply(x, identical, y=NA))) {
     if(is.null(cls)) 
       cls <- unique(sapply(x[!isvna], classIgnoringNA, first=TRUE))
     if(length(cls) == 1) {
+      #' coerce NA entries to NA object of this class
       nao <- NAobject(cls)
+      #' unless ...
+      if(all(sapply(x, is.atomic)) && all(lengths(x) == 1)) {
+        ## each entry of x is a single atomic value
+        nao <- switch(cls,
+                      logical = NA,
+                      integer = NA_integer_,
+                      numeric = NA_real_,
+                      character = NA_character_,
+                      complex = NA_complex_,
+                      nao)
+      }
       x[isvna] <- rep(list(nao), sum(isvna))
     }
   }
@@ -268,12 +280,26 @@ as.linimlist <- function(x, check=TRUE) {
 # --------------- counterparts of 'lapply' --------------------
 
 anylapply <- function(X, FUN, ...) {
-  v <- lapply(X, FUN, ...)
+  ok <- !sapply(X, is.NAobject)
+  if(all(ok)) {
+    v <- lapply(X, FUN, ...)
+  } else {
+    v <- rep(list(NA), length(X))
+    v[ok] <- lapply(X[ok], FUN, ...)
+    v <- coerceNAtoObject(v)
+  }
   return(as.anylist(v))
 }
 
 solapply <- function(X, FUN, ..., check=TRUE, promote=TRUE, demote=FALSE) {
-  v <- lapply(X, FUN, ...)
+  ok <- !sapply(X, is.NAobject)
+  if(all(ok)) {
+    v <- lapply(X, FUN, ...)
+  } else {
+    v <- rep(list(NA), length(X))
+    v[ok] <- lapply(X[ok], FUN, ...)
+    v <- coerceNAtoObject(v)
+  }
   u <- as.solist(v, check=check, promote=promote, demote=demote)
   return(u)
 }

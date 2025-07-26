@@ -1,10 +1,22 @@
-        CHANGES IN spatstat.geom VERSION 3.5-0.001
+        CHANGES IN spatstat.geom VERSION 3.5-0.002
 
 OVERVIEW
 
+    o more facilities for handling NA objects.
+    
     o clickpoly allows vertices to be snapped (rounded) onto a grid
 
 SIGNIFICANT USER-VISIBLE CHANGES
+
+    o solapply, anylapply
+    If an entry of the list is an 'NAobject', the result for that entry
+    will be an 'NAobject'.
+
+    o with.hyperframe
+    If a column in the hyperframe contains 'NA object' entries,
+    and if the name of that column is included in the expression
+    being evaluated, then the result of evaluation is an 'NA' or 'NA object'
+    in the relevant row.
 
     o clickpoly
     Allows user-selected locations of vertices to be snapped (rounded)

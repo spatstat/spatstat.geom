@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.81 $  $Date: 2025/07/06 01:28:39 $
+# $Revision: 1.83 $  $Date: 2025/07/26 01:54:10 $
 #
 
 ## ------------------  utilities -------------------------
@@ -445,8 +445,18 @@ with.hyperframe <- function(data, expr, ..., simplify=TRUE, ee=NULL,
     enclos <- parent.frame()
   n <- nrow(data)
   out <- vector(mode="list", length=n)
+  #' consider all variables or functions provided in 'data'
+  nama <- intersect(all.names(ee), colnames(data))
+  if(length(nama)) {
+    #' check for NA value or NAobject among these variables or functions
+    bad <- apply(is.na(data)[, nama, drop=FALSE], 1, any)
+    goodrows <- which(!bad)
+    out[bad] <- NA
+  } else {
+    goodrows <- seq_len(n)
+  }
   datalist <- as.list(data)
-  for(i in 1:n) {
+  for(i in goodrows) {
     rowi <- lapply(datalist, "[[", i=i)  # ensures the result is always a list
     outi <- eval(ee, rowi, enclos)
     if(!is.null(outi))
