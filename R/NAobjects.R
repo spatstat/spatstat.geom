@@ -6,7 +6,7 @@
 #'   Methods for class 'NAobject' capture dispatch of print, plot, summary
 #'   so that we don't need to tinker with print.ppp, plot.ppp etc.
 #' 
-#'   $Revision: 1.4 $ $Date: 2025/07/06 04:20:30 $
+#'   $Revision: 1.6 $ $Date: 2025/08/02 03:09:47 $
 #' 
 #'   ------------------------------------------------------------
 #'        Make an 'NA object' of any class
@@ -45,12 +45,13 @@ plot.NAobject <- function(x, ...) {
 }
 
 print.NAobject <- function(x, ...) {
-  splat("<NA", paste0(class(x)[-1], ">"))
+  oc <- classIgnoringNA(x, first=TRUE)
+  splat(paste0("<NA ", oc, ">"))
   invisible(NULL)
 }
 
 summary.NAobject <- function(object, ...) {
-  oc <- class(object)[-1]
+  oc <- classIgnoringNA(object, first=TRUE)
   structure(list(print=paste("NA object of class", sQuote(oc))),
             class="summary.NAobject")
 }
