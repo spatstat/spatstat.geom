@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.83 $  $Date: 2025/07/26 01:54:10 $
+# $Revision: 1.84 $  $Date: 2025/08/02 03:04:17 $
 #
 
 ## ------------------  utilities -------------------------
@@ -46,8 +46,8 @@ hyperframe <- function(...,
   
   if(nvars == 0) {
     ## zero columns - return
-    result <- list(nvars=0,
-                   ncases=0,
+    result <- list(nvars=0L,
+                   ncases=0L,
                    vname=character(0),
                    vtype=factor(,
                                 levels=c("dfcolumn","hypercolumn","hyperatom")),
@@ -80,9 +80,9 @@ hyperframe <- function(...,
   ## Determine number of rows (= cases) 
   columns <- dfcolumns | hypercolumns
   if(!any(columns)) {
-    ncases <- 1
+    ncases <- 1L
   } else {
-    heights <- rep.int(1, nvars)
+    heights <- rep.int(1L, nvars)
     heights[columns] <-  lengths(aarg[columns])
     u <- unique(heights)
     if(length(u) > 1) {
@@ -135,14 +135,18 @@ hyperframe <- function(...,
     vclass[hypercolumns] <- sapply(lapply(aarg[hypercolumns], "[[", i=1L),
                                    classIgnoringNA, first=TRUE)
   ## Put the result together
-  result <- list(nvars=nvars,
-                 ncases=ncases,
-                 vname=nama,
-                 vtype=vtype,
-                 vclass=vclass,
-                 df=df,
-                 hyperatoms=aarg[hyperatoms],
-                 hypercolumns=aarg[hypercolumns])
+  result <- list(
+    ## info
+    nvars  = as.integer(nvars),
+    ncases = as.integer(ncases),
+    vname  = as.character(nama),
+    vtype  = vtype,
+    vclass = as.character(vclass),
+    ## data
+    df           = df,
+    hyperatoms   = aarg[hyperatoms],
+    hypercolumns = aarg[hypercolumns]
+  )
     
   class(result) <- c("hyperframe", class(result))
   return(result)

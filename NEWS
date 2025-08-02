@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.5-0.003
+        CHANGES IN spatstat.geom VERSION 3.5-0.004
 
 OVERVIEW
 
@@ -27,6 +27,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o disc
     New argument 'type' allows the user to specify an inscribed polygon
     or a circumscribed polygon.
+
+    o hyperframe
+    Removed slight inconsistencies in the internal format
+    produced in different cases.
 
         CHANGES IN spatstat.geom VERSION 3.5-0
 
