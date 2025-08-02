@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.87 $  $Date: 2025/08/02 05:29:17 $
+# $Revision: 1.88 $  $Date: 2025/08/02 07:05:28 $
 #
 
 ## ------------------  utilities -------------------------
@@ -111,12 +111,13 @@ hyperframe <- function(...,
   } else {
     df <- do.call(data.frame,
                   append(aarg[dfcolumns],
-                         list(check.rows=check.rows,
-                              check.names=check.names,
-                              stringsAsFactors=stringsAsFactors)))
+                         list(row.names        = row.names,
+                              check.rows       = check.rows,
+                              check.names      = check.names,
+                              stringsAsFactors = stringsAsFactors)))
     names(df) <- nama[dfcolumns]
+    row.names(df) <- as.character(row.names(df))
   }
-  if(length(row.names)) row.names(df) <- as.character(row.names)
 
   ## standardise the format of hypercolumns
   if(any(hypercolumns)) {

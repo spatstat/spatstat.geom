@@ -17,7 +17,7 @@ cat(paste("--------- Executing",
 #
 # test "[.hyperframe" etc
 #
-#  $Revision: 1.15 $  $Date: 2025/07/07 06:41:24 $
+#  $Revision: 1.16 $  $Date: 2025/08/02 08:41:50 $
 #
 
 if(FULLTEST) {
@@ -147,6 +147,22 @@ if(FULLTEST) {
                {h$B[2:3] <- rep(list(owin()), 2)})
     
   })
+}
+
+if(FULLTEST) {
+  #' test internal format of hyperframes in spatstat.data
+  #' is consistent with output of 'hyperframe()'
+  rebuild <- function(h) {
+    rn <- row.names(h)
+    do.call(hyperframe, append(as.list(h), list(row.names=rn)))
+  }
+  stopifnot(identical(cetaceans, rebuild(cetaceans)))
+  stopifnot(identical(demohyper, rebuild(demohyper)))
+  stopifnot(identical(flu, rebuild(flu)))
+  stopifnot(identical(Kovesi, rebuild(Kovesi)))
+  stopifnot(identical(osteo, rebuild(osteo)))
+  stopifnot(identical(pyramidal, rebuild(pyramidal)))
+  stopifnot(identical(simba, rebuild(simba)))
 }
 #
 #  tests/imageops.R
