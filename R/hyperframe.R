@@ -1,7 +1,7 @@
 #
 #  hyperframe.R
 #
-# $Revision: 1.84 $  $Date: 2025/08/02 03:04:17 $
+# $Revision: 1.87 $  $Date: 2025/08/02 05:29:17 $
 #
 
 ## ------------------  utilities -------------------------
@@ -48,10 +48,10 @@ hyperframe <- function(...,
     ## zero columns - return
     result <- list(nvars=0L,
                    ncases=0L,
-                   vname=character(0),
+                   vname=character(0L),
                    vtype=factor(,
                                 levels=c("dfcolumn","hypercolumn","hyperatom")),
-                   vclass=character(0),
+                   vclass=character(0L),
                    df=data.frame(),
                    hyperatoms=list(),
                    hypercolumns=list())
@@ -76,7 +76,7 @@ hyperframe <- function(...,
   dfcolumns    <- sapply(aarg, can.be.dfcolumn)
   hypercolumns <- sapply(aarg, can.be.hypercolumn)
   hyperatoms   <- !(dfcolumns | hypercolumns)
-  
+
   ## Determine number of rows (= cases) 
   columns <- dfcolumns | hypercolumns
   if(!any(columns)) {
@@ -116,14 +116,23 @@ hyperframe <- function(...,
                               stringsAsFactors=stringsAsFactors)))
     names(df) <- nama[dfcolumns]
   }
-  if(length(row.names)) row.names(df) <- row.names
+  if(length(row.names)) row.names(df) <- as.character(row.names)
 
+  ## standardise the format of hypercolumns
+  if(any(hypercolumns)) {
+    ## coerce to solist if appropriate
+    aarg[hypercolumns] <- lapply(aarg[hypercolumns], as.solist,
+                                   promote=TRUE, demote=TRUE)
+    ## remove names 
+    aarg[hypercolumns] <- lapply(aarg[hypercolumns], unname)
+  }
+  
   ## Storage type of each variable
   vtype <- character(nvars)
-  vtype[dfcolumns] <- "dfcolumn"
+  vtype[dfcolumns]    <- "dfcolumn"
   vtype[hypercolumns] <- "hypercolumn"
-  vtype[hyperatoms] <- "hyperatom"
-  vtype=factor(vtype, levels=c("dfcolumn","hypercolumn","hyperatom"))
+  vtype[hyperatoms]   <- "hyperatom"
+  vtype <- factor(vtype, levels=c("dfcolumn","hypercolumn","hyperatom"))
   
   ## Class of each variable
   vclass <- character(nvars)
@@ -424,8 +433,9 @@ as.list.hyperframe <- function(x, ..., expandatoms=TRUE) {
       out[hatom] <- ha
     }
   }
-  fullrows <- !hatom | expandatoms
-  out[fullrows] <- lapply(out[fullrows], "names<-", value=row.names(df))
+  if(any(fullcols <- !hatom | expandatoms)) {
+    out[fullcols] <- lapply(out[fullcols], "names<-", value=row.names(df))
+  }
   names(out) <- names(x)
   return(out)
 }
