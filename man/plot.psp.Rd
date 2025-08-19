@@ -20,7 +20,8 @@
                      leg.wid=0.1,
                      leg.args=list(),
                      leg.scale=1,
-                     negative.args=list(col=2))
+                     negative.args=list(col=2),
+                     background=NULL)
 }
 \arguments{
   \item{x}{
@@ -140,6 +141,10 @@
     Optional list of arguments to \code{\link[graphics]{polygon}}
     to be used when the mark values are negative. 
   }
+  \item{background}{
+    Optional. An object to be plotted underneath the main plot.
+    See the section on \emph{Background}.
+  }
 }
 \value{
   If \code{style="colour"}, the result is a \code{\link{colourmap}}
@@ -201,6 +206,20 @@
   column of \code{marks(x)} to determine the colours or widths.
   To specify another
   column, use the argument \code{which.marks}.
+}
+\section{Background}{
+  The argument \code{background} specifies an object that will be
+  plotted before the pattern \code{x} is plotted,
+  and will therefore appear
+  underneath it. The background can be any spatial object in the
+  \pkg{spatstat} package family. To specify graphical arguments
+  for the background, make it into a \code{\link{layered}} object
+  using \code{\link{layered}} or \code{\link{as.layered}},
+  and assign graphical parameters to it using
+  \code{\link{layerplotargs}}.
+
+  Alternatively \code{background} can be a single colour value,
+  indicating that the plot should have this background colour.
 }
 \seealso{
   \code{\link{psp.object}},

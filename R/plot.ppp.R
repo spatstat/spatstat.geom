@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.128 $	$Date: 2025/07/12 07:45:39 $
+#	$Revision: 1.129 $	$Date: 2025/08/19 08:46:05 $
 #
 #
 #--------------------------------------------------------------------------
@@ -31,20 +31,29 @@ plot.ppp <- function(x, main, ..., clipwin=NULL,
   } else clippy <- NULL
 
   ## ........ background object ..............................
+  backbox <- NULL
   if(!is.null(background)) {
-    if(isTRUE(clip.background)) {
-      bkg <- try(background[Frame(x), drop=FALSE], silent=TRUE)
-      if(inherits(bkg, "try-error")) {
-        warning("Unable to clip the background object", call.=FALSE)
-      } else {
-        background <- bkg
+    #' background object or colour
+    if(length(background) == 1L && is.colour(background)) {
+      #' background colour
+      bg <- background
+      background <- layered(Frame(x), plotargs=list(col=bg, border=bg))
+    } else if(is.sob(background)) {
+      if(isTRUE(clip.background)) {
+        bkg <- try(background[Frame(x), drop=FALSE], silent=TRUE)
+        if(inherits(bkg, "try-error")) {
+          warning("Unable to clip the background object", call.=FALSE)
+        } else {
+          background <- bkg
+        }
       }
+      backbox <- Frame(background)
+    } else {
+      warning("Format of argument 'background' not understood", call.=FALSE)
+      background <- NULL
     }
-    backbox <- Frame(background)
-  } else {
-    backbox <- NULL
   }
-  
+
   ## sensible default position
   legend <- legend && show.all
   if(legend) {
@@ -211,9 +220,9 @@ plot.ppp <- function(x, main, ..., clipwin=NULL,
           append(list(x=quote(BB), type="n", add=add,
                       main=blankmain, show.all=show.all),
                  rez))
-  ## plot background if specified
-  if(!is.null(background)) {
-    plot(background, add=TRUE, main="")
+  ## plot background colour or background object if specified
+  if(!is.null(background) && is.sob(background)) {
+    plot(background, add=TRUE, main="", show.all=TRUE)
     add <- TRUE
   }
   ## plot reject points if any

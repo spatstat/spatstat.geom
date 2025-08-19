@@ -1,12 +1,10 @@
-#
-#	plot.owin.S
-#
-#	The 'plot' method for observation windows (class "owin")
-#
-#	$Revision: 1.64 $	$Date: 2024/05/01 05:43:30 $
-#
-#
-#
+#'
+#'	plot.owin.R
+#'
+#'	The 'plot' method for observation windows (class "owin")
+#'
+#'	$Revision: 1.65 $	$Date: 2025/08/19 08:10:10 $
+#'
 
 plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
                       type = c("w", "n"), show.all=!add,
@@ -14,11 +12,9 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
                       hatchargs=list(), 
                       invert=FALSE, do.plot=TRUE,
                       claim.title.space=FALSE, use.polypath=TRUE,
-                      adj.main=0.5) 
+                      adj.main=0.5,
+                      background=NULL) 
 {
-#
-# Function plot.owin.  A method for plot.
-#
   if(missing(main))
     main <- short.deparse(substitute(x))
 
@@ -33,15 +29,24 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
     box <- is.mask(W) && show.all
   } else stopifnot(is.logical(box) && length(box) == 1)
 
-####
+  if(length(background) == 1L && is.colour(background)) {
+    #' allow idiom where 'background' is a colour rather than an object
+    background <- layered(Frame(x),
+                          plotargs=list(col=background, border=background))
+  }
+  
+  #' .............. calculate space ...........................
+  
+  ## needed for title
   pt <- prepareTitle(main)
   main <- pt$main
   nlines <- pt$nlines
-#########        
-  xlim <- xr <- W$xrange
-  ylim <- yr <- W$yrange
 
-####################################################
+  ## overall plotting extent
+  B <- Frame(W)
+  if(!is.null(background)) B <- boundingbox(B, Frame(background))
+  xlim <- xr <- B$xrange
+  ylim <- yr <- B$yrange
 
   ## graphics parameters that can be overridden by user
   gparam <- resolve.defaults(list(...), par())
@@ -55,6 +60,7 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
   ## absolute size
   cex.main.absol <- cex.main.rela * par('cex')
 
+  ## ............ start plotting .............................
   if(!add) {
     ## new plot
     if(claim.title.space && nlines > 0) {
@@ -75,6 +81,7 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
                                           xlab="", ylab=""),
                                      .MatchNull=FALSE))
   }
+  ## ............ title .............................  
   if(show.all && nlines > 0) {
     ## add title 
     if(!missing(adj.main)) {
@@ -104,7 +111,12 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
     }
   }
   
-# Draw surrounding box
+  ## ............ draw the background .............................  
+
+  if(!is.null(background))
+    plot(background, add=TRUE, show.all=TRUE, main="")
+  
+  ## ............ surrounding box .............................  
   if(box)
     do.call.plotfun(segments,
                     resolve.defaults(
@@ -114,13 +126,11 @@ plot.owin <- function(x, main, add=FALSE, ..., box, edge=0.04,
                                           y1=yr[c(1,2,2,1)]),
                                      list(...)))
   
-# If type = "n", do not plot the window.
-    if(type == "n")
-      return(invisible(as.rectangle(W)))
+  ## If type = "n", do not plot the window.
+  if(type == "n")
+    return(invisible(B))
 
-  
-# Draw window
-
+  ## ............ plot the window .............................  
   switch(W$type,
          rectangle = {
            Wpoly <- as.polygonal(W)

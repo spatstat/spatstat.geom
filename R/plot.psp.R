@@ -3,7 +3,7 @@
 #'
 #'  plot method for segment patterns
 #'
-#'  $Revision: 1.7 $ $Date: 2024/02/04 08:04:51 $
+#'  $Revision: 1.10 $ $Date: 2025/08/19 08:41:46 $
 
 plot.psp <- function(x, ..., main, add=FALSE,
                      show.all=!add, 
@@ -21,7 +21,8 @@ plot.psp <- function(x, ..., main, add=FALSE,
                      leg.wid=0.1,
                      leg.args=list(),
                      leg.scale=1,
-                     negative.args=list(col=2)) {
+                     negative.args=list(col=2),
+                     background=NULL) {
   if(missing(main) || is.null(main))
     main <- short.deparse(substitute(x))
   verifyclass(x, "psp")
@@ -32,8 +33,21 @@ plot.psp <- function(x, ..., main, add=FALSE,
   style <- match.arg(style)
   use.marks <- use.marks && !is.null(marx) && (n != 0) && (style != "none")
   #'
+  if(!is.null(background)) {
+    #' background object or colour
+    if(length(background) == 1L && is.colour(background)) {
+      #' background colour
+      bg <- background
+      background <- layered(Frame(x), plotargs=list(col=bg, border=bg))
+    } else if(!is.sob(background)) {
+      warning("Format of argument 'background' not understood", call.=FALSE)
+      background <- NULL
+    }
+  }
+
+  #'
   if(use.marks && style == "width") {
-    #' plot marks as line width
+    #' ............  plot marks as line width ................
     if(length(dim(marx))) {
       check.1.integer(which.marks)
       marx <- marx[,which.marks]
@@ -53,17 +67,21 @@ plot.psp <- function(x, ..., main, add=FALSE,
                          leg.sep=leg.sep,
                          leg.wid=leg.wid,
                          leg.args=leg.args,
-                         leg.scale=leg.scale)
+                         leg.scale=leg.scale,
+                         background=background)
     return(invisible(out))
   }
-  #' plot marks as colours, if present
-  do.ribbon <- identical(ribbon, TRUE) && use.marks
-  ##
+  #' ...........  plot marks as colours, if present ..............
+  #' determine space required
+  bb <- as.rectangle(as.owin(x))
+  if(!is.null(background) && is.sob(background))
+    bb <- boundingbox(bb, Frame(background))
   ## ....   initialise plot; draw observation window  ......
   owinpars <- setdiff(graphicsPars("owin"), "col")
+  do.ribbon <- identical(ribbon, TRUE) && use.marks
   if(!do.ribbon) {
-    ## window of x only
-    bb.all <- as.rectangle(as.owin(x))
+    ## show image x only
+    bb.all <- bb
     if(do.plot && (!add || show.window)) {
       xwindow <- x$window
       dont.complain.about(xwindow)
@@ -72,14 +90,14 @@ plot.psp <- function(x, ..., main, add=FALSE,
 		                            main=if(show.all) main else "",
                                             add=add,
                                             type = if(show.window) "w" else "n",
-                                            show.all=show.all),
+                                            show.all=show.all,
+                                            background=background),
                                        list(...)),
                       extrargs=owinpars)
     }
   } else {
     ## enlarged window with room for colour ribbon
-    ## x at left, ribbon at right
-    bb <- as.rectangle(as.owin(x))
+    ## image x at left, ribbon at right
     xwidth <- diff(bb$xrange)
     xheight <- diff(bb$yrange)
     xsize <- max(xwidth, xheight)
@@ -96,6 +114,11 @@ plot.psp <- function(x, ..., main, add=FALSE,
                                             main=pt$blank),
                                        list(...)),
                       extrargs=owinpars)
+      ## paint background if given
+      if(!is.null(background) && is.sob(background)) {
+        plot(background, add=TRUE, main="", show.all=TRUE)
+        add <- TRUE
+      }
       ## now plot window of x
       ## with title centred on this window
       if(show.window) {
@@ -199,7 +222,8 @@ thickSegments <- local({
                             leg.args=list(),
                             leg.scale=1,
                             zlim,
-                            box=FALSE) {
+                            box=FALSE,
+                            background=NULL) {
     leg.side <- match.arg(leg.side)
     check.1.real(leg.scale)
     check.1.real(adjust)
@@ -214,9 +238,23 @@ thickSegments <- local({
     }
     
     W <- Window(x)
+    
     stopifnot(is.numeric(widths))
     #' convert non-finite widths to zero width
     widths[!is.finite(widths)] <- 0
+
+    if(!is.null(background)) {
+      #' background object or colour
+      if(length(background) == 1L && is.colour(background)) {
+        #' background colour
+        bg <- background
+        background <- layered(Frame(x), plotargs=list(col=bg, border=bg))
+      } else if(!is.sob(background)) {
+        warning("Format of argument 'background' not understood", call.=FALSE)
+        background <- NULL
+      }
+    }
+
     #' plan layout
     if(legend) {
       #' use layout procedure in plot.im
@@ -224,7 +262,8 @@ thickSegments <- local({
       dont.complain.about(px)
       z <- do.call(plot.im,
                    resolve.defaults(list(quote(px), 
-					do.plot=FALSE, ribbon=TRUE),
+                                         do.plot=FALSE, ribbon=TRUE,
+                                         background=background),
                                     list(...),
                                     list(ribside  = leg.side,
                                          ribsep   = leg.sep,
@@ -237,6 +276,8 @@ thickSegments <- local({
       bb.leg <- attr(z, "bbox.legend")
     } else {
       bb.all <- Frame(W)
+      if(!is.null(background) && is.sob(background))
+        bb.all <- boundingbox(bb.all, Frame(background))
       bb.leg <- NULL
     }
     legend <- !is.null(bb.leg)
@@ -253,6 +294,11 @@ thickSegments <- local({
                           resolve.defaults(list(x=quote(bb.all), type="n"),
                                            list(...), list(main=main)),
                           extrargs="type")
+    ## plot background colour or background object if specified
+    if(!is.null(background) && is.sob(background)) {
+      plot(background, add=TRUE, main="", show.all=TRUE)
+      add <- TRUE
+    }
     if(box)
       plot(Frame(W), add=TRUE)
     #' resolve graphics parameters for polygons

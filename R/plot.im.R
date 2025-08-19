@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.176 $   $Date: 2025/06/30 04:12:26 $
+#  $Revision: 1.177 $   $Date: 2025/08/19 09:00:53 $
 #
 #  Plotting code for pixel images
 #
@@ -690,18 +690,27 @@ plot.im <- local({
     contourargs <- resolve.defaults(contourargs, dotargs$args.contour)
 
     ## ........ background object ..............................
+    backbox <- NULL
     if(!is.null(background)) {
-      if(isTRUE(clip.background)) {
-        bkg <- try(background[as.rectangle(x), drop=FALSE], silent=TRUE)
-        if(inherits(bkg, "try-error")) {
-          warning("Unable to clip the background object", call.=FALSE)
-        } else {
-          background <- bkg
+      #' background object or colour
+      if(length(background) == 1L && is.colour(background)) {
+        #' background colour
+        bg <- background
+        background <- layered(Frame(x), plotargs=list(col=bg, border=bg))
+      } else if(is.sob(background)) {
+        if(isTRUE(clip.background)) {
+          bkg <- try(background[Frame(x), drop=FALSE], silent=TRUE)
+          if(inherits(bkg, "try-error")) {
+            warning("Unable to clip the background object", call.=FALSE)
+          } else {
+            background <- bkg
+          }
         }
+        backbox <- Frame(background)
+      } else {
+        warning("Format of argument 'background' not understood", call.=FALSE)
+        background <- NULL
       }
-      backbox <- Frame(background)
-    } else {
-      backbox <- NULL
     }
     
     ## ........ start plotting .................
@@ -712,12 +721,6 @@ plot.im <- local({
       attr(output.colmap, "bbox") <- boundingbox(as.rectangle(x), backbox)
       if(!do.plot)
         return(output.colmap)
-
-      ## plot background if specified
-      if(!is.null(background)) {
-        plot(background, main="")
-        add <- TRUE
-      }
 
       ## plot title centred over main image area
       if(show.all && sum(nzchar(main))) {
@@ -734,6 +737,11 @@ plot.im <- local({
                         extrargs=graphicsPars("owin"))
         main <- ""
         add <- TRUE
+      }
+
+      ## plot background if specified
+      if(!is.null(background) && is.sob(background)) {
+        plot(background, add=TRUE, main="", show.all=TRUE)
       }
 
       ## plot image without ribbon
@@ -806,7 +814,8 @@ plot.im <- local({
                       resolve.defaults(list(x=quote(bb.all),
                                             type="n",
                                             main=pt$blank),
-                                       dotargs),
+                                       dotargs,
+                                       list(claim.title.space=TRUE)),
                       extrargs=graphicsPars("owin"))
       add <- TRUE
     }
@@ -826,7 +835,7 @@ plot.im <- local({
     }
     if(!is.null(background)) {
       ## plot background
-      plot(background, add=TRUE)
+      plot(background, add=TRUE, main="", show.all=TRUE)
     }
     # plot image
     image.doit(imagedata=list(x=cellbreaks(x$xcol, x$xstep),

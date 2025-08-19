@@ -1,8 +1,10 @@
-        CHANGES IN spatstat.geom VERSION 3.5-0.007
+        CHANGES IN spatstat.geom VERSION 3.5-0.008
 
 OVERVIEW
 
     o more facilities for handling NA objects.
+
+    o more facilities for drawing a background behind a plot.
     
     o clickpoly allows vertices to be snapped (rounded) onto a grid
 
@@ -22,6 +24,14 @@ SIGNIFICANT USER-VISIBLE CHANGES
     being evaluated, then the result of evaluation is an 'NA' or 'NA object'
     in the relevant row.
 
+    o plot.owin, plot.psp
+    New argument 'background' specifies an object (or a colour)
+    that will be plotted before x is plotted, and will
+    therefore appear underneath it.
+
+    o plot.ppp, plot.im
+    Argument 'background' can be a single colour value.
+    
     o clickpoly
     Allows user-selected locations of vertices to be snapped (rounded)
     to the nearest grid points. New arguments 'snap.step' and 'snap.origin'.

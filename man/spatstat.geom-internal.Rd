@@ -712,7 +712,7 @@ thickSegments(x, widths, \dots,
              add, main, do.plot, show.all, show.window,
              scale, adjust, negative.args,
              legend, leg.side, leg.sep, leg.wid, leg.args, leg.scale,
-             zlim, box)
+             zlim, box, background)
 tilecentroids(W, nx, ny)
 trianglediameters(iedge, jedge, edgelength, \dots,
                   nvert, dmax, check)

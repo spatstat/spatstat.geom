@@ -11,7 +11,8 @@
                       hatchargs=list(), 
                       invert=FALSE, do.plot=TRUE,
                       claim.title.space=FALSE, use.polypath=TRUE,
-                      adj.main=0.5)
+                      adj.main=0.5,
+                      background=NULL)
 }
 \arguments{
   \item{x}{
@@ -92,6 +93,10 @@
     specifying left-justified text, and \code{adj.main=1} specifying
     right-justified text.
   }
+  \item{background}{
+    Optional. An object to be plotted underneath the main plot.
+    See the section on \emph{Background}.
+  }
 }
 \value{
   none.
@@ -147,6 +152,19 @@
   \code{xlim} and \code{ylim} to specify the desired rectangular field of
   view. (The actual field of view may be larger, depending on the
   graphics device).
+}
+\section{Background}{
+  The argument \code{background} specifies an object that will be
+  plotted before the window \code{x} is plotted,
+  and will therefore appear
+  underneath it. The background can be any spatial object in the
+  \pkg{spatstat} package family. To specify graphical arguments
+  for the background, make it into a \code{\link{layered}} object
+  using \code{\link{layered}} or \code{\link{as.layered}},
+  and assign graphical parameters to it using \code{\link{layerplotargs}}.
+
+  Alternatively \code{background} can be a single colour value,
+  indicating that the plot should have this background colour.
 }
 \section{Notes on Filled Polygons with Holes}{
   The function \code{\link[graphics]{polygon}} can only handle

@@ -50,7 +50,8 @@
     palette), a character string giving the name of a colour,
     or a string giving the hexadecimal representation of a colour,
     or a vector of such integers or strings.
-    See the section on \emph{Colour Specification} in the help for \code{\link[graphics]{par}}.
+    See the section on \emph{Colour Specification}
+    in the help for \code{\link[graphics]{par}}.
     Ignored if \code{symap} is given.
   }
   \item{use.marks}{
@@ -384,6 +385,9 @@
   for the background, make it into a \code{\link{layered}} object
   using \code{\link{layered}} or \code{\link{as.layered}},
   and assign graphical parameters to it using \code{\link{layerplotargs}}.
+
+  Alternatively \code{background} can be a single colour value,
+  indicating that the plot should have this background colour.
 }
 \section{Troubleshooting: text is clipped}{
   Text that is intended to be drawn in the margins of the plot
