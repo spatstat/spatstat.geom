@@ -25,10 +25,13 @@
 \alias{as.character.unitname}
 \alias{as.data.frame.ppplist}
 \alias{as.double.im}
+\alias{as.im.NAobject}
 \alias{as.imlist}
 \alias{as.linimlist}
 \alias{as.list.hyperframe}
 \alias{as.listof}
+\alias{as.owin.NAobject}
+\alias{as.ppp.NAobject}
 \alias{as.ppplist}
 \alias{as.tess.tessfun}
 \alias{as.unitname}
@@ -93,6 +96,7 @@
 \alias{flipxy.diagramobj}
 \alias{flipxypolygon}
 \alias{format.numberwithunit}
+\alias{Frame.NAobject}
 \alias{framebottomleft}
 \alias{gammabreaks}
 \alias{genericNNdistBy}
@@ -187,6 +191,8 @@
 \alias{nearest.pixel}
 \alias{nearest.valid.pixel}
 \alias{needpackage}
+\alias{nobjects.NAobject}
+\alias{npoints.NAobject}
 \alias{n.quad}
 \alias{numberwithunit}
 \alias{numeric.columns}
@@ -346,6 +352,7 @@
 \alias{warn.no.metric.support}
 \alias{warn.unsupported.args}
 \alias{waxlyrical}
+\alias{Window.NAobject}
 \alias{wrangle2image}
 \alias{w.quad}               
 \alias{x.quad}
@@ -398,10 +405,13 @@ AsymmDistance.psp(X, Y, metric, method)
 \method{as.character}{unitname}(x, \dots)
 \method{as.data.frame}{ppplist}(x, row.names, \dots)
 \method{as.double}{im}(x, \dots)
+\method{as.im}{NAobject}(X, \dots)
 as.imlist(x, check)
 as.linimlist(x, check)
 \method{as.list}{hyperframe}(x, \dots, expandatoms)
 as.listof(x)
+\method{as.owin}{NAobject}(W, \dots)
+\method{as.ppp}{NAobject}(X, \dots)
 as.ppplist(x, check)
 \method{as.tess}{tessfun}(X)
 as.unitname(s)
@@ -466,6 +476,7 @@ fillNA(x, value)
 \method{flipxy}{diagramobj}(X)
 flipxypolygon(p)
 \method{format}{numberwithunit}(x, \dots, collapse, modifier)
+\method{Frame}{NAobject}(X)
 framebottomleft(w)
 gammabreaks(ra, n, gamma)
 genericNNdistBy(X, by, k)
@@ -561,6 +572,8 @@ na.handle.im(X, na.replace)
 nearest.pixel(x, y, Z)
 nearest.valid.pixel(x, y, Z, method, nsearch)
 needpackage(pkg, loaded, fatal, purpose)
+\method{nobjects}{NAobject}(x)
+\method{npoints}{NAobject}(x)
 n.quad(Q)
 numberwithunit(x, u)
 numeric.columns(M, logical, others)
@@ -734,6 +747,7 @@ warn.once(key, \dots)
 warn.no.metric.support(caller, \dots, metric)
 warn.unsupported.args(unsup, \dots)
 waxlyrical(type, terse)
+\method{Window}{NAobject}(X, \dots)
 wrangle2image(values, template)
 w.quad(Q)               
 x.quad(Q)

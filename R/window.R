@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.213 $	$Date: 2025/02/16 00:03:14 $
+#	$Revision: 4.214 $	$Date: 2025/09/03 23:16:36 $
 #
 #
 #	A window may be either
@@ -362,6 +362,8 @@ as.owin <- function(W, ..., fatal=TRUE) {
   UseMethod("as.owin")
 }
 
+as.owin.NAobject <- function(W, ...) { NAobject("owin") }
+
 as.owin.owin <- function(W, ..., fatal=TRUE) {
   if(verifyclass(W, "owin", fatal=fatal)) 
     return(owin(W$xrange, W$yrange, poly=W$bdry, mask=W$m, unitname=unitname(W), check=FALSE))
@@ -534,6 +536,8 @@ Frame <- function(X) { UseMethod("Frame") }
 "Frame<-" <- function(X, value) { UseMethod("Frame<-") }
 
 Frame.default <- function(X) { as.rectangle(X) }
+
+Frame.NAobject <- function(X) { NAobject("owin") }
 
 "Frame<-.default" <- function(X, value) {
   Frame(Window(X)) <- value
@@ -1332,3 +1336,4 @@ Window <- function(X, ...) { UseMethod("Window") }
 
 "Window<-" <- function(X, ..., value) { UseMethod("Window<-") }
 
+Window.NAobject <- function(X, ...) { NAobject("owin") }

@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.5-0.008
+        CHANGES IN spatstat.geom VERSION 3.5-0.009
 
 OVERVIEW
 
@@ -11,7 +11,7 @@ OVERVIEW
     o more options for disc windows.
 
     o internal improvements.
-    
+
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o solapply, anylapply
@@ -44,6 +44,14 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Removed slight inconsistencies in the internal format
     produced in different cases.
 
+    o as.ppp, as.owin, as.im, Frame, Window
+    These generic functions now have methods for class 'NAobject'
+    which return an 'NAobject'.
+
+    o nobjects, npoints
+    These generic functions now have methods for class 'NAobject'
+    which return an NA integer value.
+    
         CHANGES IN spatstat.geom VERSION 3.5-0
 
 OVERVIEW

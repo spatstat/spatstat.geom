@@ -3,7 +3,7 @@
 #
 #    conversion to class "im"
 #
-#    $Revision: 1.62 $   $Date: 2023/05/02 04:46:11 $
+#    $Revision: 1.63 $   $Date: 2025/09/03 23:18:54 $
 #
 #    as.im()
 #
@@ -11,6 +11,8 @@
 as.im <- function(X, ...) {
   UseMethod("as.im")
 }
+
+as.im.NAobject <- function(X, ...) { NAobject("im") }
 
 as.im.im <- function(X, W=NULL, ...,
                      eps=NULL, dimyx=NULL, xy=NULL,

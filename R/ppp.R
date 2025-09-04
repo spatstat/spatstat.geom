@@ -4,7 +4,7 @@
 #	A class 'ppp' to define point patterns
 #	observed in arbitrary windows in two dimensions.
 #
-#	$Revision: 4.123 $	$Date: 2025/06/30 12:03:33 $
+#	$Revision: 4.124 $	$Date: 2025/09/04 04:58:05 $
 #
 #	A point pattern contains the following entries:	
 #
@@ -169,6 +169,8 @@ is.ppp <- function(x) { inherits(x, "ppp") }
 as.ppp <- function(X, ..., fatal=TRUE) {
   UseMethod("as.ppp")
 }
+
+as.ppp.NAobject <- function(X, ...) { NAobject("ppp") }
 
 as.ppp.ppp <- function(X, ..., fatal=TRUE) {
   check <- isTRUE(list(...)$check) # default FALSE
@@ -681,6 +683,7 @@ nobjects <- function(x) {
 
 nobjects.ppp <- npoints.ppp <- function(x) { x$n }
 
+nobjects.NAobject <- npoints.NAobject <- function(x) { NA_integer_ }
 
 domain.ppp <- Window.ppp <- function(X, ...) { as.owin(X) }
 
