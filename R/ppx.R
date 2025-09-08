@@ -3,7 +3,7 @@
 #
 #  class of general point patterns in any dimension
 #
-#  $Revision: 1.72 $  $Date: 2024/04/19 09:24:00 $
+#  $Revision: 1.74 $  $Date: 2025/09/08 07:07:11 $
 #
 
 ppx <- local({
@@ -282,7 +282,10 @@ intersect.boxx <- function(..., fatal = FALSE){
 
 domain <- function(X, ...) { UseMethod("domain") }
 
-domain.ppx <- function(X, ...) { X$domain }
+domain.ppx <- function(X, ...) {
+  if(is.NAobject(X)) NAobject("boxx") else X$domain # could be NULL
+}
+     
 
 coords <- function(x, ...) {
   UseMethod("coords")

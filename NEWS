@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.5-0.009
+        CHANGES IN spatstat.geom VERSION 3.5-0.010
 
 OVERVIEW
 
@@ -44,7 +44,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     Removed slight inconsistencies in the internal format
     produced in different cases.
 
-    o as.ppp, as.owin, as.im, Frame, Window
+    o as.ppp, as.owin, as.im, domain, Frame, Window
     These generic functions now have methods for class 'NAobject'
     which return an 'NAobject'.
 

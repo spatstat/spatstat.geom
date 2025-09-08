@@ -6,7 +6,7 @@
 #'   Methods for class 'NAobject' capture dispatch of print, plot, summary
 #'   so that we don't need to tinker with print.ppp, plot.ppp etc.
 #' 
-#'   $Revision: 1.6 $ $Date: 2025/08/02 03:09:47 $
+#'   $Revision: 1.7 $ $Date: 2025/09/08 06:04:07 $
 #' 
 #'   ------------------------------------------------------------
 #'        Make an 'NA object' of any class
@@ -61,3 +61,8 @@ print.summary.NAobject <- function(x, ...) {
   invisible(NULL)
 }
 
+as.data.frame.NAobject <- function(x, ...) { NAobject("data.frame") }
+
+is.marked.NAobject <- function(X, ...) { NA }
+
+is.multitype.NAobject <- function(X, ...) { NA }

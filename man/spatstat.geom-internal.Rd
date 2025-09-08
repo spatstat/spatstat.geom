@@ -23,6 +23,7 @@
 \alias{AsMaskInternal}
 \alias{AsymmDistance.psp}
 \alias{as.character.unitname}
+\alias{as.data.frame.NAobject}
 \alias{as.data.frame.ppplist}
 \alias{as.double.im}
 \alias{as.im.NAobject}
@@ -128,9 +129,11 @@
 \alias{is.imlist}
 \alias{is.infline}
 \alias{is.marked.default}    
+\alias{is.marked.NAobject}    
 \alias{is.marked.psp}    
 \alias{is.marked.quad}
 \alias{is.multitype.default}    
+\alias{is.multitype.NAobject}    
 \alias{is.multitype.quad}    
 \alias{is.ppplist}
 \alias{is.pp3}
@@ -403,6 +406,7 @@ areaLoss.poly(X, r, \dots, W, subset, splitem)
 AsMaskInternal(w, \dots, eps, dimyx, xy, rule.eps)
 AsymmDistance.psp(X, Y, metric, method)
 \method{as.character}{unitname}(x, \dots)
+\method{as.data.frame}{NAobject}(x, \dots)
 \method{as.data.frame}{ppplist}(x, row.names, \dots)
 \method{as.double}{im}(x, \dots)
 \method{as.im}{NAobject}(X, \dots)
@@ -508,9 +512,11 @@ is.hyperframe(x)
 is.imlist(x)
 is.infline(x)
 \method{is.marked}{default}(\dots)  
+\method{is.marked}{NAobject}(X, \dots)  
 \method{is.marked}{psp}(X, \dots)
 \method{is.marked}{quad}(X, na.action="warn", \dots)
 \method{is.multitype}{default}(X, \dots)  
+\method{is.multitype}{NAobject}(X, \dots)  
 \method{is.multitype}{quad}(X, na.action="warn", \dots)
 is.ppplist(x)
 is.pp3(x)

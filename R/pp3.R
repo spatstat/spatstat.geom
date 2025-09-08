@@ -3,7 +3,7 @@
 #
 #  class of three-dimensional point patterns in rectangular boxes
 #
-#  $Revision: 1.33 $  $Date: 2020/12/19 05:25:06 $
+#  $Revision: 1.35 $  $Date: 2025/09/08 07:08:02 $
 #
 
 box3 <- function(xrange=c(0,1), yrange=xrange, zrange=yrange, unitname=NULL) {
@@ -108,7 +108,9 @@ pp3 <- function(x, y, z, ..., marks=NULL) {
   return(out)
 }
 
-domain.pp3 <- function(X, ...) { X$domain }
+domain.pp3 <- function(X, ...) {
+  if(is.NAobject(X)) NAobject("box3") else X$domain # could be NULL
+}
 
 is.pp3 <- function(x) { inherits(x, "pp3") }
 
