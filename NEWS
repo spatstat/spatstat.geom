@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.5-0.010
+        CHANGES IN spatstat.geom VERSION 3.5-0.011
 
 OVERVIEW
 
@@ -8,6 +8,8 @@ OVERVIEW
     
     o clickpoly allows vertices to be snapped (rounded) onto a grid
 
+    o improvements to perspective views of images.
+    
     o more options for disc windows.
 
     o internal improvements.
@@ -40,10 +42,6 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New argument 'type' allows the user to specify an inscribed polygon
     or a circumscribed polygon.
 
-    o hyperframe
-    Removed slight inconsistencies in the internal format
-    produced in different cases.
-
     o as.ppp, as.owin, as.im, domain, Frame, Window
     These generic functions now have methods for class 'NAobject'
     which return an 'NAobject'.
@@ -51,7 +49,15 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o nobjects, npoints
     These generic functions now have methods for class 'NAobject'
     which return an NA integer value.
+
+    o persp.im
+    Improved appearance when apron=TRUE and the image domain is not a rectangle.
     
+    o hyperframe
+    Removed slight inconsistencies in the internal format
+    produced in different cases.
+
+
         CHANGES IN spatstat.geom VERSION 3.5-0
 
 OVERVIEW

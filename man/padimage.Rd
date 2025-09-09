@@ -49,20 +49,17 @@ padimage(X, value=NA, n=1, W=NULL)
 \value{
   Another object of class \code{"im"}, of the same type as \code{X}.
 }
-\author{\adrian
-  
-  
-  \rolf
-  
-  and \ege
-  
-}
+\author{\spatstatAuthors.}
 \seealso{
   \code{\link{im}}
 }
 \examples{
  Z <- setcov(owin())
  plot(padimage(Z, 1, 10))
+
+ D <- distmap(letterR, invert=TRUE, eps=0.05)[letterR, drop=FALSE]
+ V <- dilation(letterR, 0.15)
+ plot(padimage(D, 0.4, W=V))
 }
 \keyword{spatial}
 \keyword{manip}

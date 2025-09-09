@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.184 $     $Date: 2025/06/30 12:04:38 $
+#      $Revision: 1.185 $     $Date: 2025/09/09 05:56:56 $
 #
 #      The class "im" of raster images
 #
@@ -1275,7 +1275,6 @@ padimage <- function(X, value=NA, n=1, W=NULL) {
   stopifnot(length(value) == 1)
   if(!missing(n) && !is.null(W)) 
     stop("Arguments n and W are incompatible", call.=FALSE)
-  padW <- !is.null(W)
   if(isfac <- (X$type == "factor")) {
     ## handle factors
     levX <- levels(X)
@@ -1287,7 +1286,8 @@ padimage <- function(X, value=NA, n=1, W=NULL) {
     X <- eval.im(as.integer(X))
     value <- as.integer(value)
   }
-  if(!padW) {
+  ## create image on expanded domain
+  if(is.null(W)) {
     ## pad by 'n' pixels
     nn <- rep(n, 4)
     nleft   <- nn[1L]
@@ -1295,7 +1295,7 @@ padimage <- function(X, value=NA, n=1, W=NULL) {
     nbottom <- nn[3L]
     ntop    <- nn[4L]
   } else {
-    ## pad out to window W
+    ## pad out to frame of window W
     FX <- Frame(X)
     B <- boundingbox(Frame(W), FX)
     nleft   <- max(1, round((FX$xrange[1L] - B$xrange[1L])/X$xstep))
@@ -1303,15 +1303,18 @@ padimage <- function(X, value=NA, n=1, W=NULL) {
     nbottom <- max(1, round((FX$yrange[1L] - B$yrange[1L])/X$ystep))
     ntop    <- max(1, round((B$yrange[2L] - FX$yrange[2L])/X$ystep))
   }
+  ## create matrix of pixel values
   mX <- as.matrix(X)
-  dd <- dim(mX)
-  mX <- cbind(matrix(value, dd[1L], nleft, byrow=TRUE),
-              as.matrix(X),
-              matrix(value, dd[1L], nright, byrow=TRUE))
-  dd <- dim(mX)
-  mX <- rbind(matrix(rev(value), nbottom, dd[2L]),
-              mX,
-              matrix(value, ntop, dd[2L]))
+  dX <- dim(mX)
+  mY <- cbind(matrix(value, dX[1L], nleft, byrow=TRUE),
+              mX, 
+              matrix(value, dX[1L], nright, byrow=TRUE))
+  dY <- dim(mY)
+  mY <- rbind(matrix(rev(value), nbottom, dY[2L]),
+              mY,
+              matrix(value, ntop, dY[2L]))
+  dY <- dim(mY)
+  ## create image 
   xcol <- with(X,
                c(xcol[1L]     - (nleft:1) * xstep,
                  xcol,
@@ -1322,13 +1325,20 @@ padimage <- function(X, value=NA, n=1, W=NULL) {
                  yrow[length(yrow)] + (1:ntop) * ystep))
   xr <- with(X, xrange + c(-nleft, nright) * xstep)
   yr <- with(X, yrange + c(-nbottom, ntop) * ystep)
-  Y <- im(mX,
+  Y <- im(mY,
           xcol=xcol, yrow=yrow, xrange=xr, yrange=yr,
           unitname=unitname(X))
+  ## handle factor values
   if(isfac)
     Y <- eval.im(factor(Y, levels=seq_along(levX), labels=levX))
-  if(padW && !is.rectangle(W)) 
-    Y <- Y[W, drop=FALSE]
+  ## handle non-rectangular domains
+  eX <- anyNA(X)
+  eW <- !is.null(W) && !is.rectangle(W)
+  if(eX || eW) {
+    if(eW) Y[W] <- value
+    Y[as.owin(X)] <- X[]
+    if(eW) Y <- Y[W, drop=FALSE]
+  }
   return(Y)
 }
 

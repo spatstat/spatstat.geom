@@ -4,7 +4,7 @@
 ##  'persp' method for image objects
 ##      plus annotation
 ##  
-##  $Revision: 1.29 $ $Date: 2023/02/28 01:53:02 $
+##  $Revision: 1.31 $ $Date: 2025/09/09 23:11:52 $
 ##
 
 persp.im <- function(x, ...,
@@ -14,11 +14,12 @@ persp.im <- function(x, ...,
   xinfo <- summary(x)
   if(xinfo$type == "factor")
     stop("Perspective plot is inappropriate for factor-valued image")
+  pop <- spatstat.options("par.persp")
   ## check whether 'col' was specified when 'colmap' was intended
   Col <- list(...)$col
   if(is.null(colmap) && !is.null(Col) && !is.matrix(Col) && length(Col) != 1)
     warning("Argument col is not a matrix. Did you mean colmap?")
-  if(!missing(colin)) {
+  if(has.colin <- !missing(colin)) {
     ## separate image to determine colours
     verifyclass(colin, "im")
     if(!compatible(colin, x)) {
@@ -28,7 +29,36 @@ persp.im <- function(x, ...,
     if(is.null(colmap))
       colmap <- spatstat.options("image.colfun")(128)
   }
-  pop <- spatstat.options("par.persp")
+  ## modify image data to add an apron
+  if(apron) {
+    zlim <- list(...)$zlim
+    bottom <- if(!is.null(zlim)) zlim[1] else min(x)
+    if(has.colin)
+      mincolin <- min(colin, na.rm=TRUE, finite=TRUE)
+    xmask   <- as.mask(x)
+    isapron <- as.im(FALSE, W=xmask)
+    if(!anyNA(x)) {
+      ## add 1 pixel at border
+      x       <- padimage(x, bottom)
+      isapron <- padimage(isapron, TRUE)
+      if(has.colin)
+        colin <- padimage(colin, mincolin)
+    } else {
+      ## add about 4 pixels around domain of x
+      r <- with(x, 4 * sqrt(xstep^2+ystep^2))
+      V <- dilation(xmask, r)
+      x       <- padimage(x, bottom, W=V)
+      isapron <- padimage(isapron, TRUE, W=V)
+      if(has.colin)
+        colin <- padimage(colin, mincolin, W=V)
+      xold   <- x[xmask, drop=FALSE]
+      xclose <- nearestValue(xold)
+      transition <- 1 - distmap(as.owin(xold))/r
+      transition <- eval.im(pmax(0, pmin(1, transition)))
+      x[isapron] <- (xclose * transition + bottom * (1-transition))[isapron]
+    }
+    xinfo <- summary(x)
+  }
   ##
   if(is.function(colmap) && !inherits(colmap, "colourmap")) {
     ## coerce to a 'colourmap' if possible
@@ -54,13 +84,13 @@ persp.im <- function(x, ...,
     colval <- t(as.matrix(colval))
     ## strip one row and column for input to persp.default
     colval <- colval[-1, -1]
-    ## replace NA by arbitrary value
-    isna <- is.na(colval)
-    if(any(isna)) {
-      stuff <- attr(colmap, "stuff")
-      colvalues <- stuff$outputs
-      colval[isna] <- colvalues[1]
-    }
+    ## ## replace NA by arbitrary value
+    ##  isna <- is.na(colval)
+    ## if(any(isna)) {
+    ##   stuff <- attr(colmap, "stuff")
+    ##   colvalues <- stuff$outputs
+    ##   colval[isna] <- colvalues[1]
+    ## }
     ## pass colour matrix (and suppress lines)
     colinfo <- list(col=colval, border=NA)
   } else {
@@ -83,24 +113,17 @@ persp.im <- function(x, ...,
     colval <- t(as.matrix(colval))
     ## strip one row and column for input to persp.default
     colval <- colval[-1, -1]
-    colval[is.na(colval)] <- colvalues[1]
+    ## colval[is.na(colval)] <- colvalues[1]
     ## pass colour matrix (and suppress lines)
     colinfo <- list(col=colval, border=NA)
   }
 
-  if(apron) {
-    ## add an 'apron'
-    zlim <- list(...)$zlim
-    bottom <- if(!is.null(zlim)) zlim[1] else min(x)
-    x <- na.handle.im(x, na.replace=bottom)
-    x <- padimage(x, bottom)
-    xinfo <- summary(x)
-    if(is.matrix(colval <- colinfo$col)) {
-      colval <- matrix(col2hex(colval), nrow(colval), ncol(colval))
+  if(apron && is.matrix(colval <- colinfo$col) && !is.null(isapron)) {
+      ## assign grey colour to apron pixels
       grijs <- col2hex("lightgrey")
-      colval <- cbind(grijs, rbind(grijs, colval, grijs), grijs)
+      isap <- t(as.matrix(isapron))[-1,-1]
+      colval[isap] <- grijs
       colinfo$col <- colval
-    }
   }
 
   if(spatstat.options("monochrome"))
