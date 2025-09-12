@@ -66,3 +66,4 @@ as.data.frame.NAobject <- function(x, ...) { NAobject("data.frame") }
 is.marked.NAobject <- function(X, ...) { NA }
 
 is.multitype.NAobject <- function(X, ...) { NA }
+

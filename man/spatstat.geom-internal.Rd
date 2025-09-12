@@ -170,6 +170,8 @@
 \alias{mark.scale.default}
 \alias{markspace.integral}
 \alias{marks.default}           
+\alias{marks.NAobject}           
+\alias{marks<-.NAobject}           
 \alias{marks.quad}           
 \alias{\%mapp\%} %DoNotExport
 %NAMESPACE export("%mapp%")
@@ -557,6 +559,8 @@ mark.scale.default(marx, w, \dots,
                    minsize, zerosize, characters)
 markspace.integral(X)
 \method{marks}{default}(x, \dots)
+\method{marks}{NAobject}(x, \dots)
+\method{marks}{NAobject}(x, \dots) <- value
 \method{marks}{quad}(x, dfok=FALSE, \dots)
 markappendop(x, y)
 x \%mapp\% y

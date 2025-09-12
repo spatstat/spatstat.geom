@@ -1,7 +1,7 @@
 #
 # marks.R
 #
-#   $Revision: 1.47 $   $Date: 2020/03/23 07:18:53 $
+#   $Revision: 1.48 $   $Date: 2025/09/12 01:42:43 $
 #
 # stuff for handling marks
 #
@@ -27,11 +27,15 @@ marks.ppp <- function(x, ..., dfok=TRUE, drop=TRUE) {
   return(ma)
 }
 
+marks.NAobject <- function(x, ...) { NAobject("data.frame") }
+
 # ------------------------------------------------------------------
 
 "marks<-" <- function(x, ..., value) {
   UseMethod("marks<-")
 }
+
+"marks<-.NAobject" <- function(x, ..., value) { x }
 
 "marks<-.ppp" <- function(x, ..., dfok=TRUE, drop=TRUE, value) {
   np <- npoints(x)

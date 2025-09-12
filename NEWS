@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.5-0.011
+        CHANGES IN spatstat.geom VERSION 3.5-0.012
 
 OVERVIEW
 
@@ -49,6 +49,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o nobjects, npoints
     These generic functions now have methods for class 'NAobject'
     which return an NA integer value.
+
+    o marks, "marks<-"
+    These generic functions now have methods for class 'NAobject'
+    which return an 'NAobject'.
 
     o persp.im
     Improved appearance when apron=TRUE and the image domain is not a rectangle.
