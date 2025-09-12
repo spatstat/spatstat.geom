@@ -144,6 +144,13 @@
          apron=TRUE, theta=-30, phi=20,
          zlab="Elevation", main="", ticktype="detailed",
          expand=6)
+
+   if(interactive()) {
+     ## apron for non-rectangular domain
+     sto <- subset(stonetools, TYPE == "LITHIC", select=NULL)
+     D <- density(sto, 0.65, dimyx=512)
+     persp(D, phi=30, apron=TRUE, colmap=terrain.colors, expand=0.5, box=FALSE, theta=-10)
+   }
 }
 \author{
   \spatstatAuthors.
