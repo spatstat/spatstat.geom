@@ -79,6 +79,7 @@
 \alias{do.as.im}
 \alias{do.call.plotfun}
 \alias{drawSignedPoly}
+\alias{elementOrNA}
 \alias{emptywindow}
 \alias{ensureModelSupport}
 \alias{equalpairs.quad}          
@@ -464,6 +465,7 @@ dist2dpath(dist, method="C")
 do.as.im(x, action, \dots, W, eps, dimyx, xy, rule.eps, na.replace)
 do.call.plotfun(fun, arglist, \dots, envir)
 drawSignedPoly(x,y,pars,sgn)
+elementOrNA(x, nam, cl)
 emptywindow(w)
 ensureModelSupport(model, loaded)
 equalpairs.quad(Q)

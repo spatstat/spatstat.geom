@@ -57,6 +57,8 @@
 #-------------------------------------------------------------
 
 quad <- function(data, dummy, w, param=NULL) {
+
+  if(is.NAobject(data) || is.NAobject(dummy)) return(NAobject("quad"))
   
   data <- as.ppp(data)
   dummy <- as.ppp(dummy)

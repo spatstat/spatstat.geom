@@ -6,7 +6,7 @@
 #'   Methods for class 'NAobject' capture dispatch of print, plot, summary
 #'   so that we don't need to tinker with print.ppp, plot.ppp etc.
 #' 
-#'   $Revision: 1.7 $ $Date: 2025/09/08 06:04:07 $
+#'   $Revision: 1.10 $ $Date: 2025/09/14 02:46:37 $
 #' 
 #'   ------------------------------------------------------------
 #'        Make an 'NA object' of any class
@@ -34,6 +34,15 @@ classIgnoringNA <- function(x, first=FALSE) {
   if(first) a <- a[1L]
   return(a)
 }
+
+#'   ------------------------------------------------------------
+#'     Extract element of an object, defaulting to an 'NAobject'
+#'   ------------------------------------------------------------
+
+elementOrNA <- function(x, nam, cl) {
+  if(!is.NAobject(x) && nam %in% names(x)) getElement(x, nam) else NAobject(cl)
+}
+
 
 #'   ------------------------------------------------------------
 #'       methods for class 'NAobject'
