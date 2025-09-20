@@ -1,18 +1,18 @@
-        CHANGES IN spatstat.geom VERSION 3.5-0.014
+        CHANGES IN spatstat.geom VERSION 3.6-0
 
 OVERVIEW
 
-    o more facilities for handling NA objects.
+    o More facilities for handling NA objects.
 
-    o more facilities for drawing a background behind a plot.
+    o More facilities for drawing a background behind a plot.
     
-    o clickpoly allows vertices to be snapped (rounded) onto a grid
+    o 'clickpoly' allows vertices to be snapped (rounded) onto a grid
 
-    o improvements to perspective views of images.
+    o Improvements to perspective views of images.
     
-    o more options for disc windows.
+    o More options for disc windows.
 
-    o internal improvements.
+    o Internal improvements.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
