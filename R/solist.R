@@ -7,11 +7,11 @@
 ##
 ## plot.solist is defined in plot.solist.R
 ##
-## $Revision: 1.35 $ $Date: 2025/07/26 01:37:39 $
+## $Revision: 1.36 $ $Date: 2025/09/28 03:57:38 $
 
 anylist <- function(...) {
   x <- list(...)
-  class(x) <- c("anylist", "listof", class(x))
+  class(x) <- unique(c("anylist", "listof", class(x)))
   return(x)
 }
 
@@ -37,7 +37,7 @@ as.anylist <- function(x) {
   if(inherits(x, "anylist")) return(x)
   if(!is.list(x))
     x <- list(x)
-  class(x) <- c("anylist", "listof", class(x))
+  class(x) <- unique(c("anylist", "listof", class(x)))
   return(x)
 }
   
@@ -91,11 +91,11 @@ solist <- function(..., check=TRUE, promote=TRUE, demote=FALSE, .NameBase) {
   class(stuff) <- unique(c("solist", "anylist", "listof", class(stuff)))
   if(promote && length(stuff)) {
     if(all(sapply(stuff, is.ppp))) {
-      class(stuff) <- c("ppplist", class(stuff))
+      class(stuff) <- unique(c("ppplist", class(stuff)))
     } else if(all(sapply(stuff, is.im))) {
-      class(stuff) <- c("imlist", class(stuff))
+      class(stuff) <- unique(c("imlist", class(stuff)))
       if(all(sapply(stuff, is.linim)))
-        class(stuff) <- c("linimlist", class(stuff))
+        class(stuff) <- unique(c("linimlist", class(stuff)))
     }
   }
   return(stuff)
