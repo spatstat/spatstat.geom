@@ -634,7 +634,28 @@ tile.areas <- function(x) {
   return(a)
 }
 
-         
+tile.centroids <- function(x) {
+  stopifnot(is.tess(x))
+  switch(x$type,
+         rect={
+           xg <- x$xgrid
+           yg <- x$ygrid
+           nx <- length(xg)
+           ny <- length(yg)
+           xmid <- (xg[-1] + xg[-nx])/2
+           ymid <- (yg[-1] + yg[-ny])/2
+           xy <- cbind(x=rep(xmid, ny-1),
+                       y=rep(rev(ymid), each=nx-1))
+         },
+         tiled=,
+         image = {
+           til <- tiles(x)
+           xy <- t(sapply(lapply(til, centroid.owin), unlist))
+         })
+  z <- as.ppp(xy, W=Frame(x))
+  return(z)
+}
+           
 as.im.tess <- function(X, W=NULL, ...,
                        eps=NULL, dimyx=NULL, xy=NULL,
                        rule.eps=c("adjust.eps", "grow.frame", "shrink.frame"),

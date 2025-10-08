@@ -1,9 +1,17 @@
-        CHANGES IN spatstat.geom VERSION 3.6-0.001
+        CHANGES IN spatstat.geom VERSION 3.6-0.002
 
 OVERVIEW
 
     o Minor internal fixes.
 
+    o Find centroids of tiles of a tessellation.
+
+NEW FUNCTIONS
+
+    o tile.centroids
+    Find the centroids of the tiles of a tessellation
+    and return them as a point pattern.
+    
         CHANGES IN spatstat.geom VERSION 3.6-0
 
 OVERVIEW
