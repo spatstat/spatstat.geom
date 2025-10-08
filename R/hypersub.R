@@ -85,7 +85,7 @@
            )
     }
   }
-  class(x) <- c("hyperframe", class(x))
+  class(x) <- unique(c("hyperframe", class(x)))
   return(x)
 }
 

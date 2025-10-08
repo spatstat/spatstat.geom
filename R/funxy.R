@@ -36,7 +36,7 @@ funxy <- function(f, W=NULL) {
   attributes(h) <- attributes(f)
   unitname(h) <- unitname(W)
   ## stamp it
-  class(h) <- c("funxy", class(h))
+  class(h) <- unique(c("funxy", class(h)))
   attr(h, "W") <- W
   attr(h, "f") <- f
   return(h)  

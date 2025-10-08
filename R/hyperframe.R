@@ -253,7 +253,7 @@ names.hyperframe <- function(x) { unclass(x)$vname }
   names(x$hyperatoms)   <- value[vtype == "hyperatom"]
   names(x$hypercolumns) <- value[vtype == "hypercolumn"]
   x$vname <- value
-  class(x) <- c("hyperframe", class(x))
+  class(x) <- unique(c("hyperframe", class(x)))
   return(x)
 }
 
@@ -264,7 +264,7 @@ row.names.hyperframe <- function(x) {
 "row.names<-.hyperframe" <- function(x, value) {
   y <- unclass(x)
   row.names(y$df) <- value
-  class(y) <- c("hyperframe", class(y))
+  class(y) <- unique(c("hyperframe", class(y)))
   return(y)
 }
 
@@ -290,7 +290,7 @@ dimnames.hyperframe <- function(x) {
   y <- unclass(x)
   row.names(y$df) <- value[[1L]]
   y$vname <- value[[2]]
-  class(y) <- c("hyperframe", class(y))
+  class(y) <- unique(c("hyperframe", class(y)))
   return(y)
 }
 

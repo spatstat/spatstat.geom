@@ -15,7 +15,7 @@ diagramobj <- function(X, ...) {
   if(sum(nzchar(names(a))) != length(a))
     stop("All extra arguments must be named")
   attributes(X) <- append(attributes(X), a)
-  class(X) <- c("diagramobj", class(X))
+  class(X) <- unique(c("diagramobj", class(X)))
   return(X)
 }
 
@@ -83,7 +83,7 @@ textstring <- function(x, y, txt=NULL, ...) {
   }
   marks(X) <- txt
   Y <- diagramobj(X, otherargs=list(...))
-  class(Y) <- c("textstring", class(Y))
+  class(Y) <- unique(c("textstring", class(Y)))
   return(Y)
 }
 
@@ -131,7 +131,7 @@ yardstick <- function(x0, y0, x1, y1, txt=NULL, ...) {
   }
   Window(X) <- boundingbox(X)
   Y <- diagramobj(X, txt=txt, otherargs=list(...))
-  class(Y) <- c("yardstick", class(Y))
+  class(Y) <- unique(c("yardstick", class(Y)))
   return(Y)
 }
 
@@ -339,7 +339,7 @@ onearrow <- function(x0, y0, x1, y1, txt=NULL, ...) {
   }
   Window(X) <- boundingbox(X)
   Y <- diagramobj(X, txt=txt, otherargs=list(...))
-  class(Y) <- c("onearrow", class(Y))
+  class(Y) <- unique(c("onearrow", class(Y)))
   return(Y)
 }
 

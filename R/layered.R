@@ -27,7 +27,7 @@ layered <- function(..., plotargs=NULL, LayerList=NULL) {
   }
   names(plotargs) <- names(out)
   attr(out, "plotargs") <- plotargs
-  class(out) <- c("layered", class(out))
+  class(out) <- unique(c("layered", class(out)))
   return(out)
 }
 
@@ -45,7 +45,7 @@ c.layered <- function(...) {
   plargs <- unlist(plarglists, recursive=FALSE)
   names(plargs) <- names(out)
   attr(out, "plotargs") <- plargs
-  class(out) <- c("layered", class(out))
+  class(out) <- unique(c("layered", class(out)))
   return(out)
 }
 
@@ -248,7 +248,7 @@ plotEachLayer <- function(x, ..., main,
   class(y) <- "list"
   y[i] <- value
   # make it a 'layered' object too
-  class(y) <- c("layered", class(y))
+  class(y) <- unique(c("layered", class(y)))
   # update names and plotargs
   if(any(blank <- !nzchar(names(y)))) {
     names(y)[blank] <- paste("Layer", which(blank))
