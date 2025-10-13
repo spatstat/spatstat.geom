@@ -33,7 +33,7 @@ listof <- function(...) {
 #            "in future versions of spatstat.",
 #            "Use anylist or solist")
   stuff <- list(...)
-  class(stuff) <- c("listof", class(stuff))
+  class(stuff) <- unique(c("listof", class(stuff)))
   return(stuff)
 }
 
@@ -41,7 +41,7 @@ as.listof <- function(x) {
   if(!is.list(x))
     x <- list(x)
   if(!inherits(x, "listof"))
-    class(x) <- c("listof", class(x))
+    class(x) <- unique(c("listof", class(x)))
 #  warn.once("listof",
 #            "The class listof will be Deprecated",
 #            "in future versions of spatstat.",

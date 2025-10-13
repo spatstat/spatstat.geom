@@ -336,7 +336,7 @@ dilation.ppp <- function(w, r, ..., polygonal=TRUE, tight=TRUE) {
     ball0 <- disc(r, c(0,0), ...)
     for(i in seq_len(nn))
       balls[[i]] <- shift(ball0, vec=coo[i,])
-    class(balls) <- c("solist", class(balls))
+    class(balls) <- unique(c("solist", class(balls)))
     out <- union.owin(balls)
     return(out)
   }

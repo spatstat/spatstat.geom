@@ -57,7 +57,7 @@ psp <- function(x0, y0, x1, y1, window, marks=NULL,
     out$markformat <- "none"
   }
 
-  class(out) <- c("psp", class(out))
+  class(out) <- unique(c("psp", class(out)))
   return(out)
 }
 

@@ -70,7 +70,7 @@ quadratcount.ppp <- function(X, nx=5, ny=nx, ...,
     }
   }
   attr(Xcount, "tess") <- tess
-  class(Xcount) <- c("quadratcount", class(Xcount))
+  class(Xcount) <- unique(c("quadratcount", class(Xcount)))
   return(Xcount)
 }
 

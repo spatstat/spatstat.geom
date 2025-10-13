@@ -142,7 +142,7 @@ split.ppp <- function(x, f = marks(x), drop=FALSE, un=NULL, reduce=FALSE, ...) {
     for(i in seq_along(out))
       out[[i]]$window <- til[[i]]
   }
-  class(out) <- c("splitppp", "ppplist", "solist", class(out))
+  class(out) <- unique(c("splitppp", "ppplist", "solist", class(out)))
   attr(out, "fsplit") <- fsplit
   attr(out, "fgroup") <- f
   return(out)

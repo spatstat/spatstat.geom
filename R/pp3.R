@@ -103,7 +103,7 @@ pp3 <- function(x, y, z, ..., marks=NULL) {
   stopifnot(is.numeric(z)) 
   b <- as.box3(...)
   out <- ppx(data=data.frame(x=x,y=y,z=z), domain=b)
-  class(out) <- c("pp3", class(out))
+  class(out) <- unique(c("pp3", class(out)))
   if(!is.null(marks)) marks(out) <- marks
   return(out)
 }
@@ -215,7 +215,7 @@ plot.pp3 <- function(x, ..., eye=NULL, org=NULL, theta=25, phi=15,
 "[.pp3" <- function(x, i, drop=FALSE, ...) {
   answer <- NextMethod("[")
   if(is.ppx(answer))
-    class(answer) <- c("pp3", class(answer))
+    class(answer) <- unique(c("pp3", class(answer)))
   return(answer)
 }
   

@@ -98,7 +98,7 @@ texturemap <- function(inputs, textures, ...) {
   f <- function(x) {
     df[match(x, df$input), -1, drop=FALSE]
   }
-  class(f) <- c("texturemap", class(f))
+  class(f) <- unique(c("texturemap", class(f)))
   attr(f, "df") <- df
   return(f)
 }

@@ -34,7 +34,7 @@ nnfun.ppp <- function(X, ..., k=1, value=c("index", "mark")) {
            attr(gm, "Xclass") <- "ppp"
            g <- funxy(gm, as.rectangle(as.owin(X)))
          })
-  class(g) <- c("nnfun", class(g))
+  class(g) <- unique(c("nnfun", class(g)))
   return(g)
 }
 
@@ -61,7 +61,7 @@ nnfun.psp <- function(X, ..., value=c("index", "mark")) {
            attr(gm, "Xclass") <- "psp"
            g <- funxy(gm, as.rectangle(as.owin(X)))
          })
-  class(g) <- c("nnfun", class(g))
+  class(g) <- unique(c("nnfun", class(g)))
   return(g)
 }
 

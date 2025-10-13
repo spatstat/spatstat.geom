@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.120 $ $Date: 2025/06/17 07:37:21 $
+#   $Revision: 1.121 $ $Date: 2025/10/08 14:02:16 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -831,7 +831,7 @@ as.tess.tess <- function(X) {
            stop(paste("Unrecognised tessellation type", sQuote(X$type))))
   fields <- c(c("type", "window", "n", "marks"), fields)
   X <- unclass(X)[fields]
-  class(X) <- c("tess", class(X))
+  class(X) <- unique(c("tess", class(X)))
   return(X)
 }
 

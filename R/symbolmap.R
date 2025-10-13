@@ -145,7 +145,7 @@ symbolmap <- local({
                          compress=compress,
                          decompress=decompress))
     attr(f, "stuff") <- stuff
-    class(f) <- c("symbolmap", class(f))
+    class(f) <- unique(c("symbolmap", class(f)))
     f
   }
 

@@ -18,7 +18,7 @@ as.function.tess <- function(x, ..., values=NULL) {
     f <- function(x,y) { values[as.integer(tileindex(x,y,V))] }
   }
   g <- funxy(f, Window(V))
-  class(g) <- c("tessfun", class(g))
+  class(g) <- unique(c("tessfun", class(g)))
   return(g)
 }
 

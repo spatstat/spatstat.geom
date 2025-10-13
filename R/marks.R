@@ -200,7 +200,7 @@ unmark.ppp <- function(X) {
 
 unmark.splitppp <- function(X) {
   Y <- lapply(X, unmark.ppp)
-  class(Y) <- c("splitppp", class(Y))
+  class(Y) <- unique(c("splitppp", class(Y)))
   return(Y)
 }
 
