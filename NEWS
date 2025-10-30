@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.6-0.003
+        CHANGES IN spatstat.geom VERSION 3.6-0.004
 
 OVERVIEW
 
@@ -6,6 +6,12 @@ OVERVIEW
 
     o Find centroids of tiles of a tessellation.
 
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o owin2mask
+    Arguments '...' that are not recognised by 'as.mask'
+    are now silently ignored, rather than causing an error.
+    
 NEW FUNCTIONS
 
     o tile.centroids

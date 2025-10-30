@@ -4,7 +4,7 @@
 #'    Mask approximations which are guaranteed to be entirely inside
 #'    or entirely covering the original window.
 #'
-#'    $Revision: 1.8 $  $Date: 2023/05/04 00:58:17 $
+#'    $Revision: 1.9 $  $Date: 2025/10/30 01:26:55 $
 #'
 
 owin2mask <- function(W, 
@@ -26,8 +26,8 @@ owin2mask <- function(W,
            outside = { return(complement.owin(W)) },
            boundary = { M <- W })
   } else {
-    ## convert to mask
-    M <- as.mask(W, ...)
+    ## convert to mask, ignoring unrecognised arguments
+    M <- AsMaskInternal(w=W, ...)
   }
   ## (M consists of all pixels whose centres are inside W)
   

@@ -27,8 +27,9 @@ owin2mask(W,
     should be converted to a binary pixel mask.
   }
   \item{\dots}{
-    Optional arguments passed to \code{\link[spatstat.geom]{as.mask}} to determine
-    the pixel resolution.
+    Optional arguments in \code{name=value} format,
+    passed to \code{\link[spatstat.geom]{as.mask}} to determine
+    the pixel resolution. Unrecognised arguments will be silently ignored.
   }
 }
 \details{
