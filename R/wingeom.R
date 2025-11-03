@@ -1,7 +1,7 @@
 #
 #	wingeom.R	Various geometrical computations in windows
 #
-#	$Revision: 4.146 $	$Date: 2025/06/29 07:20:53 $
+#	$Revision: 4.147 $	$Date: 2025/11/03 08:51:04 $
 #
 
 volume.owin <- function(x) { area.owin(x) }
@@ -949,7 +949,9 @@ incircle <- function(W) {
   }
   # compute distance to boundary
   D <- distmap(W, invert=TRUE)
+  B <- distmap(Frame(W), invert=TRUE, xy=D)
   D <- D[W, drop=FALSE]
+  D <- eval.im(pmin(D,B))
   # find maximum distance
   v <- D$v
   ok <- !is.na(v)
