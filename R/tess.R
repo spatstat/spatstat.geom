@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.121 $ $Date: 2025/10/08 14:02:16 $
+#   $Revision: 1.124 $ $Date: 2025/11/06 08:00:12 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -659,14 +659,16 @@ tile.centroids <- function(x) {
 as.im.tess <- function(X, W=NULL, ...,
                        eps=NULL, dimyx=NULL, xy=NULL,
                        rule.eps=c("adjust.eps", "grow.frame", "shrink.frame"),
+                       rule.tile=c("sample", "majority"),
                        na.replace=NULL, values=NULL) {
   rule.eps <- match.arg(rule.eps)
+  rule.tile <- match.arg(rule.tile)
   ## if W is present, it may have to be converted
   if(!is.null(W)) {
     stopifnot(is.owin(W))
-    if(W$type != "mask") 
-      W <- as.mask(W, eps=eps, dimyx=dimyx, xy=xy, rule.eps=rule.eps)
+    W <- as.mask(W, eps=eps, dimyx=dimyx, xy=xy, rule.eps=rule.eps)
   }
+  ## map tile names/indices to other values?
   if(!is.null(values)) {
     if(!is.atomic(values))
       stop("Argument 'values' should contain numeric, logical or factor values",
@@ -676,24 +678,38 @@ as.im.tess <- function(X, W=NULL, ...,
                  nobjects(X), "= number of tiles"),
            call.=FALSE)
   }
+  if(rule.tile == "majority") {
+    ## Requires polygonal calculation (except *)
+    switch(X$type,
+           tiled = { },
+           rect = {
+             til <- tiles(X)
+             WX <- Window(X)
+             X <- tess(tiles=til, window=WX)
+           },
+           image = {
+             ## (*) required only if there is a change of pixel grid
+             if(!is.null(eps) || !is.null(dimyx) || !is.null(xy)) {
+               til <- solapply(tiles(X), as.polygonal)
+               WX <- Window(X)
+               X <- tess(tiles=til, window=WX)
+             }
+           })
+  }
+  ## Do conversion
   switch(X$type,
          image={
-           if(is.null(values)) {
-             ## result is factor image
-             out <- as.im(X$image, W=W, eps=eps, dimyx=dimyx, xy=xy,
-                          rule.eps=rule.eps,
-                          na.replace=na.replace)
-           } else {
-             ## map tiles to 'values'
-             out <- as.im(X$image, W=W, eps=eps, dimyx=dimyx, xy=xy,
-                          rule.eps=rule.eps)
+           ## Tessellation is already given as a factor image
+           ## Sample onto another grid 
+           out <- as.im(X$image, W=W, eps=eps, dimyx=dimyx, xy=xy,
+                        rule.eps=rule.eps)
+           if(!is.null(values)) {
+             ## map factor levels to 'values'
              out <- eval.im(values[as.integer(out)])
-             ## replace NA by other value
-             if(!is.null(na.replace))
-               out <- as.im(out, na.replace=na.replace)
            }
          },
          tiled={
+           ## Tessellation is a list of polygons
            if(is.null(W))
              W <- as.mask(as.owin(X), eps=eps, dimyx=dimyx, xy=xy,
                           rule.eps=rule.eps)
@@ -702,42 +718,64 @@ as.im.tess <- function(X, W=NULL, ...,
            nama <- names(til)
            if(is.null(nama) || !all(nzchar(nama)))
              nama <- paste(seq_len(ntil))
-           xy <- list(x=W$xcol, y=W$yrow)
-           for(i in seq_len(ntil)) {
-             indic <- as.mask(til[[i]], xy=xy)
-             tag <- as.im(indic, value=i)
-             if(i == 1) {
-               out <- tag
-               outv <- as.integer(out$v)
-             } else {
-               outv <- pmin.int(outv, tag$v, na.rm=TRUE)
-             }
-           }
-           if(is.null(values)) {
-             ## result is factor image
-             outv <- factor(outv, levels=seq_len(ntil), labels=nama)
-           } else {
-             ## map tiles to 'values'
-             outv <- values[outv]
-           }
-           if(!is.null(na.replace) && anyNA(outv))
-             outv[is.na(outv)] <- na.replace
-           out <- im(outv, out$xcol, out$yrow, unitname=unitname(W))
+           switch(rule.tile,
+                  sample = {
+                    ## sample at centre of each pixel
+                    xy <- list(x=W$xcol, y=W$yrow)
+                    for(i in seq_len(ntil)) {
+                      indic <- as.mask(til[[i]], xy=xy)
+                      tag <- as.im(indic, value=i)
+                      if(i == 1) {
+                        out <- tag
+                        outv <- as.integer(out$v)
+                      } else {
+                        outv <- pmin.int(outv, tag$v, na.rm=TRUE)
+                      }
+                    }
+                    if(is.null(values)) {
+                      ## result is factor image
+                      outv <- factor(outv, levels=seq_len(ntil), labels=nama)
+                    } else {
+                      ## map tiles to 'values'
+                      outv <- values[outv]
+                    }
+                    out <- im(outv, out$xcol, out$yrow, unitname=unitname(W))
+                  },
+                  majority = {
+                    ## find tile occuping largest fraction of pixel
+                    A <- solapply(til, pixellate, W=W)
+                    J <- im.apply(A, which.max)
+                    if(is.null(values)) {
+                      ## result is factor image
+                      out <- eval.im(factor(J,
+                                            levels=seq_len(ntil),
+                                            labels=nama))
+                    } else {
+                      ## map tile indices to 'values'
+                      out <- eval.im(values[J])
+                    }
+                  })
          },
          rect={
-           out <- as.im(W %orifnull% as.rectangle(X),
-                        eps=eps, dimyx=dimyx, xy=xy,
-                        rule.eps=rule.eps)
+           ## discretise window or frame to required resolution
+           M <- as.im(W %orifnull% as.rectangle(X),
+                      eps=eps, dimyx=dimyx, xy=xy,
+                      rule.eps=rule.eps)
+           Mxcol <- M$xcol
+           Myrow <- M$yrow
+           ## extract information about rectangular tessellation
            xg <- X$xgrid
            yg <- X$ygrid
            nrows <- length(yg) - 1L
            ncols <- length(xg) - 1L
-           jx <- findInterval(out$xcol, xg, rightmost.closed=TRUE)
-           iy <- findInterval(out$yrow, yg, rightmost.closed=TRUE)
-           M <- as.matrix(out)
-           Jcol <- jx[col(M)]
-           Irow <- nrows - iy[row(M)] + 1L
+           ## find tile containing each pixel of M
+           jx <- findInterval(Mxcol, xg, rightmost.closed=TRUE)
+           iy <- findInterval(Myrow, yg, rightmost.closed=TRUE)
+           MM <- as.matrix(M)
+           Jcol <- jx[col(MM)]
+           Irow <- nrows - iy[row(MM)] + 1L
            Ktile <- as.integer(Jcol + ncols * (Irow - 1L))
+           ## 
            if(is.null(values)) {
              ## result is factor image
              outv <- factor(Ktile, levels=seq_len(nrows * ncols))
@@ -745,12 +783,11 @@ as.im.tess <- function(X, W=NULL, ...,
              ## map tiles to 'values'
              outv <- values[Ktile]
            }
-           if(!is.null(na.replace) && anyNA(outv))
-             outv[is.na(outv)] <- na.replace
-           out <- im(outv, xcol=out$xcol, yrow=out$yrow,
+           out <- im(outv, xcol=Mxcol, yrow=Myrow,
                      unitname=unitname(W))
-         }
-         )
+         })
+  ## replace NA by other value
+  out <- na.handle.im(out, na.replace=na.replace)
   return(out)
 }
 

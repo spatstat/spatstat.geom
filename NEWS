@@ -1,9 +1,11 @@
-        CHANGES IN spatstat.geom VERSION 3.6-0.005
+        CHANGES IN spatstat.geom VERSION 3.6-0.006
 
 OVERVIEW
 
     o Find centroids of tiles of a tessellation.
 
+    o More options for converting a tessellation to an image.
+    
     o Minor internal improvements and bug fixes.
 
 SIGNIFICANT USER-VISIBLE CHANGES
@@ -11,6 +13,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o owin2mask
     Arguments '...' that are not recognised by 'as.mask'
     are now silently ignored, rather than causing an error.
+
+    o as.im.tess
+    New argument 'rule.tile' specifies how to determine,
+    for each pixel, the tile of the tessellation that covers the pixel.
     
 NEW FUNCTIONS
 

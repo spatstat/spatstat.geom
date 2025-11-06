@@ -33,6 +33,7 @@
   \method{as.im}{tess}(X, W=NULL, \dots, 
         eps=NULL, dimyx=NULL, xy=NULL,
         rule.eps=c("adjust.eps", "grow.frame", "shrink.frame"),
+        rule.tile = c("sample", "majority"),
         na.replace=NULL, values=NULL)
 
   \method{as.im}{function}(X, W=NULL, \dots,
@@ -76,6 +77,14 @@
     Optional parameters passed to \code{\link[spatstat.geom]{as.mask}}
     which determine the pixel array geometry.
     See \code{\link[spatstat.geom]{as.mask}}.
+  }
+  \item{rule.tile}{
+    String (partially matched) specifying how to determine,
+    for each pixel, which tile of the tessellation \code{X} covers the pixel.
+    If \code{rule.tile="sample"}
+    (the default), the tile covering the centre of the pixel is chosen.
+    If \code{rule.tile="majority"}, the tile occupying the largest
+    fraction of area in the pixel is chosen.
   }
   \item{na.replace}{Optional value to replace \code{NA} entries in the
     output image.
