@@ -9,7 +9,7 @@
   given points.
 }
 \usage{
-tileindex(x, y, Z)
+tileindex(x, y, Z, close.gaps=TRUE, all.inside=FALSE)
 }
 \arguments{
   \item{x,y}{
@@ -22,6 +22,17 @@ tileindex(x, y, Z)
   \item{Z}{
     A tessellation (object of class \code{"tess"}).
   }
+  \item{close.gaps}{
+    Logical value specifying whether all points \eqn{x,y}
+    lying inside the window of \code{Z} must be classified
+    as belonging to a tile. This avoids the effect of numerical errors
+    in the tile geometry. See Details.
+  }
+  \item{all.inside}{
+    Logical value specifying whether all points \eqn{x,y} should be 
+    classified as lying inside a tile. This implies that points lying
+    outside the window will be assigned to the closest tile. See Details.
+  }
 }
 \details{
   This function determines which tile of the tessellation \code{Z}
@@ -31,11 +42,25 @@ tileindex(x, y, Z)
   The result is a factor, of the same length as \code{x} and \code{y},
   indicating which tile contains each point. The levels of the factor
   are the names of the tiles of \code{Z}.
-  Values are \code{NA} if the corresponding point lies outside the tessellation.
+
+  A point lying outside the window containing the tessellation
+  is assigned the value \code{NA} by default.
+  However if \code{all.inside=TRUE} is specified,
+  then every point will be assigned to
+  the closest tile, and no \code{NA} values are returned.
+
+  It is possible that, due to numerical error, a point lying \emph{inside} the
+  window may not be classified as belonging to any of the tiles of
+  \code{Z}. If this occurs, the default behaviour is to assign
+  the point to the closest tile. This can be suppressed
+  by setting \code{close.gaps=FALSE} (and \code{all.inside=FALSE});
+  in that case, \code{NA} values are returned for such points.
 }
 \value{
   A factor, of the same length as \code{x} and \code{y},
   whose levels are the names of the tiles of \code{Z}.
+  The factor values may include \code{NA} unless \code{all.inside=TRUE}
+  was specified.
 }
 \author{
   \spatstatAuthors

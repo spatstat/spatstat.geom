@@ -1,3 +1,21 @@
+        CHANGES IN spatstat.geom VERSION 3.6-1.001
+
+OVERVIEW
+
+    o Minor improvements and bug fixes.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o tileindex
+    New arguments 'close.gaps' and 'all.inside'.
+
+BUG FIXES
+
+    o plot.tess
+    Crashed when do.col=TRUE, for a tessellation consisting of a single tile.
+    Fixed.
+    
+
         CHANGES IN spatstat.geom VERSION 3.6-1
 
 OVERVIEW

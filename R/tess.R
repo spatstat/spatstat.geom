@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.124 $ $Date: 2025/11/06 08:00:12 $
+#   $Revision: 1.126 $ $Date: 2025/11/27 03:03:21 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -798,7 +798,7 @@ nobjects.tess <- function(x) {
          tiled = length(x$tiles))
 }
   
-tileindex <- function(x, y, Z) {
+tileindex <- function(x, y, Z, close.gaps=TRUE, all.inside=FALSE) {
   stopifnot(is.tess(Z))
   if((missing(y) || is.null(y)) && all(c("x", "y") %in% names(x))) {
     y <- x$y
@@ -823,10 +823,11 @@ tileindex <- function(x, y, Z) {
          tiled={
            n <- length(x)
            todo <- seq_len(n)
-           nt <- length(Z$tiles)
+           til <- Z$tiles
+           nt <- length(til)
            m <- integer(n)
            for(i in 1:nt) {
-             ti <- Z$tiles[[i]]
+             ti <- til[[i]]
              hit <- inside.owin(x[todo], y[todo], ti)
              if(any(hit)) {
                m[todo[hit]] <- i
@@ -836,7 +837,7 @@ tileindex <- function(x, y, Z) {
                break
            }
            m[m == 0] <- NA
-           nama <- names(Z$tiles)
+           nama <- names(til)
            lev <- seq_len(nt)
            lab <- if(!is.null(nama) && all(nzchar(nama))) nama else paste("Tile", lev)
            m <- factor(m, levels=lev, labels=lab)
@@ -852,6 +853,36 @@ tileindex <- function(x, y, Z) {
            }
          }
          )
+  if((close.gaps || all.inside) && anyNA(m)) {
+    bad <- is.na(m)
+    if(!all.inside) {
+      ## Points lying outside the window itself remain classified as NA.
+      ## Reclassify only those points which lie inside the window.
+      bad <- inside.owin(x[bad], y[bad], Window(Z))
+    }
+    if(any(bad)) {
+      ## assign bad points to nearest tile
+      nbad <- sum(bad)
+      xbad <- x[bad]
+      ybad <- y[bad]
+      til <- tiles(Z)
+      for(i in seq_along(til)) {
+        til.i <- as.polygonal(til[[i]])
+        dtile.i <- distfun(til.i)(x,y)
+        if(i == 1) {
+          dtile.min <- dtile.i
+          closest   <- rep(1L, nbad)
+        } else {
+          better <- (dtile.i < dtile.min)
+          if(any(better)) {
+            dtile.min[better] <- dtile.i[better]
+            closest[better] <- i
+          }
+        }
+      }
+      m[bad] <- levels(m)[closest]
+    }
+  }
   return(m)
 }
   

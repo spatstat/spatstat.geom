@@ -14,7 +14,7 @@ cat(paste("--------- Executing",
           "test code -----------\n"))
 #'   tests/tessera.R
 #'   Tessellation code, not elsewhere tested
-#'   $Revision: 1.9 $ $Date: 2020/12/04 08:04:38 $
+#'   $Revision: 1.10 $ $Date: 2025/12/01 14:29:27 $
 #'
 if(FULLTEST) {
 local({
@@ -28,6 +28,13 @@ local({
   #' discretisation of tiles
   V <- as.im(A)
   B <- tess(window=as.mask(W), tiles=tiles(A))
+  #' plotting tessellation with numeric marks
+  plot(A, do.col=TRUE)
+  marks(A) <- rep(42, nobjects(A))
+  plot(A, do.col=TRUE)
+  U <- as.tess(owin()) # tessellation consisting of a single tile
+  marks(U) <- 42
+  plot(U, do.col=TRUE)
   #' logical images
   D <- tess(image=(Z > 0.2))
   U <- (Z > -0.2) # TRUE or NA

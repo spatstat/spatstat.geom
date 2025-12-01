@@ -11,9 +11,10 @@
 #'        a pixel image
 #'        an expression involving the coordinates and marks
 #' 
-#'  $Revision: 1.4 $ $Date: 2023/12/08 06:51:20 $
+#'  $Revision: 1.5 $ $Date: 2025/11/25 03:22:24 $
 
-pointweights <- function(X, ..., weights=NULL, parent=NULL, dfok=FALSE) {
+pointweights <- function(X, ..., weights=NULL, parent=NULL, dfok=FALSE,
+                         weightsname="weights") {
   if(is.null(weights)) return(NULL)
   nX <- npoints(X)
   ## evaluate weights
@@ -28,13 +29,12 @@ pointweights <- function(X, ..., weights=NULL, parent=NULL, dfok=FALSE) {
     df <- as.data.frame(X)
     weights <- try(eval(weights, envir=df, enclos=parent))
     if(inherits(weights, "try-error"))
-      stop("Unable to evaluate expression for weights", call.=FALSE)
+      stop(paste("Unable to evaluate expression for", weightsname), call.=FALSE)
   } else if(dfok && inherits(weights, c("matrix", "data.frame"))) {
     weights <- as.matrix(weights)
   } else
-    stop(paste0("Argument 'weights' should be ",
-                "a numeric vector, ",
-                if(dfok) "matrix or data frame, " else NULL,
+    stop(paste("Argument", sQuote(weightsname), "should be a numeric",
+               if(dfok) "vector, matrix or data frame, or" else "vector,",
                 "a function, an image, or an expression"),
          call.=FALSE)
 
@@ -43,9 +43,9 @@ pointweights <- function(X, ..., weights=NULL, parent=NULL, dfok=FALSE) {
 
   ## validate
   if(dfok && !is.null(dim(weights))) {
-    check.nmatrix(weights, nX, squarematrix=FALSE, mname="weights")
+    check.nmatrix(weights, nX, squarematrix=FALSE, mname=weightsname)
   } else {
-    check.nvector(weights, nX, vname="weights")
+    check.nvector(weights, nX, vname=weightsname)
   }
   return(weights)
 }

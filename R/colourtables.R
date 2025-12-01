@@ -263,9 +263,12 @@ plot.colourmap <- local({
     dFrom <- as.numeric(diff(from))
     dTo <- as.numeric(diff(to))
     b <- dTo/dFrom
-    if(is.nan(b)) b <- 0
-    if(!is.finite(b)) stop("Internal error: Cannot map zero width interval")
-    to[1L] + b * (x - from[1L])
+    y <- if(is.finite(b)) {
+           to[1L] + b * (x - from[1L])
+         } else {
+           rep(mean(to), length(x))
+         }
+    return(y)
   }
 
   ensurenumeric <- function(x) { if(is.numeric(x)) x else as.numeric(x) }
