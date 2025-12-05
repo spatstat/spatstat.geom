@@ -6,7 +6,7 @@
 #  generic functions
 #  and methods for owin, psp, ppp
 #
-#  $Revision: 1.33 $   $Date: 2020/03/16 10:28:51 $
+#  $Revision: 1.34 $   $Date: 2025/12/02 23:45:53 $
 #
 
 # ............ generic  ............................
@@ -39,7 +39,7 @@ erosion.owin <-
   yr <- w$yrange
   
   if(2 * r >= max(diff(xr), diff(yr)))
-    stop("erosion distance r too large for frame of window")
+    return(emptywindow(Frame(w)))
 
   # compute the dimensions of the eroded frame
   exr <- xr + c(r, -r)
@@ -66,7 +66,7 @@ erosion.owin <-
   if(is.rectangle(w) && polygonal) {
     # result is a smaller rectangle
     if(shrink.frame) {
-      return(owinInternalRect(exr, eyr))  # type 'rectangle' 
+      return(owin(exr, eyr))  # type 'rectangle' 
     } else {
       return(owin(xr, yr, poly=ebox, check=FALSE)) # type 'polygonal'
     }
@@ -336,7 +336,7 @@ dilation.ppp <- function(w, r, ..., polygonal=TRUE, tight=TRUE) {
     ball0 <- disc(r, c(0,0), ...)
     for(i in seq_len(nn))
       balls[[i]] <- shift(ball0, vec=coo[i,])
-    class(balls) <- unique(c("solist", class(balls)))
+    class(balls) <- c("solist", class(balls))
     out <- union.owin(balls)
     return(out)
   }

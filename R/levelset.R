@@ -1,22 +1,33 @@
 # levelset.R
 #
-#  $Revision: 1.5 $  $Date: 2015/01/15 07:10:37 $
+#  $Revision: 1.10 $  $Date: 2025/12/05 05:02:30 $
 #
 # level set of an image
 
-levelset <- function(X, thresh, compare="<=") {
+levelset <- function(X, thresh, compare="<=", ...) {
+  UseMethod("levelset")
+}
+
+levelset.im <- function(X, thresh, compare="<=", ...) {
   # force X and thresh to be evaluated in this frame
   verifyclass(X, "im")
   thresh <- thresh
-  switch(compare,
-         "<"  = { A <- eval.im(X < thresh) },
-         ">"  = { A <- eval.im(X > thresh) },
-         "<=" = { A <- eval.im(X <= thresh) },
-         ">=" = { A <- eval.im(X >= thresh) },
-         "==" = { A <- eval.im(X == thresh) },
-         "!=" = { A <- eval.im(X != thresh) },
+  A <- switch(compare,
+         "<"  = eval.im(X < thresh),
+         ">"  = eval.im(X > thresh),
+         "<=" = eval.im(X <= thresh),
+         ">=" = eval.im(X >= thresh),
+         "==" = eval.im(X == thresh),
+         "!=" = eval.im(X != thresh),
          stop(paste("unrecognised comparison operator", sQuote(compare))))
   W <- as.owin(eval.im(ifelse1NA(A)))
+  return(W)
+}
+
+levelset.default <- function(X, thresh, compare="<=", ...) {
+  # last resort: convert X to image
+  X <- as.im(X, ...)
+  W <- levelset.im(X, thresh, compare)
   return(W)
 }
 

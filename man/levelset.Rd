@@ -1,5 +1,6 @@
 \name{levelset}
 \alias{levelset}
+\alias{levelset.im}
 \title{Level Set of a Pixel Image}
 \description{
   Given a pixel image, find all pixels which have values less than a
@@ -7,7 +8,9 @@
   and assemble these pixels into a window.
 }
 \usage{
-  levelset(X, thresh, compare="<=")
+  levelset(X, thresh, compare="<=", \dots)
+
+  \method{levelset}{im}(X, thresh, compare="<=", \dots)
 }
 \arguments{
   \item{X}{A pixel image (object of class "im")}.
@@ -16,6 +19,9 @@
     \code{X}}.
   \item{compare}{Character string specifying one of the comparison
     operators \code{"<", ">", "==", "<=", ">=", "!="}. 
+  }
+  \item{\dots}{
+    Arguments passed to other methods (ignored by \code{levelset.im})
   }
 }
 \details{

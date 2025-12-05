@@ -1,14 +1,30 @@
-        CHANGES IN spatstat.geom VERSION 3.6-1.001
+        CHANGES IN spatstat.geom VERSION 3.6-1.003
 
 OVERVIEW
 
     o Minor improvements and bug fixes.
+
+    o Level sets calculated using analytic geometry, for some functions.
+
+NEW FUNCTIONS
+
+    o levelset.im
+    The function previously called 'levelset' is now a method for class 'im'.
+    
+    o levelset.distfun
+    Method for level sets for distance functions.
+
+    o levelset.tessfun
+    Method for level sets for functions created by as.function.tess
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o tileindex
     New arguments 'close.gaps' and 'all.inside'.
 
+    o levelset
+    This function is now generic, with methods for 'im' and 'distfun'.
+    
 BUG FIXES
 
     o plot.tess

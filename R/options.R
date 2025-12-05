@@ -3,7 +3,7 @@
 #
 #     Spatstat options and other internal states
 #
-#    $Revision: 1.97 $   $Date: 2025/05/08 04:52:09 $
+#    $Revision: 1.98 $   $Date: 2025/12/01 15:15:33 $
 #
 #
 
@@ -518,18 +518,6 @@ warn.once <- function(key, ...) {
        kppm.strict=list(
          ## whether to apply domain limits for cluster parameters in kppm
          default=TRUE,
-         check=function(x) { is.logical(x) && length(x) == 1 },
-         valid="a single logical value"
-       ),
-       check.RandomFields.loaded=list(
-         # defunct
-         default=FALSE,
-         check=function(x) { is.logical(x) && length(x) == 1 },
-         valid="a single logical value"
-       ),
-       check.RandomFieldsUtils.loaded=list(
-         # defunct
-         default=FALSE,
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
        ),

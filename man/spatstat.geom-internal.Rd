@@ -148,6 +148,8 @@
 \alias{levels.im}
 \alias{levels<-.im}
 \alias{levelsAsFactor}
+\alias{levelset.default}
+\alias{levelset.tessfun}
 \alias{listof}
 \alias{logi.dummy}
 \alias{markvaluetype}
@@ -534,6 +536,8 @@ is.vanilla(u)
 \method{levels}{im}(x)
 \method{levels}{im}(x) <- value
 levelsAsFactor(x)
+\method{levelset}{default}(X, thresh, compare, \dots)
+\method{levelset}{tessfun}(X, thresh, compare, \dots)
 listof(\dots)
 logi.dummy(X, dummytype, nd, mark.repeat, \dots)
 markvaluetype(x)

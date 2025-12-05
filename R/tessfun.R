@@ -75,3 +75,25 @@ plot.tessfun <- function(x, ...) {
                            list(do.col=TRUE, values=val, main=xname)))
 }
 
+levelset.tessfun <- function(X, thresh, compare="<=", ...) {
+  #' extract tessellation and values attached to each tile
+  Tess     <- get("V", envir=environment(X))
+  values   <- tessfunvalues(X)
+  selected <- switch(compare,
+                     "<"  = (values < thresh),
+                     ">"  = (values > thresh),
+                     "<=" = (values <= thresh),
+                     ">=" = (values >= thresh),
+                     "==" = (values == thresh),
+                     "!=" = (values  != thresh),
+                     stop(paste("unrecognised comparison operator",
+                                sQuote(compare))))
+  W <- Window(Tess)
+  if(all(selected)) return(W)
+  if(!any(selected)) return(emptywindow(Frame(W)))
+  result <- do.call(union.owin, tiles(Tess)[selected])
+  Frame(result) <- Frame(W)
+  return(result)
+}
+
+
