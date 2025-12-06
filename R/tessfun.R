@@ -78,6 +78,13 @@ plot.tessfun <- function(x, ...) {
 levelset.tessfun <- function(X, thresh, compare="<=", ...) {
   #' extract tessellation and values attached to each tile
   Tess     <- get("V", envir=environment(X))
+  if(Tess$type == "image") {
+    ## equivalent to thresholding a pixel image
+    X <- as.im(X)
+    result <- levelset.im(as.im(X), thresh, compare, ...)
+    return(result)
+  }
+  ## tiles are polygons or rectangles
   values   <- tessfunvalues(X)
   selected <- switch(compare,
                      "<"  = (values < thresh),
