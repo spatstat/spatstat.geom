@@ -5,7 +5,7 @@
 #'  Copyright (C) Adrian Baddeley 2024
 #'  GPL Public Licence >= 2.0
 #'
-#' $Revision: 1.6 $ $Date: 2024/12/02 04:33:39 $
+#' $Revision: 1.10 $ $Date: 2025/12/06 04:58:13 $
 
 persp.ppp <- local({
   
@@ -154,9 +154,22 @@ persp.ppp <- local({
       tixseg <- xyzsegmentdata(legxy[1], legxy[2], scaled.tix[-ntix],
                                legxy[1], legxy[2], scaled.tix[-1])
       tixcol <- rep(leg.col, ntix)[1:ntix]
+      #' inclination of vertical spike relative to projection plane
+      a <- trans3dz(legxy[1], legxy[2], scal*zlim, M)
+      spikeangle <- with(a, atan2(diff(y), diff(x))) * 180/pi - 90
+      #' draw zebra segments
       spectiveSegments(tixseg, list(col=tixcol), leg.args, M=M)
+      #' draw tickmark values
       spectiveText(legxy[1], legxy[2], scaled.tix[-c(1,ntix)],
-                   labels=tix[-c(1,ntix)], pos=4, M=M)
+                   labels=tix[-c(1,ntix)], pos=4, M=M, srt=spikeangle)
+      #' add text for z axis?
+      if(!isTRUE(argh$box) && nchar(zlab) > 0) {
+        #' persp.default(box=FALSE) suppresses axis labels,
+        #' so draw a vertical axis label now
+        spectiveText(legxy[1], legxy[2], scal * zlim[2],
+                     labels=zlab, M=M,
+                     pos=2, offset=0.75, srt=spikeangle + 90)
+      }
     }
     invisible(M)
   }

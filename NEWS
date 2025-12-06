@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.6-1.003
+        CHANGES IN spatstat.geom VERSION 3.6-1.004
 
 OVERVIEW
 
@@ -24,6 +24,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o levelset
     This function is now generic, with methods for 'im' and 'distfun'.
+
+    o persp.ppp
+    Now plots the 'zlab' label alongside the vertical scale bar.
     
 BUG FIXES
 

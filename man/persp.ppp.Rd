@@ -149,10 +149,11 @@
   (Invisibly) the perspective transformation matrix.
 }
 \author{
-Adrian Baddeley.
+  \adrian.
 }
 \examples{
-   persp(longleaf, theta=-30, phi=35, spike.args=list(lwd=3), zadjust=1.5)
+   persp(longleaf, theta=-30, phi=35, spike.args=list(lwd=3), zadjust=1.5,
+         zlab="diameter")
 
    # negative mark values
    X <- longleaf
@@ -166,7 +167,7 @@ Adrian Baddeley.
    marks(Y) <- runif(npoints(Y))
    persp(Y, theta=30, phi=20, col.base="lightblue",
          win.args=list(col="pink", border=NA),
-         spike.args=list(lwd=2), zadjust=1.5)
+         spike.args=list(lwd=2), zadjust=1.5, zlab="")
 
    persp(Y, type="b",
          theta=30, phi=20, col.base="lightblue",
