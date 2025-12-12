@@ -17,6 +17,7 @@
             point.args=list(), 
             which.marks = 1,
             zlab = NULL, zlim = NULL, zadjust = 1,
+            show.window=TRUE,
             legend=TRUE, legendpos="bottomleft",
             leg.args=list(lwd=4), leg.col=c("black", "orange"))
 }
@@ -57,6 +58,7 @@
   }
   \item{col.base}{
     Colour with which to fill the horizontal plane.
+    A single colour value, or a pixel image.
   }
   \item{win.args}{
     List of arguments passed to \code{\link{plot.owin}}
@@ -90,6 +92,10 @@
   }
   \item{zadjust}{
     Scale adjustment factor controlling the height of spikes.
+  }
+  \item{show.window}{
+    Logical value specifying whether to draw the window of \code{x}
+    on the horizontal plane.
   }
   \item{legend}{
     Logical value specifying whether to draw a reference scale bar for the
@@ -133,10 +139,22 @@
   at the spatial location of the data point, with height equal to the
   mark value of the point.
 
+  The horizontal plane is effectively transparent, by default.
+  If the argument \code{col.base} is a single colour value,
+  the horizontal plane will be painted in this colour.
+  If \code{col.base} is a pixel image, it will be rendered as a 
+  colour image shown in perspective view on the
+  horizontal plane. The argument \code{colmap} controls the mapping
+  from pixel values of \code{col.base} to physical colours.
+    
   If any mark values are negative, the corresponding spikes will
   penetrate below the horizontal plane. They can be drawn in a different
   colour by specifying \code{neg.args} as shown in the examples.
-
+  These would be obscured if \code{col.base} is an opaque colour
+  other than white, or if \code{col.base} is a pixel image.
+  A transparent colour for \code{col.base} can be used
+  if it is supported by the graphics device.
+  
   Like all spatial plots in the \pkg{spatstat} family,
   \code{persp.ppp} does not independently rescale
   the \eqn{x} and \eqn{y} coordinates. A long narrow window will be

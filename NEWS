@@ -1,10 +1,10 @@
-        CHANGES IN spatstat.geom VERSION 3.6-1.004
+        CHANGES IN spatstat.geom VERSION 3.6-1.005
 
 OVERVIEW
 
-    o Minor improvements and bug fixes.
-
     o Level sets calculated using analytic geometry, for some functions.
+
+    o Minor improvements and bug fixes.
 
 NEW FUNCTIONS
 
@@ -27,6 +27,13 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o persp.ppp
     Now plots the 'zlab' label alongside the vertical scale bar.
+
+    o persp.ppp
+    Argument 'col.base' can be a pixel image, which will be
+    rendered as a colour image in perspective view on the horizontal plane.
+    
+    o persp.ppp
+    New argument 'show.window'.
     
 BUG FIXES
 
