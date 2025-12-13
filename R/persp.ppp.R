@@ -5,7 +5,7 @@
 #'  Copyright (C) Adrian Baddeley 2024
 #'  GPL Public Licence >= 2.0
 #'
-#' $Revision: 1.11 $ $Date: 2025/12/12 01:43:14 $
+#' $Revision: 1.12 $ $Date: 2025/12/13 07:52:15 $
 
 persp.ppp <- local({
   
@@ -85,7 +85,7 @@ persp.ppp <- local({
       if(!is.subset.owin(Window(x), Window(col.base)))
         Window(x) <- boundingbox(Window(x), Window(col.base))
       #' base plane height
-      Z <- 0 * col.base
+      Z <- as.im(0, W=col.base)
       BaseInfo <- list(colin=col.base)
     } else if(length(col.base) == 1 && is.colour(col.base)) {
       #' Usual case: horizontal plane will be painted a single colour

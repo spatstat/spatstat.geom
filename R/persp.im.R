@@ -4,12 +4,12 @@
 ##  'persp' method for image objects
 ##      plus annotation
 ##  
-##  $Revision: 1.31 $ $Date: 2025/09/09 23:11:52 $
+##  $Revision: 1.34 $ $Date: 2025/12/13 08:12:39 $
 ##
 
 persp.im <- function(x, ...,
-                     colmap=NULL, colin=x, apron=FALSE,
-                     visible=FALSE) {
+                     colmap=NULL, colin=x, valuesAreColours=NULL,
+                     apron=FALSE, visible=FALSE) {
   xname <- short.deparse(substitute(x))
   xinfo <- summary(x)
   if(xinfo$type == "factor")
@@ -26,15 +26,58 @@ persp.im <- function(x, ...,
       ## resample 'colin' onto grid of 'x'
       colin <- as.im(colin, W=x)
     }
-    if(is.null(colmap))
-      colmap <- spatstat.options("image.colfun")(128)
+    #' determine whether pixel values of colin are to be taken as colour values
+    if(is.null(valuesAreColours)) {
+      valuesAreColours <- (colin$type %in% c("factor", "character"))
+      if(valuesAreColours)
+        splat("Interpreting pixel values of 'colin' as colours",
+              "(valuesAreColours=TRUE)")
+    } else {
+      valuesAreColours <- isTRUE(valuesAreColours)
+    }
+    if(valuesAreColours) {
+      switch(colin$type,
+             factor = {
+               col <- levels(colin)
+             },
+             character = {
+               colin <- eval.im(factor(colin))
+               col <- levels(colin)
+             },
+             {
+               warning(paste("Pixel values of type", sQuote(colin$type),
+                             "are not interpretable as colours"))
+               valuesAreColours <- FALSE
+             })
+    }
+    if(valuesAreColours) {
+      if(!is.null(colmap)) {
+        ## colour info provided: contradictory
+        warning(paste("Pixel values are taken to be colour values,",
+                      "because valuesAreColours=TRUE;", 
+                      "the colour map (argument colmap) is ignored"),
+                call.=FALSE)
+      }
+      #' colour map is the identity (colour values -> colour values)
+      colmap <- colourmap(col=col, inputs=col)
+    } else {
+      if(is.null(colmap)) {
+        #' default colour map
+        colmap <- spatstat.options("image.colfun")(128)
+      }
+    }
   }
   ## modify image data to add an apron
   if(apron) {
     zlim <- list(...)$zlim
     bottom <- if(!is.null(zlim)) zlim[1] else min(x)
-    if(has.colin)
-      mincolin <- min(colin, na.rm=TRUE, finite=TRUE)
+    if(has.colin) {
+      mincolin <- if(colin$type == "factor") {
+                    levels(colin)[1L]
+                  } else {
+                    min(colin, na.rm=TRUE, finite=TRUE)
+                  }
+    }
     xmask   <- as.mask(x)
     isapron <- as.im(FALSE, W=xmask)
     if(!anyNA(x)) {
@@ -80,7 +123,7 @@ persp.im <- function(x, ...,
   } else if(inherits(colmap, "colourmap")) {
     ## colour map object
     ## apply colour function to image data
-    colval <- eval.im(colmap(colin))
+    colval <- eval.im(colmap(colin)) 
     colval <- t(as.matrix(colval))
     ## strip one row and column for input to persp.default
     colval <- colval[-1, -1]

@@ -1,9 +1,11 @@
-        CHANGES IN spatstat.geom VERSION 3.6-1.005
+        CHANGES IN spatstat.geom VERSION 3.6-1.006
 
 OVERVIEW
 
     o Level sets calculated using analytic geometry, for some functions.
 
+    o More options for perspective plots.
+    
     o Minor improvements and bug fixes.
 
 NEW FUNCTIONS
@@ -19,12 +21,13 @@ NEW FUNCTIONS
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
-    o tileindex
-    New arguments 'close.gaps' and 'all.inside'.
-
     o levelset
     This function is now generic, with methods for 'im' and 'distfun'.
 
+    o persp.im
+    The pixel values of 'colin' can be colour values.
+    New argument 'valuesAreColours'.
+    
     o persp.ppp
     Now plots the 'zlab' label alongside the vertical scale bar.
 
@@ -35,6 +38,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o persp.ppp
     New argument 'show.window'.
     
+    o tileindex
+    New arguments 'close.gaps' and 'all.inside'.
+
 BUG FIXES
 
     o plot.tess

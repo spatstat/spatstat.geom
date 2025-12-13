@@ -144,8 +144,15 @@
   the horizontal plane will be painted in this colour.
   If \code{col.base} is a pixel image, it will be rendered as a 
   colour image shown in perspective view on the
-  horizontal plane. The argument \code{colmap} controls the mapping
-  from pixel values of \code{col.base} to physical colours.
+  horizontal plane:
+  \itemize{
+    \item If \code{valuesAreColours=TRUE} is specified,
+    the pixel values of \code{col.base} will be interpreted directly
+    as colour values. 
+    \item
+    Otherwise, the argument \code{colmap} controls the mapping
+    from pixel values of \code{col.base} to physical colours.
+  }
     
   If any mark values are negative, the corresponding spikes will
   penetrate below the horizontal plane. They can be drawn in a different

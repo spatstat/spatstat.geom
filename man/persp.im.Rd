@@ -6,7 +6,8 @@
 }
 \usage{
   \method{persp}{im}(x, \dots,
-                     colmap=NULL, colin=x, apron=FALSE, visible=FALSE)
+                     colmap=NULL, colin=x, valuesAreColours=NULL,
+                     apron=FALSE, visible=FALSE)
 }
 \arguments{
   \item{x}{
@@ -23,6 +24,14 @@
   \item{colin}{
     Optional. Colour input. Another pixel image (of the same dimensions
     as \code{x}) containing the values that will be mapped to colours. 
+  }
+  \item{valuesAreColours}{
+    Optional. Logical value indicating whether the pixel values in \code{colin}
+    are to be interpreted directly as colour values
+    (\code{valuesAreColours=TRUE}) or interpreted as numerical values
+    that should be mapped to colours (\code{valuesAreColours=FALSE}).
+    The default is \code{TRUE} if \code{colin} is a character-valued
+    or factor-valued image, and \code{FALSE} otherwise.
   }
   \item{apron}{
     Logical. If \code{TRUE}, a grey apron is placed
@@ -85,14 +94,25 @@
     then \code{colmap$breaks} determines the breakpoints of the altitude
     intervals, and \code{colmap$col} provides the corresponding colours.
   }
-  Alternatively, if the argument \code{colin} (\emph{colour input}) is present,
-  then the colour map \code{colmap} will be applied to
-  the pixel values of \code{colin} instead of the pixel values of
-  \code{x}. The result is a perspective view of a surface with
-  heights determined by \code{x} and colours determined by \code{colin}
-  (mapped by \code{colmap}).  
+  Alternatively, if the argument \code{colin} (\emph{colour input}) is
+  present, then \code{colin} determines the colour of each piece of the surface.
+  The result is a perspective view of a surface with
+  heights determined by \code{x} and colours determined by \code{colin}:
+  \itemize{
+    \item
+    If \code{colin} is a numeric-valued image, or if
+    \code{valuesAreColours=FALSE} is specified,
+    the pixel values of \code{colin} will be mapped to
+    colour values to determine the colour of each piece of the surface.
+    The colour map \code{colmap} controls this mapping.
+    \item
+    If \code{colin} is a character-valued or factor-valued image,
+    or if \code{valuesAreColours=TRUE} is specified,
+    the pixel values of \code{colin}
+    are interpreted directly as colour values.
+  }
   
-  If \code{apron=TRUE}, vertical surface is drawn around the boundary
+  If \code{apron=TRUE}, a vertical surface is drawn around the boundary
   of the perspective plot, so that the terrain appears to have been
   cut out of a solid material. If colour data were supplied, then
   the apron is coloured light grey.
