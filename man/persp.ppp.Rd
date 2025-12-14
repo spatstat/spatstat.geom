@@ -153,6 +153,16 @@
     Otherwise, the argument \code{colmap} controls the mapping
     from pixel values of \code{col.base} to physical colours.
   }
+  After the horizontal plane has been coloured, 
+  the observation window \code{Window(x)} will be drawn
+  on the horizontal plane (unless \code{show.window=FALSE}).
+  By default, only the edges of the window will be drawn,
+  as black line segments. The style of plotting the window 
+  can be modified using \code{win.args}. The colour of the line
+  segments is controlled by \code{win.args$border}. If
+  \code{win.args$col} is given, the window will be filled in the
+  specified colour, overwriting any previous colours.
+  See the Examples.
     
   If any mark values are negative, the corresponding spikes will
   penetrate below the horizontal plane. They can be drawn in a different
