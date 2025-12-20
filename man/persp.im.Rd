@@ -3,6 +3,8 @@
 \title{Perspective Plot of Pixel Image}
 \description{
   Displays a perspective plot of a pixel image.
+  The pixel values are treated as heights of a surface;
+  the surface is displayed in perspective view.
 }
 \usage{
   \method{persp}{im}(x, \dots,
