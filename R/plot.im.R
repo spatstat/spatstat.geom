@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.177 $   $Date: 2025/08/19 09:00:53 $
+#  $Revision: 1.178 $   $Date: 2025/12/21 02:18:59 $
 #
 #  Plotting code for pixel images
 #
@@ -248,7 +248,7 @@ plot.im <- local({
                      add=FALSE, clipwin=NULL,
                      col=NULL, reverse.col=FALSE,
                      valuesAreColours=NULL, log=FALSE,
-                     ncolours=256, gamma=1, 
+                     ncolours=256, gamma=1, opacity=1,
                      ribbon=show.all, show.all=!add,
                      drop.ribbon=FALSE,
                      ribside=c("right", "left", "bottom", "top"),
@@ -273,6 +273,12 @@ plot.im <- local({
     ribside <- match.arg(ribside)
     col.given <- !is.null(col)
     dotargs <- list(...)
+
+    if(!missing(opacity)) {
+      check.1.real(opacity)
+      stopifnot(opacity >= 0)
+      stopifnot(opacity <= 1)
+    }
 
     stopifnot(is.list(ribargs))
     user.ticks <- ribargs$at
@@ -607,6 +613,11 @@ plot.im <- local({
     if(spatstat.options("monochrome")) {
       ## transform to grey scale
       colourinfo$col <- to.grey(colourinfo$col)
+    }
+
+    if(opacity != 1) {
+      ## make partially transparent colours
+      colourinfo$col <- to.transparent(colourinfo$col, fraction=opacity)
     }
 
     if(isTRUE(reverse.col) && !valuesAreColours) {

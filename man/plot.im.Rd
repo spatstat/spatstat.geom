@@ -11,7 +11,7 @@
                    add=FALSE, clipwin=NULL,
                    col=NULL, reverse.col=FALSE,
                    valuesAreColours=NULL, log=FALSE,
-                   ncolours=256, gamma=1, 
+                   ncolours=256, gamma=1, opacity=1,
                    ribbon=show.all, show.all=!add,
                    drop.ribbon=FALSE,
                    ribside=c("right", "left", "bottom", "top"),
@@ -27,7 +27,7 @@
                    add=FALSE, clipwin=NULL,
                    col=NULL, reverse.col=FALSE,
                    valuesAreColours=NULL, log=FALSE, 
-                   ncolours=256, gamma=1, 
+                   ncolours=256, gamma=1, opacity=1,
                    ribbon=show.all, show.all=!add,
                    drop.ribbon=FALSE,
                    ribside=c("right", "left", "bottom", "top"),
@@ -82,6 +82,13 @@
   \item{gamma}{
     Exponent for the gamma correction of the colours.
     A single positive number.
+  }
+  \item{opacity}{
+    Numerical value between 0 and 1 specifying the degree of
+    transparency or opaqueness of the colours.
+    \code{opacity=0} would make the colours completely invisible.
+    \code{opacity=1} (the default) makes the colours completely opaque.
+    Not all graphics devices support transparent colours.
   }
   \item{ribbon}{
     Logical flag indicating whether to display a ribbon
@@ -338,7 +345,10 @@
 
   If \code{reverse.col=TRUE}, the sequence of colour values specified
   by \code{col} will be reversed (unless \code{valuesAreColours=TRUE}).
-  
+
+  Finally if \code{opacity} is a value less than 1,
+  the \bold{colours are transformed to semi-transparent colours}.
+
   Other graphical parameters controlling the display of both the pixel image
   and the ribbon can be passed through the \code{...} arguments
   to the function \code{\link[graphics]{image.default}}.

@@ -1,11 +1,13 @@
-        CHANGES IN spatstat.geom VERSION 3.6-1.008
+        CHANGES IN spatstat.geom VERSION 3.6-1.010
 
 OVERVIEW
 
     o Level sets calculated using analytic geometry, for some functions.
 
     o More options for perspective plots.
-    
+
+    o Easier control over transparency of image plots.
+
     o Minor improvements and bug fixes.
 
 NEW FUNCTIONS
@@ -37,6 +39,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o persp.ppp
     New argument 'show.window'.
+
+    o plot.im
+    New argument 'opacity' controls semi-transparency of colours.
     
     o tileindex
     New arguments 'close.gaps' and 'all.inside'.
