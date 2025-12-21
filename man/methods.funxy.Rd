@@ -50,7 +50,10 @@
   over which the function will be plotted. See the Examples.
 }
 \value{
-  \code{NULL}.
+  Equivalent to the result of
+  \code{\link{contour.im}},
+  \code{\link{persp.im}} or 
+  \code{\link{plot.im}} respectively.
 }
 \author{
   \spatstatAuthors.

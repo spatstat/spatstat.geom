@@ -675,7 +675,7 @@ plot.im <- local({
 
     ##  ........ decide whether to use rasterImage .........
 
-    if(!isFALSE(useRaster)) {
+    if(!isFALSE(useRaster) && do.plot) {
       ## get device capabilities
       ##      (this will start a graphics device if none is active)
       rasterable <- safeDevCapabilities()$rasterImage

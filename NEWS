@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.6-1.010
+        CHANGES IN spatstat.geom VERSION 3.6-1.011
 
 OVERVIEW
 
@@ -48,10 +48,26 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
 BUG FIXES
 
+    o contour.funxy
+    Returned NULL rather than the result of 'contour.im' as intended.
+    Fixed.
+
+    o persp.funxy
+    Returned NULL rather than the result of 'persp.im' as intended.
+    Fixed.
+
+    o plot.funxy
+    Returned NULL rather than the result of 'plot.im' as intended.
+    Fixed.
+
     o plot.tess
     Crashed when do.col=TRUE, for a tessellation consisting of a single tile.
     Fixed.
-    
+
+    o plot.im
+    Partially disobeyed 'do.plot=FALSE' because it started a graphics device
+    if no graphics device was open.
+    Fixed.
 
         CHANGES IN spatstat.geom VERSION 3.6-1
 

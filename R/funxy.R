@@ -124,22 +124,22 @@ plot.funxy <- function(x, ...) {
   xname <- short.deparse(substitute(x))
   force(x)
   W <- as.owin(x)
-  do.call(do.as.im,
-          resolve.defaults(list(quote(x), action="plot"),
-                           list(...),
-                           list(main=xname, W=W)))
-  invisible(NULL)
+  result <- do.call(do.as.im,
+                    resolve.defaults(list(quote(x), action="plot"),
+                                     list(...),
+                                     list(main=xname, W=W)))
+  return(invisible(result))
 }
 
 contour.funxy <- function(x, ...) {
   xname <- short.deparse(substitute(x))
   force(x)
   W <- as.owin(x)
-  do.call(do.as.im,
-          resolve.defaults(list(quote(x), action="contour"),
-                           list(...),
-                           list(main=xname, W=W)))
-  invisible(NULL)
+  result <- do.call(do.as.im,
+                    resolve.defaults(list(quote(x), action="contour"),
+                                     list(...),
+                                     list(main=xname, W=W)))
+  return(invisible(result))
 }
 
 persp.funxy <- function(x, ...) {
@@ -147,11 +147,11 @@ persp.funxy <- function(x, ...) {
   zlab <- substitute(expression(f(x,y)), list(f=as.name(xname)))
   force(x)
   W <- as.rectangle(as.owin(x))
-  do.call(do.as.im,
-          resolve.defaults(list(quote(x), action="persp"),
-                           list(...),
-                           list(main=xname, W=W, zlab=zlab)))
-  invisible(NULL)
+  result <- do.call(do.as.im,
+                    resolve.defaults(list(quote(x), action="persp"),
+                                     list(...),
+                                     list(main=xname, W=W, zlab=zlab)))
+  return(invisible(result))
 }
 
 hist.funxy <- function(x, ..., xname) {
