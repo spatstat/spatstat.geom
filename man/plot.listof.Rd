@@ -11,6 +11,7 @@
    panel.begin=NULL, panel.end=NULL, panel.args=NULL,
    panel.begin.args=NULL, panel.end.args=NULL, panel.vpad=0.2, 
    plotcommand="plot",
+   do.plot=TRUE,
    adorn.left=NULL, adorn.right=NULL, adorn.top=NULL, adorn.bottom=NULL,
    adorn.size=0.2, adorn.args=list(),
    equal.scales=FALSE, halign=FALSE, valign=FALSE)
@@ -80,6 +81,9 @@
     Optional.
     Character string containing the name of the command that should be
     executed to plot each panel. 
+  }
+  \item{do.plot}{
+    Logical value specifying whether to actually perform the plot.
   }
   \item{adorn.left,adorn.right,adorn.top,adorn.bottom}{
     Optional. Functions (with no arguments) that will be executed to

@@ -211,6 +211,58 @@ reset.spatstat.options()
 
 
 #'
+#'   spatstat.geom/tests/sidefx.R
+#'
+#' Test whether plot(do.plot=FALSE) has no side effects on graphics system
+#'
+#'  $Revision: 1.2 $  $Date: 2025/12/22 02:25:23 $
+
+local({
+  if(FULLTEST) {
+    ## test whether a graphics device has been started
+    deviceExists <- function() { length(dev.list()) != 0 }
+    ## check whether executing 'expr' causes creation of a graphics device
+    chk <- function(expr) {
+      ename <- sQuote(deparse(substitute(expr)))
+      if(deviceExists()) {
+        ## try switching off the graphics
+        graphics.off()
+        if(deviceExists()) {
+          ## Dang
+          warning(paste("Cannot check", ename, 
+                        "as a graphics device already exists"),
+                  call.=FALSE)
+          return(FALSE)
+        }
+      }
+      eval(expr)
+      if(deviceExists()) {
+        stop(paste("Evaluating", ename, 
+                   "caused a graphics device to be started"),
+             call.=FALSE)
+      }
+      return(TRUE)
+    }
+    
+    ## windows
+    chk(plot(owin(), do.plot=FALSE))
+    chk(plot(letterR, do.plot=FALSE))
+    chk(plot(as.mask(letterR), do.plot=FALSE))
+    ## point patterns
+    chk(plot(cells, do.plot=FALSE))
+    chk(plot(chorley, do.plot=FALSE))
+    chk(plot(chorley, legend=FALSE, do.plot=FALSE))
+    ## line segment patterns
+    chk(plot(edges(letterR), do.plot=FALSE))
+    ## images
+    chk(plot(bei.extra$elev, do.plot=FALSE))
+    chk(plot(bei.extra$elev, ribbon=FALSE, do.plot=FALSE))
+    ## solist/imlist
+    chk(plot(bei.extra, do.plot=FALSE))
+    chk(plot(solist(cells, redwood), do.plot=FALSE))
+  }
+})
+#'
 #'     tests/simplepan.R
 #'
 #'   Tests of user interaction in simplepanel

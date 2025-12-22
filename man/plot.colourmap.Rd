@@ -8,7 +8,8 @@
 \method{plot}{colourmap}(x, ...,
        main, xlim = NULL, ylim = NULL, vertical = FALSE,
        axis = TRUE, side = if(vertical) "right" else "bottom",
-       labelmap=NULL, gap=0.25, add=FALSE, increasing=NULL, nticks=5,
+       labelmap=NULL, gap=0.25, add=FALSE, do.plot=TRUE,
+       increasing=NULL, nticks=5,
        at=NULL, box=NULL)
 }
 \arguments{
@@ -57,6 +58,9 @@
     Logical value indicating whether to add the colourmap to the
     existing plot (\code{add=TRUE}), or to start a new plot
     (\code{add=FALSE}, the default).
+  }
+  \item{do.plot}{
+    Logical value indicating whether to actually perform the plot.
   }
   \item{increasing}{
     Logical value indicating whether to display the colour map
@@ -118,7 +122,9 @@
   the domain of the colourmap is a finite set of discrete inputs.
 }
 \value{
-  None.
+  (Invisibly) a rectangular window (object of class \code{"owin"})
+  giving the region of coordinate space where the
+  colours were drawn (or would have been drawn).
 }
 \seealso{\code{\link{colourmap}}}
 \examples{

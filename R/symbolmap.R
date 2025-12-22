@@ -1,7 +1,7 @@
 ##
 ## symbolmap.R
 ##
-##   $Revision: 1.68 $  $Date: 2025/04/26 09:57:55 $
+##   $Revision: 1.69 $  $Date: 2025/12/22 07:35:49 $
 ##
 
 symbolmap <- local({
@@ -565,7 +565,8 @@ plot.symbolmap <- function(x, ..., main,
                            xlim=NULL, ylim=NULL,
                            vertical=FALSE,
                            side=c("bottom", "left", "top", "right"),
-                           annotate=TRUE, labelmap=NULL, add=FALSE,
+                           annotate=TRUE, labelmap=NULL,
+                           add=FALSE, do.plot=TRUE, 
                            nsymbols=NULL, warn=TRUE,
                            colour.only=FALSE, representatives=NULL) {
   if(missing(main))
@@ -585,10 +586,11 @@ plot.symbolmap <- function(x, ..., main,
         side <- if(vertical) "right" else "bottom"
       if(!is.numeric(side))
         side <- match(side, c("bottom", "left", "top", "right"))
-      result <- plot.colourmap(cmap, ..., main=main,
+      result <- plot.colourmap(cmap, ..., main=main, 
                                xlim=xlim, ylim=ylim, vertical=vertical,
-                               side=side, labelmap=labelmap, add=add)
-      return(result)
+                               side=side, labelmap=labelmap,
+                               add=add, do.plot=do.plot)
+      return(invisible(result))
     }
   }
     
@@ -698,7 +700,7 @@ plot.symbolmap <- function(x, ..., main,
   ll <- paste(labelmap(vv))
     
   ## determine position of plot and symbols
-  if(add) {
+  if(do.plot && add) {
     ## x and y limits must respect existing plot space
     usr <- par('usr')
     if(is.null(xlim)) xlim <- usr[1:2]
@@ -720,6 +722,13 @@ plot.symbolmap <- function(x, ..., main,
     } else if(is.null(xlim)) {
       xlim <- zz
     }
+  }
+
+  ## .......... finished computing layout ...............................
+  if(!do.plot) {
+    result <- map
+    attr(result, "bbox") <- owin(xlim, ylim)
+    return(invisible(result))
   }
 
   ## .......... initialise plot ...............................

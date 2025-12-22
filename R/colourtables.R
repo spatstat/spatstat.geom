@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.70 $ $Date: 2025/06/28 02:23:09 $
+# $Revision: 1.71 $ $Date: 2025/12/22 07:24:17 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1,
@@ -302,7 +302,7 @@ plot.colourmap <- local({
                              vertical=FALSE,
                              axis=TRUE,
                              side = if(vertical) "right" else "bottom",
-                             labelmap=NULL, gap=0.25, add=FALSE,
+                             labelmap=NULL, gap=0.25, add=FALSE, do.plot=TRUE, 
                              increasing=NULL, nticks=5, at=NULL, box=NULL) {
     if(missing(main))
       main <- short.deparse(substitute(x))
@@ -317,8 +317,8 @@ plot.colourmap <- local({
     col <- stuff$outputs
     n   <- stuff$n
     if(n == 0) {
-      ## Null map
-      return(invisible(NULL))
+      ## Nothing to plot.
+      return(invisible(x))
     }
     discrete <- stuff$discrete
     if(discrete) {
@@ -389,7 +389,15 @@ plot.colourmap <- local({
         xlim <- c(0, widthrule(ylim, separate, n, gap))
     } 
 
-    # .......... initialise plot ...............................
+    ## .......... done computing layout. ...............................
+    
+    if(!do.plot) {
+      result <- x
+      attr(result, "bbox") <- owin(xlim, ylim)
+      return(invisible(result))
+    }
+    
+    ## .......... initialise plot ...............................
     if(!add)
       do.call.matched(plot.default,
                       resolve.defaults(list(x=xlim, y=ylim,

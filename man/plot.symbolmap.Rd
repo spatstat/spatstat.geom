@@ -11,7 +11,8 @@
 \method{plot}{symbolmap}(x, \dots, main, xlim = NULL, ylim = NULL,
                          vertical = FALSE,
                          side = c("bottom", "left", "top", "right"),
-                         annotate = TRUE, labelmap = NULL, add = FALSE,
+                         annotate = TRUE, labelmap = NULL,
+                         add = FALSE, do.plot=TRUE, 
                          nsymbols = NULL, warn = TRUE,
                          colour.only=FALSE,
                          representatives=NULL)
@@ -49,6 +50,9 @@
   \item{add}{
     Logical value indicating whether to add the plot to the
     current plot (\code{add=TRUE}) or to initialise a new plot.
+  }
+  \item{do.plot}{
+    Logical value indicating whether to actually perform the plot.
   }
   \item{nsymbols}{
     Optional. The maximum number of symbols that should be displayed.
@@ -104,7 +108,10 @@
   be equally spaced on the compressed scale. 
 }
 \value{
-  None.
+  (Invisibly) The symbolmap \code{x} with an attribute \code{"bbox"}
+  which is a rectangular window (object of class \code{"owin"})
+  giving the region in coordinate space where the symbol map
+  was plotted (or would have been plotted).
 }
 \author{
   \spatstatAuthors.

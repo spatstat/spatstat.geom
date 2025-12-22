@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.6-1.011
+        CHANGES IN spatstat.geom VERSION 3.6-1.012
 
 OVERVIEW
 
@@ -46,6 +46,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o tileindex
     New arguments 'close.gaps' and 'all.inside'.
 
+    o plot.colourmap
+    New argument 'do.plot'
+
+    o plot.symbolmap
+    New argument 'do.plot'
+
 BUG FIXES
 
     o contour.funxy
@@ -69,6 +75,10 @@ BUG FIXES
     if no graphics device was open.
     Fixed.
 
+    o plot.layered
+    Crashed in some cases with message "plot.new has not been called yet".
+    Fixed.
+    
         CHANGES IN spatstat.geom VERSION 3.6-1
 
 OVERVIEW

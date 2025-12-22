@@ -4,14 +4,25 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.44 $ $Date: 2025/06/28 03:20:57 $
+##  $Revision: 1.49 $ $Date: 2025/12/22 08:00:18 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
   local({
 
   ## auxiliary functions
-  classes.with.do.plot <- c("im", "ppp", "psp", "msr", "layered", "tess")
+  classes.with.do.plot <- c("colourmap",
+                            "diagramobj", "diagppm",
+                            "fv", 
+                            "im", "layered",
+                            "linnet", "lintess", "linim", "linfun", "lpp",
+                            "linearquadratcount", 
+                            "msr",
+                            "owin",
+                            "ppp", "psp",
+                            "ssf", "symbolmap",
+                            "tess", "texturemap")
+  
   classes.with.multiplot <- c("ppp", "lpp", "msr", "tess",
                               "leverage.ppm", "influence.ppm")
 
@@ -20,11 +31,25 @@ plot.anylist <- plot.solist <- plot.listof <-
       (is.function(x) && "multiplot" %in% names(formals(x)))
   }
   
-  extraplot <- function(nnn, x, ..., add=FALSE, extrargs=list(),
-                        panel.args=NULL, plotcommand="plot") {
+  has.do.plot <- function(x) {
+    inherits(x, classes.with.do.plot) ||
+      (is.function(x) && "do.plot" %in% names(formals(x)))
+  }
+  
+  extraplot <- function(nnn, x, ..., add=FALSE, do.plot=TRUE, extrargs=list(),
+                        panel.args=NULL, plotcommand="plot", pctype) {
     argh <- list(...)
-    if(has.multiplot(x) && identical(plotcommand,"plot"))
+    if(missing(pctype))
+      pctype <- recognise.plotcommand.type(plotcommand)
+    if(has.multiplot(x) && pctype == "plot")
       argh <- c(argh, list(multiplot=FALSE))
+    if(!do.plot) {
+      if(has.do.plot(x) && (pctype %in% c("plot", "image", "contour"))) {
+        argh <- c(argh, list(do.plot=FALSE))
+      } else {
+        return(NULL)
+      }
+    }
     if(!is.null(panel.args)) {
       xtra <- if(is.function(panel.args)) panel.args(nnn) else panel.args
       if(!is.list(xtra))
@@ -76,30 +101,43 @@ plot.anylist <- plot.solist <- plot.listof <-
   }
 
   ## bounding box, including ribbon for images, legend for point patterns
-  getplotbox <- function(x, ..., do.plot, plotcommand="plot", multiplot) {
+  getplotbox <- function(x, ..., do.plot,
+                         plotcommand="plot", pctype, multiplot) {
+    if(missing(pctype))
+      pctype <- recognise.plotcommand.type(plotcommand)
     if(inherits(x, classes.with.do.plot)) {
-      if(identical(plotcommand, "plot")) {
-        y <- if(has.multiplot(x))
-          plot(x, ..., multiplot=FALSE, do.plot=FALSE) else 
-          plot(x, ..., do.plot=FALSE)
-        return(as.owin(y))
-      } else if(identical(plotcommand, "contour")) {
-        y <- contour(x, ..., do.plot=FALSE)      
-        return(as.owin(y))
-      } else {
-        plc <- plotcommand
-        if(is.character(plc)) plc <- get(plc)
-        if(!is.function(plc)) stop("Unrecognised plot function")
-        if("do.plot" %in% names(args(plc))) {
-          if(has.multiplot(plc)) {
-            y <- do.call(plc, list(x=x, ..., multiplot=FALSE, do.plot=FALSE))
-          } else {
-            y <- do.call(plc, list(x=x, ...,                  do.plot=FALSE))
-          }
-          return(as.owin(y))
-        }
-      }
-    }
+      switch(pctype,
+             plot = {
+               y <- if(has.multiplot(x)) {
+                      plot(x, ..., multiplot=FALSE, do.plot=FALSE)
+                    } else {
+                      plot(x, ..., do.plot=FALSE)
+                    }
+               return(as.owin(y))
+             },
+             contour = {
+               y <- contour(x, ..., do.plot=FALSE)      
+               return(as.owin(y))
+             },
+             image = {
+               y <- image(x, ..., do.plot=FALSE)
+               return(as.owin(y))
+             },
+             unknown = {
+               plc <- plotcommand
+               if(is.character(plc)) plc <- get(plc)
+               if(!is.function(plc)) stop("Unrecognised plot function")
+               if("do.plot" %in% names(args(plc))) {
+                 if(has.multiplot(plc)) {
+                   y <- do.call(plc, list(x=x, ..., do.plot=FALSE,
+                                          multiplot=FALSE))
+                 } else {
+                   y <- do.call(plc, list(x=x, ..., do.plot=FALSE))
+                 }
+               }
+               return(as.owin(y))
+             })
+    } 
     return(try(as.rectangle(x), silent=TRUE))
   }
 
@@ -153,6 +191,7 @@ plot.anylist <- plot.solist <- plot.listof <-
                             panel.end.args=NULL,
                             panel.vpad = 0.2,
                             plotcommand="plot",
+                            do.plot=TRUE,
                             adorn.left=NULL,
                             adorn.right=NULL,
                             adorn.top=NULL,
@@ -171,14 +210,17 @@ plot.anylist <- plot.solist <- plot.listof <-
     isSo <- inherits(x, "solist")
     isIm <- inherits(x, "imlist") || (isSo && all(unlist(lapply(x, is.im))))
     
-    ## `boomerang despatch'
     cl <- match.call()
-    if(missing(plotcommand) && isIm) {
+    if(isIm && missing(plotcommand)) {
+      ## dispatch to image.imlist instead
       cl[[1]] <- as.name("image.imlist")
       parenv <- sys.parent()
       return(invisible(eval(cl, envir=parenv)))
     }
 
+    ## recognise type of plot
+    pctype <- recognise.plotcommand.type(plotcommand)
+    
     ## determine whether 'fv' objects are present
     if(isSo) {
       allfv <- somefv <- FALSE
@@ -241,8 +283,46 @@ plot.anylist <- plot.solist <- plot.listof <-
     ## "texturemap" not yet supported by plan.legend.layout
     
     if(!arrange) {
-      ## sequence of plots
+      ## ------------  sequence of plots -----------------------
+      if(!do.plot) {
+        result <- vector(mode="list", length=n)
+        if(allfv) return(result) # physical size is undefined
+        switch(pctype,
+               persp = {
+                 return(result) # physical size undefined
+               },
+               image = ,
+               contour = ,
+               plot = {
+                 ## compute colour map (etc) and layout boxes
+                 for(i in 1:n) {
+                   xi <- x[[i]]
+                   result[[i]] <-
+                     extraplot(i, xi, ...,
+                               do.plot=FALSE,
+                               add=!is.null(panel.begin),
+                               main=main.panel[i],
+                               panel.args=panel.args, extrargs=extrargs,
+                               plotcommand=plotcommand,
+                               pctype=pctype) %orifnull% list()
+                 }
+               },
+               unknown = {
+                 ## attempt to determine physical size of each plot
+                 result <- getPlotBoxes(x, ...,
+                                        plotcommand=plotcommand,
+                                        pctype=pctype,
+                                        panel.args=panel.args,
+                                        extrargs=extrargs)
+                 if(any(bad <- sapply(result, inherits, what="try-error")))
+                   result[bad] <- list(NULL)
+               })
+        ## no plotting performed - exit
+        return(result)
+      }
+      ## ----------- start actual plotting ------------------
       result <- vector(mode="list", length=n)
+      ## generate each plot
       for(i in 1:n) {
         xi <- x[[i]]
         exec.or.plot(panel.begin, i, xi, main=main.panel[i],
@@ -252,10 +332,10 @@ plot.anylist <- plot.solist <- plot.listof <-
                     add=!is.null(panel.begin),
                     main=main.panel[i],
                     panel.args=panel.args, extrargs=extrargs,
-                    plotcommand=plotcommand) %orifnull% list()
+                    plotcommand=plotcommand, pctype=pctype) %orifnull% list()
         exec.or.plot(panel.end, i, xi, add=TRUE, extrargs=extrargs.end)
       }
-
+      ## 
       if(nadorn > 0)
         warning(paste(ngettext(nadorn, "Argument", "Arguments"),
                       commasep(sQuote(names(adornments))),
@@ -266,7 +346,10 @@ plot.anylist <- plot.solist <- plot.listof <-
       return(invisible(result))
     }
 
-    ## ARRAY of plots
+    ## ----------------------------------------------------
+    ## >>>>>>>>>>>>>>>> ARRAY of plots <<<<<<<<<<<<<<<<<<<<
+    ## ----------------------------------------------------
+
     ## decide whether to plot a main header
     main <- if(!missing(main) && !is.null(main)) main else xname
     if(!is.character(main)) {
@@ -291,19 +374,19 @@ plot.anylist <- plot.solist <- plot.listof <-
       nrows <- as.integer(ceiling(n/ncols))
     else stopifnot(nrows * ncols >= length(x))
     nblank <- ncols * nrows - n
-    if(allfv || list(plotcommand) %in% list("persp", persp)) {
+    if(allfv || pctype == "persp") {
       ## Function plots do not have physical 'size'
       sizes.known <- FALSE
     } else {
       ## Determine dimensions of objects
       ##     (including space for colour ribbons, if they are images)
-      boxes <- getPlotBoxes(x, ..., plotcommand=plotcommand,
+      boxes <- getPlotBoxes(x, ..., plotcommand=plotcommand, pctype=pctype,
                             panel.args=panel.args, extrargs=extrargs)
       sizes.known <- !any(sapply(boxes, inherits, what="try-error"))
       sizes.known <- sizes.known && (nadorn == 0 || adorable)
       if(sizes.known) {
         extrargs <- resolve.defaults(extrargs, list(claim.title.space=TRUE))
-        boxes <- getPlotBoxes(x, ..., plotcommand=plotcommand,
+        boxes <- getPlotBoxes(x, ..., plotcommand=plotcommand, pctype=pctype,
                               panel.args=panel.args, extrargs=extrargs)
       }
       if(equal.scales && !sizes.known) {
@@ -414,8 +497,10 @@ plot.anylist <- plot.solist <- plot.listof <-
         bigbox <- do.call(boundingbox, append(list(bigbox), coveringboxes))
       }
       ## initialise, with banner
-      cex <- resolve.1.default(list(cex.title=1.5), list(...))/par('cex.main')
-      plot(bigbox, type="n", main=main, cex.main=cex)
+      if(do.plot) {
+        cex <- resolve.1.default(list(cex.title=1.5), list(...))/par('cex.main')
+        plot(bigbox, type="n", main=main, cex.main=cex)
+      }
       ## plot individual objects
       result <- vector(mode="list", length=n)
       for(i in 1:n) {
@@ -426,33 +511,36 @@ plot.anylist <- plot.solist <- plot.listof <-
         xi <- x[[i]]
         xishift <- shift(xi, vec)
         ## let rip
-        if(!is.null(panel.begin))
+        if(do.plot && !is.null(panel.begin))
           exec.or.plotshift(panel.begin, i, xishift,
                             add=TRUE,
                             main=main.panel[i], show.all=TRUE,
                             extrargs=extrargs.begin,
                             vec=vec)
         result[[i]] <-
-          extraplot(i, xishift, ...,
+          extraplot(i, xishift, ..., do.plot=do.plot,
                     add=TRUE, show.all=is.null(panel.begin),
                     main=main.panel[i],
                     extrargs=extrargs,
                     panel.args=panel.args,
-                    plotcommand=plotcommand) %orifnull% list()
-        exec.or.plotshift(panel.end, i, xishift, add=TRUE,
-                          extrargs=extrargs.end,
-                          vec=vec)
+                    plotcommand=plotcommand, pctype=pctype) %orifnull% list()
+        if(do.plot)
+          exec.or.plotshift(panel.end, i, xishift, add=TRUE,
+                            extrargs=extrargs.end,
+                            vec=vec)
       }
       ## add adornments if any
-      for(i in seq_len(nadorn)) {
-        bi <- sideboxes[[i]]
-        do.call(plot,
-                resolve.defaults(list(x=adornments[[i]]),
-                                 list(...),
-                                 list(add=TRUE,
-                                      xlim=bi$xrange, ylim=bi$yrange,
-                                      side=sidestrings[i]),
-                                 adorn.args))
+      if(do.plot) {
+        for(i in seq_len(nadorn)) {
+          bi <- sideboxes[[i]]
+          do.call(plot,
+                  resolve.defaults(list(x=adornments[[i]]),
+                                   list(...),
+                                   list(add=TRUE,
+                                        xlim=bi$xrange, ylim=bi$yrange,
+                                        side=sidestrings[i]),
+                                   adorn.args))
+        }
       }
       return(invisible(result))
     }
@@ -495,37 +583,41 @@ plot.anylist <- plot.solist <- plot.listof <-
       mat <- rbind(1, mat)
       heights <- c(0.1 * meanheight * (1 + nlines), heights)
     }
-    ## declare layout
-    layout(mat, heights=heights, widths=widths, respect=sizes.known)
-    ## start output .....
-    ## .... plot banner
-    if(banner) {
-      opa <- par(mar=rep.int(0,4), xpd=TRUE)
-      on.exit(par(opa))
-      plot(numeric(0),numeric(0),type="n",ann=FALSE,axes=FALSE,
-           xlim=c(-1,1),ylim=c(-1,1))
-      cex <- resolve.1.default(list(cex.title=1.5), list(...))/par('cex')
-      text(0,0,main, cex=cex)
+    ## -------- start actual plotting -----------------
+    if(do.plot) {
+      ## declare layout
+      layout(mat, heights=heights, widths=widths, respect=sizes.known)
+      ## .... plot banner
+      if(banner) {
+        opa <- par(mar=rep.int(0,4), xpd=TRUE)
+        on.exit(par(opa))
+        plot(numeric(0),numeric(0),type="n",ann=FALSE,axes=FALSE,
+             xlim=c(-1,1),ylim=c(-1,1))
+        cex <- resolve.1.default(list(cex.title=1.5), list(...))/par('cex')
+        text(0,0,main, cex=cex)
+      }
+      ## plot panels
+      npa <- par(mar=mar.panel)
+      if(!banner) on.exit(par(npa))
     }
-    ## plot panels
-    npa <- par(mar=mar.panel)
-    if(!banner) on.exit(par(npa))
     result <- vector(mode="list", length=n)
     for(i in 1:n) {
       xi <- x[[i]]
-      exec.or.plot(panel.begin, i, xi, main=main.panel[i],
-                   extrargs=extrargs.begin)
-      result <-
-        extraplot(i, xi, ...,
+      if(do.plot)
+        exec.or.plot(panel.begin, i, xi, main=main.panel[i],
+                     extrargs=extrargs.begin)
+      result[[i]] <-
+        extraplot(i, xi, ..., do.plot=do.plot,
                   add = !is.null(panel.begin), 
                   main = main.panel[i],
                   extrargs=extrargs,
                   panel.args=panel.args,
-                  plotcommand=plotcommand) %orifnull% list()
-      exec.or.plot(panel.end, i, xi, add=TRUE, extrargs=extrargs.end)
+                  plotcommand=plotcommand, pctype=pctype) %orifnull% list()
+      if(do.plot)
+        exec.or.plot(panel.end, i, xi, add=TRUE, extrargs=extrargs.end)
     }
     ## adornments
-    if(nall > n) {
+    if(do.plot && nall > n) {
       par(mar=rep.int(0,4), xpd=TRUE)
       plotadornment(adorn.left, adorn.args)
       plotadornment(adorn.right, adorn.args)
@@ -533,7 +625,8 @@ plot.anylist <- plot.solist <- plot.listof <-
       plotadornment(adorn.top, adorn.args)
     }
     ## revert
-    layout(1)
+    if(do.plot)
+      layout(1)
     return(invisible(result))
   }
 
@@ -562,15 +655,16 @@ plot.imlist <- local({
     if(missing(plotcommand) &&
        any(sapply(x, inherits, what=c("linim", "linfun"))))
       plotcommand <- "plot"
-    if(equal.ribbon &&
-       (list(plotcommand) %in% list("image", "plot", image, plot))) {
+    pctype <- recognise.plotcommand.type(plotcommand)
+    if(equal.ribbon && pctype %in% c("image", "plot")) {
       out <- imagecommon(x, ...,
                          xname=xname,
                          ribmar=ribmar,
                          equal.scales=equal.scales)
     } else {
       out <- do.call(plot.solist,
-                     resolve.defaults(list(x=quote(x), plotcommand=plotcommand), 
+                     resolve.defaults(list(x=quote(x),
+                                           plotcommand=plotcommand), 
                                       list(...),
                                       list(main=xname,
                                            equal.scales=equal.scales)))
@@ -582,6 +676,7 @@ plot.imlist <- local({
                           xname,
                           zlim=NULL, log=FALSE,
                           equal.scales=FALSE,
+                          do.plot=TRUE, 
                           ribbon=TRUE,
                           ribside=c("right", "left", "bottom", "top"),
                           ribsep=NULL, ribwid=0.5, ribn=1024,
@@ -667,7 +762,9 @@ plot.imlist <- local({
                                        list(equal.scales=equal.scales,
                                             mar.panel=mar.panel,
                                             main=xname,
-                                            col=imcolmap, zlim=zlim,
+                                            do.plot=do.plot,
+                                            col=imcolmap,
+                                            zlim=zlim,
                                             ribbon=FALSE),
                                        ribadorn))
     return(invisible(result))
@@ -684,13 +781,36 @@ image.imlist <- image.listof <-
   function(x, ..., equal.ribbon = FALSE, equal.scales=FALSE, ribmar=NULL) {
     plc <- resolve.1.default(list(plotcommand="image"), list(...))
     if(list(plc) %in% list("image", "plot", image, plot)) {
-      out <- plot.imlist(x, ..., plotcommand="image",
-                         equal.ribbon=equal.ribbon,
-                         equal.scales=equal.scales,
-                         ribmar=ribmar)
+      out <- do.call(plot.imlist,
+                     resolve.defaults(
+                       list(x=quote(x), plotcommand="image"),
+                       list(...),
+                       list(equal.ribbon=equal.ribbon,
+                            equal.scales=equal.scales,
+                            ribmar=ribmar)))
     } else {
       out <- plot.solist(x, ..., equal.scales=equal.scales, ribmar=ribmar)
     }
     return(invisible(out))
   }
+
+recognise.plotcommand.type <- function(s) {
+  if(is.name(s)) s <- as.character(s)
+  if(is.character(s) && length(s) == 1) {
+    for(a in c("plot", "contour", "image", "persp")) {
+      ## recognise name of generic
+      if(s == a) return(a)
+      ## recognise name of a method
+      if(nchar(s) > nchar(a) && substr(s, 1, nchar(a)+1) == paste0(a, "."))
+        return(a)
+    }
+  }
+  if(is.function(s)) {
+    ## recognise the generic
+    m <- match(list(s), list(plot, contour, image, persp))
+    if(!is.na(m))
+      return(c("plot", "contour", "image", "persp")[m])
+  }
+  return("unknown")
+}
 

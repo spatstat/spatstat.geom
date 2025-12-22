@@ -288,6 +288,7 @@
 \alias{rebound.ppp}
 \alias{rebound.psp}
 \alias{rebound.owin}
+\alias{recognise.plotcommand.type}
 \alias{recognise.spatstat.type}
 \alias{rectquadrat.breaks}
 \alias{rectquadrat.countEngine}
@@ -687,6 +688,7 @@ rebound(x, rect)
 \method{rebound}{ppp}(x, rect) 
 \method{rebound}{psp}(x, rect) 
 \method{rebound}{owin}(x, rect)
+recognise.plotcommand.type(s)
 recognise.spatstat.type(x)
 rectquadrat.breaks(xr, yr, nx = 5, ny = nx, xbreaks = NULL, ybreaks = NULL)
 rectquadrat.countEngine(x, y, xbreaks, ybreaks, weights, left.open)
