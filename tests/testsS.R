@@ -215,7 +215,7 @@ reset.spatstat.options()
 #'
 #' Test whether plot(do.plot=FALSE) has no side effects on graphics system
 #'
-#'  $Revision: 1.2 $  $Date: 2025/12/22 02:25:23 $
+#'  $Revision: 1.4 $  $Date: 2025/12/22 08:29:32 $
 
 local({
   if(FULLTEST) {
@@ -260,6 +260,15 @@ local({
     ## solist/imlist
     chk(plot(bei.extra, do.plot=FALSE))
     chk(plot(solist(cells, redwood), do.plot=FALSE))
+    ## tessellation
+    aTess <- dirichlet(runifrect(5))
+    chk(plot(aTess, do.plot=FALSE))
+    chk(textureplot(aTess, do.plot=FALSE))
+
+
+
+
+
   }
 })
 #'

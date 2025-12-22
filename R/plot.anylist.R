@@ -4,7 +4,7 @@
 ##  Plotting functions for 'solist', 'anylist', 'imlist'
 ##       and legacy class 'listof'
 ##
-##  $Revision: 1.49 $ $Date: 2025/12/22 08:00:18 $
+##  $Revision: 1.50 $ $Date: 2025/12/22 08:36:02 $
 ##
 
 plot.anylist <- plot.solist <- plot.listof <-
@@ -134,8 +134,8 @@ plot.anylist <- plot.solist <- plot.listof <-
                  } else {
                    y <- do.call(plc, list(x=x, ..., do.plot=FALSE))
                  }
+                 return(as.owin(y))
                }
-               return(as.owin(y))
              })
     } 
     return(try(as.rectangle(x), silent=TRUE))
