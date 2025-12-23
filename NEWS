@@ -1,7 +1,9 @@
-        CHANGES IN spatstat.geom VERSION 3.6-1.013
+        CHANGES IN spatstat.geom VERSION 3.6-1.014
 
 OVERVIEW
 
+    o We thank Alexey Sergushichev for contributions.
+    
     o Level sets calculated using analytic geometry, for some functions.
 
     o More options for perspective plots.
@@ -54,10 +56,18 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
 BUG FIXES
 
+    o connected.im
+    Crashed if the image consisted of a single pixel.
+    [Spotted by Alexey Sergushichev]
+    Fixed.
+    
     o contour.funxy
     Returned NULL rather than the result of 'contour.im' as intended.
     Fixed.
 
+    o is.subset.owin
+    Crashed if one of the arguments was an empty window.
+    
     o persp.funxy
     Returned NULL rather than the result of 'persp.im' as intended.
     Fixed.

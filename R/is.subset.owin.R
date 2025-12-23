@@ -1,7 +1,7 @@
 #
 #  is.subset.owin.R
 #
-#  $Revision: 1.17 $   $Date: 2023/12/16 05:02:18 $
+#  $Revision: 1.18 $   $Date: 2025/12/23 01:45:47 $
 #
 #  Determine whether a window is a subset of another window
 #
@@ -16,6 +16,9 @@ is.subset.owin <- local({
 
     if(identical(A, B))
       return(TRUE)
+
+    if(is.empty(A)) return(TRUE)
+    if(is.empty(B)) return(FALSE)
 
     A <- rescue.rectangle(A)
     B <- rescue.rectangle(B)

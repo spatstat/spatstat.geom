@@ -3,7 +3,7 @@
 #
 # connected component transform
 #
-#    $Revision: 1.30 $  $Date: 2025/07/15 03:22:49 $
+#    $Revision: 1.33 $  $Date: 2025/12/23 02:51:27 $
 #
 # Interpreted code for pixel images by Julian Burgos <jmburgos@u.washington.edu>
 # Rewritten in C by Adrian Baddeley
@@ -14,14 +14,24 @@ connected <- function(X, ...) {
   UseMethod("connected")
 }
 
-connected.im <- function(X, ..., background=NA, method="C", connect=8) {
-  if(!is.na(background)) {
-    W <- solutionset(X != background)
-  } else if(X$type == "logical") {
-    W <- solutionset(X)
+connected.im <- function(X, ..., background, method="C", connect=8) {
+  if(missing(background)) {
+    if(X$type == "logical") {
+      ## region where TRUE
+      W <- solutionset(X)
+    } else {
+      ## region where defined
+      W <- as.owin(X)
+    }
   } else {
-    warning("Assuming background = NA, foreground = other values", call.=FALSE)
-    W <- as.owin(X)
+    stopifnot(length(background) == 1)
+    if(is.na(background)) {
+      ## region where defined
+      W <- as.owin(X)
+    } else {
+      ## region where defined and not background 
+      W <- solutionset(X != background)
+    }
   }
   connected.owin(W, method=method, ..., connect=connect)
 }
@@ -31,7 +41,8 @@ connected.owin <- function(X, ..., polygonal=FALSE, method="C", connect=8) {
     P <- as.polygonal(X)
     A <- xypolycomponents(P)
     W <- if(is.mask(X)) P else X
-    result <- tess(tiles=A, window=W)
+    vacuous <- all(sapply(A, is.empty))
+    result <- tess(tiles=A, window=W, keepempty=vacuous)
     return(result)
   }
   method <- pickoption("algorithm choice", method,
@@ -184,21 +195,27 @@ connected.owin <- function(X, ..., polygonal=FALSE, method="C", connect=8) {
 
   ########### COMMON CODE ############################
     
-  # Renumber labels sequentially
   mapped <- (Z != 0)
-  usedlabs <- sortunique(as.vector(Z[mapped]))
-  nlabs <- length(usedlabs)
-  labtable <- cumsum(seq_len(max(usedlabs)) %in% usedlabs)
-  Z[mapped] <- labtable[Z[mapped]]
+  if(any(mapped)) {
+    ## Renumber labels sequentially
+    usedlabs <- sortunique(as.vector(Z[mapped]))
+    nlabs <- length(usedlabs)
+    labtable <- cumsum(seq_len(max(usedlabs)) %in% usedlabs)
+    Z[mapped] <- labtable[Z[mapped]]
+  } else {
+    nlabs <- 1
+  }
 
-  # banish zeroes
+  ## banish zeroes
   Z[!mapped] <- NA
   
   # strip borders
   Z <- Z[2:(nrow(Z)-1L),2:(ncol(Z)-1L)]
   # dress up 
   Z <- im(factor(Z, levels=1:nlabs),
-          xcol=X$xcol, yrow=X$yrow, unitname=unitname(X))
+          xcol=X$xcol, yrow=X$yrow,
+          xrange=X$xrange, yrange=X$yrange,
+          unitname=unitname(X))
   return(Z)
 }
 

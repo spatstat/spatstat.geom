@@ -167,7 +167,7 @@ if(FULLTEST) {
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.45 $   $Date: 2025/07/03 02:00:14 $
+#   $Revision: 1.46 $   $Date: 2025/12/23 02:49:34 $
 #
 
 
@@ -226,7 +226,12 @@ local({
   aaa <- xtfrm(AAA)
   eee <- xtfrm(E)
   
-  ##
+  ## trivial case in connected.owin
+  ## 1 x 1 image
+  lego <- im(matrix(1), xrange = c(0, 1), yrange = c(0, 1))
+  piecesImage <- connected(lego)
+  piecesTess  <- connected(lego, polygonal=TRUE)
+  ## cases of 'method' in 'connected.owin'
   d <- distmap(cells, dimyx=32)
   D6 <- (d <= 0.06)
   Z <- connected(D6, method="interpreted")

@@ -15,7 +15,7 @@ connected(X, \dots)
 
 \method{connected}{owin}(X, \dots, polygonal=FALSE, method="C", connect=8)
 
-\method{connected}{im}(X, \dots, background = NA, method="C", connect=8)
+\method{connected}{im}(X, \dots, background, method="C", connect=8)
 }
 \arguments{
   \item{X}{
@@ -53,10 +53,19 @@ connected(X, \dots)
   
   The functions described here compute the connected component transform
   (Rosenfeld and Pfalz, 1966)
-  of a binary image or binary mask. The argument \code{X} is first
-  converted into a pixel image with logical values. Then the algorithm
+  of a binary image or binary mask.
+  The pixel values in \code{X} are first mapped to logical values.
+  Then the algorithm
   identifies the connected components (topologically-connected clumps
   of pixels) in the foreground.
+
+  When \code{X} is converted to a logical valued image,
+  the pixel value \code{NA} is always mapped to \code{FALSE}.
+  If \code{background} is specified, then the value \code{background} is also
+  mapped to \code{FALSE}.   All other values are mapped to \code{TRUE}.
+  In the special case where \code{X} is already a logical-valued
+  image, the default is \code{background=FALSE}, so that the
+  values \code{NA} and \code{FALSE} are mapped to \code{FALSE}.
 
   Two pixels belong to the same connected component if they have the value
   \code{TRUE} and if they are neighbours.

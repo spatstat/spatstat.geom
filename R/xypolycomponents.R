@@ -3,7 +3,7 @@
 #'
 #'  Relations between component polygons of a window
 #'
-#'  $Revision: 1.4 $ $Date: 2025/07/15 02:49:35 $
+#'  $Revision: 1.5 $ $Date: 2025/12/23 01:51:20 $
 
 xypolycomponents <- function(W) {
   stopifnot(is.polygonal(W))
@@ -13,7 +13,9 @@ xypolycomponents <- function(W) {
   solapply(A$components, xypolysub2owin, B=B, unitname=uW)
 }
 
-xypoly2owin <- function(p, check=FALSE, ...) { owin(poly=p, check=check, ...) }
+xypoly2owin <- function(p, check=FALSE, ...) {
+  rescue.rectangle(owin(poly=p, check=check, ...))
+}
 
 xypolysub2owin <- function(i, B, ...) { xypoly2owin(B[i], ...) }
 
