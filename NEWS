@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.6-1.014
+        CHANGES IN spatstat.geom VERSION 3.6-1.015
 
 OVERVIEW
 
@@ -28,6 +28,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o levelset
     This function is now generic, with methods for 'im' and 'distfun'.
 
+    o multiplicity
+    Methods for 'multiplicity' can now handle objects of larger size.
+    
     o persp.im
     The pixel values of 'colin' can be colour values.
     New argument 'valuesAreColours'.

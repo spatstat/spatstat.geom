@@ -1,7 +1,7 @@
 #
 #   unique.ppp.R
 #
-# $Revision: 1.40 $  $Date: 2024/06/26 08:53:35 $
+# $Revision: 1.42 $  $Date: 2025/12/29 04:06:16 $
 #
 # Methods for 'multiplicity' co-authored by Sebastian Meyer
 # Copyright 2013 Adrian Baddeley and Sebastian Meyer 
@@ -122,6 +122,14 @@ multiplicity.ppp <- function(x) {
 multiplicity.data.frame <- function (x) {
   if(all(unlist(lapply(x, is.numeric))))
     return(multiplicityNumeric(as.matrix(x)))
+  if(nrow(x) > 2^15) {
+    #' avoid using 'outer' for large object
+    u <- uniquemap(x)
+    k <- tabulate(u)
+    result <- k[u]
+    names(result) <- rownames(x)
+    return(result)
+  }
   ## result template (vector of 1's)
   result <- setNames(rep.int(1L, nrow(x)), rownames(x))
   ## check for duplicates (works for data frames, arrays and vectors)
@@ -145,16 +153,21 @@ multiplicity.data.frame <- function (x) {
 
 multiplicityNumeric <- function(x)
 {
-  if (anyDuplicated(x)) {
+  nx <- NROW(x)
+  if(nx > 2^15) {
+    #' large data frame overwhelms 'dist'
+    u <- uniquemap(x)
+    k <- tabulate(u)
+    result <- k[u]
+  } else if(anyDuplicated(x)) {
     distmat <- as.matrix(dist(x, method="manhattan"))  # faster than euclid.
     result <- as.integer(rowSums(distmat == 0))        # labels are kept
-    if(is.null(names(result)))
-      names(result) <- seq_along(result)
   } else {                                             # -> vector of 1's
-    nx <- NROW(x)
+    result <- rep.int(1L, nx)
+  }
+  if(is.null(names(result))) {
     labels <- if (length(dim(x))) rownames(x) else names(x)
-    if (is.null(labels)) labels <- seq_len(nx)
-    result <- setNames(rep.int(1L, nx), labels)
+    names(result) <- labels %orifnull% seq_len(nx)
   }
   return(result)
 }
