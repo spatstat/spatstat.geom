@@ -11,7 +11,8 @@
       chars = NULL, cols = NULL, 
       fixsize = FALSE,
       maxsize = NULL, meansize = NULL, markscale = NULL,
-      minsize = NULL, zerosize = NULL, transform = NULL)
+      minsize = NULL, zerosize = NULL, transform = NULL,
+      scramble.cols = FALSE)
 }
 \arguments{
   \item{x}{
@@ -32,10 +33,12 @@
     the colour(s) used to plot points.
     Either an integer index from 1 to 8 (indexing the standard colour
     palette), a character string giving the name of a colour,
-    or a string giving the hexadecimal representation of a colour,
+    a string giving the hexadecimal representation of a colour,
     or a vector of such integers or strings.
     See the section on \emph{Colour Specification}
     in the help for \code{\link[graphics]{par}}.
+    Alternatively \code{cols} may be a function, as described in
+    Details below.
   }
   \item{fixsize}{
     Logical value specifying whether the symbols should all have the
@@ -75,6 +78,12 @@
   \item{transform}{
     Experimental. A function that will be applied to the mark values
     before the symbol map scale is determined.
+  }
+  \item{scramble.cols}{
+    Logical value specifying whether to randomly permute the
+    sequence \code{cols}. Applies only when \code{x} is a multitype
+    point pattern. This is a useful trick when it is desired
+    that adjacent colours should be easily distinguishable.
   }
 }
 \details{
@@ -138,18 +147,43 @@
     all points.
     \item
     The argument \code{cols} determines the colour or colours used to
-    display the points. For an unmarked point pattern,
-    \code{cols} should be a character string
-    determining a colour. For a multitype point pattern, \code{cols}
-    should be a character vector, of the same length
-    as \code{levels(marks(x))}: that is, there is one colour for each
-    possible mark value. The \eqn{i}th level or type will
-    be plotted using colour \code{cols[i]}. For a point pattern with
-    continuous marks, \code{cols} can be either a character string
-    or a character vector specifying colour values: the range of mark
-    values will be mapped to the specified colours.
-    Alternatively, for any kind of data, \code{cols} can be a colour map
-    (object of class \code{"colourmap"}) created by \code{\link{colourmap}}.
+    display the points.
+    A colour can be specified either as an integer from 1 to 8
+    (indexing the standard colour palette), a character string giving the
+    name of a colour, or a character string giving the hexadecimal
+    representation of a colour.
+    \itemize{
+      \item 
+      For an unmarked point pattern,
+      \code{cols} should be a single colour value.
+      \item
+      For a multitype point pattern, \code{cols}
+      should be a vector of colour values, of the same length
+      as \code{levels(marks(x))}: that is, there is one colour for each
+      possible mark value. The \eqn{i}th level or type will
+      be plotted using colour \code{cols[i]}.
+      \item
+      Alternatively for a multitype point pattern,
+      \code{cols} can be a \code{function(n)} or
+      \code{function(n, ...)} which returns a vector of \code{n} colour
+      values. This function will be invoked to obtain a vector of
+      colours, with one colour for each possible mark value.
+      \item
+      For a point pattern with
+      continuous marks, \code{cols} should be a vector of 
+      colour values, of any length: the range of mark
+      values will be mapped to the specified colours.
+      \item
+      Alternatively, for any kind of data, \code{cols} can be a colour map
+      (object of class \code{"colourmap"}) created by
+      \code{\link{colourmap}}. The colour map will be applied to the
+      mark values to determine the colours plotted.
+      \item
+      For a multitype point pattern only, if \code{scramble.cols=TRUE},
+      the colours associated with the different types of points will
+      be randomly permuted. This is a useful trick if it is desired
+      that adjacent colours should be easily distinguishable.
+    }
     \item
     If \code{cols} is absent, the colours used to plot the
     points may be determined by the extra arguments \code{fg}

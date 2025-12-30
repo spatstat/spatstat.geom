@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.6-1.015
+        CHANGES IN spatstat.geom VERSION 3.6-1.016
 
 OVERVIEW
 
@@ -25,6 +25,12 @@ NEW FUNCTIONS
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o default.symbolmap.ppp
+    For a multitype point pattern, 'cols' can be a 'function(n)'
+    
+    o default.symbolmap.ppp
+    New argument 'scramble.cols'
+    
     o levelset
     This function is now generic, with methods for 'im' and 'distfun'.
 

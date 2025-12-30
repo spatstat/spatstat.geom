@@ -445,6 +445,7 @@
    plot(lansing, cols=c("black", "yellow", "green", 
                         "blue","red","pink"))
    plot(longleaf, fg="blue")
+   plot(lansing, cols=rainbow, scramble.cols=TRUE)
 
    # make window purple
    plot(lansing, border="purple")
