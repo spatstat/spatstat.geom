@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.6-1.017
+        CHANGES IN spatstat.geom VERSION 3.6-1.019
 
 OVERVIEW
 
@@ -93,6 +93,10 @@ BUG FIXES
     Returned NULL rather than the result of 'plot.im' as intended.
     Fixed.
 
+    o plot.psp
+    Crashed if x had logical-valued marks.
+    Fixed.
+    
     o plot.tess
     Crashed when do.col=TRUE, for a tessellation consisting of a single tile.
     Fixed.

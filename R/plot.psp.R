@@ -3,7 +3,7 @@
 #'
 #'  plot method for segment patterns
 #'
-#'  $Revision: 1.11 $ $Date: 2025/12/31 02:55:25 $
+#'  $Revision: 1.15 $ $Date: 2025/12/31 09:25:44 $
 
 plot.psp <- function(x, ..., main, add=FALSE,
                      show.all=!add, 
@@ -148,50 +148,64 @@ plot.psp <- function(x, ..., main, add=FALSE,
   ## determine colours if any
   colmap <- NULL
   if(use.marks) {
-    ## use colours
+    ## display mark values as colours
     marx <- as.data.frame(marx)[, which.marks]
-    if(is.character(marx) || length(unique(marx)) == 1)
-      marx <- factor(marx)
+    #' Recognise whether marks are discrete or continuous
+    if(is.factor(marx)) {
+      um <- levels(marx)
+      discrete <- TRUE
+    } else if(is.logical(marx)) {
+      um <- c(FALSE, TRUE)
+      discrete <- TRUE
+    } else if(is.character(marx)) {
+      um <- sort(unique(marx))
+      discrete <- TRUE
+    } else if(length(unique(marx)) == 1) {
+      um <- marx[1L]
+      discrete <- TRUE
+    } else {
+      ra <- range(marx, na.rm=TRUE)
+      discrete <- FALSE
+    }
+    #' Interpret colour information in argument 'col'
+    colfun <- colvals <- NULL
     if(is.null(col)) {
       ## no colour info: use default colour palette
-      nc <- if(is.factor(marx)) {
-              length(levels(marx))
-            } else {
-              min(256, length(unique(marx)))
-            }
       colfun <- spatstat.options("image.colfun")
-      col <- colfun(nc)
-    }
-    ## determine colour map
-    if(inherits(col, "colourmap")) {
-      colmap <- colourmap
-      if(scramble.cols) {
-        ## randomise colour sequence in colour map
-        colouroutputs(colmap) <- sample(colouroutputs(colmap))
-      }
+    } else if(inherits(col, "colourmap")) {
+      ## col is a colour map
+      colmap <- col
+    } else if(is.function(col) && names(formals(col))[1L] == "n") {
+      ## 'col' is a function that provides a colour sequence of length n
+      colfun <- col
     } else if(is.colour(col)) {
-      ## colour values given; create colour map
-      if(scramble.cols) {
-        ## randomise colour sequence
-        col <- sample(col)
-      }
-      if(is.factor(marx)) {
-        lev <- levels(marx)
-        colmap <- colourmap(col=col, inputs=factor(lev))
-      } else {
-        if(!all(is.finite(marx)))
-          warning("Some mark values are infinite or NaN or NA")
-        colmap <- colourmap(col=col, range=range(marx, finite=TRUE))
-      }
+      ## 'col' is a sequence of colour values
+      colvals <- col
     } else stop("Format of argument 'col' is not recognised")
-    #' map the mark values to colours
+    #' Determine colour map
+    if(is.null(colmap)) {
+      #' Determine colour values to be used
+      if(is.null(colvals)) {
+        nc <- if(discrete) length(um) else 256
+        colvals <- colfun(nc)
+      } 
+      #' Create colour map
+      if(discrete) {
+        colmap <- colourmap(colvals, inputs=um)
+      } else {
+        colmap <- colourmap(colvals, range=ra)
+      }
+    }
+    #' Randomise?
+    if(scramble.cols)
+      colouroutputs(colmap) <- sample(colouroutputs(colmap))
+    #' Monochrome?
+    if(spatstat.options("monochrome"))
+      colmap <- to.grey(colmap)
+    #' Finally apply colour map to marks
     col <- colmap(marx)
   }
-  ## convert to greyscale?
-  if(spatstat.options("monochrome")) {
-    col <- to.grey(col)
-    colmap <- to.grey(colmap)
-  }
+
   if(do.plot) {
     ## plot segments
     do.call.plotfun(segments,
@@ -205,7 +219,7 @@ plot.psp <- function(x, ..., main, add=FALSE,
       plot(colmap, vertical=TRUE, add=TRUE,
            xlim=bb.rib$xrange, ylim=bb.rib$yrange)
   }
-  
+
   # return colour map
   result <- colmap %orifnull% colourmap()
   attr(result, "bbox") <- bb.all

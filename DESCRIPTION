@@ -1,5 +1,5 @@
 Package: spatstat.geom
-Version: 3.6-1.017
+Version: 3.6-1.019
 Date: 2025-12-31
 Title: Geometrical Functionality of the 'spatstat' Family 
 Authors@R: c(person("Adrian", "Baddeley", 
