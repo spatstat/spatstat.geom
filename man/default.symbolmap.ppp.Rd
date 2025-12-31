@@ -231,6 +231,16 @@
   \code{direction},\code{headlength},\code{headangle},\code{arrowtype}.
 
 }
+\section{Scrambling the colours}{
+  The argument \code{scramble.cols=TRUE}
+  will cause the sequence of colours in the colour map (if any) to be
+  randomly permuted. This is a useful trick when it is desired that
+  adjacent colours in the sequence should be easily distinguishable.
+
+  Randomisation implies that the return value (the symbol map)
+  will be different each time the command is executed. For reproducible results,
+  set the random generator seed using \code{\link{set.seed}}.
+}
 \value{
   A symbol map (object of class \code{"symbolmap"})
   or a list of symbol maps, one for each column of marks.

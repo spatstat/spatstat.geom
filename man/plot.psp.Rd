@@ -21,7 +21,8 @@
                      leg.args=list(),
                      leg.scale=1,
                      negative.args=list(col=2),
-                     background=NULL)
+                     background=NULL,
+                     scramble.cols=FALSE)
 }
 \arguments{
   \item{x}{
@@ -145,6 +146,12 @@
     Optional. An object to be plotted underneath the main plot.
     See the section on \emph{Background}.
   }
+  \item{scramble.cols}{
+    Logical value. If \code{TRUE}, the sequence of colour values
+    will be randomly permuted. This is a useful trick when it is
+    desired that adjacent colours in the sequence should be easily
+    distinguishable. Applicable only when \code{style="colour"}.
+  }
 }
 \value{
   If \code{style="colour"}, the result is a \code{\link{colourmap}}
@@ -183,7 +190,7 @@
       The colour map, associating mark values with colours,
       is determined by the argument \code{col}. The colour map will be
       displayed as a vertical colour ribbon to the right of the plot, if
-      \code{ribbon=TRUE} (the default).
+      \code{ribbon=TRUE} (the default). 
     }
     \item{\code{style="width"}:}{
       Segments are plotted with different widths depending on their
@@ -206,6 +213,18 @@
   column of \code{marks(x)} to determine the colours or widths.
   To specify another
   column, use the argument \code{which.marks}.
+}
+\section{Scrambling the colours}{
+  When \code{style="colour"}, the argument \code{scramble.cols=TRUE}
+  will cause the sequence of colours in the colour map to be
+  randomly permuted. This is a useful trick when it is desired that
+  adjacent colours in the sequence should be easily distinguishable.
+  The return value of \code{plot.psp} will be the randomised colour map.
+
+  Randomisation implies that the appearance of the plot,
+  and the return value, will be different
+  each time the command is executed. For reproducible results,
+  set the random generator seed using \code{\link{set.seed}}.
 }
 \section{Background}{
   The argument \code{background} specifies an object that will be
@@ -238,6 +257,9 @@
   plot(X)
   plot(X, which.marks="B")
   plot(X, style="width", col="grey")
+  marks(X) <- factor(letters[1:20])
+  plot(X)
+  plot(X, scramble.cols=TRUE)
 }
 
 \author{

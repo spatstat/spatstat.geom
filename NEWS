@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.6-1.016
+        CHANGES IN spatstat.geom VERSION 3.6-1.017
 
 OVERVIEW
 
@@ -9,6 +9,8 @@ OVERVIEW
     o More options for perspective plots.
 
     o Easier control over transparency of image plots.
+
+    o Scramble the colours when plotting a point pattern or segment pattern.
 
     o Minor improvements and bug fixes.
 
@@ -53,6 +55,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.im
     New argument 'opacity' controls semi-transparency of colours.
+
+    o plot.ppp
+    New argument 'scramble.cols'.
+    
+    o plot.psp
+    New argument 'scramble.cols'.
     
     o tileindex
     New arguments 'close.gaps' and 'all.inside'.

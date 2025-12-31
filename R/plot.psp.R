@@ -3,7 +3,7 @@
 #'
 #'  plot method for segment patterns
 #'
-#'  $Revision: 1.10 $ $Date: 2025/08/19 08:41:46 $
+#'  $Revision: 1.11 $ $Date: 2025/12/31 02:55:25 $
 
 plot.psp <- function(x, ..., main, add=FALSE,
                      show.all=!add, 
@@ -22,7 +22,8 @@ plot.psp <- function(x, ..., main, add=FALSE,
                      leg.args=list(),
                      leg.scale=1,
                      negative.args=list(col=2),
-                     background=NULL) {
+                     background=NULL,
+                     scramble.cols=FALSE) {
   if(missing(main) || is.null(main))
     main <- short.deparse(substitute(x))
   verifyclass(x, "psp")
@@ -164,8 +165,16 @@ plot.psp <- function(x, ..., main, add=FALSE,
     ## determine colour map
     if(inherits(col, "colourmap")) {
       colmap <- colourmap
+      if(scramble.cols) {
+        ## randomise colour sequence in colour map
+        colouroutputs(colmap) <- sample(colouroutputs(colmap))
+      }
     } else if(is.colour(col)) {
       ## colour values given; create colour map
+      if(scramble.cols) {
+        ## randomise colour sequence
+        col <- sample(col)
+      }
       if(is.factor(marx)) {
         lev <- levels(marx)
         colmap <- colourmap(col=col, inputs=factor(lev))

@@ -17,7 +17,8 @@
                     zap=0.01,
                     show.window=show.all, show.all=!add, do.plot=TRUE,
                     multiplot=TRUE,
-                    background=NULL, clip.background=FALSE)
+                    background=NULL, clip.background=FALSE,
+                    scramble.cols=FALSE)
 }
 \arguments{
   \item{x}{
@@ -172,6 +173,13 @@
   \item{clip.background}{
     Logical value specifying whether \code{background} should be
     intersected with the rectangular frame of \code{x}.
+  }
+  \item{scramble.cols}{
+    Logical value. If \code{TRUE}, the sequence of colour values
+    will be randomly permuted. This is a useful trick when it is
+    desired that adjacent colours in the sequence should be easily
+    distinguishable. Applicable only when \code{x} is a multitype
+    point pattern.
   }
 }
 \value{
@@ -376,6 +384,20 @@
   To modify a symbol map, for example to change the colours used
   without changing anything else, use \code{\link{update.symbolmap}}.
 }
+\section{Scrambling the colours}{
+  When \code{x} is a multitype point pattern and \code{cols} is given,
+  the argument \code{scramble.cols=TRUE}
+  will cause the sequence of colours in the colour map to be
+  randomly permuted. This is a useful trick when it is desired that
+  adjacent colours in the sequence should be easily distinguishable.
+  The return value of \code{plot.ppp} will include the randomised colour
+  sequence rather than the original colour sequence.
+
+  Randomisation implies that the appearance of the plot,
+  and the return value, will be different
+  each time the command is executed. For reproducible results,
+  set the random generator seed using \code{\link{set.seed}}.
+}
 \section{Background}{
   The argument \code{background} specifies an object that will be
   plotted before the point pattern \code{x} is plotted,
@@ -404,6 +426,8 @@
 }
 \seealso{
   \code{\link{ppp.object}},
+  \code{\link{default.symbolmap.ppp}}.
+  
   \code{\link{plot}},
   \code{\link{par}},
   \code{\link{points}},
