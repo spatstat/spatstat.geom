@@ -225,20 +225,39 @@ connected.ppp <- connected.pp3 <- function(X, R, ...) {
                 stopifnot(is.ppp(X) || is.pp3(X))
   check.1.real(R, paste("In", methodname))
   stopifnot(R >= 0)
-  internal <- resolve.1.default("internal", list(...), list(internal=FALSE))
   nv <- npoints(X)
   cl <- closepairs(X, R, what="indices")
-  lab0 <- cocoEngine(nv, cl$i - 1L, cl$j - 1L, methodname)
-  if(internal)
-    return(lab0)
-  lab <- lab0 + 1L
-  # Renumber labels sequentially 
-  lab <- as.integer(factor(lab))
-  # Convert labels to factor
-  lab <- factor(lab)
+  lab <- cocoLabels(nv, cl$i, cl$j, methodname, check=FALSE)
   # Apply to points
-  Y <- X %mark% lab
+  Y <- X %mark% as.factor(lab)
   return(Y)
+}
+
+cocoLabels <- function(nv, ie, je, algoname="connectedness algorithm",
+                       check=TRUE, resequence=TRUE) {
+  if(check) {
+    re <- range(ie, je)    
+    if(re[1L] < 1  || re[2L] > nv)
+      stop(paste0("Internal error in ", algoname, ": indices out of bounds"),
+           call.=FALSE)
+  }
+  #' convert R indices to C indices
+  ie <- ie - 1L
+  je <- je - 1L
+  #' determine connected components (membership label for each vertex)
+  z <- cocoEngine(nv, ie, je, algoname)
+  #' values of z are C indices
+  if(resequence) {
+    #' map to arbitrary labels 1 ... m
+    uz <- sort.int(unique.default(z))
+    z <- match(z, uz)
+  } else {
+    #' convert C indices back to R indices
+    z <- z + 1L
+    #' Label attached to an equivalence class is the lowest serial number
+    #' of any vertex in the class
+  }
+  return(z)
 }
 
 cocoEngine <- function(nv, ie, je, algoname="connectedness algorithm") {
