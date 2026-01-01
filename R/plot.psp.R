@@ -3,7 +3,7 @@
 #'
 #'  plot method for segment patterns
 #'
-#'  $Revision: 1.15 $ $Date: 2025/12/31 09:25:44 $
+#'  $Revision: 1.18 $ $Date: 2026/01/01 00:24:45 $
 
 plot.psp <- function(x, ..., main, add=FALSE,
                      show.all=!add, 
@@ -148,61 +148,12 @@ plot.psp <- function(x, ..., main, add=FALSE,
   ## determine colours if any
   colmap <- NULL
   if(use.marks) {
-    ## display mark values as colours
+    ## Will display mark values as colours
     marx <- as.data.frame(marx)[, which.marks]
-    #' Recognise whether marks are discrete or continuous
-    if(is.factor(marx)) {
-      um <- levels(marx)
-      discrete <- TRUE
-    } else if(is.logical(marx)) {
-      um <- c(FALSE, TRUE)
-      discrete <- TRUE
-    } else if(is.character(marx)) {
-      um <- sort(unique(marx))
-      discrete <- TRUE
-    } else if(length(unique(marx)) == 1) {
-      um <- marx[1L]
-      discrete <- TRUE
-    } else {
-      ra <- range(marx, na.rm=TRUE)
-      discrete <- FALSE
-    }
-    #' Interpret colour information in argument 'col'
-    colfun <- colvals <- NULL
-    if(is.null(col)) {
-      ## no colour info: use default colour palette
-      colfun <- spatstat.options("image.colfun")
-    } else if(inherits(col, "colourmap")) {
-      ## col is a colour map
-      colmap <- col
-    } else if(is.function(col) && names(formals(col))[1L] == "n") {
-      ## 'col' is a function that provides a colour sequence of length n
-      colfun <- col
-    } else if(is.colour(col)) {
-      ## 'col' is a sequence of colour values
-      colvals <- col
-    } else stop("Format of argument 'col' is not recognised")
-    #' Determine colour map
-    if(is.null(colmap)) {
-      #' Determine colour values to be used
-      if(is.null(colvals)) {
-        nc <- if(discrete) length(um) else 256
-        colvals <- colfun(nc)
-      } 
-      #' Create colour map
-      if(discrete) {
-        colmap <- colourmap(colvals, inputs=um)
-      } else {
-        colmap <- colourmap(colvals, range=ra)
-      }
-    }
-    #' Randomise?
-    if(scramble.cols)
-      colouroutputs(colmap) <- sample(colouroutputs(colmap))
-    #' Monochrome?
-    if(spatstat.options("monochrome"))
-      colmap <- to.grey(colmap)
-    #' Finally apply colour map to marks
+    ## determine colour map
+    colmap <- default.colourmap(marx, col=col,
+                                scramble.cols=scramble.cols)
+    #' apply colour map to marks
     col <- colmap(marx)
   }
 
@@ -460,3 +411,4 @@ plotWidthMap <- function(bb.leg, zlim, phys.scale,
   do.call.matched(text, textargs, extrargs=graphicsPars("text"))
   return(invisible(NULL))
 }
+

@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.6-1.019
+        CHANGES IN spatstat.geom VERSION 3.6-1.021
 
 OVERVIEW
 
@@ -16,6 +16,9 @@ OVERVIEW
 
 NEW FUNCTIONS
 
+    o default.colourmap
+    Default colour map for a vector or factor.
+    
     o levelset.im
     The function previously called 'levelset' is now a method for class 'im'.
     

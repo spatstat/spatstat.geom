@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.71 $ $Date: 2025/12/22 07:24:17 $
+# $Revision: 1.75 $ $Date: 2026/01/01 00:28:23 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1,
@@ -781,3 +781,62 @@ as.colourmap.colourmap <- function(x, ...) {
   return(x)
 }
 
+default.colourmap <- function(x, ...,
+                              col=spatstat.options("image.colfun"),
+                              scramble.cols=FALSE,
+                              monochrome=spatstat.options("monochrome")) {
+  if(is.null(x)) return(colourmap())
+  #' Recognise whether values are discrete or continuous
+  if(is.factor(x)) {
+    ux <- levels(x)
+    discrete <- TRUE
+  } else if(is.logical(x)) {
+    ux <- c(FALSE, TRUE)
+    discrete <- TRUE
+  } else if(is.character(x)) {
+    ux <- sort(unique(x))
+    discrete <- TRUE
+  } else if(length(unique(x)) == 1) {
+    ux <- x[1L]
+    discrete <- TRUE
+  } else if(is.numeric(x)) {
+    ra <- range(x, na.rm=TRUE)
+    discrete <- FALSE
+  } else stop("Format of x is not understood", call.=FALSE)
+  #' Interpret colour information in argument 'col'
+  colmap <- colfun <- colvals <- NULL
+  if(is.null(col)) {
+    ## no colour info: use default colour palette
+    colfun <- spatstat.options("image.colfun")
+  } else if(inherits(col, "colourmap")) {
+    ## col is a colour map
+    colmap <- col
+  } else if(is.function(col) && names(formals(col))[1L] == "n") {
+    ## 'col' is a function that provides a colour sequence of length n
+    colfun <- col
+  } else if(is.colour(col)) {
+    ## 'col' is a sequence of colour values
+    colvals <- col
+  } else stop("Format of argument 'col' is not recognised")
+  #' Determine colour map
+  if(is.null(colmap)) {
+    #' Determine colour values to be used
+    if(is.null(colvals)) {
+      nc <- if(discrete) length(ux) else 256
+      colvals <- colfun(nc)
+    } 
+    #' Create colour map
+    if(discrete) {
+      colmap <- colourmap(colvals, inputs=ux)
+    } else {
+      colmap <- colourmap(colvals, range=ra)
+    }
+  }
+  #' Randomise?
+  if(scramble.cols)
+    colouroutputs(colmap) <- sample(colouroutputs(colmap))
+  #' Monochrome?
+  if(monochrome)
+    colmap <- to.grey(colmap)
+  return(colmap)
+}
