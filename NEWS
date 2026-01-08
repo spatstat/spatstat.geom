@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.6-1.023
+        CHANGES IN spatstat.geom VERSION 3.6-1.024
 
 OVERVIEW
 
@@ -12,6 +12,8 @@ OVERVIEW
 
     o Scramble the colours when plotting a point pattern or segment pattern.
 
+    o Signed distance transform and signed distance function
+    
     o Minor improvements and bug fixes.
 
 NEW FUNCTIONS
@@ -35,6 +37,12 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o default.symbolmap.ppp
     New argument 'scramble.cols'
+
+    o distfun.owin
+    New argument 'signed'
+    
+    o distmap.owin
+    New argument 'signed'
     
     o levelset
     This function is now generic, with methods for 'im' and 'distfun'.

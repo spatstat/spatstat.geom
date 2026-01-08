@@ -3,7 +3,7 @@
 #
 #   distance function (returns a function of x,y)
 #
-#   $Revision: 1.31 $   $Date: 2025/12/05 05:14:39 $
+#   $Revision: 1.32 $   $Date: 2026/01/08 05:22:59 $
 #
 
 distfun <- function(X, ...) {
@@ -42,10 +42,11 @@ distfun.psp <- function(X, ...) {
   return(g)
 }
 
-distfun.owin <- function(X, ..., invert=FALSE) {
+distfun.owin <- function(X, ..., invert=FALSE, signed=FALSE) {
   # this line forces X to be bound
   stopifnot(is.owin(X))
   force(invert)
+  force(signed)
   #
   P <- edges(X)
   #
@@ -53,7 +54,19 @@ distfun.owin <- function(X, ..., invert=FALSE) {
     Y <-  xy.coords(x, y)
     inside <- inside.owin(Y$x, Y$y, X)
     D <- nncross(Y, P, what="dist")
-    out <- if(!invert) ifelseAX(inside, 0, D) else ifelseXB(inside, D, 0)
+    out <- if(!signed) {
+             if(!invert) {
+               ifelseAX(inside, 0, D)
+             } else {
+               ifelseXB(inside, D, 0)
+             }
+           } else {
+             if(!invert) {
+               ifelse(inside, -D, D)
+             } else {
+               ifelse(inside, D, -D)
+             }
+           }
     return(out)
   }
   attr(g, "Xclass") <- "owin"

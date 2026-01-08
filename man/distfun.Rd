@@ -17,7 +17,7 @@
 
   \method{distfun}{psp}(X, \dots)
 
-  \method{distfun}{owin}(X, \dots, invert=FALSE)
+  \method{distfun}{owin}(X, \dots, invert=FALSE, signed=FALSE)
 }
 \arguments{
   \item{X}{Any suitable dataset representing a two-dimensional
@@ -37,8 +37,12 @@
     (that is, if \code{X} contains fewer than \code{k} points).
   }
   \item{invert}{
-    If \code{TRUE}, compute the distance transform of the
+    Logical value. If \code{TRUE}, compute the distance transform of the
     complement of \code{X}.
+  }
+  \item{signed}{
+    Logical value. If \code{TRUE}, compute the signed distance transform
+    which is negative inside \code{X} and positive outside \code{X}.
   }
 }
 \details{
@@ -122,6 +126,7 @@
    f(0.2, 0.3)
 
    plot(distfun(letterR, invert=TRUE), eps=0.1)
+   plot(distfun(letterR, signed=TRUE), eps=0.1, col=beachcolourmap)
 
    d <- distfun(cells)
    d2 <- distfun(cells, k=2)

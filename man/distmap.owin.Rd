@@ -7,7 +7,7 @@
 }
 \usage{
   \method{distmap}{owin}(X, \dots, discretise=FALSE, invert=FALSE,
-        connect=8, metric=NULL)
+        signed=FALSE, connect=8, metric=NULL)
 }
 \arguments{
   \item{X}{
@@ -22,8 +22,12 @@
     a polygonal window. See Details.
   }
   \item{invert}{
-    If \code{TRUE}, compute the distance transform of the
+    Logical value. If \code{TRUE}, compute the distance transform of the
     complement of the window.
+  }
+  \item{signed}{
+    Logical value. If \code{TRUE}, compute the signed distance transform
+    which is negative inside \code{X} and positive outside \code{X}.
   }
   \item{connect}{
     Neighbourhood connectivity for the discrete distance transform
@@ -93,10 +97,13 @@
 }
 \examples{
   U <- distmap(letterR)
-  if(interactive()) {
-  plot(U)
-  plot(attr(U, "bdry"))
+  if(human <- interactive()) {
+    plot(U, main="distmap(letterR)")
+    plot(attr(U, "bdry"))
   }
+  V <- distmap(letterR, signed=TRUE)
+  if(human)
+    plot(V, main="signed distance", col=beachcolourmap)
 }
 \references{
   Borgefors, G.
@@ -108,11 +115,8 @@
   Distance functions on digital pictures.
   \emph{Pattern Recognition} \bold{1} (1968) 33-61.
 }
-\author{\adrian
-  
-  
-  and \rolf
-  
+\author{\adrian  
+  and \rolf.
 }
 \keyword{spatial}
 \keyword{math}

@@ -2,7 +2,7 @@
 #
 #      distmap.R
 #
-#      $Revision: 1.34 $     $Date: 2023/08/28 06:38:54 $
+#      $Revision: 1.35 $     $Date: 2026/01/08 05:20:35 $
 #
 #
 #     Distance transforms
@@ -45,9 +45,18 @@ distmap.ppp <- function(X, ..., clip=FALSE, metric=NULL) {
   return(V)
 }
 
-distmap.owin <- function(X, ..., discretise=FALSE, invert=FALSE,
+distmap.owin <- function(X, ..., discretise=FALSE,
+                         invert=FALSE, signed=FALSE,
                          connect=8, metric=NULL) {
   verifyclass(X, "owin")
+  if(signed) {
+    Pos <- distmap(X, ..., discretise=discretise, invert=invert,
+                   connect=connect, metric=metric)
+    Neg <- distmap(X, ..., discretise=discretise, invert=!invert,
+                   connect=connect, metric=metric)
+    Dist <- Pos - Neg
+    return(Dist)
+  }
   uni <- unitname(X)
   if(!is.null(metric)) {
     ans <- invoke.metric(metric, "distmap.owin", X=X, ...,
