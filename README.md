@@ -5,14 +5,6 @@
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/spatstat.geom)](http://CRAN.R-project.org/package=spatstat.geom) 
 [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.geom)](https://github.com/spatstat/spatstat.geom)
 
-The original `spatstat` package has been split into
-several sub-packages. This package `spatstat.geom` is one of the sub-packages.
-It defines **classes of spatial objects**, and supports
-**geometrical operations** on them.
-
-The reorganisation of `spatstat` into a family of packages is described
-on the GitHub repository
-[spatstat/spatstat](https://github.com/spatstat/spatstat).
 
 You are viewing the GitHub repository which
 holds the latest **development version** of `spatstat.geom`.
@@ -32,7 +24,12 @@ ___
 
 ### <a name="overview"></a> Overview of `spatstat.geom`
 
-`spatstat.geom` defines **classes of spatial objects**, and supports
+The original `spatstat` package has been split into
+several sub-packages, listed on the GitHub repository
+[spatstat/spatstat](https://github.com/spatstat/spatstat).
+
+This package `spatstat.geom` is one of the sub-packages.
+It defines **classes of spatial objects**, and supports
 **geometrical operations** on them. It provides
 
 - classes of spatial objects
