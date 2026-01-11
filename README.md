@@ -18,9 +18,22 @@ You are viewing the GitHub repository which
 holds the latest **development version** of `spatstat.geom`.
 For the latest public release on CRAN, click the green badge above.
 
-### Overview
+Contents:
 
-`spatstat.geom` supports
+ - [Overview of `spatstat.geom`](#overview)
+ - [Detailed contents of package](#detailed)
+ - [Installing the package](#installing)
+ - [Bug reports](#bugreports)
+ - [Questions](#questions)
+ - [Proposing changes to code](#proposing)
+ - [Future development](#future)
+
+___
+
+### <a name="overview"></a> Overview of `spatstat.geom`
+
+`spatstat.geom` defines **classes of spatial objects**, and supports
+**geometrical operations** on them. It provides
 
 - classes of spatial objects
 - basic support for spatial objects
@@ -30,7 +43,9 @@ For the latest public release on CRAN, click the green badge above.
 - morphological operations
 - image processing
 
-### Detailed contents
+___
+
+### <a name="detailed"></a> Detailed contents of package
 
 For a full list of functions, see the help file for `spatstat.geom-package`.
 
@@ -83,14 +98,17 @@ For a full list of functions, see the help file for `spatstat.geom-package`.
 
 #### Distance Operations
 
-- nearest neighbour
-- nearest neighbour distance
-- pairwise distances
-- distance map/ distance transform
+- nearest neighbour distance (`nndist`)
+- find the nearest neighbour (`nnwhich`)
+- pairwise distances (`pairdist`)
+- nearest neighbour from one pattern to another (`nncross`)
+- pairwise distances between one pattern and another (`crossdist`)
+- distance transform (`distmap`, `distfun`)
+- non-Euclidean distance (`convexmetric`)
 
 #### Geometrical constructions
 
-- tessellations (`tess`, `hextess`, `quadrats`, `venn.tess`, `polartess`, `dirichlet`, `delaunay`, `quantess`, `rpoislinetess`)
+- creating tessellations (`tess`, `hextess`, `quadrats`, `venn.tess`, `polartess`, `dirichlet`, `delaunay`, `quantess`)
 - triangulation
 - discretisation
 - bounding box
@@ -124,7 +142,9 @@ However, `spatstat.geom` provides basic functions for generating
 - random points in a rectangle (`runifrect`)
 - quasirandom points (`rQuasi`)
 
-### Installing the package
+___
+
+### <a name="installing"></a> Installing the package
 
 This repository contains the _development version_ of
 `spatstat.geom`. The easiest way to install the development version
@@ -142,3 +162,41 @@ type
 install.packages("spatstat.geom")
 ```
 
+___
+
+## <a name="bugreports"></a> Bug reports 
+
+Users are encouraged to report bugs.
+If you find a bug in a `spatstat` function,
+please identify the sub-package containing that function.
+Visit the GitHub repository for the sub-package, 
+click the `Issues` tab at the top of the page, 
+and press *new issue* to start a new bug report, documentation correction
+or feature request.
+
+**Please do not post questions** on the Issues pages,
+because they are too clunky for correspondence.
+
+## <a name="questions"></a> Questions about spatstat
+
+For questions about the `spatstat` package family, first check 
+the question-and-answer website
+[stackoverflow](http://stackoverflow.com/questions/tagged/spatstat)
+to see whether your question has already been asked and answered.
+If not, you can either post your question at stackoverflow, or
+email the authors.
+
+## <a name="proposing"></a> Proposing changes to the code
+
+Feel free to fork `spatstat.geom`, make changes to the code,
+and ask us to include them in the package by making a github *pull request*. 
+
+## <a name="future"></a> Future development
+
+The `spatstat` package family is the result of 30 years of software development
+and contains over 200,000 lines of code.
+It is still under development,
+motivated by the needs of researchers in many fields,
+and driven by innovations in statistical science.
+We welcome contributions of code, and suggestions
+for improvements.
