@@ -3,7 +3,7 @@
 #
 #	Utilities for computing quadrature weights
 #
-#	$Revision: 4.40 $	$Date: 2020/01/10 06:54:23 $
+#	$Revision: 4.41 $	$Date: 2026/01/09 01:43:18 $
 #
 #
 # Main functions:
@@ -280,10 +280,10 @@ dirichletWeights <- function(X, window = NULL, exact=TRUE, ...) {
     #' map deleted points to nearest retained point
     jj <- nncross(X[zeroes], Xnew, what="which")
     #' map retained points to themselves
-    ii <- Xseq <- seq_len(nX)
+    ii <- seq_len(nX)
     ii[zeroes] <- (ii[!zeroes])[jj]
     #' redistribute weights
-    nshare <- table(factor(ii, levels=Xseq))
+    nshare <- tabulate(ii, nbins=nX)
     w <- w[ii]/nshare[ii]
   }
   #' attach information about weight construction parameters

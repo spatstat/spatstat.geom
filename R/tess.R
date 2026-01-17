@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.126 $ $Date: 2025/11/27 03:03:21 $
+#   $Revision: 1.129 $ $Date: 2026/01/17 04:23:46 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -921,45 +921,46 @@ domain.tess <- Window.tess <- function(X, ...) { as.owin(X) }
 intersect.tess <- function(X, Y, ..., keepempty=FALSE, keepmarks=FALSE, sep="x") {
   X <- as.tess(X)
   check.1.string(sep)
-
+  keepmarks <- keepmarks && !is.null(marx <- marks(X))
   if(is.owin(Y)) {
-    ## intersection of a tessellation with a window
-    if(Y$type == "mask") {
-      ## convert to pixel image 
-      Xtiles <- tiles(X)
-      seqXtiles <- seq_along(Xtiles)
-      result <- as.im(Y, value=factor(1, levels=seqXtiles))
-      for(i in seqXtiles) {
-        tilei <- Xtiles[[i]]
-        result[tilei] <- i
+    ## efficient code for intersection of a tessellation with a window
+    if(Y$type == "mask" || X$type == "image") {
+      ## pixel based computation
+      if(Y$type == "mask") {
+        ## Y is a binary pixel mask
+        ## X is any tessellation
+        ## Make pixel image by evaluating tile index of X at each pixel of Y
+        XimY <- as.im(X, xy=Y)
+      } else {
+        #' Y is a polygonal or rectangular window
+        #' X is a tessellation defined by a pixel image
+        XimY <- as.im(X)
       }
-      result <- result[Y, drop=FALSE]
-      out <- tess(image=result, window=Y, keepempty=keepempty)
-      if(keepmarks && !is.null(marx <- marks(X))) {
+      #' Restrict raster to Y
+      XimY <- XimY[Y, drop=FALSE]
+      ## result is a tessellation defined by a pixel image
+      out <- tess(image=XimY, keepempty=keepempty)
+      if(keepmarks) {
         if(keepempty) {
           marks(out) <- marx
         } else {
           #' identify non-empty tiles
-          tab <- table(factor(result[], levels=seqXtiles))
+          tab <- tabulate(XimY[], nbins=nobjects(X))
           marks(out) <- marksubset(marx, tab > 0)
         }
       }
       return(out)
     } else {
-      ## efficient code when Y is a window, retaining names of tiles of X
+      ## polygonal computation
+      Zwin <- intersect.owin(as.owin(X), Y)
       Ztiles <- lapply(tiles(X), intersect.owin, B=Y, ..., fatal=FALSE)
-      isempty <- !keepempty & sapply(Ztiles, is.empty)
-      Ztiles <- Ztiles[!isempty]
-      Xwin <- as.owin(X)
-      Ywin <- Y
-      Zwin <- intersect.owin(Xwin, Ywin)
-      out <- tess(tiles=Ztiles, window=Zwin, keepempty=keepempty)
-      if(keepmarks) {
-        marx <- marks(X)
-        if(!is.null(marx))
-          marx <- marksubset(marx, !isempty)
-        marks(out) <- marx
+      if(!keepempty) {
+        isempty <- sapply(Ztiles, is.empty)
+        Ztiles <- Ztiles[!isempty]
       }
+      out <- tess(tiles=Ztiles, window=Zwin, keepempty=keepempty)
+      if(keepmarks) 
+        marks(out) <- marksubset(marx, !isempty)
       return(out)
     }
   }

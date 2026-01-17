@@ -3,7 +3,7 @@
 #
 # connected component transform
 #
-#    $Revision: 1.33 $  $Date: 2025/12/23 02:51:27 $
+#    $Revision: 1.34 $  $Date: 2026/01/17 03:29:57 $
 #
 # Interpreted code for pixel images by Julian Burgos <jmburgos@u.washington.edu>
 # Rewritten in C by Adrian Baddeley
@@ -235,7 +235,13 @@ connected.ppp <- connected.pp3 <- function(X, R, ...) {
 
 cocoLabels <- function(nv, ie, je, algoname="connectedness algorithm",
                        check=TRUE, resequence=TRUE) {
+  #' internal function assumes length(ie) == length(je)
+  if(length(ie) == 0) {
+    #' all connected components are singletons
+    return(seq_len(nv))
+  }
   if(check) {
+    #' check indices are in {1, ..., nv}
     re <- range(ie, je)    
     if(re[1L] < 1  || re[2L] > nv)
       stop(paste0("Internal error in ", algoname, ": indices out of bounds"),
