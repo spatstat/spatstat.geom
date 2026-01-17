@@ -15,14 +15,10 @@ Contents:
  - [Overview of `spatstat.geom`](#overview)
  - [Detailed contents of package](#detailed)
  - [Installing the package](#installing)
- - [Bug reports](#bugreports)
- - [Questions](#questions)
- - [Proposing changes to code](#proposing)
- - [Future development](#future)
-
+ - [Bug reports, questions, code development](#bugreports)
 ___
 
-### <a name="overview"></a> Overview of `spatstat.geom`
+## <a name="overview"></a> Overview of `spatstat.geom`
 
 The original `spatstat` package has been split into
 several sub-packages, listed on the GitHub repository
@@ -42,7 +38,7 @@ It defines **classes of spatial objects**, and supports
 
 ___
 
-### <a name="detailed"></a> Detailed contents of package
+## <a name="detailed"></a> Detailed contents of package
 
 For a full list of functions, see the help file for `spatstat.geom-package`.
 
@@ -141,7 +137,7 @@ However, `spatstat.geom` provides basic functions for generating
 
 ___
 
-### <a name="installing"></a> Installing the package
+## <a name="installing"></a> Installing the package
 
 This repository contains the _development version_ of
 `spatstat.geom`. The easiest way to install the development version
@@ -161,7 +157,9 @@ install.packages("spatstat.geom")
 
 ___
 
-## <a name="bugreports"></a> Bug reports 
+## <a name="bugreports"></a> Bug reports, questions, code development
+
+### Bug reports
 
 Users are encouraged to report bugs.
 If you find a bug in a `spatstat` function,
@@ -174,7 +172,7 @@ or feature request.
 **Please do not post questions** on the Issues pages,
 because they are too clunky for correspondence.
 
-## <a name="questions"></a> Questions about spatstat
+### <a name="questions"></a> Questions about spatstat
 
 For questions about the `spatstat` package family, first check 
 the question-and-answer website
@@ -183,12 +181,12 @@ to see whether your question has already been asked and answered.
 If not, you can either post your question at stackoverflow, or
 email the authors.
 
-## <a name="proposing"></a> Proposing changes to the code
+### <a name="proposing"></a> Proposing changes to the code
 
 Feel free to fork `spatstat.geom`, make changes to the code,
 and ask us to include them in the package by making a github *pull request*. 
 
-## <a name="future"></a> Future development
+### <a name="future"></a> Future development
 
 The `spatstat` package family is the result of 30 years of software development
 and contains over 200,000 lines of code.
