@@ -2,7 +2,7 @@
 #
 #	classes.S
 #
-#	$Revision: 1.7 $	$Date: 2006/10/09 03:38:14 $
+#	$Revision: 1.8 $	$Date: 2026/01/17 05:50:45 $
 #
 #	Generic utilities for classes
 #
@@ -10,15 +10,13 @@
 #--------------------------------------------------------------------------
 
 verifyclass <- function(X, C, N=deparse(substitute(X)), fatal=TRUE) {
-  if(!inherits(X, C)) {
-    if(fatal) {
-        gripe <- paste("argument", sQuote(N),
-                       "is not of class", sQuote(C))
-	stop(gripe)
-    } else 
-	return(FALSE)
-  }
-  return(TRUE)
+  if(inherits(X, C))
+    return(TRUE)
+  if(fatal) 
+    stop(paste("Argument", sQuote(N), "is not of class",
+               commasep(sQuote(C), " or ")),
+         call.=FALSE)
+  return(FALSE)
 }
 
 #--------------------------------------------------------------------------

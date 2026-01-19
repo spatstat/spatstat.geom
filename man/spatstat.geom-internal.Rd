@@ -202,6 +202,7 @@
 \alias{needpackage}
 \alias{nobjects.NAobject}
 \alias{npoints.NAobject}
+\alias{npoints.quad}
 \alias{n.quad}
 \alias{numberwithunit}
 \alias{numeric.columns}
@@ -593,6 +594,7 @@ nearest.valid.pixel(x, y, Z, method, nsearch)
 needpackage(pkg, loaded, fatal, purpose)
 \method{nobjects}{NAobject}(x)
 \method{npoints}{NAobject}(x)
+\method{npoints}{quad}(x)
 n.quad(Q)
 numberwithunit(x, u)
 numeric.columns(M, logical, others)
