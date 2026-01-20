@@ -3,7 +3,7 @@
 #
 #	Utilities for generating patterns of dummy points
 #
-#       $Revision: 5.32 $     $Date: 2018/09/28 05:11:55 $
+#       $Revision: 5.33 $     $Date: 2026/01/20 01:53:06 $
 #
 #	corners()	corners of window
 #	gridcenters()	points of a rectangular grid
@@ -52,7 +52,7 @@ stratrand <- function(window,nx,ny, k=1) {
 	return(list(x=x,y=y))
 }
 
-tilecentroids <- function (W, nx, ny)
+dummytilecentroids <- function (W, nx, ny)
 {
   W <- as.owin(W)
   if(W$type == "rectangle")

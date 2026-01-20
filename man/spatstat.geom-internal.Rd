@@ -80,6 +80,7 @@
 \alias{do.as.im}
 \alias{do.call.plotfun}
 \alias{drawSignedPoly}
+\alias{dummytilecentroids}        
 \alias{elementOrNA}
 \alias{emptywindow}
 \alias{ensureModelSupport}
@@ -342,7 +343,6 @@
 \alias{tail.hyperframe}
 \alias{tessfunvalues}
 \alias{thickSegments}
-\alias{tilecentroids}        
 \alias{trianglediameters}
 \alias{trim.mask}
 \alias{tweak.closepairs}
@@ -471,6 +471,7 @@ dist2dpath(dist, method="C")
 do.as.im(x, action, \dots, W, eps, dimyx, xy, rule.eps, na.replace)
 do.call.plotfun(fun, arglist, \dots, envir)
 drawSignedPoly(x,y,pars,sgn)
+dummytilecentroids(W, nx, ny)
 elementOrNA(x, nam, cl)
 emptywindow(w)
 ensureModelSupport(model, loaded)
@@ -748,7 +749,6 @@ thickSegments(x, widths, \dots,
              scale, adjust, negative.args,
              legend, leg.side, leg.sep, leg.wid, leg.args, leg.scale,
              zlim, box, background)
-tilecentroids(W, nx, ny)
 trianglediameters(iedge, jedge, edgelength, \dots,
                   nvert, dmax, check)
 trim.mask(M, R, tolerant)
