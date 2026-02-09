@@ -1,7 +1,7 @@
 #
 #  colourschemes.R
 #
-#  $Revision: 1.6 $  $Date: 2023/02/18 03:50:13 $
+#  $Revision: 1.7 $  $Date: 2026/01/21 06:26:39 $
 #
 
 beachcolourmap <- function(range, ...) {

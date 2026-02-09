@@ -1,3 +1,30 @@
+        CHANGES IN spatstat.geom VERSION 3.7-0.001
+
+OVERVIEW
+
+    o Support function, Feret diameter, polar body, Voronoi flower.
+
+NEW FUNCTIONS
+
+    o FeretDiamFun
+    Create a function that computes the Feret diameter of a domain at any angle.
+
+    o FeretBox
+    Compute the tightest rectangle enclosing a domain at any angle.
+
+    o minFeretDiam, maxFeretDiam
+    Minimum or maximum Feret diameter of a domain
+
+    o SupportFun
+    Create a function that computes the support function of a domain.
+
+    o polarbody
+    Compute the polar body of a domain.
+
+    o voronoiFlower
+    Compute the Voronoi flower of a domain.
+
+
         CHANGES IN spatstat.geom VERSION 3.7-0
 
 OVERVIEW

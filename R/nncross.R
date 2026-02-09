@@ -2,7 +2,7 @@
 #   nncross.R
 #
 #
-#    $Revision: 1.43 $  $Date: 2024/02/02 02:37:06 $
+#    $Revision: 1.44 $  $Date: 2026/01/21 06:26:39 $
 #
 #  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2012
 #  Licence: GNU Public Licence >= 2

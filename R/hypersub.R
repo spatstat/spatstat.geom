@@ -4,7 +4,7 @@
 ##
 ##  subset operations for hyperframes
 ##
-##  $Revision: 1.37 $    $Date: 2025/07/07 06:14:38 $
+##  $Revision: 1.38 $    $Date: 2026/01/21 06:26:39 $
 ##
 
 "[.hyperframe" <- function(x, i, j, drop=FALSE, strip=drop, ...) {

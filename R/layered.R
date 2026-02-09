@@ -3,7 +3,7 @@
 #
 # Simple mechanism for layered plotting
 #
-#  $Revision: 1.42 $  $Date: 2025/07/12 08:55:22 $
+#  $Revision: 1.43 $  $Date: 2026/01/21 06:26:39 $
 #
 
 layered <- function(..., plotargs=NULL, LayerList=NULL) {

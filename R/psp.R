@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.120 $ $Date: 2025/06/17 07:48:49 $
+#  $Revision: 1.121 $ $Date: 2026/01/21 06:26:39 $
 #
 # Class "psp" of planar line segment patterns
 #

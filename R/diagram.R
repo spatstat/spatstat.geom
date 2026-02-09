@@ -4,7 +4,7 @@
 ##   Simple objects for the elements of a diagram (text, arrows etc)
 ##    that are compatible with plot.layered and plot.solist
 ##
-##   $Revision: 1.20 $ $Date: 2025/05/03 03:21:06 $
+##   $Revision: 1.21 $ $Date: 2026/01/21 06:26:39 $
 
 # ......... internal class 'diagramobj' supports other classes  .........
 
