@@ -1,8 +1,12 @@
-        CHANGES IN spatstat.geom VERSION 3.7-0.001
+        CHANGES IN spatstat.geom VERSION 3.7-0.002
 
 OVERVIEW
 
+    o We thank Ute Hahn for contributions.
+    
     o Support function, Feret diameter, polar body, Voronoi flower.
+
+    o Bug fix.
 
 NEW FUNCTIONS
 
@@ -24,6 +28,12 @@ NEW FUNCTIONS
     o voronoiFlower
     Compute the Voronoi flower of a domain.
 
+BUG FIXES
+
+    o MinkowskiSum, operator %(+)%
+    Result was often incorrect (and was not symmetric in A and B).
+    [Spotted by Ute Hahn]
+    Fixed.
 
         CHANGES IN spatstat.geom VERSION 3.7-0
 
