@@ -3,7 +3,7 @@
 #' 
 #'  Minkowski Sum and related operations
 #'
-#'  $Revision: 1.15 $ $Date: 2026/02/10 03:58:59 $
+#'  $Revision: 1.16 $ $Date: 2026/02/10 08:09:32 $
 
 
 "%(+)%" <- MinkowskiSum <- local({
@@ -34,7 +34,7 @@
           AA <- tiles(triangulate.owin(A))
           simpleA <- TRUE
         }
-        AA <- lapply(AA, owin2poly)
+        AA <- lapply(AA, owin2singlepoly)
       }
       if(is.psp(B)) {
         BB <- psp2poly(B)
@@ -48,7 +48,7 @@
           BB <- tiles(triangulate.owin(B))
           simpleB <- TRUE
         }
-        BB <- lapply(BB, owin2poly)
+        BB <- lapply(BB, owin2singlepoly)
       }
       ## determine common resolution for polyclip operations
       FRAME <- SumOfBoxes(A, B)
@@ -59,17 +59,20 @@
       ## compute Minkowski sums of pairs of CONVEX pieces
       result <- NULL
       if(simpleA && simpleB) {
-        ## each piece is a triangle or line segment; evaluate directly
+        ## each piece in AA and in BB is a triangle or line segment; evaluate directly
         for(a in AA) {
           partial.a <- NULL
           for(b in BB) {
             x <- as.numeric(outer(a$x, b$x, "+"))
             y <- as.numeric(outer(a$y, b$y, "+"))
             h <- rev(chull(x,y))
-            contrib.ab <- owin(poly=list(x=x[h], y=y[h]), check=FALSE) 
-            partial.a <- union.owin(partial.a, contrib.ab, p=p)
+            if(length(h) >= 3) {
+              contrib.ab <- owin(poly=list(x=x[h], y=y[h]), check=FALSE) 
+              partial.a <- union.owin(partial.a, contrib.ab, p=p)
+            }
           }
-          result <- union.owin(result, partial.a, p=p)
+          if(!is.null(partial.a)) 
+            result <- union.owin(result, partial.a, p=p)
         }
       } else {
         ## general case - use polyclip
@@ -102,7 +105,7 @@
 
   poly2owin <- function(z) owin(poly=z, check=FALSE)
 
-  owin2poly <- function(w) { w$bdry }
+  owin2singlepoly <- function(w) { w$bdry[[1]] }
   
   psp2poly <- function(X) apply(as.matrix(X$ends), 1, seg2poly)
 
@@ -131,19 +134,44 @@
     ## A and B are segment patterns
     eA <- as.matrix(A$ends)
     eB <- as.matrix(B$ends)
+    nA <- nrow(eA)
+    nB <- nrow(eB)
     ## determine common resolution for polyclip operations
     eps <- mean(c(sidelengths(Frame(A)), sidelengths(Frame(B))))/2^30
     p <- list(eps=eps)
     ## form the Minkowski sum of each pair of segments
-    result <- NULL
-    for(i in seq_len(nrow(eA))) {
-      for(j in seq_len(nrow(eB))) {
+    flat <- list()
+    interior <- NULL
+    for(i in seq_len(nA)) {
+      for(j in seq_len(nB)) {
         x <- as.numeric(outer(eA[i, c(1,3)], eB[j, c(1,3)], "+"))
         y <- as.numeric(outer(eA[i, c(2,4)], eB[j, c(2,4)], "+"))
         h <- rev(chull(x,y))
-        g <- owin(poly=list(x=x[h], y=y[h]), check=FALSE) 
-        result <- union.owin(result, g, p=p)
+        xy <- list(x=x[h], y=y[h])
+        if(length(h) >= 3) {
+          ## polygon with interior
+          g <- owin(poly=xy, check=FALSE)
+          interior <- union.owin(interior, g, p=p)
+        } else if(length(h) == 2) {
+          ## line segment: store it
+          flat <- append(flat, list(xy))
+        } 
       }
+    }
+    if(!is.null(interior)) {
+      ## fill holes due to numerical error 
+      amin <- sqrt(.Machine$double.eps) * area(interior)
+      result <- fillholes.owin(interior, amin)
+    } else {
+      ## all segments were parallel
+      ## result is a psp
+      xx <- unlist(lapply(flat, getelement, name="x"))
+      yy <- unlist(lapply(flat, getelement, name="y"))
+      ends <- cbind(xx[c(TRUE,  FALSE)],
+                    yy[c(TRUE,  FALSE)],
+                    xx[c(FALSE, TRUE)],
+                    yy[c(FALSE, TRUE)])
+      result <- as.psp(ends, window=SumOfBoxes(A,B), check=FALSE)
     }
     return(result)
   }
