@@ -575,6 +575,12 @@ warn.once <- function(key, ...) {
          check=function(x) { is.logical(x) && length(x) == 1 },
          valid="a single logical value"
        ),
+       minkowski.special = list(
+         ## use special code blocks in MinkowskiSum
+         default = TRUE,
+         check=function(x) { is.logical(x) && length(x) == 1 },
+         valid="a single logical value"
+       ),
        developer = list(
          # general purpose; user is a developer; use experimental code, etc
          default=FALSE,

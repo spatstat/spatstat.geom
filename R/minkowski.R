@@ -3,12 +3,13 @@
 #' 
 #'  Minkowski Sum and related operations
 #'
-#'  $Revision: 1.17 $ $Date: 2026/02/12 03:04:52 $
+#'  $Revision: 1.19 $ $Date: 2026/02/12 08:25:37 $
 
 
 "%(+)%" <- MinkowskiSum <- local({
 
   MinkowskiSum <- function(A, B) {
+    exceptions <- spatstat.options("minkowski.special")
     if(is.ppp(A)) {
       ## point pattern + something
       result <- UnionOfShifts(B, A)
@@ -18,7 +19,7 @@
     } else if(is.psp(A) && is.psp(B)) {
       ## segments + segments
       result <- UnionOfParallelograms(A,B)
-    } else if(is.rectangle(A) && is.rectangle(B)) {
+    } else if(exceptions && is.rectangle(A) && is.rectangle(B)) {
       ## rectangle + rectangle
       result <- SumOfBoxes(A,B)
     } else {
@@ -42,7 +43,7 @@
         elementaryAA <- TRUE
       } else {
         ## convert window to list of polygons
-        if(convexA || (simplyA && convexB)) {
+        if(convexA || (exceptions && simplyA && convexB)) {
           ## A is a single polygon and we can use it as is
           AA <- list(A)
           elementaryAA <- FALSE
@@ -59,7 +60,7 @@
         elementaryBB <- TRUE
       } else {
         ## convert window to list of polygons
-        if(convexB || (simplyB && convexA)) {
+        if(convexB || (exceptions && simplyB && convexA)) {
           ## B is a single polygon and we can use it as is
           BB <- list(B)
           elementaryBB <- FALSE
@@ -78,7 +79,7 @@
       p <- list(eps=eps, x0=x0, y0=y0)
       ## compute Minkowski sums of pairs of CONVEX pieces
       result <- NULL
-      if(elementaryAA && elementaryBB) {
+      if(exceptions && elementaryAA && elementaryBB) {
         ## each piece in AA and in BB is a triangle or line segment; evaluate directly
         for(a in AA) {
           partial.a <- NULL
@@ -111,7 +112,8 @@
         }
       }
       result <- rescue.rectangle(result)
-      Frame(result) <- FRAME
+      if(!is.rectangle(result))
+        Frame(result) <- FRAME
     }
     ## resolve unitname
     un <- list(unitname(A), unitname(B))
