@@ -3,7 +3,7 @@
 #' 
 #'  Minkowski Sum and related operations
 #'
-#'  $Revision: 1.16 $ $Date: 2026/02/10 08:09:32 $
+#'  $Revision: 1.17 $ $Date: 2026/02/12 03:04:52 $
 
 
 "%(+)%" <- MinkowskiSum <- local({
@@ -19,34 +19,54 @@
       ## segments + segments
       result <- UnionOfParallelograms(A,B)
     } else if(is.rectangle(A) && is.rectangle(B)) {
+      ## rectangle + rectangle
       result <- SumOfBoxes(A,B)
     } else {
-      ## convert each object to a list of CONVEX polygons
-      if(is.psp(A)) {
-        AA <- psp2poly(A)
-        simpleA <- TRUE
-      } else {
+      ## gather information
+      simplyA <- simplyB <- convexA <- convexB <- FALSE
+      if(owinA <- !is.psp(A)) {
         A <- as.polygonal(A)
-        if(is.convex(A)) {
+        simplyA <- (length(A$bdry) == 1) # simply connected
+        convexA <- is.convex(A)
+      }
+      if(owinB <- !is.psp(B)) {
+        B <- as.polygonal(B)
+        simplyB <- (length(B$bdry) == 1) # simply connected
+        convexB <- is.convex(B)
+      }
+      ## convert each object to a list of polygons
+      elementaryAA <- elementaryBB <- FALSE
+      if(is.psp(A)) {
+        ## convert line segments to flat polygons with 2 edges
+        AA <- psp2poly(A)
+        elementaryAA <- TRUE
+      } else {
+        ## convert window to list of polygons
+        if(convexA || (simplyA && convexB)) {
+          ## A is a single polygon and we can use it as is
           AA <- list(A)
-          simpleA <- FALSE
+          elementaryAA <- FALSE
         } else {
+          ## decompose A into triangles
           AA <- tiles(triangulate.owin(A))
-          simpleA <- TRUE
+          elementaryAA <- TRUE
         }
         AA <- lapply(AA, owin2singlepoly)
       }
       if(is.psp(B)) {
+        ## convert line segments to flat polygons with 2 edges
         BB <- psp2poly(B)
-        simpleB <- TRUE
+        elementaryBB <- TRUE
       } else {
-        B <- as.polygonal(B)
-        if(is.convex(B)) {
+        ## convert window to list of polygons
+        if(convexB || (simplyB && convexA)) {
+          ## B is a single polygon and we can use it as is
           BB <- list(B)
-          simpleB <- FALSE
+          elementaryBB <- FALSE
         } else {
+          ## decompose B into triangles
           BB <- tiles(triangulate.owin(B))
-          simpleB <- TRUE
+          elementaryBB <- TRUE
         }
         BB <- lapply(BB, owin2singlepoly)
       }
@@ -58,7 +78,7 @@
       p <- list(eps=eps, x0=x0, y0=y0)
       ## compute Minkowski sums of pairs of CONVEX pieces
       result <- NULL
-      if(simpleA && simpleB) {
+      if(elementaryAA && elementaryBB) {
         ## each piece in AA and in BB is a triangle or line segment; evaluate directly
         for(a in AA) {
           partial.a <- NULL

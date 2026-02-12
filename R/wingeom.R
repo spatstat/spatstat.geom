@@ -1,7 +1,7 @@
 #
 #	wingeom.R	Various geometrical computations in windows
 #
-#	$Revision: 4.147 $	$Date: 2025/11/03 08:51:04 $
+#	$Revision: 4.152 $	$Date: 2026/02/12 03:38:42 $
 #
 
 volume.owin <- function(x) { area.owin(x) }
@@ -1011,9 +1011,32 @@ fillholes.owin <- function(W, amin) {
   switch(W$type,
          rectangle = { },
          polygonal = {
-           a <- sapply(W$bdry, Area.xypolygon)
-           if(any(tinyhole <- (a <= 0 & abs(a) < amin)))
-             W$bdry <- W$bdry[!tinyhole]
+           bdry <- W$bdry
+           a <- sapply(bdry, Area.xypolygon)
+           aa <- abs(a)
+           if(any(tinyhole <- (a <= 0 & aa < amin))) {
+             retain <- !tinyhole
+             if(sum(retain) > 1) {
+               ## also remove polygons contained in the holes 
+               b <- max(aa[tinyhole])
+               todo <- retain & (aa < b)
+               for(i in which(todo)) {
+                 Bi <- bdry[[i]]
+                 if(a[i] < 0) Bi <- reverse.xypolygon(Bi)
+                 Pi <- owin(poly=Bi, check=FALSE)
+                 for(j in which(tinyhole & aa >= aa[i])) {
+                   Bj <- bdry[[j]]
+                   if(a[j] < 0) Bj <- reverse.xypolygon(Bj)
+                   Pj <- owin(poly=Bj, check=FALSE)
+                   if(is.subset.owin(Pi, Pj)) {
+                     retain[i] <- FALSE
+                     break
+                   }
+                 }
+               }
+             }
+             W$bdry <- bdry[retain]
+           }
          },
          mask = {
            co <- connected(complement.owin(W))

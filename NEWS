@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.7-0.003
+        CHANGES IN spatstat.geom VERSION 3.7-0.004
 
 OVERVIEW
 
@@ -6,7 +6,7 @@ OVERVIEW
     
     o Support function, Feret diameter, polar body, Voronoi flower.
 
-    o Bug fix.
+    o Bug fix in Minkowski sum.
 
 NEW FUNCTIONS
 

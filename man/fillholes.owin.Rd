@@ -20,10 +20,12 @@ fillholes.owin(W, amin)
 }
 \details{
   This function simplifies a window \code{W}
-  by removing any holes with area less than \code{amin}.
+  by filling in any holes with area less than \code{amin}.
 
   The argument \code{W} must be a window (object of class
   \code{"owin"}). 
+
+  If \code{amin=Inf}, all holes will be filled in.
 }
 \value{
   Another window (object of class \code{"owin"})
