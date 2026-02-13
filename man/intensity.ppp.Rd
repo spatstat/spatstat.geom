@@ -19,9 +19,8 @@
   }
   \item{weights}{
     Optional.
-    Numeric vector of weights attached to the points of \code{X}.
-    Alternatively, an \code{expression} which can be evaluated to
-    give a vector of weights.
+    \pointweightsVector.
+    Numerical weights may be positive, negative or zero.
   }
   \item{\dots}{
     Ignored.

@@ -6,15 +6,15 @@
 #'
 #'  Argument 'weights' is usually passed from a user-level function
 #'  It may be:
-#'        a numeric vector
-#'        a numeric matrix or data frame (if dfok=TRUE)
+#'        a numeric or logical vector
+#'        a numeric or logical matrix or data frame (if dfok=TRUE)
 #'        a single number
 #'        a function(x,y)
 #'        a pixel image
 #'        an expression involving the coordinates and marks
 #'        one of the characters "x" or "y"
 #' 
-#'  $Revision: 1.8 $ $Date: 2025/12/20 02:54:15 $
+#'  $Revision: 1.10 $ $Date: 2026/02/13 06:42:31 $
 
 pointweights <- function(X, ..., weights=NULL, parent=NULL, dfok=FALSE,
                          weightsname="weights") {
@@ -33,8 +33,9 @@ pointweights <- function(X, ..., weights=NULL, parent=NULL, dfok=FALSE,
              weights <- str2expression(weights)
            })
   }
-  if(is.numeric(weights) && is.vector(as.numeric(weights))) {
+  if((is.numeric(weights) || is.logical(weights)) && NCOL(weights) == 1) {
     if(length(weights) == 1) weights <- rep(weights, nX)
+    weights <- as.numeric(weights)
   } else if(is.im(weights)) {
     weights <- safelookup(weights, X) # includes warning if NA
     weightsblurb <- paste("Pixel values of", sQuote(weightsname))
@@ -51,11 +52,17 @@ pointweights <- function(X, ..., weights=NULL, parent=NULL, dfok=FALSE,
     weights <- try(eval(weights, envir=df, enclos=parent))
     if(inherits(weights, "try-error"))
       stop(paste("Unable to evaluate expression for", weightsname), call.=FALSE)
-    weightsblurb <- paste("Values of the expression", sQuote(weightsname))
-  } else if(dfok && inherits(weights, c("matrix", "data.frame"))) {
+    if(is.im(weights)) {
+      weights <- safelookup(weights, X) # includes warning if NA
+      weightsblurb <- paste("Pixel values of", sQuote(weightsname))
+    } else {
+      weightsblurb <- paste("Values of the expression", sQuote(weightsname))
+    }
+  } else if(NCOL(weights) > 1) {
     weights <- as.matrix(weights)
   } else
-    stop(paste("Argument", sQuote(weightsname), "should be a numeric",
+    stop(paste("Argument", sQuote(weightsname),
+               "should be a numeric or logical",
                if(dfok) "vector, matrix or data frame, or" else "vector,",
                 "a function, an image, or an expression"),
          call.=FALSE)
@@ -64,9 +71,13 @@ pointweights <- function(X, ..., weights=NULL, parent=NULL, dfok=FALSE,
   if(length(weights) == 0) return(NULL)
 
   ## validate
-  if(dfok && !is.null(dim(weights))) {
+  if(NCOL(weights) > 1) {
+    if(!dfok) stop("A matrix or data frame of weights is not permitted",
+                   call.=FALSE)
+    weights <- apply(weights, 2, as.numeric)
     check.nmatrix(weights, nX, squarematrix=FALSE, mname=weightsblurb)
   } else {
+    weights <- as.numeric(weights)
     check.nvector(weights, nX, vname=weightsblurb)
   }
   return(weights)

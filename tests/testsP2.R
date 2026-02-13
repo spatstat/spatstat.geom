@@ -15,7 +15,7 @@ cat(paste("--------- Executing",
 #'
 #'   tests/ppp.R
 #'
-#'   $Revision: 1.14 $ $Date: 2022/08/27 04:49:32 $
+#'   $Revision: 1.16 $ $Date: 2026/02/13 06:56:36 $
 #'
 #'  Untested cases in ppp() or associated code
 
@@ -107,6 +107,25 @@ local({
   }
 })
 
+local({
+  if(FULLTEST) {
+    ## cases of 'pointweights'
+    z <- cells$y - cells$x
+    a <- pointweights(cells, weights=z)
+    a <- pointweights(cells, weights=(z > 0))
+    a <- pointweights(cells, weights="x")
+    a <- pointweights(cells, weights=expression(y))
+    Z <- as.im(function(x,y){y-x}, W=Window(cells))
+    a <- pointweights(cells, weights=Z)
+    a <- pointweights(cells, weights=(Z > 0))
+    e <- sys.frame(sys.nframe())
+    a <- pointweights(cells, weights=expression(Z), parent=e)
+    zz <- coords(cells)
+    a <- pointweights(cells, weights=zz, dfok=TRUE)
+    a <- pointweights(cells, weights=as.matrix(zz), dfok=TRUE)
+    a <- pointweights(cells, weights=as.matrix(zz) > 0.5, dfok=TRUE)
+  }
+})
 #
 # tests/ppx.R
 #

@@ -193,6 +193,7 @@
 \alias{meanX.owin}
 \alias{meanY.owin}
 \alias{MinimalTess}
+\alias{MinkowskiSumInternal}
 \alias{multiplicityNumeric}
 \alias{multiply.only.finite.entries}
 \alias{na.handle.im}
@@ -585,6 +586,7 @@ maxflow(costm)
 meanX.owin(w)            
 meanY.owin(w)
 MinimalTess(W, \dots)
+MinkowskiSumInternal(A, B, \dots, do.specialcases, p)
 multiplicityNumeric(x)
 multiply.only.finite.entries(x, a)
 na.handle.im(X, na.replace)

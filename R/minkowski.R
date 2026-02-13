@@ -3,13 +3,14 @@
 #' 
 #'  Minkowski Sum and related operations
 #'
-#'  $Revision: 1.19 $ $Date: 2026/02/12 08:25:37 $
+#'  $Revision: 1.21 $ $Date: 2026/02/13 05:13:35 $
 
 
-"%(+)%" <- MinkowskiSum <- local({
+"%(+)%" <- MinkowskiSum <- function(A, B) { MinkowskiSumInternal(A,B) }
 
-  MinkowskiSum <- function(A, B) {
-    exceptions <- spatstat.options("minkowski.special")
+MinkowskiSumInternal <- local({
+
+  MinkowskiSumInternal <- function(A, B, ..., do.specialcases=TRUE, p = NULL) {
     if(is.ppp(A)) {
       ## point pattern + something
       result <- UnionOfShifts(B, A)
@@ -19,7 +20,7 @@
     } else if(is.psp(A) && is.psp(B)) {
       ## segments + segments
       result <- UnionOfParallelograms(A,B)
-    } else if(exceptions && is.rectangle(A) && is.rectangle(B)) {
+    } else if(do.specialcases && is.rectangle(A) && is.rectangle(B)) {
       ## rectangle + rectangle
       result <- SumOfBoxes(A,B)
     } else {
@@ -43,7 +44,7 @@
         elementaryAA <- TRUE
       } else {
         ## convert window to list of polygons
-        if(convexA || (exceptions && simplyA && convexB)) {
+        if(convexA || (do.specialcases && simplyA && convexB)) {
           ## A is a single polygon and we can use it as is
           AA <- list(A)
           elementaryAA <- FALSE
@@ -60,7 +61,7 @@
         elementaryBB <- TRUE
       } else {
         ## convert window to list of polygons
-        if(convexB || (exceptions && simplyB && convexA)) {
+        if(convexB || (do.specialcases && simplyB && convexA)) {
           ## B is a single polygon and we can use it as is
           BB <- list(B)
           elementaryBB <- FALSE
@@ -73,13 +74,14 @@
       }
       ## determine common resolution for polyclip operations
       FRAME <- SumOfBoxes(A, B)
-      x0 <- FRAME$xrange[1L]
-      y0 <- FRAME$yrange[1L]
-      eps <- mean(c(sidelengths(Frame(A)), sidelengths(Frame(B))))/2^30
-      p <- list(eps=eps, x0=x0, y0=y0)
+      pdefault <- list(x0 = FRAME$xrange[1L],
+                       y0 = FRAME$yrange[1L],
+                       eps = mean(c(sidelengths(Frame(A)),
+                                    sidelengths(Frame(B))))/2^30)
+      p <- resolve.defaults(p, pdefault)
       ## compute Minkowski sums of pairs of CONVEX pieces
       result <- NULL
-      if(exceptions && elementaryAA && elementaryBB) {
+      if(do.specialcases && elementaryAA && elementaryBB) {
         ## each piece in AA and in BB is a triangle or line segment; evaluate directly
         for(a in AA) {
           partial.a <- NULL
@@ -97,6 +99,9 @@
         }
       } else {
         ## general case - use polyclip
+        x0 <- p$x0
+        y0 <- p$y0
+        eps <- p$eps
         for(a in AA) {
           partial.a <- NULL
           for(b in BB) {
@@ -207,16 +212,16 @@
     return(result)
   }
   
-  MinkowskiSum
+  MinkowskiSumInternal
 })
 
-dilationAny <- function(A, B) { MinkowskiSum(A, reflect(B)) }
+dilationAny <- function(A, B) { MinkowskiSumInternal(A, reflect(B)) }
 
 "%(-)%" <- erosionAny <- function(A, B) {
   D <- Frame(A)
   Dplus <- grow.rectangle(D, 0.1 * shortside(D))
   Ac <- complement.owin(A, Dplus)
-  AcB <- MinkowskiSum(Ac, reflect(B))
+  AcB <- MinkowskiSumInternal(Ac, reflect(B))
   if(is.subset.owin(D, AcB))
     return(emptywindow(D))
   C <- complement.owin(AcB[Dplus], Dplus)[D]
