@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.129 $ $Date: 2026/01/17 04:23:46 $
+#   $Revision: 1.131 $ $Date: 2026/02/15 10:34:01 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -1392,3 +1392,29 @@ identify.tess <- function(x, ..., labels=tilenames(x),
   return(out)
 }
 
+mergeTiles <- function(x, group, ...) {
+  UseMethod("mergeTiles")
+}
+
+mergeTiles.tess <- function(x, group, ...) {
+  verifyclass(x, "tess")
+  group <- as.factor(group)
+  switch(x$type,
+         rect = ,
+         tiled = {
+           ## compute unions of tiles
+           newtiles <- lapply(split(tiles(x), group), union.owin)
+           result <- tess(tiles=newtiles, window=Window(x))
+         },
+         image = {
+           ## map levels of factor-valued image
+           ima <- x$image
+           gmap <- as.integer(group)
+           glev <- levels(group)
+           gn <- length(glev)
+           newima <- eval.im(factor(gmap[as.integer(ima)],
+                                    levels=1:gn, labels=glev))
+           result <- tess(image=newima)
+         })
+  return(result)
+}

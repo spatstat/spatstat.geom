@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.7-0.007
+        CHANGES IN spatstat.geom VERSION 3.7-0.008
 
 OVERVIEW
 
@@ -6,10 +6,15 @@ OVERVIEW
     
     o Support function, Feret diameter, polar body, Voronoi flower.
 
+    o Merge tiles in a tessellation.
+    
     o Bug fix in Minkowski sum.
 
 NEW FUNCTIONS
 
+    o mergeTiles
+    Merge tiles in a tessellation.
+    
     o FeretDiamFun
     Create a function that computes the Feret diameter of a domain at any angle.
 
