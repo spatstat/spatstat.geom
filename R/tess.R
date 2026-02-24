@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.131 $ $Date: 2026/02/15 10:34:01 $
+#   $Revision: 1.132 $ $Date: 2026/02/21 04:20:01 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -1416,5 +1416,7 @@ mergeTiles.tess <- function(x, group, ...) {
                                     levels=1:gn, labels=glev))
            result <- tess(image=newima)
          })
+  if(!is.null(marks(x)))
+    warning("marks were discarded when tiles were merged", call.=FALSE)
   return(result)
 }
