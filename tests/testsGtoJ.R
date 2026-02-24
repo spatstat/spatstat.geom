@@ -167,7 +167,7 @@ if(FULLTEST) {
 #
 #  tests/imageops.R
 #
-#   $Revision: 1.46 $   $Date: 2025/12/23 02:49:34 $
+#   $Revision: 1.47 $   $Date: 2026/02/24 01:26:07 $
 #
 
 
@@ -441,5 +441,17 @@ if(ALWAYS) {
         stop("Equal, but not identical, results in nearest.valid.pixel")
   })
 }
+
+if(ALWAYS) {
+  local({
+    #' rastersample
+    Z <- distmap(letterR, invert=TRUE, eps=0.02) ## non-square raster
+    Zs <- rastersample(Z, phase=2, scale=3)
+    Zf <- rastersample(Z, phase=1.5, scale=2.7)
+    Zss <- rastersample(Z, Zs)
+    Zff <- rastersample(Z, Zf)
+  })
+}
+    
 
 

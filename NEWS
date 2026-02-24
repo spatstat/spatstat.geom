@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.7-0.008
+        CHANGES IN spatstat.geom VERSION 3.7-0.009
 
 OVERVIEW
 
@@ -9,6 +9,8 @@ OVERVIEW
     o Merge tiles in a tessellation.
     
     o Bug fix in Minkowski sum.
+
+    o Internal improvements.
 
 NEW FUNCTIONS
 

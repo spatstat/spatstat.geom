@@ -1,18 +1,54 @@
-#
-#    util.R    miscellaneous utilities
-#
-#    $Revision: 1.268 $    $Date: 2023/09/04 03:45:14 $
-#
+##
+##    util.R    miscellaneous utilities
+##
+##    $Revision: 1.269 $    $Date: 2026/02/24 00:50:07 $
+##
 
-# common invocation of matrixsample
+## common invocation of matrixsample
 
-rastersample <- function(X, Y) {
+rastersample <- function(X, Y=NULL, ..., phase=0L, scale=1L) {
   stopifnot(is.im(X) || is.mask(X))
-  stopifnot(is.im(Y) || is.mask(Y))
-  phase <- c((Y$yrow[1] - X$yrow[1])/X$ystep,
-             (Y$xcol[1] - X$xcol[1])/X$xstep)
-  scale <- c(Y$ystep/X$ystep,
-             Y$xstep/X$xstep)
+  if(!is.null(Y)) {
+    ## sample X onto raster of Y
+    stopifnot(is.im(Y) || is.mask(Y))
+    phase <- c((Y$yrow[1] - X$yrow[1])/X$ystep,
+               (Y$xcol[1] - X$xcol[1])/X$xstep)
+    scale <- c(Y$ystep/X$ystep,
+               Y$xstep/X$xstep)
+  } else if(missing(phase) && missing(scale)) {
+    return(X)
+  } else {
+    ## create a coarsened version of raster of X
+    ## phase and scale are expressed as multiples of the pixels of X
+    if(!is.integer(phase)) {
+      phase <- as.numeric(phase)
+      if(all(phase %% 1 == 0))
+        phase <- as.integer(phase)
+    }
+    if(!is.integer(scale)) {
+      scale <- as.numeric(scale)
+      if(all(scale %% 1 == 0))
+        scale <- as.integer(scale)
+    }
+    phase <- ensure2vector(phase)
+    scale <- ensure2vector(scale)
+    if(is.integer(phase) && is.integer(scale)) {
+      ## subsample the existing coordinates
+      yrow <- X$yrow[seq(from=1L+phase[1L], by=scale[1L], to=length(X$yrow))]
+      xcol <- X$xcol[seq(from=1L+phase[2L], by=scale[2L], to=length(X$xcol))]
+    } else {
+      ## fractionally displaced coordinates
+      ystep <- scale[1L] * X$ystep
+      xstep <- scale[2L] * X$xstep
+      ystart <- X$yrow[1L] + phase[1L] * X$ystep
+      xstart <- X$xcol[2L] + phase[2L] * X$xstep
+      yrow <- seq(from=ystart, by=ystep, to=X$yrow[length(X$yrow)])
+      xcol <- seq(from=xstart, by=xstep, to=X$xcol[length(X$xcol)])
+    }
+    Y <- owinInternalMask(xy=list(x=xcol, y=yrow),
+                          mask=matrix(FALSE, length(yrow), length(xcol)),
+                          unitname=unitname(X))
+  }
   if(is.im(X)) {
     # resample an image
     if(!is.im(Y))
@@ -24,13 +60,13 @@ rastersample <- function(X, Y) {
       Xv <- array(as.integer(Xv), dim=X$dim)
     # resample
     naval <- switch(Xtype,
-                 factor=,
-                 integer= NA_integer_, 
-                 logical = as.logical(NA_integer_), 
-                 real = NA_real_, 
-                 complex = NA_complex_, 
-                 character = NA_character_,
-                 NA)
+                    factor=,
+                    integer= NA_integer_, 
+                    logical = as.logical(NA_integer_), 
+                    real = NA_real_, 
+                    complex = NA_complex_, 
+                    character = NA_character_,
+                    NA)
     Y$v <- matrixsample(Xv, Y$dim, phase=phase, scale=scale, na.value=naval)
     # inherit pixel data type from X
     Y$type <- Xtype
