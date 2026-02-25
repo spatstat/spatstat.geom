@@ -410,6 +410,16 @@ local({
     stop("Inconsistent results from im.apply max (parallel vs batch-wise)")
   if(max(abs(Z-Z2)) > sqrt(.Machine$double.eps))
     stop("Inconsistent results from im.apply sd (parallel vs batch-wise)")
+  #' check unitname information was retained
+  metres <- unitname(BE[[1L]])  
+  chuk <- function(A, txt) {
+    if(!identical(unitname(A), metres))
+      stop(paste(txt, "does not retain unitname"))
+  }
+  chuk(Z, "im.apply(bei.extra, sd)")
+  chuk(Y, "im.apply(bei.extra, max)")
+  chuk(Z2, "im.apply(bei.extra, sd) for big data")
+  chuk(Y2, "im.apply(bei.extra, max) for big data")
   
   #' Math.imlist, Ops.imlist, Complex.imlist
   U <- Z+2i

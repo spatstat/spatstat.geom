@@ -10,7 +10,7 @@
 #'
 #'        im.apply()           Pixelwise 'apply'
 #' 
-#'     $Revision: 1.60 $     $Date: 2025/07/03 01:55:43 $
+#'     $Revision: 1.64 $     $Date: 2026/02/25 06:37:50 $
 #'
 
 eval.im <- local({
@@ -253,10 +253,12 @@ im.apply <- function(X, FUN, ...,
                    nomatch=0L)
   funtype <- c("general", "sum", "mean", "mean", "var", "sd")[funcode+1L]
   ## ensure images are compatible
-  if(check && !do.call(compatible, unname(X)))
+  if(check && !do.call(compatible, unname(X))) {
     X <- do.call(harmonise.im, X)
+  }
   template <- X[[1L]]
   d <- dim(template)
+  Xunits <- harmonise.unitname(lapply(unname(X), unitname), single=TRUE)
   ## First check memory limits
   maxmat <- spatstat.options("maxmatrix")
   nvalues <- length(X) * prod(d)
@@ -273,7 +275,7 @@ im.apply <- function(X, FUN, ...,
       result <- im(y,
                    xcol=template$xcol, yrow=template$yrow,
                    xrange=template$xrange, yrange=template$yrange,
-                   unitname=template$unitname)
+                   unitname=Xunits)
     } else {
       ## rows are pixels, columns are different values
       result <- vector(mode="list", length=ncol(y))
@@ -281,7 +283,7 @@ im.apply <- function(X, FUN, ...,
         result[[j]] <- im(y[,j],
                           xcol=template$xcol, yrow=template$yrow,
                           xrange=template$xrange, yrange=template$yrange,
-                          unitname=template$unitname)
+                          unitname=Xunits)
     }
   } else {
     ## Memory limit is exceeded
@@ -320,7 +322,7 @@ im.apply <- function(X, FUN, ...,
           result <- im(rep(RelevantNA(ysub), prod(d)),
                        xcol=template$xcol, yrow=template$yrow,
                        xrange=template$xrange, yrange=template$yrange,
-                       unitname=template$unitname)
+                       unitname=Xunits)
           if(!single)
             result <- rep(list(result), ny)
           ny.previous <- ny

@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.7-0.009
+        CHANGES IN spatstat.geom VERSION 3.7-0.010
 
 OVERVIEW
 
@@ -10,7 +10,7 @@ OVERVIEW
     
     o Bug fix in Minkowski sum.
 
-    o Internal improvements.
+    o Minor improvements and bug fixes.
 
 NEW FUNCTIONS
 
@@ -42,6 +42,10 @@ BUG FIXES
     [Spotted by Ute Hahn]
     Fixed.
 
+    o im.apply
+    Did not preserve the name of the unit of length.
+    Fixed.
+    
         CHANGES IN spatstat.geom VERSION 3.7-0
 
 OVERVIEW

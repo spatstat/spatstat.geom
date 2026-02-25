@@ -1,7 +1,7 @@
 #
 # Functions for extracting and setting the name of the unit of length
 #
-#   $Revision: 1.32 $   $Date: 2020/12/06 02:32:01 $
+#   $Revision: 1.33 $   $Date: 2026/02/25 06:38:14 $
 #
 #
 
@@ -183,6 +183,12 @@ compatible.unitname <- function(A, B, ..., coerce=TRUE) {
 harmonize.unitname <-
 harmonise.unitname <- function(..., coerce=TRUE, single=FALSE) {
   argh <- list(...)
+  if(length(argh) == 1) {
+    ## single argument, could be a list of unitnames
+    a <- argh[[1L]]
+    if(all(sapply(a, is.null) | sapply(a, inherits, what="unitname")))
+      argh <- a
+  }
   n <- length(argh)
   if(n == 0) return(NULL)
   u <- lapply(argh, as.unitname)
