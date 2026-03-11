@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.7-0.011
+        CHANGES IN spatstat.geom VERSION 3.7-0.012
 
 OVERVIEW
 
@@ -11,6 +11,8 @@ OVERVIEW
     o Return the squared distances in distance maps.
     
     o Bug fix in Minkowski sum.
+
+    o summary method for tessellations.
 
     o Minor improvements and bug fixes.
 
@@ -37,6 +39,9 @@ NEW FUNCTIONS
     o voronoiFlower
     Compute the Voronoi flower of a domain.
 
+    o summary.tess, print.summary.tess
+    Method for 'summary' for tessellations.
+    
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o distmap.ppp
@@ -54,7 +59,8 @@ SIGNIFICANT USER-VISIBLE CHANGES
 BUG FIXES
 
     o MinkowskiSum, operator %(+)%
-    Result was often incorrect (and was not symmetric in A and B).
+    Result was often incorrect for non-convex sets
+    (and was not symmetric in A and B).
     [Spotted by Ute Hahn]
     Fixed.
 

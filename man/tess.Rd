@@ -98,7 +98,8 @@
   When \code{keepempty=FALSE} (the default), tiles are not allowed to be
   empty, and any empty tiles will be removed from the tessellation.
 
-  There are methods for \code{print}, \code{plot}, \code{[} and \code{[<-}
+  There are methods for \code{print}, \code{plot}, \code{summary},
+  \code{[} and \code{[<-}
   for tessellations. Use \code{\link{tiles}} to extract the list of
   tiles in a tessellation, \code{\link{tilenames}} to extract the names
   of the tiles, and \code{\link{tile.areas}} to compute their

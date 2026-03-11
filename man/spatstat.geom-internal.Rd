@@ -265,6 +265,7 @@
 \alias{print.summary.splitppp}
 \alias{print.summary.splitppx}
 \alias{print.summary.symbolmap}       
+\alias{print.summary.tess}       
 \alias{print.summary.unitname}
 \alias{print.symbolmap}
 \alias{print.tessfun}
@@ -336,6 +337,7 @@
 \alias{summary.ppx}
 \alias{summary.splitppx}
 \alias{summary.symbolmap}
+\alias{summary.tess}
 \alias{superimposeMarks}
 \alias{symbolmapdomain}
 \alias{symbolmapparnames}
@@ -668,6 +670,7 @@ prepareTitle(main)
 \method{print}{summary.solist}(x, \dots)
 \method{print}{summary.splitppx}(x, \dots)
 \method{print}{summary.symbolmap}(x, \dots)
+\method{print}{summary.tess}(x, \dots)
 \method{print}{summary.unitname}(x, \dots)
 \method{print}{symbolmap}(x, \dots)
 \method{print}{tessfun}(x, \dots)
@@ -739,6 +742,7 @@ store.versionstring.spatstat()
 \method{summary}{ppx}(object, \dots)
 \method{summary}{splitppx}(object, \dots)
 \method{summary}{symbolmap}(object, \dots)
+\method{summary}{tess}(object, \dots)
 superimposeMarks(arglist, nobj)
 symbolmapdomain(x)
 symbolmapparnames(x)
