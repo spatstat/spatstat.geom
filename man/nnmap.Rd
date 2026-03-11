@@ -12,7 +12,7 @@
 \usage{
   nnmap(X, k = 1, what = c("dist", "which"),
   \dots, W = as.owin(X),
-  is.sorted.X = FALSE, sortby = c("range", "var", "x", "y"))
+  is.sorted.X = FALSE, sortby = c("range", "var", "x", "y"), squared=FALSE)
 }
 \arguments{
   \item{X}{
@@ -44,6 +44,10 @@
   \item{sortby}{
     Determines which coordinate to use to sort the point pattern.
     See Details.
+  }
+  \item{squared}{
+    Logical value specifying whether to return the squared distances
+    instead of the distances themselves.
   }
 }
 \details{
@@ -119,6 +123,9 @@
   If \code{k} is a vector of several integers, then the result is
   similar except that each pixel image is replaced by a list of
   pixel images, one for each entry of \code{k}.
+
+  If \code{squared=TRUE} then squared distances are returned with the name
+  \code{"dist2"} instead of \code{"dist"}.
 }
 \seealso{
   \code{\link{distmap}}
@@ -127,11 +134,7 @@
   plot(nnmap(cells, 2, what="which"))
 }
 \author{
-  \adrian
-  
-  ,
-  \rolf
-  ,
+  \adrian, \rolf,
   and Jens Oehlschlaegel
 }
 \keyword{spatial}

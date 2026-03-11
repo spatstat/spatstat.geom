@@ -3,16 +3,18 @@
 #
 #    nearest or k-th nearest neighbour of each pixel
 #
-#  $Revision: 1.13 $  $Date: 2022/05/21 09:52:11 $
+#  $Revision: 1.14 $  $Date: 2026/03/11 08:11:49 $
 #
 
 nnmap <- function(X, k=1, what = c("dist", "which"), ...,
                   W=as.owin(X),
                   is.sorted.X=FALSE,
-                  sortby=c("range", "var", "x", "y")) {
+                  sortby=c("range", "var", "x", "y"),
+                  squared=FALSE) {
   stopifnot(is.ppp(X))
   sortby <- match.arg(sortby)
   outputarray <- resolve.1.default("outputarray", ..., outputarray=FALSE)
+  squared <- isTRUE(squared)
 
   W <- as.owin(W %orifnull% X)
   huge <- 1.1 * diameter(boundingbox(as.rectangle(X), as.rectangle(W)))
@@ -82,8 +84,8 @@ nnmap <- function(X, k=1, what = c("dist", "which"), ...,
       W <- flipxy(W)
       M <- flipxy(M)
       Mdim <- M$dim
-      nxcol <- Mdim[2]
-      nyrow <- Mdim[1]
+      nxcol <- Mdim[2L]
+      nyrow <- Mdim[1L]
     }
     xx <- X$x
     yy <- X$y
@@ -116,6 +118,7 @@ nnmap <- function(X, k=1, what = c("dist", "which"), ...,
                yp = as.double(yy),
                wantdist = as.integer(want.dist),
                wantwhich = as.integer(want.which),
+               squared=as.integer(squared),
                nnd = as.double(nndv),
                nnwhich = as.integer(nnwh),
                huge = as.double(huge),
@@ -134,6 +137,7 @@ nnmap <- function(X, k=1, what = c("dist", "which"), ...,
                kmax = as.integer(kmaxcalc),
                wantdist = as.integer(want.dist),
                wantwhich = as.integer(want.which),
+               squared=as.integer(squared),
                nnd = as.double(nndv),
                nnwhich = as.integer(nnwh),
                huge = as.double(huge),
@@ -203,8 +207,8 @@ nnmap <- function(X, k=1, what = c("dist", "which"), ...,
       if(!isrect) DI <- DI[M, drop=FALSE]
       dlist[[i]] <- DI
     }
-    names(dlist) <- k
-    result[["dist"]] <- if(nk > 1) dlist else dlist[[1]]
+    distname <- if(squared) "dist2" else "dist"
+    result[[distname]] <- if(nk > 1) setNames(dlist, k) else dlist[[1L]]
   }
   if(want.which) {
     wlist <- list()
@@ -213,9 +217,8 @@ nnmap <- function(X, k=1, what = c("dist", "which"), ...,
       if(!isrect) WI <- WI[M, drop=FALSE]
       wlist[[i]] <- WI
     }
-    names(wlist) <- k
-    result[["which"]] <- if(nk > 1) wlist else wlist[[1]]
+    result[["which"]] <- if(nk > 1) setNames(wlist, k) else wlist[[1L]]
   }
-  if(!want.both) result <- result[[1]]
+  if(!want.both) result <- result[[1L]]
   return(result)
 }

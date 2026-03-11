@@ -8,7 +8,8 @@
   point in the given point pattern.
 }
 \usage{
-  \method{distmap}{ppp}(X, \dots, clip=FALSE, metric=NULL)
+  \method{distmap}{ppp}(X, \dots, clip=FALSE,
+                  squared=FALSE, extras=TRUE, metric=NULL)
 }
 \arguments{
   \item{X}{A point pattern (object of class \code{"ppp"}).
@@ -19,6 +20,14 @@
   \item{clip}{
     Logical value specifying whether the resulting pixel image
     should be clipped to the window of \code{X}.
+  }
+  \item{squared}{
+    Logical value specifying whether to return the
+    squared distance values.
+  }
+  \item{extras}{
+    Logical value specifying whether to return extra data
+    (point indices and boundary distances). See Details.
   }
   \item{metric}{
     Optional. A distance metric
@@ -41,13 +50,15 @@
   and returns the distance map as a pixel image. The greyscale value
   at a pixel \eqn{u} equals the distance from \eqn{u} to the nearest
   point of the pattern \code{X}.
+  If \code{squared=TRUE}, the squared distances are returned,
+  which is a faster computation.
 
   If \code{clip=FALSE} (the default), the resulting pixel values are defined at every pixel in
   the rectangle \code{Frame(X)}. If \code{clip=TRUE}, the pixel values are defined
   only inside \code{Window(X)}, and are \code{NA} outside this window.
   Computation is faster when \code{clip=FALSE}.
   
-  Additionally, the return value 
+  If \code{extras=TRUE} (the default), the return value 
   has two attributes, \code{"index"} and \code{"bdry"}, which are
   also pixel images. The grey values in \code{"bdry"} give the
   distance from each pixel to the boundary of the window containing \code{X}.

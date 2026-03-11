@@ -4,9 +4,9 @@
        Exact distance transform of a point pattern
        (used to estimate the empty space function F)
        
-       $Revision: 1.20 $ $Date: 2022/10/22 09:29:51 $
+       $Revision: 1.22 $ $Date: 2026/03/11 08:24:55 $
 
-  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2018
+  Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2026
   Licence: GNU Public Licence >= 2
 
        Author: Adrian Baddeley
@@ -44,11 +44,14 @@ void shape_raster(Raster *ras, void *data,
 
 void
 exact_dt(
+  /* inputs */	 
   double *x,
   double *y,		/* data points */
   int	npt,
-  Raster *dist,		/* exact distance to nearest point */
-  Raster *index		/* which point x[i],y[i] is closest */
+  int squared,          /* whether to return squared distances */
+  /* outputs */
+  Raster *dist,		/* exact distance (or squared distance) to nearest point */
+  Raster *index		/* index i such that point x[i],y[i] is closest */
 ) {
 	int	i,j,k,l,m;
 	double	d;
@@ -143,11 +146,12 @@ exact_dt(
 		COMPARE(j,k, j,  k+1)
 	}
 
-	/* take square roots of the distances^2 */
-
-	for(j = index->rmin; j <= index->rmax; j++)
-	for(k = index->cmin; k <= index->cmax; k++) 
-	        Entry(*dist,j,k,double) = sqrt(Entry(*dist,j,k,double));
+	if(squared != 0) {
+	  /* take square roots of the distances^2 */
+	  for(j = index->rmin; j <= index->rmax; j++)
+	    for(k = index->cmin; k <= index->cmax; k++) 
+	      Entry(*dist,j,k,double) = sqrt(Entry(*dist,j,k,double));
+	}
 	
 }	
 
@@ -194,6 +198,7 @@ void exact_dt_R(
   double *x,
   double *y,		/* input data points */
   int	*npt,
+  int *squared,         /* whether to return squared distances */
   double *xmin,
   double *ymin,
   double *xmax,
@@ -202,7 +207,7 @@ void exact_dt_R(
   int *nc,		/* desired raster dimensions
 			   EXCLUDING margins */
   int *mr,
-  int *mc,           /* margins */
+  int *mc,              /* margins */
   /* output arrays */
   double *distances,	/* distance to nearest point */
   int   *indices,	        /* index to nearest point */
@@ -225,6 +230,6 @@ void exact_dt_R(
 	shape_raster( &bdist, (void *) boundary, *xmin,*ymin,*xmax,*ymax,
 		      nrow, ncol, mrow, mcol);
 	
-	exact_dt(x, y, (int) *npt, &dist, &index);
+	exact_dt(x, y, (int) *npt, (int) *squared, &dist, &index);
 	dist_to_bdry(&bdist);
 }	

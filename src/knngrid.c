@@ -4,10 +4,10 @@
 
   K-th Nearest Neighbour Distances from a pixel grid to a point pattern
 
-  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2022
+  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2026
   Licence: GNU Public Licence >= 2
 
-  $Revision: 1.9 $     $Date: 2022/10/22 09:29:51 $
+  $Revision: 1.10 $     $Date: 2026/03/11 07:56:05 $
 
   Function body definition is #included from knngrid.h 
 
@@ -25,11 +25,13 @@
 
 double sqrt(double x);
 
-/* THE FOLLOWING CODE ASSUMES THAT x IS SORTED IN ASCENDING ORDER */
-
+/* initialise macros */
 #undef FNAME
 #undef DIST
 #undef WHICH
+#undef SQUARED
+
+/* THE FOLLOWING CODE ASSUMES THAT x IS SORTED IN ASCENDING ORDER */
 
 /* 
    knnGdw
@@ -62,7 +64,6 @@ double sqrt(double x);
 #include "knngrid.h"
 #undef FNAME
 #undef DIST
-#undef WHICH
 
 /* 
    knnGw 
@@ -77,8 +78,43 @@ double sqrt(double x);
 #define WHICH
 #include "knngrid.h"
 #undef FNAME
+#undef WHICH
+
+/* 
+   knnGd2w
+
+   nearest neighbours 1:kmax
+
+   returns _squared_ distances and indices
+
+*/
+
+#define FNAME knnGd2w
+#define DIST
+#define WHICH
+#define SQUARED
+#include "knngrid.h"
+#undef FNAME
 #undef DIST
 #undef WHICH
+#undef SQUARED
+
+/* 
+   knnGd2
+
+   nearest neighbours 1:kmax
+
+   returns squared distances only
+
+*/
+
+#define FNAME knnGd2
+#define DIST
+#define SQUARED
+#include "knngrid.h"
+#undef FNAME
+#undef DIST
+#undef SQUARED
 
 /* >>>>>>>>>>> GENERAL INTERFACE <<<<<<<<<<<<<<<< */
 
@@ -93,6 +129,7 @@ void knnGinterface(
   /* options */
   int *wantdist,
   int *wantwhich,
+  int *squared,
   /* outputs */
   double *nnd,
   int *nnwhich,
@@ -100,13 +137,26 @@ void knnGinterface(
   double *huge
   /* some inputs + outputs are not used in all functions */
 ) {
-  int di, wh;
+  int di, wh, sq;
   di = (*wantdist != 0);
   wh = (*wantwhich != 0);
+  sq = (*squared != 0);
   if(di && wh) {
-    knnGdw(nx, x0, xstep, ny, y0, ystep, np, xp, yp, kmax, nnd, nnwhich, huge);
+    if(sq) {
+      /* squared distance and index */
+      knnGd2w(nx, x0, xstep, ny, y0, ystep, np, xp, yp, kmax, nnd, nnwhich, huge);
+    } else {
+      /* distance and index */
+      knnGdw(nx, x0, xstep, ny, y0, ystep, np, xp, yp, kmax, nnd, nnwhich, huge);
+    }
   } else if(di) {
-    knnGd(nx, x0, xstep, ny, y0, ystep, np, xp, yp, kmax, nnd, nnwhich, huge);
+    if(sq) {
+      /* squared distance */
+      knnGd2(nx, x0, xstep, ny, y0, ystep, np, xp, yp, kmax, nnd, nnwhich, huge);
+    } else {
+      /* distance */
+      knnGd(nx, x0, xstep, ny, y0, ystep, np, xp, yp, kmax, nnd, nnwhich, huge);
+    }
   } else if(wh) {
     knnGw(nx, x0, xstep, ny, y0, ystep, np, xp, yp, kmax, nnd, nnwhich, huge);
   }

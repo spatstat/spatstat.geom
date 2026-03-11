@@ -2,7 +2,7 @@
 #
 #      distmap.R
 #
-#      $Revision: 1.35 $     $Date: 2026/01/08 05:20:35 $
+#      $Revision: 1.36 $     $Date: 2026/03/11 08:45:26 $
 #
 #
 #     Distance transforms
@@ -12,36 +12,45 @@ distmap <- function(X, ...) {
   UseMethod("distmap")
 }
 
-distmap.ppp <- function(X, ..., clip=FALSE, metric=NULL) {
+distmap.ppp <- function(X, ..., clip=FALSE, squared=FALSE, extras=TRUE,
+                        metric=NULL) {
   verifyclass(X, "ppp")
+  squared <- isTRUE(squared)
   if(!is.null(metric)) {
-    ans <- invoke.metric(metric, "distmap.ppp", X=X, ..., clip=clip)
+    ans <- invoke.metric(metric, "distmap.ppp", X=X, ..., clip=clip,
+                         squared=squared)
     return(ans)
   }
-  e <- exactdt(X, ...)
+  #' compute
+  e <- exactdt(X, ..., squared=squared)
+  #' extract window information
   W <- e$w
   uni <- unitname(W)
-  dmat <- e$d
-  imat <- e$i
-  V <- im(dmat, W$xcol, W$yrow, unitname=uni)
-  I <- im(imat, W$xcol, W$yrow, unitname=uni)
-  if(X$window$type == "rectangle") {
-    # distance to frame boundary
-    bmat <- e$b
-    B <- im(bmat, W$xcol, W$yrow, unitname=uni)
-  } else {
-    ## distance to window boundary, not frame boundary
-    bmat <- bdist.pixels(W, style="matrix")
+  #' extract distances e$d and convert to image object
+  V <- im(e$d, W$xcol, W$yrow, unitname=uni)
+  if(clip) {
+    ## clip to window
+    V <- V[W, drop=FALSE]
+  }
+  if(extras) {
+    ## extract indices e$i and convert to image object 
+    I <- im(e$i, W$xcol, W$yrow, unitname=uni)
+    if(X$window$type == "rectangle") {
+      ## distance to frame boundary was computed
+      bmat <- e$b
+    } else {
+      ## compute distance to window boundary, not frame boundary
+      bmat <- bdist.pixels(W, style="matrix")
+    }
     B <- im(bmat, W$xcol, W$yrow, unitname=uni)
     if(clip) {
-      ## clip all to window
-      V <- V[W, drop=FALSE]
+      ## clip to window
       I <- I[W, drop=FALSE]
       B <- B[W, drop=FALSE]
     }
+    attr(V, "index") <- I
+    attr(V, "bdry")  <- if(squared) B^2 else B
   }
-  attr(V, "index") <- I
-  attr(V, "bdry")  <- B
   return(V)
 }
 

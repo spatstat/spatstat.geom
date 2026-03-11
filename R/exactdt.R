@@ -2,16 +2,17 @@
 #	exactdt.S
 #	S function exactdt() for exact distance transform
 #
-#	$Revision: 4.24 $	$Date: 2022/05/21 09:52:11 $
+#	$Revision: 4.25 $	$Date: 2026/03/11 08:29:15 $
 #
 
 exactdt <- local({
 
   die <- function(why) { stop(paste("ppp object format corrupted:", why)) }
 
-  exactdt <- function(X, ...) {
+  exactdt <- function(X, ..., squared=FALSE) {
     verifyclass(X, "ppp")
     w <- X$window
+    squared <- isTRUE(squared)
     if(spatstat.options("exactdt.checks.data")) {
       ## check validity of ppp structure 
       bb <- as.rectangle(w)
@@ -52,20 +53,21 @@ exactdt <- local({
     cmax <- Nnc - mc
     ## go
     res <- .C(SG_exact_dt_R,
-              as.double(X$x),
-              as.double(X$y),
-              as.integer(X$n),
-              as.double(xcol[1L]),
-              as.double(yrow[1L]),
-              as.double(xcol[nc]),
-              as.double(yrow[nr]),
-              nr = as.integer(nr),
-              nc = as.integer(nc),
-              mr = as.integer(mr),
-              mc = as.integer(mc),
+              x         = as.double(X$x),
+              y         = as.double(X$y),
+              npt       = as.integer(X$n),
+              squared   = as.integer(squared),
+              xmin      = as.double(xcol[1L]),
+              ymin      = as.double(yrow[1L]),
+              xmax      = as.double(xcol[nc]),
+              ymax      = as.double(yrow[nr]),
+              nr        = as.integer(nr),
+              nc        = as.integer(nc),
+              mr        = as.integer(mr),
+              mc        = as.integer(mc),
               distances = as.double(double(N)),
-              indices = as.integer(integer(N)),
-              boundary = as.double(double(N)),
+              indices   = as.integer(integer(N)),
+              boundary  = as.double(double(N)),
               PACKAGE="spatstat.geom")
     ## extract 
     dist <- matrix(res$distances,

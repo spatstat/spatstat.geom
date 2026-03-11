@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.7-0.010
+        CHANGES IN spatstat.geom VERSION 3.7-0.011
 
 OVERVIEW
 
@@ -7,6 +7,8 @@ OVERVIEW
     o Support function, Feret diameter, polar body, Voronoi flower.
 
     o Merge tiles in a tessellation.
+
+    o Return the squared distances in distance maps.
     
     o Bug fix in Minkowski sum.
 
@@ -35,6 +37,20 @@ NEW FUNCTIONS
     o voronoiFlower
     Compute the Voronoi flower of a domain.
 
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o distmap.ppp
+    New option 'squared=TRUE' returns the squared distances,
+    reducing computation time.
+    
+    o distmap.ppp
+    New option 'extras=FALSE' avoids returning additional attributes,
+    reducing computation time.
+    
+    o nnmap.ppp
+    New option 'squared=TRUE' returns the squared distances,
+    reducing computation time.
+    
 BUG FIXES
 
     o MinkowskiSum, operator %(+)%
