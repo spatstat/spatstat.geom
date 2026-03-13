@@ -3,7 +3,7 @@
 #
 # support for tessellations
 #
-#   $Revision: 1.134 $ $Date: 2026/03/11 12:34:35 $
+#   $Revision: 1.136 $ $Date: 2026/03/13 08:17:09 $
 #
 tess <- function(..., xgrid=NULL, ygrid=NULL, tiles=NULL, image=NULL,
                  window=NULL, marks=NULL, keepempty=FALSE,
@@ -207,32 +207,61 @@ print.tess <- function(x, ..., brief=FALSE) {
 }
 
 summary.tess <- function(object, ...) {
-  y <- list(type   = object$type,
-            window = summary(object$window),
-            units  = summary(unitname(object)),
-            ntiles = nobjects(object),
-            areas  = summary(tile.areas(object)))
+  y <- list(type      = object$type,
+            window    = summary(object$window),
+            units     = summary(unitname(object)),
+            ntiles    = nobjects(object),
+            names     = tilenames(object),
+            areas     = NULL,
+            polygonal = FALSE,
+            congruent = FALSE,
+            dim       = NULL, 
+            marks     = NULL,
+            mf        = "none"
+            )
+  switch(object$type,
+         rect = {
+           xg <- object$xgrid
+           yg <- object$ygrid
+           y$dim <- c(length(xg)-1, length(yg)-1)
+           y$congruent <- evenly.spaced(xg) && evenly.spaced(yg)
+         },
+         tiled = {
+           y$polygonal <- (object$window$type %in% c("rectangle", "polygonal"))
+         },
+         image = {
+         })
+  ## tile areas
+  areas <- tile.areas(object)
+  ua <- unique(areas)
+  y$areas <- if(length(ua) == 1) {
+               numberwithunit(ua, unitname(object), "square")
+             } else {
+               summary(areas)
+             }
+  ## marks
   marx <- marks(object)
   y$mf <- mf <- markformat(marx)
   y$marks <- switch(mf,
-                    none = NULL,
-                    list = if(is.solist(marx)) "list of spatial objects" else "list",
+                    none = { NULL },
+                    list = {
+                      cl <- sapply(marx, classIgnoringNA, first=TRUE)
+                      if(length(unique(cl)) == 1) {
+                        paste("list of objects of class", sQuote(cl[1L]))
+                      } else if(is.solist(marx)) {
+                        "list of spatial objects"
+                      } else {
+                        "list"
+                      }
+                    }, 
                     summary(marx))
-  y$polygonal <- (object$type == "tiled") &&
-                  (object$window$type %in% c("rectangle", "polygonal"))
-  if(object$type == "rect") {
-    xg <- object$xgrid
-    yg <- object$ygrid
-    y$congruent <- evenly.spaced(xg) && evenly.spaced(yg)
-    y$dim <- c(length(xg)-1, length(yg)-1)
-  } else {
-    y$congruent <- FALSE
-  }
+  ## 
   class(y) <- c("summary.tess", class(y))
   return(y)
 }
 
 print.summary.tess <- function(x, ...) {
+  terse <- spatstat.options('terse')
   splat("Tessellation containing", x$ntiles, "tiles")
   switch(x$type,
          rect={
@@ -249,12 +278,29 @@ print.summary.tess <- function(x, ...) {
          image={
            splat("Tessellation is determined by a factor-valued image")
          })
-  splat("Tile areas:")
-  print(x$areas)
+  if(waxlyrical('gory', terse) && (x$type != "rect")) {
+    splat("Tile names:")
+    print(x$names)
+    parbreak(terse)
+  }
+  ## tile areas
+  if(waxlyrical('extras', terse)) {
+    splat("Tile areas:")
+    print(x$areas)
+  }
+  parbreak(terse)
+  ## marks
   mf <- x$mf
   splat("Marks:", mf)
-  if(mf != "none") print(x$marks)
-  invisible(NULL)
+  if(waxlyrical('extras', terse)) {
+    if(mf != "none") print(x$marks)
+    parbreak(terse)
+  }
+  ## window
+  if(waxlyrical('extras', terse)) {
+    print(x$window)
+  }
+  return(invisible(NULL))
 }
 
 unitname.tess <- function(x) unitname(x$window)

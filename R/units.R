@@ -1,7 +1,7 @@
 #
 # Functions for extracting and setting the name of the unit of length
 #
-#   $Revision: 1.33 $   $Date: 2026/02/25 06:38:14 $
+#   $Revision: 1.34 $   $Date: 2026/03/13 07:26:37 $
 #
 #
 
@@ -209,13 +209,16 @@ harmonise.unitname <- function(..., coerce=TRUE, single=FALSE) {
   return(z)
 }
 
-# class 'numberwithunit':  numeric value(s) with unit of length
+## class 'numberwithunit':  numeric value(s) with unit of length
+##
+##     'modifier' could be 'square', 'cubic' etc
 
-numberwithunit <- function(x, u) {
+numberwithunit <- function(x, u, modifier=NULL) {
   u <- as.unitname(u)
   x <- as.numeric(x)
   unitname(x) <- u
   class(x) <- c(class(x), "numberwithunit")
+  attr(x, "modifier") <- modifier
   return(x)
 }
 
@@ -224,6 +227,7 @@ numberwithunit <- function(x, u) {
 }
 
 format.numberwithunit <- function(x, ..., collapse=" x ", modifier=NULL) {
+  if(missing(modifier)) modifier <- attr(x, "modifier")
   u <- summary(unitname(x))
   uname <- if(all(x == 1)) u$singular else u$plural
   y <- format(as.numeric(x), ...)

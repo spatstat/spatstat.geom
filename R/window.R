@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.214 $	$Date: 2025/09/03 23:16:36 $
+#	$Revision: 4.217 $	$Date: 2026/03/13 08:21:12 $
 #
 #
 #	A window may be either
@@ -1189,6 +1189,7 @@ print.summary.owin <- function(x, ...) {
   unitinfo <- summary(x$units)
   pluralunits <- unitinfo$plural
   singularunits <- unitinfo$singular
+  terse <- spatstat.options("terse")
   switch(x$type,
          rectangle={
            rectname <- "Window: rectangle ="
@@ -1207,7 +1208,7 @@ print.summary.owin <- function(x, ...) {
                      if(nh == 1) "(1 hole)" else
                      paren(paste(nh, "holes"))
              splat(np, "separate polygons", holy)
-             if(np > 0)
+             if(np > 0 && waxlyrical('gory', terse)) {
                print(data.frame(vertices=x$nvertices,
                                 area=signif(x$areas, 6),
                                 relative.area=signif(x$areas/x$area,3),
@@ -1215,16 +1216,19 @@ print.summary.owin <- function(x, ...) {
                                   1:np,
                                   ifelse(x$areas < 0, "(hole)", "")
                                   )))
+             }
            }
            rectname <- "enclosing rectangle:"
          },
          mask={
-           splat("binary image mask")
+           splat("Window: binary image mask")
            di <- x$npixels
            splat(di[1L], "x", di[2L], "pixel array (ny, nx)")
-           splat("pixel size:",
-                 signif(x$xstep,3), "by", signif(x$ystep,3),
-                 pluralunits)
+           if(waxlyrical('gory', terse)) {
+             splat("pixel size:",
+                   signif(x$xstep,3), "by", signif(x$ystep,3),
+                   pluralunits)
+           }
            rectname <- "enclosing rectangle:"
          }
          )
@@ -1233,20 +1237,27 @@ print.summary.owin <- function(x, ...) {
         "x",
         prange(zapsmall(x$yrange)),
         pluralunits)
-  if(x$xrange[1] != 0 || x$yrange[1] != 0) {
-    width <- diff(x$xrange)
-    height <- diff(x$yrange)
-    blank <- paste(rep(" ", nchar(rectname)), collapse="") 
-    splat(blank, paren(paste(signif(width, 4), "x", signif(height, 4),
-                             pluralunits)))
+  if(waxlyrical('gory', terse)) {
+    if(x$xrange[1] != 0 || x$yrange[1] != 0) {
+      width <- diff(x$xrange)
+      height <- diff(x$yrange)
+      blank <- paste(rep(" ", nchar(rectname)), collapse="") 
+      splat(blank, paren(paste(signif(width, 4), "x", signif(height, 4),
+                               pluralunits)))
+    }
   }
-  Area <- signif(x$area, 6)
-  splat("Window area =", Area, "square",
-        if(Area == 1) singularunits else pluralunits)
-  if(!is.null(ledge <- unitinfo$legend))
-    splat(ledge)
-  if(x$type != "rectangle")
-    splat("Fraction of frame area:", signif(x$areafraction, 3))
+  if(waxlyrical('extras', terse)) {
+    Area <- signif(x$area, 6)
+    splat("Window area =", Area, "square",
+          if(Area == 1) singularunits else pluralunits)
+    if(!is.null(ledge <- unitinfo$legend))
+      splat(ledge)
+  }
+  if(waxlyrical('gory', terse)) {
+    if(x$type != "rectangle") {
+      splat("Fraction of frame area:", signif(x$areafraction, 3))
+    }
+  }
   return(invisible(x))
 }
 

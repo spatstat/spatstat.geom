@@ -601,7 +601,7 @@ needpackage(pkg, loaded, fatal, purpose)
 \method{npoints}{NAobject}(x)
 \method{npoints}{quad}(x)
 n.quad(Q)
-numberwithunit(x, u)
+numberwithunit(x, u, modifier)
 numeric.columns(M, logical, others)
 onecolumn(m)
 owinInternalRect(xrange, yrange, \dots, unitname,

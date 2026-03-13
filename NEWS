@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.7-0.012
+        CHANGES IN spatstat.geom VERSION 3.7-0.013
 
 OVERVIEW
 
@@ -12,7 +12,7 @@ OVERVIEW
     
     o Bug fix in Minkowski sum.
 
-    o summary method for tessellations.
+    o Summary method for tessellations.
 
     o Minor improvements and bug fixes.
 
@@ -55,6 +55,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o nnmap.ppp
     New option 'squared=TRUE' returns the squared distances,
     reducing computation time.
+
+    o print.summary.owin
+    Output can now be abbreviated by
+    increasing the value of spatstat.options('terse')
     
 BUG FIXES
 
