@@ -1,7 +1,7 @@
 #
 #  psp.R
 #
-#  $Revision: 1.121 $ $Date: 2026/01/21 06:26:39 $
+#  $Revision: 1.122 $ $Date: 2026/03/15 01:06:54 $
 #
 # Class "psp" of planar line segment patterns
 #
@@ -454,24 +454,35 @@ summary.psp <- function(object, ...) {
               ang= summary(angles.psp(object)),
               w = summary.owin(object$window),
               marks=if(is.null(object$marks)) NULL else summary(object$marks),
+              mf=markformat(object$marks),
               unitinfo=summary(unitname(object)))
   class(out) <- c("summary.psp", class(out))
   return(out)
 }
 
 print.summary.psp <- function(x, ...) {
+  terselevel <- spatstat.options("terse")
   cat(paste(x$n, "line segments\n"))
-  cat("Lengths:\n")
-  print(x$len)
+  if(waxlyrical('extras', terselevel)) {
+    cat("Lengths:\n")
+    print(x$len)
+    parbreak(terselevel)
+  }
   unitblurb <- paste(x$unitinfo$plural, x$unitinfo$explain)
   cat(paste("Total length:", x$totlen, unitblurb, "\n"))
   cat(paste("Length per unit area:", x$totlen/x$w$area, "\n"))
-  cat("Angles (radians):\n")
-  print(x$ang)
-  print(x$w)
-  if(!is.null(x$marks)) {
-    cat("Marks:\n")
+  if(waxlyrical('gory', terselevel)) {
+    cat("Angles (radians):\n")
+    print(x$ang)
+  }
+  parbreak(terselevel)
+  splat("Marks:", x$mf)
+  if(waxlyrical('gory', terselevel)) {
+    #' summary of marks
     print(x$marks)
+    #' window
+    parbreak(terselevel)
+    print(x$w)
   }
   return(invisible(NULL))
 }

@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.7-0.013
+        CHANGES IN spatstat.geom VERSION 3.7-0.014
 
 OVERVIEW
 
@@ -57,6 +57,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     reducing computation time.
 
     o print.summary.owin
+    Output can now be abbreviated by
+    increasing the value of spatstat.options('terse')
+    
+    o print.summary.psp
     Output can now be abbreviated by
     increasing the value of spatstat.options('terse')
     
