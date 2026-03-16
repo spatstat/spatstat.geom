@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.7-0.015
+        CHANGES IN spatstat.geom VERSION 3.7-0.016
 
 OVERVIEW
 
@@ -8,7 +8,7 @@ OVERVIEW
 
     o Merge tiles in a tessellation.
 
-    o Return the squared distances in distance maps.
+    o Return squared nearest neighbour distances.
     
     o Bug fix in Minkowski sum.
 
@@ -56,7 +56,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New option 'squared=TRUE' returns the squared distances,
     reducing computation time.
 
-    o nndist.ppp, nndist.default
+    o nndist.ppp, nndist.default, nncross.ppp, nncross.default
     New option 'squared=TRUE' returns the squared nearest neighbour distances,
     reducing computation time.
 

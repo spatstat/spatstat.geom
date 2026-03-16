@@ -22,7 +22,7 @@ cat(paste("--------- Executing",
 #
 # Also test whether minnndist(X) == min(nndist(X))
 #
-#   $Revision: 1.39 $  $Date: 2021/05/20 09:31:23 $
+#   $Revision: 1.40 $  $Date: 2026/03/16 07:30:20 $
 #
 
 
@@ -175,6 +175,41 @@ local({
     nncross(X[1:3], Y[1:3], k=4)
     nncross(X[1:3], Y[1:3], k=1:4)
   }
+
+  ## squared distances
+  if(FULLTEST) {
+    ## nearest neighbour distances in a pattern
+    d  <- nndist(X, squared=FALSE)
+    d2 <- nndist(X, squared=TRUE)
+    if(max(range(abs(d - sqrt(d2)))) > eps)
+      stop("nndist(squared=TRUE) is suspect")
+    d  <- nndist(X, k=2:3, squared=FALSE)
+    d2 <- nndist(X, k=2:3, squared=TRUE)
+    if(max(range(abs(d - sqrt(d2)))) > eps)
+      stop("nndist(squared=TRUE, k=2:3) is suspect")
+
+    ## nearest neighbours between two distinct patterns
+    YY <- Z[31:50]
+    d  <- nncross(X, YY, what="d", squared=FALSE)
+    d2 <- nncross(X, YY, what="d", squared=TRUE)
+    if(max(range(abs(d - sqrt(d2)))) > eps)
+      stop("nncross(squared=TRUE) is suspect")
+    d  <- nncross(X, YY, k=2:3, what="d", squared=FALSE)
+    d2 <- nncross(X, YY, k=2:3, what="d", squared=TRUE)
+    if(max(range(abs(d - sqrt(d2)))) > eps)
+      stop("nncross(squared=TRUE, k=2:3) is suspect")
+    
+    ## nearest neighbours between two overlapping patterns
+    d  <- nncross(X, Y, iX, iY, what="d", squared=FALSE)
+    d2 <- nncross(X, Y, iX, iY, what="d", squared=TRUE)
+    if(max(range(abs(d - sqrt(d2)))) > eps)
+      stop("nncross(squared=TRUE, iX, iY) is suspect")
+    d  <- nncross(X, Y, iX, iY, k=2:3, what="d", squared=FALSE)
+    d2 <- nncross(X, Y, iX, iY, k=2:3, what="d", squared=TRUE)
+    if(max(range(abs(d - sqrt(d2)))) > eps)
+      stop("nncross(squared=TRUE, iX, iY, k=2:3) is suspect")
+  }
+  
   
   ## .......  Three dimensions ................
 

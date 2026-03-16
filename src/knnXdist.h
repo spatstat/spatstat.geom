@@ -16,16 +16,17 @@
 	WHICH     #defined if function returns id of nearest neighbour
         EXCLUDE   #defined if exclusion mechanism is used
   Either or both DIST and WHICH may be defined.
+        SQUARED   #defined if squared distances should be returned.
 
   When EXCLUDE is defined,
   code numbers id1, id2 are attached to the patterns X and Y respectively, 
   such that
   x1[i], y1[i] and x2[j], y2[j] are the same point iff id1[i] = id2[j].
 
-  Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2013
+  Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2026
   Licence: GPL >= 2
 
-  $Revision: 1.13 $  $Date: 2022/10/23 00:23:50 $
+  $Revision: 1.14 $  $Date: 2026/03/16 07:39:54 $
 
 
 */
@@ -288,14 +289,21 @@ void FNAME(
 	Rprintf("\tEnd backward search\n");
 #endif
       }
-      /* copy nn distances for point i 
+      /* copy nn distances and/or indices for point i 
 	 to output matrix in ROW MAJOR order
       */
       for(k = 0; k < nk; k++) {
 #ifdef DIST
+#ifdef SQUARED
+	/* squared distances */
+	nnd[nk * i + k] = d2min[k];
+#else
+	/* distances */
 	nnd[nk * i + k] = sqrt(d2min[k]);
 #endif
+#endif
 #ifdef WHICH
+	/* indices */
 	nnwhich[nk * i + k] = which[k] + 1;  /* R indexing */
 #endif
       }

@@ -11,11 +11,12 @@
         DIST      #defined if function returns distance to nearest neighbour
 	WHICH     #defined if function returns id of nearest neighbour
   Either or both DIST and WHICH may be defined.
+        SQUARED   #defined if squared distances should be returned.
 
-  Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2022
+  Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2026
   Licence: GPL >= 2
 
-  $Revision: 1.4 $  $Date: 2022/10/21 10:43:01 $
+  $Revision: 1.6 $  $Date: 2026/03/16 07:08:38 $
 
 */
 
@@ -180,14 +181,21 @@ void FNAME(
       Rprintf("\n");
 #endif
 
-      /* copy nn distances for point i 
+      /* copy nn distances and/or indices for point i 
 	 to output matrix in ROW MAJOR order
       */
       for(k = 0; k < nk; k++) {
 #ifdef DIST
+#ifdef SQUARED
+	/* squared distances */
+	nnd[nk * i + k] = d2min[k];
+#else
+	/* distances */
 	nnd[nk * i + k] = sqrt(d2min[k]);
 #endif
+#endif
 #ifdef WHICH
+	/* indices */
 	nnwhich[nk * i + k] = which[k] + 1;  /* R indexing */
 #endif
       }

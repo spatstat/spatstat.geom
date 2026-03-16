@@ -7,7 +7,7 @@
   Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2026
   Licence: GNU Public Licence >= 2
 
-  $Revision: 1.12 $     $Date: 2026/03/16 03:28:41 $
+  $Revision: 1.13 $     $Date: 2026/03/16 07:10:13 $
 
   Function definitions are #included from knndist.h and knnXdist.h
 
@@ -34,6 +34,7 @@
   knnXE        Nearest neighbour ID & distance 
   knnXE2       Nearest neighbour ID & distance^2
 
+  Functions beginning 'knnX' can be accessed using 'knnXinterface'
 
 */
 
