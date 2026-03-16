@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.7-0.014
+        CHANGES IN spatstat.geom VERSION 3.7-0.015
 
 OVERVIEW
 
@@ -54,6 +54,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
     
     o nnmap.ppp
     New option 'squared=TRUE' returns the squared distances,
+    reducing computation time.
+
+    o nndist.ppp, nndist.default
+    New option 'squared=TRUE' returns the squared nearest neighbour distances,
     reducing computation time.
 
     o print.summary.owin

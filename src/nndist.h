@@ -11,11 +11,12 @@
         DIST      #defined if function returns distance to nearest neighbour
 	WHICH     #defined if function returns id of nearest neighbour
   Either or both DIST and WHICH may be defined.
+        SQUARED   #defined if the squared distance should be returned.
 
-  Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2012
+  Copyright (C) Adrian Baddeley, Jens Oehlschlagel and Rolf Turner 2000-2026
   Licence: GPL >= 2
 
-  $Revision: 1.3 $  $Date: 2022/10/21 10:43:01 $
+  $Revision: 1.4 $  $Date: 2026/03/16 01:59:20 $
 
 */
 
@@ -100,7 +101,11 @@ void FNAME(
       }
 
 #ifdef DIST
+#ifdef SQUARED      
+      nnd[i] = d2min;
+#else
       nnd[i] = sqrt(d2min);
+#endif
 #endif
 #ifdef WHICH
       nnwhich[i] = which + 1; /* R indexing */

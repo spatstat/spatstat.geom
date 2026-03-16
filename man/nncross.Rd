@@ -15,7 +15,7 @@
           iX=NULL, iY=NULL,
           what = c("dist", "which"),
           \dots,
-          k = 1,
+          k = 1, squared=FALSE,
           sortby=c("range", "var", "x", "y"),
           is.sorted.X = FALSE,
           is.sorted.Y = FALSE,
@@ -40,6 +40,11 @@
   \item{k}{
     Integer, or integer vector. The algorithm will compute the distance to the
     \code{k}th nearest neighbour.
+  }
+  \item{squared}{
+    Logical value specifying whether to return the squared nearest
+    neighbour distances, instead of the distances themselves.
+    This reduces computation time.
   }
   \item{sortby}{
     Determines which coordinate to use to sort the point patterns.
@@ -133,7 +138,12 @@
   axis} then both \code{is.sorted.X} and \code{is.sorted.Y}
   should be set to \code{TRUE}, and \code{sortby} should be set
   equal to \code{"x"} or \code{"y"} to indicate which coordinate
-  is sorted.  
+  is sorted.
+
+  Programmers should also consider whether their objective can be achieved
+  using the squared distances (obtained by setting \code{squared=TRUE})
+  rather than the distances themselves. This reduces computation time,
+  at least for the Euclidean distance (\code{metric=NULL}).
 }
 \value{
   A data frame, or a vector if the data frame would contain only one column.

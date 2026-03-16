@@ -1,10 +1,13 @@
-#
-#   nndist.R
-#
-#   nearest neighbour distances (nndist) and identifiers (nnwhich)
-#
-#   $Revision: 1.19 $ $Date: 2025/06/16 05:35:37 $
-#
+##
+##   nndist.R
+##
+##   nearest neighbour distances (nndist) and identifiers (nnwhich)
+##
+##   Copyright (C) Pavel Grabarnik and Adrian Baddeley 1997-2026
+##   GNU Public Licence (>= 2.0)
+##
+##   $Revision: 1.21 $ $Date: 2026/03/16 03:42:33 $
+##
 
 nndist <- function(X, ...) {
   UseMethod("nndist")
@@ -12,7 +15,7 @@ nndist <- function(X, ...) {
 
 nndist.ppp <- local({
 
-  nndist.ppp <- function(X, ..., k=1, by=NULL,
+  nndist.ppp <- function(X, ..., k=1, by=NULL, squared=FALSE, 
                          proper=FALSE, method="C", metric=NULL) {
     verifyclass(X, "ppp")
     trap.extra.arguments(..., .Context="In nndist.ppp")
@@ -21,11 +24,12 @@ nndist.ppp <- local({
         ## allow duplicated points
         if(is.null(metric)) {
           ## default case: Euclidean distance
-          d <- nndist.default(X$x, X$y, k=k, method=method)
+          d <- nndist.default(X$x, X$y, k=k, method=method, squared=squared)
         } else {
           ## some other distance metric
           d <- invoke.metric(metric, "nndist.ppp",
                              X, ..., k=k, method=method)
+          if(squared) d <- d^2
         }
       } else {
         ## collapse duplicated points
@@ -34,10 +38,11 @@ nndist.ppp <- local({
         UX <- X[isuniq]
         ## compute nn distances between unique points
         if(is.null(metric)) {
-          dU <- nndist.default(UX$x, UX$y, k=k, method=method)
+          dU <- nndist.default(UX$x, UX$y, k=k, method=method, squared=squared)
         } else {
           dU <- invoke.metric(metric, "nndist.ppp",
                               UX, ..., k=k, method=method)
+          if(squared) dU <- dU^2
         }
         ## remap to original dataset
         d <- marksubset(dU, cumsum(isuniq))
@@ -59,18 +64,20 @@ nndist.ppp <- local({
         Y <- mapply("marks<-", x=Y, value=Yid, SIMPLIFY=FALSE)
         idX <- unsplit(Yid, f=by)
       }
-      distY <- lapply(Y, nndistsub, XX=X, iX=idX, k=k, metric=metric)
+      distY <- lapply(Y, nndistsub, XX=X, iX=idX, k=k,
+                      metric=metric, squared=squared)
       d <- do.call(cbind, distY)
     }
     return(d)
   }
   
-  nndistsub <- function(Z, XX, iX, k, metric=NULL) {
+  nndistsub <- function(Z, XX, iX, k, metric=NULL, squared=FALSE) {
     if(is.null(metric)) {
-      d <- nncross(XX, Z, iX=iX, iY=marks(Z), k=k, what="dist")
+      d <- nncross(XX, Z, iX=iX, iY=marks(Z), k=k, what="dist", squared=squared)
     } else {
       d <- invoke.metric(metric, "nncross.ppp",
-                    X=XX, Y=Z, iX=iX, iY=marks(Z), k=k, what="dist")
+                         X=XX, Y=Z, iX=iX, iY=marks(Z), k=k, what="dist")
+      if(squared) d <- d^2
     }
     return(d)
   }
@@ -78,7 +85,8 @@ nndist.ppp <- local({
   nndist.ppp
 })
 
-nndist.default <- function(X, Y=NULL, ..., k=1, by=NULL, method="C")
+nndist.default <- function(X, Y=NULL, ..., k=1, by=NULL,
+                           squared=FALSE, method="C")
 {
   warn.no.metric.support("nndist.default", ...)
 	#  computes the vector of nearest-neighbour distances 
@@ -100,7 +108,7 @@ nndist.default <- function(X, Y=NULL, ..., k=1, by=NULL, method="C")
   # split by factor ?
   if(!is.null(by)) {
     X <- as.ppp(xy, W=boundingbox)
-    return(nndist(X, by=by, k=k))
+    return(nndist(X, by=by, k=k, squared=squared))
   }
   
   # k can be a single integer or an integer vector
@@ -141,18 +149,34 @@ nndist.default <- function(X, Y=NULL, ..., k=1, by=NULL, method="C")
            squd <-  outer(x, x, sq) + outer(y, y, sq)
            #  reset diagonal to a large value so it is excluded from minimum
            diag(squd) <- Inf
-           #  nearest neighbour distances
-           nnd <- sqrt(apply(squd,1,min))
+           ##  nearest neighbour distances
+           if(squared) {
+             nnd <- apply(squd, 1, min)
+           } else {
+             nnd <- sqrt(apply(squd,1,min))
+           }
          },
          C={
-           nnd<-numeric(n)
+           nnd <- numeric(n)
            o <- fave.order(y)
            big <- sqrt(.Machine$double.xmax)
-           z <- .C(SG_nndistsort,
-                  n= as.integer(n),
-                  x= as.double(x[o]), y= as.double(y[o]), nnd= as.double(nnd),
-                  as.double(big),
-                  PACKAGE="spatstat.geom")
+           if(squared) {
+             z <- .C(SG_nndist2sort,
+                     n= as.integer(n),
+                     x= as.double(x[o]),
+                     y= as.double(y[o]),
+                     nnd= as.double(nnd),
+                     as.double(big),
+                     PACKAGE="spatstat.geom")
+           } else {
+             z <- .C(SG_nndistsort,
+                     n= as.integer(n),
+                     x= as.double(x[o]),
+                     y= as.double(y[o]),
+                     nnd= as.double(nnd),
+                     as.double(big),
+                     PACKAGE="spatstat.geom")
+           }
            nnd[o] <- z$nnd
          },
          stop(paste("Unrecognised method", sQuote(method)))
@@ -168,7 +192,7 @@ nndist.default <- function(X, Y=NULL, ..., k=1, by=NULL, method="C")
                # find k'th smallest squared distance
                diag(D2) <- Inf
                NND2 <- t(apply(D2, 1, sort))[, 1:kmaxcalc]
-               nnd <- sqrt(NND2)
+               nnd <- if(squared) NND2 else sqrt(NND2)
              } else {
                # avoid creating huge matrix
                # handle one row of D at a time
@@ -178,21 +202,34 @@ nndist.default <- function(X, Y=NULL, ..., k=1, by=NULL, method="C")
                  D2i[i] <- Inf
                  NND2[i,] <- orderstats(D2i, k=1:kmaxcalc)
                }
-               nnd <- sqrt(NND2)
+               nnd <- if(squared) NND2 else sqrt(NND2)
              }
            },
            C={
-             nnd<-numeric(n * kmaxcalc)
+             nnd <- numeric(n * kmaxcalc)
              o <- fave.order(y)
              big <- sqrt(.Machine$double.xmax)
-             z <- .C(SG_knndsort,
-                    n    = as.integer(n),
-                    kmax = as.integer(kmaxcalc),
-                    x    = as.double(x[o]),
-                    y    = as.double(y[o]),
-                    nnd  = as.double(nnd),
-                    huge = as.double(big),
-                    PACKAGE="spatstat.geom")
+             if(squared) {
+               ## squared distances
+               z <- .C(SG_knnd2sort,
+                       n    = as.integer(n),
+                       kmax = as.integer(kmaxcalc),
+                       x    = as.double(x[o]),
+                       y    = as.double(y[o]),
+                       nnd  = as.double(nnd),
+                       huge = as.double(big),
+                       PACKAGE="spatstat.geom")
+             } else {
+               ## distances
+               z <- .C(SG_knndsort,
+                       n    = as.integer(n),
+                       kmax = as.integer(kmaxcalc),
+                       x    = as.double(x[o]),
+                       y    = as.double(y[o]),
+                       nnd  = as.double(nnd),
+                       huge = as.double(big),
+                       PACKAGE="spatstat.geom")
+             }
              nnd <- matrix(nnd, nrow=n, ncol=kmaxcalc)
              nnd[o, ] <- matrix(z$nnd, nrow=n, ncol=kmaxcalc, byrow=TRUE)
            },

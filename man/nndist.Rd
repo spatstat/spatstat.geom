@@ -10,8 +10,10 @@
 }
 \usage{
   nndist(X, \dots)
-  \method{nndist}{ppp}(X, \dots, k=1, by=NULL, proper=FALSE, method="C", metric=NULL)
-  \method{nndist}{default}(X, Y=NULL, \dots, k=1, by=NULL, method="C")
+  \method{nndist}{ppp}(X, \dots, k=1,
+         by=NULL, squared=FALSE, proper=FALSE, method="C", metric=NULL)
+  \method{nndist}{default}(X, Y=NULL, \dots, k=1,
+         by=NULL, squared=FALSE, method="C")
 }
 \arguments{
   \item{X,Y}{
@@ -42,6 +44,10 @@
     Optional. A factor, which separates \code{X} into groups.
     The algorithm will compute the distance to the nearest point in each
     group. See Details.
+  }
+  \item{squared}{
+    Logical value specifying whether to return the squared distances
+    rather than the distances. This reduces computation time.
   }
   \item{proper}{
     Logical value specifying whether to measure distances

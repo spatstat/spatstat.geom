@@ -2,9 +2,9 @@
 #   nncross.R
 #
 #
-#    $Revision: 1.44 $  $Date: 2026/01/21 06:26:39 $
+#    $Revision: 1.45 $  $Date: 2026/03/16 02:56:57 $
 #
-#  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2012
+#  Copyright (C) Adrian Baddeley, Jens Oehlschlaegel and Rolf Turner 2000-2026
 #  Licence: GNU Public Licence >= 2
 
 nncross <- function(X, Y, ...) {
@@ -20,6 +20,7 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
                     what = c("dist", "which"),
                     ...,
                     k = 1,
+                    squared=FALSE, 
                     sortby=c("range", "var", "x", "y"),
                     is.sorted.X = FALSE,
                     is.sorted.Y = FALSE,
@@ -28,7 +29,7 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
   if(!is.null(metric)) {
     ans <- invoke.metric(metric, "nncross.ppp",
                          X=X, Y=Y, iX=iX, iY=iY, what=what, ...,
-                         k=k, sortby=sortby,
+                         k=k, squared=squared, sortby=sortby,
                          is.sorted.X=is.sorted.X,
                          is.sorted.Y=is.sorted.Y)
     return(ans)
@@ -39,6 +40,7 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
   want.dist  <- "dist" %in% what 
   want.which <- "which" %in% what
   want.both  <- want.dist && want.which
+  squared <- isTRUE(squared)
 
   if(!missing(k)) {
     # k can be a single integer or an integer vector
@@ -75,6 +77,7 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
       return(ppllengine(X,Y,"distance")[, what])
     ## all distances
     D <- distppll(coords(X), Y$ends, mintype=0)
+    if(squared) D <- D^2
     ans <- XDtoNN(D, what=what, iX=iX, iY=iX, k=k)
     return(ans)
   }
@@ -163,6 +166,7 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
             exclude = as.integer(exclude),
             wantdist = as.integer(want.dist),
             wantwhich = as.integer(want.which),
+            squared = as.integer(squared),
             nnd=as.double(nndv),
             nnwhich=as.integer(nnwh),
             huge=as.double(huge),
@@ -216,6 +220,7 @@ nncross.ppp <- function(X, Y, iX=NULL, iY=NULL,
             exclude = as.integer(exclude),
             wantdist = as.integer(want.dist),
             wantwhich = as.integer(want.which),
+            squared = as.integer(squared),
             nnd=as.double(nndv),
             nnwhich=as.integer(nnwh),
             huge=as.double(huge),
