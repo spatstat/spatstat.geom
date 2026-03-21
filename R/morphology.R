@@ -6,7 +6,7 @@
 #  generic functions
 #  and methods for owin, psp, ppp
 #
-#  $Revision: 1.34 $   $Date: 2025/12/02 23:45:53 $
+#  $Revision: 1.37 $   $Date: 2026/03/21 04:21:45 $
 #
 
 # ............ generic  ............................
@@ -22,41 +22,42 @@ opening  <- function(w, r, ...) { UseMethod("opening") }
 # ............ methods for class 'owin' ............................
 
 
-# DELETED
-# erode.owin <- function(...) {
-#   .Deprecated("erosion.owin", package="spatstat")
-#   erosion.owin(...)
-# }
-
 erosion.owin <- 
   function(w, r, shrink.frame=TRUE, ..., strict=FALSE, polygonal=NULL) {
   verifyclass(w, "owin")
   validradius(r, "erosion")
   if(r == 0 && !strict)
     return(w)
-
+  u <- unitname(w)
+  
   xr <- w$xrange
   yr <- w$yrange
-  
+
+  #' If erosion would obliterate the frame itself,
+  #' return empty window in original frame
   if(2 * r >= max(diff(xr), diff(yr)))
     return(emptywindow(Frame(w)))
 
-  # compute the dimensions of the eroded frame
+  #' Compute the (nonempty) eroded frame
   exr <- xr + c(r, -r)
   eyr <- yr + c(r, -r)
-  ebox <- list(x=exr[c(1,2,2,1)], y=eyr[c(1,1,2,2)])
+  efpoly <- list(x=exr[c(1,2,2,1)], y=eyr[c(1,1,2,2)])
+  eframe <- owin(exr, eyr, unitname=u)
 
+  #' Erosion of an empty window is empty
+  if(is.empty(w)) {
+    OutFrame <- if(shrink.frame) eframe else Frame(w)
+    return(emptywindow(OutFrame))
+  }
+  
+  #' Determine type of computation
   ismask <- is.mask(w)
-  if(is.empty(w))
-    return(emptywindow(ebox))
-
-  # determine type of computation
   if(is.null(polygonal))
     polygonal <- !ismask
   else {
     stopifnot(is.logical(polygonal))
     if(polygonal && ismask) {
-      # try to convert
+      #' try to convert
       w <- as.polygonal(w)
       if(is.mask(w))
         polygonal <- FALSE
@@ -64,38 +65,42 @@ erosion.owin <-
   }
   
   if(is.rectangle(w) && polygonal) {
-    # result is a smaller rectangle
+    #' Result is a smaller rectangle exr * eyr
     if(shrink.frame) {
-      return(owin(exr, eyr))  # type 'rectangle' 
+      #' type 'rectangle'
+      return(eframe)  
     } else {
-      return(owin(xr, yr, poly=ebox, check=FALSE)) # type 'polygonal'
+      #' type 'polygonal' representing rectangle
+      return(owin(xr, yr, poly=efpoly, unitname=u, check=FALSE)) 
     }
   }
 
   if(polygonal) {
-    # compute polygonal region using polyclip package
+    #' compute eroded polygonal region using polyclip package
     pnew <- polyclip::polyoffset(w$bdry, -r, jointype="round")
-    # ensure correct polarity
-    totarea <- sum(unlist(lapply(pnew, Area.xypolygon)))
-    if(totarea < 0)
-      pnew <- lapply(pnew, reverse.xypolygon)
+    #' ensure correct polarity of polygon data
+    if(length(pnew) > 0) {
+      totarea <- sum(unlist(lapply(pnew, Area.xypolygon)))
+      if(totarea < 0)
+        pnew <- lapply(pnew, reverse.xypolygon)
+    }
     if(shrink.frame) {
-      return(owin(poly=pnew, check=FALSE))
+      return(owin(exr, eyr, poly=pnew, unitname=u, check=FALSE))
     } else {
-      return(owin( xr,  yr, poly=pnew, check=FALSE))
+      return(owin( xr,  yr, poly=pnew, unitname=u, check=FALSE))
     }
   }
   
-  # otherwise erode the window in pixel image form
-  if(w$type == "mask") 
+  #' Otherwise erode the window in pixel image form
+  if(w$type == "mask") {
     wnew <- erodemask(w, r, strict=strict)
-  else {
+  } else {
     D <- distmap(w, invert=TRUE, ...)
     wnew <- levelset(D, r, if(strict) ">" else ">=")
   }
         
   if(shrink.frame) {
-    # trim off some rows & columns of pixel raster
+    #' trim off some rows & columns of pixel raster
     keepcol <- (wnew$xcol >= exr[1] & wnew$xcol <= exr[2])
     keeprow <- (wnew$yrow >= eyr[1] & wnew$yrow <= eyr[2])
     wnew$xcol <- wnew$xcol[keepcol]
@@ -109,11 +114,8 @@ erosion.owin <-
   return(wnew)
 }	
 
-# DELETED
-# dilate.owin <- function(...) {
-#   .Deprecated("dilation.owin", package="spatstat")
-#   dilation.owin(...)
-# }
+
+#' ---------------- dilation -----------------------------
 
 dilation.owin <- 
   function(w, r, ..., polygonal=NULL, tight=TRUE) {
@@ -123,10 +125,12 @@ dilation.owin <-
   if(r == 0)
     return(w)
 
-  ismask <- is.mask(w)
   if(is.empty(w))
     return(w)
 
+  u <- unitname(w)
+  ismask <- is.mask(w)
+  
   # determine type of computation
   if(is.null(polygonal)) {
     polygonal <- !ismask
@@ -153,17 +157,22 @@ dilation.owin <-
     dil <- levelset(distant, r, "<=")
     return(dil)
   } else {
-    # compute polygonal region using polyclip package
+    #' compute polygonal region using polyclip package
     pnew <- polyclip::polyoffset(w$bdry, r, jointype="round")
-    # ensure correct polarity
-    totarea <- sum(unlist(lapply(pnew, Area.xypolygon)))
-    if(totarea < 0)
-      pnew <- lapply(pnew, reverse.xypolygon)
+    #' ensure correct polarity of polygon data
+    if(length(pnew) > 0) {
+      totarea <- sum(unlist(lapply(pnew, Area.xypolygon)))
+      if(totarea < 0)
+        pnew <- lapply(pnew, reverse.xypolygon)
+    }
     # determine bounding frame, convert to owin
-    if(tight) {
-      out <- owin(poly=pnew, check=FALSE)
+    if(tight && length(pnew) > 0) {
+      out <- owin(poly=pnew,
+                  unitname=u, check=FALSE)
     } else {
-      out <- owin(newbox$xrange, newbox$yrange, poly=pnew, check=FALSE)
+      out <- owin(newbox$xrange, newbox$yrange,
+                  poly=pnew,
+                  unitname=u, check=FALSE)
     }
     return(out)
   }

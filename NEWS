@@ -1,3 +1,22 @@
+        CHANGES IN spatstat.geom VERSION 3.7-2
+
+OVERVIEW
+
+    o Minor improvements and bug fixes
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o erosion.owin
+    When shrink.frame=TRUE, the frame of the resulting window
+    is always the erosion of the original frame by distance r,
+    as promised in the help file.
+    
+BUG FIXES
+
+    o erosion.owin, dilation.owin
+    The 'unitname' of w was sometimes ignored.
+    Fixed.
+    
         CHANGES IN spatstat.geom VERSION 3.7-1
 
 OVERVIEW
