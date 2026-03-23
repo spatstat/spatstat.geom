@@ -12,18 +12,35 @@ ALWAYS   <- TRUE
 cat(paste("--------- Executing",
           if(FULLTEST) "** ALL **" else "**RESTRICTED** subset of",
           "test code -----------\n"))
-#
-#    tests/nndist.R
-#
-# Check that nndist and nnwhich give
-# results consistent with direct calculation from pairdist
-#
-# Similarly for nncross and distfun
-#
-# Also test whether minnndist(X) == min(nndist(X))
-#
-#   $Revision: 1.40 $  $Date: 2026/03/16 07:30:20 $
-#
+#'
+#'    tests/nndist.R
+#'
+#' Checks of nearest-neighbour code
+#'
+#' Test that:
+#'
+#'     (A) nndist and nnwhich give results consistent with
+#'         direct calculation from pairdist
+#'
+#'     (B) nncross and distfun likewise
+#'
+#'     (C) all cases of nndist, nncross execute without error
+#'
+#'     (D) minnndist(X) == min(nndist(X))
+#'         maxnndist(X) == max(nndist(X))
+#'
+#'     (E) all cases of nnmap execute without error
+#' 
+#'     (F) has.close.ppp (C code) agrees with has.close.default
+#'
+#'     (G) all cases of bdist.pixels execute without error
+#'
+#'     (H) all cases of bdist.pixels execute without error
+#'
+#'     (I) distmap.ppp(squared=TRUE) == distmap.ppp()^2
+#'
+#'   $Revision: 1.41 $  $Date: 2026/03/23 01:41:02 $
+#'
 
 
 local({
@@ -437,5 +454,11 @@ local({
     Z <- as.im(h)
   }
 
+  if(ALWAYS) {
+    D <- distmap(cells)
+    D2 <- distmap(cells, squared=TRUE)
+    if(max(abs(D - sqrt(D2))) > .Machine$double.eps)
+      stop("distmap.ppp(squared=TRUE) is incorrect")
+  }
 })
 

@@ -4,7 +4,7 @@
        Exact distance transform of a point pattern
        (used to estimate the empty space function F)
        
-       $Revision: 1.22 $ $Date: 2026/03/11 08:24:55 $
+       $Revision: 1.25 $ $Date: 2026/03/23 01:51:56 $
 
   Copyright (C) Adrian Baddeley, Ege Rubak and Rolf Turner 2001-2026
   Licence: GNU Public Licence >= 2
@@ -48,7 +48,7 @@ exact_dt(
   double *x,
   double *y,		/* data points */
   int	npt,
-  int squared,          /* whether to return squared distances */
+  int squared,          /* whether to return squared distances (1 = TRUE) */
   /* outputs */
   Raster *dist,		/* exact distance (or squared distance) to nearest point */
   Raster *index		/* index i such that point x[i],y[i] is closest */
@@ -146,7 +146,7 @@ exact_dt(
 		COMPARE(j,k, j,  k+1)
 	}
 
-	if(squared != 0) {
+	if(squared == 0) { /* squared = FALSE */
 	  /* take square roots of the distances^2 */
 	  for(j = index->rmin; j <= index->rmax; j++)
 	    for(k = index->cmin; k <= index->cmax; k++) 

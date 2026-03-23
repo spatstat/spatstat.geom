@@ -1,3 +1,19 @@
+        CHANGES IN spatstat.geom VERSION 3.7-3
+
+OVERVIEW
+
+    o We thank Alexey Sergushichev for contributions.
+    
+    o Urgent bug fix.
+    
+BUG FIXES
+
+    o distmap.ppp
+    Argument 'squared' was inverted, so that the result
+    contained the squared distances if and only if squared=FALSE.
+    [Spotted by Alexey Sergushichev.]
+    Fixed.
+
         CHANGES IN spatstat.geom VERSION 3.7-2
 
 OVERVIEW
