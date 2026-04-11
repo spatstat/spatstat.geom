@@ -404,8 +404,10 @@
 \section{Main title, box and white space}{
   The left-right placement of the main title is controlled by the
   argument \code{adj.main} passed to \code{\link[spatstat.geom]{plot.owin}}.
-  A rectangular box surrounding the image domain is drawn by default; it can be
-  suppressed by setting \code{box=FALSE}.
+
+  A rectangular box surrounding the image domain 
+  can be added by setting \code{box=TRUE}.
+
   White space around the plot is controlled by
   \code{\link[graphics]{par}('mar')}.
 }

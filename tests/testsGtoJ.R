@@ -173,6 +173,7 @@ if(FULLTEST) {
 
 if(ALWAYS) {
   local({
+    #' distance transform of binary mask
     #' Test of case 'CONNECT=24' in src/distmapbin.[ch]
     #' Distance transform with 24-connected neighbours
     A <- distmap(heather$coarse, connect=24)

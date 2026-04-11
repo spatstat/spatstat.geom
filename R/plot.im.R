@@ -765,7 +765,7 @@ plot.im <- local({
                  addcontour=addcontour, contourargs=contourargs, 
                  workaround=workaround,
                  ## argument lists 
-                 list(axes=FALSE, xlab="",ylab=""),
+                 list(axes=FALSE, xlab="",ylab="", box=FALSE),
                  dotargs,
                  list(useRaster=useRaster),
                  colourinfo,
@@ -824,7 +824,8 @@ plot.im <- local({
       do.call.plotfun(plot.owin,
                       resolve.defaults(list(x=quote(bb.all),
                                             type="n",
-                                            main=pt$blank),
+                                            main=pt$blank,
+                                            box=FALSE),
                                        dotargs,
                                        list(claim.title.space=TRUE)),
                       extrargs=graphicsPars("owin"))
@@ -837,7 +838,8 @@ plot.im <- local({
                                             type="n",
                                             main=main,
                                             add=add,
-                                            show.all=TRUE),
+                                            show.all=TRUE,
+                                            box=FALSE),
                                        dotargs,
                                        list(claim.title.space=TRUE)),
                       extrargs=graphicsPars("owin"))
@@ -858,7 +860,7 @@ plot.im <- local({
                addcontour=addcontour, contourargs=contourargs,
                workaround=workaround,
                ## argument lists
-               list(axes=FALSE, xlab="", ylab=""),
+               list(axes=FALSE, xlab="", ylab="", box=FALSE),
                dotargs,
                list(useRaster=useRaster),
                colourinfo,

@@ -7,7 +7,7 @@
 #'    rsyst()           systematic random (randomly-displaced grid)
 #'    rjitter()         random perturbation
 #'
-#'   $Revision: 1.18 $  $Date: 2024/09/09 01:43:21 $
+#'   $Revision: 1.21 $  $Date: 2026/04/10 04:48:30 $
 
 
 simulationresult <- function(resultlist, nsim=length(resultlist), drop=TRUE, NameBase="Simulation") {
