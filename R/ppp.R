@@ -4,7 +4,7 @@
 #	A class 'ppp' to define point patterns
 #	observed in arbitrary windows in two dimensions.
 #
-#	$Revision: 4.124 $	$Date: 2025/09/04 04:58:05 $
+#	$Revision: 4.125 $	$Date: 2026/04/11 06:33:49 $
 #
 #	A point pattern contains the following entries:	
 #
@@ -166,6 +166,13 @@ is.ppp <- function(x) { inherits(x, "ppp") }
 #--------------------------------------------------------------------------
 #
 
+InternalPPP <- function(x, y, window, marks=NULL, ...,
+                        check=defaultcheck,
+                        checkdup=check,
+                        defaultcheck=TRUE) {
+  ppp(x=x, y=y, window=window, marks=marks, ..., check=check, checkdup=checkdup)
+}
+
 as.ppp <- function(X, ..., fatal=TRUE) {
   UseMethod("as.ppp")
 }
@@ -173,8 +180,8 @@ as.ppp <- function(X, ..., fatal=TRUE) {
 as.ppp.NAobject <- function(X, ...) { NAobject("ppp") }
 
 as.ppp.ppp <- function(X, ..., fatal=TRUE) {
-  check <- isTRUE(list(...)$check) # default FALSE
-  return(ppp(X$x, X$y, window=X$window, marks=X$marks, check=check))
+  InternalPPP(x=X$x, y=X$y, window=X$window, marks=X$marks, ...,
+              defaultcheck=FALSE)
 }
 
 as.ppp.quad <- function(X, ..., fatal=TRUE) {
@@ -204,7 +211,6 @@ as.ppp.data.frame <- function(X, W = NULL, ..., fatal=TRUE) {
 }
     
 as.ppp.matrix <- function(X, W = NULL, ..., fatal=TRUE) {
-  check <- !isFALSE(list(...)$check) # default TRUE
   if(!verifyclass(X, "matrix", fatal=fatal)
      || !is.numeric(X))
     return(complaining("X must be a numeric matrix",
@@ -219,10 +225,10 @@ as.ppp.matrix <- function(X, W = NULL, ..., fatal=TRUE) {
                        fatal, value=NULL))
     
   if(is.function(W))
-    Z <- cobble.xy(X[,1], X[,2], W, fatal, check=check)
+    Z <- cobble.xy(X[,1], X[,2], W, fatal, ...)
   else {
     win <- as.owin(W)
-    Z <- ppp(X[,1], X[,2], window = win, check=check)
+    Z <- ppp(X[,1], X[,2], window = win, ...)
   }
 
   # add marks from other columns

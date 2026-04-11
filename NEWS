@@ -1,8 +1,15 @@
-        CHANGES IN spatstat.geom VERSION 3.7-3.002
+        CHANGES IN spatstat.geom VERSION 3.7-3.003
 
 OVERVIEW
 
-    o Bug fix.
+    o Bug fixes and minor improvements
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o as.ppp.ppp
+    No longer checks for duplicated points (unless checkdup=TRUE is specified).
+    No longer checks for points lying outside the window (unless check=TRUE
+    is specified).
 
 BUG FIXES
 

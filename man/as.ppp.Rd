@@ -34,7 +34,7 @@
     when \code{X} does not contain a window.
     (Ignored if \code{X} contains window information.)
   }
-  \item{\dots}{Ignored.}
+  \item{\dots}{Optional arguments passed to \code{\link{ppp}}.}
   \item{fatal}{
     Logical value specifying what to do if the
     data cannot be converted.
@@ -125,6 +125,29 @@
 
   Methods for \code{as.ppp} exist for some other classes of data;
   they are listed by \code{methods(as.ppp)}.
+}
+\section{Checking Validity of Data}{
+  By default, the validity of the data will be checked,
+  unless \code{X} is already a point pattern object.
+  
+  The additional arguments \code{check} and \code{checkdup}
+  may be passed to \code{\link{ppp}} to specify whether the validity of the
+  input data should be checked:
+  \itemize{
+    \item If \code{checkdup=TRUE}, the algorithm
+    issues a warning if there are any duplicated points.
+    \item If
+    \code{check=TRUE}, then any points which lie outside the observation window
+    will be removed, as described in the help file for
+    \code{\link{ppp}}.
+  }
+
+  If \code{X} is already an object of class \code{"ppp"},
+  no checking is performed by default (the default settings
+  are \code{check=checkdup=FALSE}).
+
+  For all other kinds of object \code{X}, checking is performed
+  by default (default settings are \code{check=checkdup=TRUE}).
 }
 \seealso{
   \code{\link{ppp}}, \code{\link{ppp.object}}, \code{\link{as.owin}},
