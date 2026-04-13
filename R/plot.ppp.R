@@ -1,7 +1,7 @@
 #
 #	plot.ppp.R
 #
-#	$Revision: 1.131 $	$Date: 2025/12/31 02:59:15 $
+#	$Revision: 1.132 $	$Date: 2026/04/13 03:23:47 $
 #
 #
 #--------------------------------------------------------------------------
@@ -14,7 +14,7 @@ plot.ppp <- function(x, main, ..., clipwin=NULL,
                      symap=NULL, maxsize=NULL, meansize=NULL, markscale=NULL,
                      minsize=NULL, zerosize=NULL, zap=0.01, 
                      show.window=show.all, show.all=!add,
-                     show.rejects=show.all, do.plot=TRUE,
+                     show.rejects=TRUE, do.plot=TRUE,
                      multiplot=TRUE,
                      background=NULL, clip.background=FALSE,
                      scramble.cols=FALSE)

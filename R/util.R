@@ -1,7 +1,7 @@
 ##
 ##    util.R    miscellaneous utilities
 ##
-##    $Revision: 1.269 $    $Date: 2026/02/24 00:50:07 $
+##    $Revision: 1.270 $    $Date: 2026/04/13 03:18:32 $
 ##
 
 ## common invocation of matrixsample
@@ -447,7 +447,7 @@ prepareTitle <- function(main) {
   ## Count the number of lines in a main title
   ## Convert title to a form usable by plot.owin
   if(is.expression(main)) {
-    nlines <- 1
+    nlines <- length(main)
   } else {
     main <- paste(main)
     ## break at newline 

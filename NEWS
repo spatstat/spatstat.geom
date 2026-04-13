@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.7-3.004
+        CHANGES IN spatstat.geom VERSION 3.7-3.005
 
 OVERVIEW
 
@@ -22,6 +22,11 @@ BUG FIXES
 
     o plot.im
     Argument 'box=TRUE' was not handled correctly.
+    Fixed.
+    
+    o plot.im, plot.layered, plot.msr, plot.owin, plot.ppp, plot.psp:
+    Display of the main title was mangled if argument 'main' was
+    an 'expression' with length > 1.
     Fixed.
     
         CHANGES IN spatstat.geom VERSION 3.7-3
