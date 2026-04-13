@@ -1,15 +1,22 @@
-        CHANGES IN spatstat.geom VERSION 3.7-3.003
+        CHANGES IN spatstat.geom VERSION 3.7-3.004
 
 OVERVIEW
 
-    o Bug fixes and minor improvements
+    o Bug fixes and minor improvements.
 
 SIGNIFICANT USER-VISIBLE CHANGES
 
+    o as.layered.ppp
+    Now handles rejected points in attr(x, "rejects")
+    and retrieves them as a layer in the resulting layered object.
+    
     o as.ppp.ppp
     No longer checks for duplicated points (unless checkdup=TRUE is specified).
     No longer checks for points lying outside the window (unless check=TRUE
     is specified).
+
+    o plot.ppp
+    New argument 'show.rejects' determines whether rejected points are plotted.
 
 BUG FIXES
 

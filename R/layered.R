@@ -3,7 +3,7 @@
 #
 # Simple mechanism for layered plotting
 #
-#  $Revision: 1.43 $  $Date: 2026/01/21 06:26:39 $
+#  $Revision: 1.45 $  $Date: 2026/04/13 01:46:59 $
 #
 
 layered <- function(..., plotargs=NULL, LayerList=NULL) {
@@ -396,15 +396,20 @@ as.layered.default <- function(X) {
 }
 
 as.layered.ppp <- function(X) {
-  if(!is.marked(X)) return(layered(X))
-  if(is.multitype(X)) return(layered(LayerList=split(X)))
+  if(!is.null(R <- attr(X, "rejects"))) 
+    return(layered(rejects=R, X=as.ppp(X)))
+  if(!is.marked(X)) 
+    return(layered(X))
+  if(is.multitype(X))
+    return(layered(LayerList=split(X)))
   mX <- marks(X)
-  if(!is.null(d <- dim(mX)) && d[2L] > 1) {
+  if(NCOL(mX) > 1) {
     mx <- as.data.frame(marks(X))
     Y <- lapply(mx, setmarks, x=X)
     return(layered(LayerList=Y))
   }
   return(layered(X))
+  return(Y)
 }
 
 

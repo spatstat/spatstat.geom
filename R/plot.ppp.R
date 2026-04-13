@@ -13,7 +13,8 @@ plot.ppp <- function(x, main, ..., clipwin=NULL,
                      leg.args=list(),
                      symap=NULL, maxsize=NULL, meansize=NULL, markscale=NULL,
                      minsize=NULL, zerosize=NULL, zap=0.01, 
-                     show.window=show.all, show.all=!add, do.plot=TRUE,
+                     show.window=show.all, show.all=!add,
+                     show.rejects=show.all, do.plot=TRUE,
                      multiplot=TRUE,
                      background=NULL, clip.background=FALSE,
                      scramble.cols=FALSE)
@@ -146,7 +147,7 @@ plot.ppp <- function(x, main, ..., clipwin=NULL,
   ## Determine bounding box for main plot
   BB <- boundingbox(as.rectangle(x), backbox)
   sick <- inherits(x, "ppp") && !is.null(rejects <- attr(x, "rejects"))
-  if(sick) {
+  if(show.rejects && sick) {
     ## Get relevant parameters
     par.direct <- list(main=main, use.marks=use.marks,
                        maxsize=maxsize, meansize=meansize, markscale=markscale,
@@ -230,7 +231,7 @@ plot.ppp <- function(x, main, ..., clipwin=NULL,
     add <- TRUE
   }
   ## plot reject points if any
-  if(sick) {
+  if(show.rejects && sick) {
     if(show.window) {
       ## plot windows
       if(!is.null(rw)) {

@@ -15,7 +15,8 @@
                     symap=NULL, maxsize=NULL, meansize=NULL, markscale=NULL,
                     minsize=NULL, zerosize=NULL,
                     zap=0.01,
-                    show.window=show.all, show.all=!add, do.plot=TRUE,
+                    show.window=show.all, show.all=!add,
+                    show.rejects=TRUE, do.plot=TRUE,
                     multiplot=TRUE,
                     background=NULL, clip.background=FALSE,
                     scramble.cols=FALSE)
@@ -159,6 +160,10 @@
   \item{show.all}{
     Logical value indicating whether to plot everything
     including the main title and the observation window of \code{x}.
+  }
+  \item{show.rejects}{
+    Logical value indicating whether to plot 
+    \code{attr(x, "rejects")}. See the section on Rejected Points.
   }
   \item{do.plot}{
     Logical value determining whether to actually perform the plotting.
@@ -424,6 +429,17 @@
   is as large as possible,
   set \code{par(xpd=NA)} immediately before calling \code{plot.ppp}.
 }
+\section{Rejected Points}{
+  A point pattern object \code{x} 
+  may have an attribute \code{attr(x, "rejects")}.
+  This contains points that were rejected when \code{x} was created,
+  because they lie outside the window of \code{x}.
+  See \code{\link{ppp}} for more explanation.
+
+  When \code{plot(x)} is executed, the rejected points will also be
+  plotted if \code{show.rejects=TRUE} (the default).
+}
+
 \seealso{
   \code{\link{ppp.object}},
   \code{\link{default.symbolmap.ppp}}.

@@ -161,14 +161,22 @@
   The rejected points are still accessible: they are stored
   as an attribute of the point pattern called \code{"rejects"}
   (which is an object of class \code{"ppp"} containing the rejected points
-  in a large window). However, rejected points in a point pattern
+  in a larger window). 
+  However, rejected points in a point pattern
   will be ignored by all other functions except
   \code{\link{plot.ppp}}.
 
-  To remove the rejected points altogether,
-  use \code{\link{as.ppp}}. To include the rejected points,
-  you will need to find a larger window that contains them,
-  and use this larger window in a call to \code{ppp}.
+  To delete the rejected points altogether from the point pattern \code{X},
+  use \code{\link{as.ppp}(X)} or \code{attr(X, "rejects") <- NULL}.
+  To extract the rejected points, 
+  use \code{R <- attr(X, "rejects")}.
+  Use \code{\link{as.layered}(X)} to extract the rejected and accepted
+  points as separate layers in a layered object.
+
+  To automatically merge the rejected points into the dataset using a larger window,
+  use \code{do.call(superimpose, unname(as.layered(X)))}. The resulting
+  window may be unnecessarily large, since it contains the convex hull of the
+  rejected points.
 }
 \section{Warnings}{
   The code will check for problems with the data,
