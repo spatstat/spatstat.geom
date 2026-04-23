@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.7-3.005
+        CHANGES IN spatstat.geom VERSION 3.7-3.006
 
 OVERVIEW
 
@@ -17,6 +17,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o plot.ppp
     New argument 'show.rejects' determines whether rejected points are plotted.
+
+    o project2set
+    Now supports projection to a polygonal window.
+    New argument 'polygonal'.
 
 BUG FIXES
 

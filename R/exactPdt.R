@@ -2,7 +2,7 @@
 #	exactPdt.R
 #	R function exactPdt() for exact distance transform of binary mask
 #
-#	$Revision: 4.23 $	$Date: 2022/05/21 09:52:11 $
+#	$Revision: 4.25 $	$Date: 2026/04/23 03:33:34 $
 #
 
 "exactPdt"<-
@@ -66,17 +66,40 @@
   return(list(d=dist,row=rows,col=cols,b=bdist, w=w))
 }
 
-project2set <- function(X, W, ...) {
+project2set <- function(X, W, ..., polygonal=is.polygonal(W)) {
   stopifnot(is.ppp(X))
-  W <- as.mask(W, ...)
-  eW <- exactPdt(W)
-  ## grid location of X
-  XX <- nearest.raster.point(X$x, X$y, W)
-  ijX <- cbind(XX$row, XX$col)
-  ## look up values of 'eW' at this location 
-  iY <- eW$row[ijX]
-  jY <- eW$col[ijX]
-  ## convert to spatial coordinates
-  Y <- ppp(W$xcol[jY], W$yrow[iY], window=W)
+  W <- as.owin(W)
+  if(polygonal) {
+    W <- as.polygonal(W)
+    Y <- X
+    out <- !inside.owin(X, , w=W)
+    if(any(out)) {
+      ## project points lying outside polygon to nearest edge of polygon
+      Xout <- X[out]
+      E <- edges(W)
+      Xproj <- project2segment(Xout, E)$Xproj
+      ## calculate displacement vectors due to projection
+      dx <- Xproj$x - Xout$x
+      dy <- Xproj$y - Xout$y
+      ang <- atan2(dy,dx)
+      co <- cos(ang)
+      si <- sin(ang)
+      ## extend these vectors slightly and displace the points again
+      delta <- min(sidelengths(Frame(W)))/128
+      Y$x[out] <- Xout$x + dx + delta * co
+      Y$y[out] <- Xout$y + dy + delta * si
+    }
+  } else {
+    W <- as.mask(W, ...)
+    eW <- exactPdt(W)
+    ## grid location of X
+    XX <- nearest.raster.point(X$x, X$y, W)
+    ijX <- cbind(XX$row, XX$col)
+    ## look up values of 'eW' at this location 
+    iY <- eW$row[ijX]
+    jY <- eW$col[ijX]
+    ## convert to spatial coordinates
+    Y <- ppp(W$xcol[jY], W$yrow[iY], window=W)
+  }
   return(Y)
 }
