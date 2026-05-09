@@ -120,7 +120,9 @@ For a full list of functions, see the help file for `spatstat.geom-package`.
 
 #### Elementary summary statistics
 
-Summary statistics are mostly provided in the `spatstat.explore` package.
+Summary statistics are mostly provided in the 
+[`spatstat.explore`](https://github.com/spatstat/spatstat.explore)
+package.
 However, `spatstat.geom` provides functions for calculating
 
 - average intensity of a point pattern (`intensity`)
@@ -129,7 +131,9 @@ However, `spatstat.geom` provides functions for calculating
 #### Elementary generation of random patterns
 
 Functions for generating random spatial patterns
-are mostly provided in the `spatstat.random` package.
+are mostly provided in the
+[`spatstat.random`](https://github.com/spatstat/spatstat.random)
+package.
 However, `spatstat.geom` provides basic functions for generating
 
 - random points in a rectangle (`runifrect`)
