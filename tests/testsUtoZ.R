@@ -244,12 +244,12 @@ local({
 
 reset.spatstat.options()
 ##
-## tests/xysegment.R
-##                      [SEE ALSO tests/segments.R]
+## tests/xysegment.R 
+##                      [SEE ALSO tests/segments.R -> spatstat.utils]
 ##
 ##    Test weird problems and boundary cases for line segment code
 ##
-##    $Version$ $Date: 2022/10/23 01:21:09 $ 
+##    $Revision: 1.11 $ $Date: 2026/05/07 06:07:09 $ 
 ##
 
 local({
@@ -259,6 +259,24 @@ local({
     BB <- angles.psp(B)
     A <- runifrect(3)
     AB <- project2segment(A,B)
+
+    ## agreement between R and C algorithms in ppllengine
+    ## R code is in nearestsegment.R
+    ## C code is in spatstat.utils/src/distseg.[ch]
+    U <- ppp(c(3.6, 2.6, 3.0, 3.5, 2.1, 2.4, 3.0, 3.1, 2.2, 3.9),
+             c(0.7, 1.3, 1.1, 1.9, 3.2, 2.1, 1.7, 2.5, 2.4, 2.7),
+             window=grow.rectangle(Frame(letterR), 0.1))
+    E <- edges(letterR)
+    rC <- ppllengine(U, E, action="project", method="C")
+    rI <- ppllengine(U, E, action="project", method="interpreted")
+    if(!all(rC$mapXY == rI$mapxy))
+      stop("Discrepancy between C and interpreted code in ppllengine()$mapXY")
+    if(max(nncross(rC$Xproj, rI$Xproj, what="d")) > 0.01)
+      stop("Discrepancy between C and interpreted code in ppllengine()$Xproj")
+    if(max(abs(rC$d - rI$d)) > 0.01)
+      stop("Discrepancy between C and interpreted code in ppllengine()$d")
+    if(max(abs(rC$tp - rI$tp)) > 0.01)
+      stop("Discrepancy between C and interpreted code in ppllengine()$d")
 
     ## mark inheritance
     X <- psp(runif(10), runif(10), runif(10), runif(10), window=owin())
