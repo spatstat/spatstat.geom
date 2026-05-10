@@ -1,7 +1,7 @@
 #
 #	distbdry.S		Distance to boundary
 #
-#	$Revision: 4.49 $	$Date: 2022/03/31 01:13:38 $
+#	$Revision: 4.51 $	$Date: 2026/05/10 04:15:56 $
 #
 # -------- functions ----------------------------------------
 #
@@ -57,11 +57,13 @@ function(X)
         style <- match.arg(style)
         masque <- as.mask(w, ...)
         
+        b <- matrix(0, nrow=masque$dim[1L], ncol=masque$dim[2L])
+
         switch(w$type,
                mask = {
                  neg <- complement.owin(masque)
                  m <- exactPdt(neg)
-                 b <- pmin.int(m$d,m$b)
+                 b[] <- pmin.int(m$d,m$b)
                },
                rectangle = {
                  rxy <- rasterxy.mask(masque)
@@ -71,19 +73,16 @@ function(X)
                  xmax <- w$xrange[2L]
                  ymin <- w$yrange[1L]
                  ymax <- w$yrange[2L]
-                 b <- pmin.int(x - xmin, xmax - x, y - ymin, ymax - y)
+                 b[] <- pmin.int(x - xmin, xmax - x, y - ymin, ymax - y)
                },
                polygonal = {
                  # set up pixel raster
                  method <- match.arg(method)
-                 rxy <- rasterxy.mask(masque)
+                 rxy <- rasterxy.mask(masque, drop=TRUE)
                  x <- rxy$x
                  y <- rxy$y
-                 b <- numeric(length(x))
-                 # test each pixel in/out, analytically
-                 inside <- inside.owin(x, y, w)
                  # compute distances for these pixels
-                 xy <- cbind(x[inside], y[inside])
+                 xy <- cbind(x, y)
                  switch(method,
                         C = {
                           #' C code
@@ -92,7 +91,7 @@ function(X)
                         },
                         interpreted = {
                           #' ancient R code
-                          dxy <- rep.int(Inf, sum(inside))
+                          dxy <- rep.int(Inf, length(x))
                           bdry <- w$bdry
                           for(i in seq_along(bdry)) {
                             polly <- bdry[[i]]
@@ -105,13 +104,10 @@ function(X)
                             }
                           }
                         })
-                 b[inside] <- dxy
+                 b[masque$m] <- dxy
                },
                stop("unrecognised window type", w$type)
                )
-
-        # reshape it
-        b <- matrix(b, nrow=masque$dim[1L], ncol=masque$dim[2L])
 
         switch(style,
                coords={
