@@ -234,7 +234,10 @@
   use \code{ribargs=list(cex.axis=2)}.
   To control the number of tick-marks, use \code{ribargs=list(nint=N)}
   where \code{N} is the desired number of intervals (so there will
-  be \code{N+1} tickmarks, subject to the vagaries of \R internal code). 
+  be \code{N+1} tickmarks, subject to the vagaries of \R internal
+  code). To draw a box around the colour ribbon but not around the main
+  image, use \code{ribargs=list(box=TRUE)}.
+  
 
   The argument \code{riblab} contains text that should be displayed 
   in the margin next to the ribbon. Alternatively \code{riblab} may be a
@@ -528,8 +531,8 @@
    plot(Z, col=beachcolours, colargs=list(sealevel=0.5))
    # tweaking the plot
    plot(Z, main="La vie en bleu", col.main="blue", cex.main=1.5,
-        box=FALSE,
-        ribargs=list(col.axis="blue", col.ticks="blue", cex.axis=0.75),
+        box=TRUE,
+        ribargs=list(col.axis="blue", col.ticks="blue", cex.axis=0.75, box=FALSE),
         riblab=list(text="couleur", side=1, col="blue", offset=1, font=2))
    # add axes and axis labels
    plot(Z, axes=TRUE, ann=TRUE, xlab="Easting", ylab="Northing")
