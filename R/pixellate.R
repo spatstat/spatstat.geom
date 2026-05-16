@@ -1,7 +1,7 @@
 #
 #           pixellate.R
 #
-#           $Revision: 1.31 $    $Date: 2026/05/16 04:01:09 $
+#           $Revision: 1.32 $    $Date: 2026/05/16 04:39:36 $
 #
 #     pixellate            convert an object to a pixel image
 #
@@ -27,9 +27,9 @@ pixellate.ppp <- function(x, W=NULL, ..., weights=NULL, padzero=FALSE,
   preserve <- preserve && !isrect
   iscount <- is.null(weights) && !fractional && !preserve
   
-  W <- do.call.matched(owin2mask,
-                       resolve.defaults(list(...),
-                                        list(w=quote(W))))
+  W <- do.call(owin2mask,
+               resolve.defaults(list(...),
+                                list(w=quote(W))))
 
   nx <- npoints(x)
   
@@ -185,9 +185,9 @@ pixellate.owin <- function(x, W=NULL, ..., DivideByPixelArea=FALSE) {
   else if(!is.subset.owin(R, as.rectangle(W)))
     stop("W does not cover the domain of x")
   
-  W <- do.call.matched(owin2mask,
-                       resolve.defaults(list(...),
-                                        list(w=quote(W))))
+  W <- do.call(owin2mask,
+               resolve.defaults(list(...),
+                                list(w=quote(W))))
   ## compute
   Zmat <- polytileareaEngine(P, W$xrange, W$yrange, nx=W$dim[2L], ny=W$dim[1L],
                              DivideByPixelArea)

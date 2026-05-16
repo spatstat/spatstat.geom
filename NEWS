@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.7-3.009
+        CHANGES IN spatstat.geom VERSION 3.7-3.010
 
 OVERVIEW
 
@@ -25,7 +25,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o pixellate.ppp, pixellate.owin, pixellate.psp
     These methods now accept the argument 'op' which is passed to 'owin2mask'.
     This makes it possible to ensure that all pixels which intersect the
-    window are included in the resulting pixel image.
+    window are included in the resulting pixel image, by setting op="cover".
     
     o project2segment
     Accelerated by 20 percent.
