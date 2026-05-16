@@ -4,7 +4,7 @@
 #'    Mask approximations which are guaranteed to be entirely inside
 #'    or entirely covering the original window.
 #'
-#'    $Revision: 1.11 $  $Date: 2026/05/16 06:59:17 $
+#'    $Revision: 1.12 $  $Date: 2026/05/16 10:45:08 $
 #'
 
 owin2mask <- function(w,
@@ -60,10 +60,10 @@ owin2mask <- function(w,
   R <- switch(op,
               sample    = M,
               notsample = complement.owin(M),
-              inside   = setminus.owin(M, B),
-              outside  = setminus.owin(complement.owin(M), B),
-              cover    = union.owin(M, B),
-              uncover  = union.owin(complement.owin(M), B),
+              inside   = setminus.owin(M, B, rescue=FALSE),
+              outside  = setminus.owin(complement.owin(M), B, rescue=FALSE),
+              cover    = union.owin(M, B, rescue=FALSE),
+              uncover  = union.owin(complement.owin(M), B, rescue=FALSE),
               boundary = B,
               majority = levelset(U, 0.5, ">="), 
               minority = levelset(U, 0.5, "<"))

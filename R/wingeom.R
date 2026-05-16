@@ -1,7 +1,7 @@
 #
 #	wingeom.R	Various geometrical computations in windows
 #
-#	$Revision: 4.153 $	$Date: 2026/05/16 06:21:16 $
+#	$Revision: 4.154 $	$Date: 2026/05/16 10:44:00 $
 #
 
 volume.owin <- function(x) { area.owin(x) }
@@ -258,7 +258,7 @@ function(x, i, ...) {
 #
 #
 
-intersect.owin <- function(..., fatal=FALSE, p) {
+intersect.owin <- function(..., fatal=FALSE, rescue=TRUE, p) {
   argh <- list(...)
   ## p is a list of arguments to polyclip::polyclip
   if(missing(p) || is.null(p)) p <- list()
@@ -316,8 +316,10 @@ intersect.owin <- function(..., fatal=FALSE, p) {
   }
 
   ## There are now only two windows, which are not empty.
-  if(identical(A, B))
+  if(identical(A, B)) {
+    if(rescue) A <- rescue.rectangle(A)
     return(A)
+  }
 
   # check units
   if(!compatible(unitname(A), unitname(B)))
@@ -361,7 +363,7 @@ intersect.owin <- function(..., fatal=FALSE, p) {
     if(totarea < 0)
       ab <- lapply(ab, reverse.xypolygon)
     AB <- owin(poly=ab, check=FALSE, unitname=uname)
-    AB <- rescue.rectangle(AB)
+    if(rescue) AB <- rescue.rectangle(AB)
     return(AB)
   }
 
@@ -395,11 +397,15 @@ intersect.owin <- function(..., fatal=FALSE, p) {
       A <- do.call(AsMaskInternal, append(list(A), rasterinfo))
       AB <- restrict.mask(A, B, op=op)
       if(fatal && is.empty(AB)) stop("Intersection is empty", call.=FALSE)
+      if(rescue)
+        AB <- rescue.rectangle(AB)
       return(AB)
     } else {
       B <- do.call(AsMaskInternal, append(list(B), rasterinfo))
       BA <- restrict.mask(B,A, op=op)
       if(fatal && is.empty(BA)) stop("Intersection is empty", call.=FALSE)
+      if(rescue)
+        BA <- rescue.rectangle(BA)
       return(BA)
     }
   } 
@@ -407,20 +413,26 @@ intersect.owin <- function(..., fatal=FALSE, p) {
   # No raster information given
   
   # One mask and one rectangle?
-  if(Arect && Bmask)
-      return(B)
-  if(Amask && Brect)
-      return(A)
+  if(Arect && Bmask) {
+    if(rescue) B <- rescue.rectangle(B)
+    return(B)
+  }
+  if(Amask && Brect) {
+    if(rescue) A <- rescue.rectangle(A)
+    return(A)
+  }
 
   # One mask and one polygon?
   if(Amask && !Bmask) {
     AB <- restrict.mask(A, B)
     if(fatal && is.empty(AB)) stop("Intersection is empty", call.=FALSE)
+    if(rescue) AB <- rescue.rectangle(AB)
     return(AB)
   }
   if(!Amask && Bmask) {
     BA <- restrict.mask(B, A)
     if(fatal && is.empty(BA)) stop("Intersection is empty", call.=FALSE)
+    if(rescue) BA <- rescue.rectangle(BA)
     return(BA)
   }
 
@@ -429,6 +441,7 @@ intersect.owin <- function(..., fatal=FALSE, p) {
     # choose the finer one
     AB <- if(A$xstep <= B$xstep) restrict.mask(A, B) else restrict.mask(B, A)
     if(fatal && is.empty(AB)) stop("Intersection is empty", call.=FALSE)
+    if(rescue) AB <- rescue.rectangle(AB)
     return(AB)
   }
 
@@ -449,7 +462,7 @@ intersect.owin <- function(..., fatal=FALSE, p) {
 }
 
 
-union.owin <- function(..., p) {
+union.owin <- function(..., rescue=TRUE, p) {
   argh <- list(...)
   ## weed out NULL arguments
   argh <- argh[!sapply(argh, is.null)]
@@ -511,13 +524,18 @@ union.owin <- function(..., p) {
       ## undo rescaling
       A <- reversePolyclipArgs(A, p=p)
     }
+    if(rescue)
+      A <- rescue.rectangle(A)
     return(A)
   }
 
   ## Exactly two windows
   B <- argh[[2L]]
-  if(identical(A, B))
+  if(identical(A, B)) {
+    if(rescue)
+      A <- rescue.rectangle(A)
     return(A)
+  }
 
   ## check units
   if(!compatible(unitname(A), unitname(B)))
@@ -554,7 +572,8 @@ union.owin <- function(..., p) {
     if(totarea < 0)
       ab <- lapply(ab, reverse.xypolygon)
     AB <- owin(poly=ab, check=FALSE, unitname=uname)
-    AB <- rescue.rectangle(AB)
+    if(rescue)
+      AB <- rescue.rectangle(AB)
     return(AB)
   }
 
@@ -581,7 +600,7 @@ union.owin <- function(..., p) {
   y <- rxy$y
   ok <- inside.owin(x, y, A) | inside.owin(x, y, B)
 
-  if(all(ok)) {
+  if(rescue && all(ok)) {
     ## result is a rectangle
     C <- as.rectangle(C)
   } else {
@@ -591,7 +610,7 @@ union.owin <- function(..., p) {
   return(C)
 }
 
-setminus.owin <- function(A, B, ..., p) {
+setminus.owin <- function(A, B, ..., rescue=TRUE, p) {
   if(is.null(B)) return(A)
   verifyclass(B, "owin")
   if(is.null(A)) return(emptywindow(Frame(B)))
@@ -622,8 +641,10 @@ setminus.owin <- function(A, B, ..., p) {
     if(is.subset.owin(A, B))
       return(emptywindow(B))
     C <- intersect.owin(A, B, fatal=FALSE)
-    if(is.null(C) || is.empty(C)) return(A)
-    return(complement.owin(C, A))
+    result <- if(is.null(C) || is.empty(C)) A else complement.owin(C, A)
+    if(rescue)
+      result <- rescue.rectangle(result)
+    return(result)
   }
     
   ## Polygonal case
@@ -643,7 +664,7 @@ setminus.owin <- function(A, B, ..., p) {
     if(totarea < 0)
       ab <- lapply(ab, reverse.xypolygon)
     AB <- owin(poly=ab, check=FALSE, unitname=uname)
-    AB <- rescue.rectangle(AB)
+    if(rescue) AB <- rescue.rectangle(AB)
     return(AB)
   }
 
@@ -670,9 +691,9 @@ setminus.owin <- function(A, B, ..., p) {
   y <- rxy$y
   ok <- inside.owin(x, y, A) & !inside.owin(x, y, B)
 
-  if(!all(ok))
-    AB$m[] <- ok
-  else
+  AB$m[] <- ok
+
+  if(rescue)
     AB <- rescue.rectangle(AB)
 
   return(AB)

@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.7-3.012
+        CHANGES IN spatstat.geom VERSION 3.7-3.013
 
 OVERVIEW
 
@@ -51,6 +51,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o owin2mask
     Changed formal arguments. First argument is now called 'w'.
     All arguments must be given by name except for the first argument.
+
+    o union.owin, intersect.owin, setminus.owin
+    New argument 'rescue'.
 
 BUG FIXES
 
