@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.217 $	$Date: 2026/03/13 08:21:12 $
+#	$Revision: 4.219 $	$Date: 2026/05/16 09:03:54 $
 #
 #
 #	A window may be either
@@ -564,15 +564,24 @@ as.rectangle <- function(w, ...) {
 ##----------------------------------------------------------------------------
 ##
 
-AsMaskInternal <- function(w, ..., eps=NULL, dimyx=NULL, xy=NULL,
+.Spatstat.RasterInfoNames <- c("eps", "dimyx", "xy", "rule.eps", "op")
+
+as.mask <- function(w, ...,
+                    eps=NULL, dimyx=NULL, xy=NULL,
+                    rule.eps=c("adjust.eps", "grow.frame", "shrink.frame")) {
+  if(missing(w)) w <- NULL
+  rule.eps <- match.arg(rule.eps)
+  if("op" %in% names(list(...))) {
+    owin2mask(w=w, ..., eps=eps, dimyx=dimyx, xy=xy, rule.eps=rule.eps)
+  } else {
+    AsMaskInternal(w=w,   eps=eps, dimyx=dimyx, xy=xy, rule.eps=rule.eps)
+  }
+}
+    
+AsMaskInternal <- function(w=NULL, ..., eps=NULL, dimyx=NULL, xy=NULL,
                            rule.eps=c("adjust.eps", "grow.frame",
                                       "shrink.frame")) {
-  rule.eps <- match.arg(rule.eps)
-  as.mask(w, eps=eps, dimyx=dimyx, xy=xy, rule.eps=rule.eps)
-}
-
-as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL,
-                    rule.eps=c("adjust.eps", "grow.frame", "shrink.frame")) {
+  ## The original 'as.mask' still used internally
   ## 	  eps:		   grid mesh (pixel) size
   ##	dimyx:		   dimensions of pixel raster
   ##       xy:             coordinates of pixel raster
@@ -580,7 +589,7 @@ as.mask <- function(w, eps=NULL, dimyx=NULL, xy=NULL,
   ###########################
   ##  First determine window
   ###########################
-  w.absent <- missing(w) || is.null(w)
+  w.absent <- is.null(w)
   if(w.absent) {
     ## w is not given
     ## Ensure there is some window information

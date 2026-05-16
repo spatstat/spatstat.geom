@@ -1,14 +1,30 @@
-        CHANGES IN spatstat.geom VERSION 3.7-3.010
+        CHANGES IN spatstat.geom VERSION 3.7-3.011
 
 OVERVIEW
 
+    o Improved handling of boundary pixels when discretising a polygonal window.
+
     o Improved handling of 'rejected' points.
-    
-    o Improved handling of boundary pixels in pixellate()
     
     o Bug fixes and minor improvements.
 
 SIGNIFICANT USER-VISIBLE CHANGES
+
+    o pixellate.ppp, pixellate.owin, pixellate.psp
+    These methods now accept the argument 'op' which is passed to 'owin2mask'.
+    This makes it possible to ensure that boundary pixels which partially
+    intersect the window are included in the resulting pixel image,
+    by setting op="cover".
+    
+    o as.im
+    Methods for as.im now accept argument 'op' which is passed to 'owin2mask'.
+    This makes it possible to ensure that boundary pixels which partially
+    intersect the window are included in the resulting pixel image,
+    by setting op="cover".
+
+    o "[.im"
+    New argument 'op' controls the handling of boundary pixels
+    in computations like x[W] where W is a polygonal window.
 
     o as.layered.ppp
     Now handles rejected points in attr(x, "rejects")
@@ -22,11 +38,6 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.ppp
     New argument 'show.rejects' determines whether rejected points are plotted.
 
-    o pixellate.ppp, pixellate.owin, pixellate.psp
-    These methods now accept the argument 'op' which is passed to 'owin2mask'.
-    This makes it possible to ensure that all pixels which intersect the
-    window are included in the resulting pixel image, by setting op="cover".
-    
     o project2segment
     Accelerated by 20 percent.
     

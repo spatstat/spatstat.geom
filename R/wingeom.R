@@ -1,7 +1,7 @@
 #
 #	wingeom.R	Various geometrical computations in windows
 #
-#	$Revision: 4.152 $	$Date: 2026/02/12 03:38:42 $
+#	$Revision: 4.153 $	$Date: 2026/05/16 06:21:16 $
 #
 
 volume.owin <- function(x) { area.owin(x) }
@@ -266,8 +266,8 @@ intersect.owin <- function(..., fatal=FALSE, p) {
   argh <- expandSpecialLists(argh, "solist")
   rasterinfo <- list()
   if(length(argh) > 0) {
-    # explicit arguments controlling raster info
-    israster <- names(argh) %in% names(formals(as.mask))
+    #' recognise explicit arguments controlling raster info
+    israster <- names(argh) %in% .Spatstat.RasterInfoNames
     if(any(israster)) {
       rasterinfo <- argh[israster]
       ## remaining arguments
@@ -386,22 +386,25 @@ intersect.owin <- function(..., fatal=FALSE, p) {
     if(fatal) stop("Intersection is empty", call.=FALSE)
     return(B)
   }
-  
+
   # Did the user specify the pixel raster?
   if(length(rasterinfo) > 0) {
-    # convert to masks with specified parameters, and intersect
+    #' convert to masks with specified parameters, and intersect
+    op <- rasterinfo$op
     if(Amask) {
-      A <- do.call(as.mask, append(list(A), rasterinfo))
-      AB <- restrict.mask(A, B)
+      A <- do.call(AsMaskInternal, append(list(A), rasterinfo))
+      AB <- restrict.mask(A, B, op=op)
       if(fatal && is.empty(AB)) stop("Intersection is empty", call.=FALSE)
       return(AB)
     } else {
-      B <- do.call(as.mask, append(list(B), rasterinfo))
-      BA <- restrict.mask(B,A)
+      B <- do.call(AsMaskInternal, append(list(B), rasterinfo))
+      BA <- restrict.mask(B,A, op=op)
       if(fatal && is.empty(BA)) stop("Intersection is empty", call.=FALSE)
       return(BA)
     }
   } 
+
+  # No raster information given
   
   # One mask and one rectangle?
   if(Arect && Bmask)
@@ -457,7 +460,7 @@ union.owin <- function(..., p) {
   rasterinfo <- list()
   if(length(argh) > 0) {
     ## arguments controlling raster info
-    israster <- names(argh) %in% names(formals(as.mask))
+    israster <- names(argh) %in% .Spatstat.RasterInfoNames
     if(any(israster)) {
       rasterinfo <- argh[israster]
       ## remaining arguments
@@ -571,7 +574,7 @@ union.owin <- function(..., p) {
   }
 
   ## Convert C to mask
-  C <- do.call(as.mask, append(list(w=C), rasterinfo))
+  C <- do.call(owin2mask, append(list(w=C), rasterinfo))
 
   rxy <- rasterxy.mask(C)
   x <- rxy$x
@@ -660,7 +663,7 @@ setminus.owin <- function(A, B, ..., p) {
       list()
 
   ## Convert A to mask
-  AB <- do.call(as.mask, append(list(w=A), rasterinfo))
+  AB <- do.call(owin2mask, append(list(w=A), rasterinfo))
 
   rxy <- rasterxy.mask(AB)
   x <- rxy$x
@@ -736,13 +739,15 @@ trim.mask <- function(M, R, tolerant=TRUE) {
     return(Z)
 }
 
-restrict.mask <- function(M, W) {
+restrict.mask <- function(M, W, ..., op=NULL) {
   ## M is a mask, W is any window
   stopifnot(is.mask(M))
-  stopifnot(inherits(W, "owin"))
+  stopifnot(is.owin(W))
+  M <- trim.mask(M, Frame(W))
+  if(!is.null(op)) 
+    W <- owin2mask(W, op=op)
   if(is.rectangle(W))
     return(trim.mask(M, W))
-  M <- trim.mask(M, as.rectangle(W))
   ## Determine which pixels of M are inside W
   rxy <- rasterxy.mask(M, drop=TRUE)
   x <- rxy$x

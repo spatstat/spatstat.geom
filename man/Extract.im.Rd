@@ -6,7 +6,8 @@
 }
 \usage{
   \method{[}{im}(x, i, j, \dots, drop=TRUE, tight=FALSE,
-                                 raster=NULL, rescue=is.owin(i))
+                                 raster=NULL, rescue=is.owin(i),
+                                 op=NULL)
 }
 \arguments{
   \item{x}{
@@ -49,6 +50,11 @@
   \item{rescue}{
    Logical value indicating whether rectangular blocks of data
    should always be returned as pixel images.
+  }
+  \item{op}{
+    Argument passed to \code{\link[spatstat.geom]{owin2mask}}
+    when \code{i} is a polygonal window. This determines which pixels
+    are deemed to lie inside the window.
   }
 }
 \value{

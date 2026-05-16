@@ -21,11 +21,13 @@
   \method{as.im}{im}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
         rule.eps=c("adjust.eps", "grow.frame", "shrink.frame"),
+        op=NULL,
         na.replace=NULL)
 
   \method{as.im}{owin}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
         rule.eps=c("adjust.eps", "grow.frame", "shrink.frame"),
+        op=NULL,
         na.replace=NULL, value=1)
 
   \method{as.im}{matrix}(X, W=NULL, \dots)
@@ -39,6 +41,7 @@
   \method{as.im}{function}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
         rule.eps=c("adjust.eps", "grow.frame", "shrink.frame"),
+        op=NULL,
         na.replace=NULL,
         stringsAsFactors=NULL,
         strict=FALSE, drop=TRUE)
@@ -50,11 +53,13 @@
   \method{as.im}{distfun}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
         rule.eps=c("adjust.eps", "grow.frame", "shrink.frame"),
+        op=NULL,
         na.replace=NULL, approx=TRUE)
 
   \method{as.im}{nnfun}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
         rule.eps=c("adjust.eps", "grow.frame", "shrink.frame"),
+        op=NULL,
         na.replace=NULL, approx=TRUE)
 
   \method{as.im}{data.frame}(X, \dots, step, fatal=TRUE, drop=TRUE)
@@ -62,6 +67,7 @@
   \method{as.im}{default}(X, W=NULL, \dots,
         eps=NULL, dimyx=NULL, xy=NULL,
         rule.eps=c("adjust.eps", "grow.frame", "shrink.frame"),
+        op=NULL,
         na.replace=NULL)
 
 
@@ -77,6 +83,11 @@
     Optional parameters passed to \code{\link[spatstat.geom]{as.mask}}
     which determine the pixel array geometry.
     See \code{\link[spatstat.geom]{as.mask}}.
+  }
+  \item{op}{
+    Optional parameter passed to \code{\link[spatstat.geom]{owin2mask}}
+    specifying how boundary pixels should be treated
+    when converting a polygonal window to a pixel mask.
   }
   \item{rule.tile}{
     String (partially matched) specifying how to determine,
@@ -295,6 +306,18 @@
 
   If \code{X} is a \code{function(x,y)} which returns a matrix of
   values, then \code{as.im(X, W)} will be a list of pixel images.
+}
+\section{Boundary pixels}{
+  When \code{W} is a rectangle or a polygonal window,
+  the default behaviour is to represent the window as the set of pixels
+  whose \emph{centres} fall inside the polygon. A pixel which contains
+  part of the interior of the polygon, but whose centre falls outside
+  the polygon, is excluded by default, for the sake of efficiency.
+
+  To ensure that all pixels which intersect the interior of the
+  polygon are included in the pixel image, use the argument
+  \code{op="cover"} which will be passed to
+  \code{\link[spatstat.geom]{owin2mask}}.
 }
 \section{Character-valued images}{
   By default, if the pixel value data are character strings, they will be

@@ -45,8 +45,8 @@ nnmap <- function(X, k=1, what = c("dist", "which"), ...,
   isrect <- is.rectangle(rescue.rectangle(W))
 
   # set up pixel array
-  M <- do.call.matched(as.mask,
-                       resolve.defaults(list(...), list(w=quote(W))))
+  M <- do.call(owin2mask,
+               resolve.defaults(list(...), list(w=quote(W))))
   Mdim <- M$dim
   nxcol <- Mdim[2]
   nyrow <- Mdim[1]

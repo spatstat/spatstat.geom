@@ -87,6 +87,7 @@ domain.distfun <- Window.distfun <- function(X, ...) { as.owin(X) }
 as.im.distfun <- function(X, W=NULL, ...,
                           eps=NULL, dimyx=NULL, xy=NULL,
                           rule.eps=c("adjust.eps", "grow.frame", "shrink.frame"),
+                          op=NULL,
                           na.replace=NULL, approx=TRUE) {
   k <- attr(X, "k")
   rule.eps <- match.arg(rule.eps)
@@ -94,7 +95,7 @@ as.im.distfun <- function(X, W=NULL, ...,
     # use 'distmap' for speed
     env <- environment(X)
     Xdata  <- get("X",      envir=env)
-    args <- list(X=Xdata, eps=eps, dimyx=dimyx, xy=xy, rule.eps=rule.eps)
+    args <- list(X=Xdata, op=op, eps=eps, dimyx=dimyx, xy=xy, rule.eps=rule.eps)
     if(is.owin(Xdata)) {
       args <- append(args, list(invert = get("invert", envir=env)))
     }
@@ -107,13 +108,13 @@ as.im.distfun <- function(X, W=NULL, ...,
     Xdata  <- get("X",      envir=env)
     D <- nnmap(Xdata, W=W, what="dist", k=k, 
                eps=eps, dimyx=dimyx, xy=xy, na.replace=na.replace,
-               rule.eps=rule.eps,
+               rule.eps=rule.eps, op=op,
                ...)
   } else {
     # evaluate function at pixel centres
     D <- as.im.function(X, W=W,
                         eps=eps, dimyx=dimyx, xy=xy,
-                        rule.eps=rule.eps,
+                        rule.eps=rule.eps, op=op,
                         na.replace=na.replace)
   }
   return(D)

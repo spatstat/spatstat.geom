@@ -4,7 +4,7 @@
 #'    Mask approximations which are guaranteed to be entirely inside
 #'    or entirely covering the original window.
 #'
-#'    $Revision: 1.10 $  $Date: 2026/05/15 07:50:03 $
+#'    $Revision: 1.11 $  $Date: 2026/05/16 06:59:17 $
 #'
 
 owin2mask <- function(w,
@@ -14,7 +14,7 @@ owin2mask <- function(w,
                            "boundary", "majority", "minority"),
                       W=w
                       ) {
-  op <- match.arg(op)
+  op <- if(!is.null(op)) match.arg(op) else "sample"
   if(!missing(w) && !missing(W))
     warning("Both arguments w and W were given in owin2mask", call.=FALSE)
   if(is.mask(W) && (length(list(...)) == 0)) {

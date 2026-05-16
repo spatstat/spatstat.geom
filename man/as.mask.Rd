@@ -5,7 +5,7 @@
   Obtain a discrete (pixel image) approximation of a given window
 }
 \usage{
- as.mask(w, eps=NULL, dimyx=NULL, xy=NULL,
+ as.mask(w, \dots, eps=NULL, dimyx=NULL, xy=NULL,
          rule.eps=c("adjust.eps", "grow.frame", "shrink.frame"))
 }
 \arguments{
@@ -32,6 +32,7 @@
     \code{eps} is not a divisor of the frame size.
     Ignored if \code{eps} is missing or null. See Details.
   }
+  \item{\dots}{Other arguments are ignored.}
 }
 \value{
   A window (object of class \code{"owin"})
