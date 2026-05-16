@@ -8,7 +8,7 @@
   by measuring the length or number of lines intersecting each pixel.
 }
 \usage{
-\method{pixellate}{psp}(x, W=NULL, ..., weights = NULL,
+\method{pixellate}{psp}(x, W=NULL, \dots, weights = NULL,
                         what=c("length", "number", "indicator"),
                         DivideByPixelArea=FALSE)
 }
@@ -21,7 +21,8 @@
     the pixel resolution.
   }
   \item{\dots}{
-    Optional arguments passed to \code{\link[spatstat.geom]{as.mask}} to determine
+    Optional arguments passed to \code{\link[spatstat.geom]{as.mask}}
+    or \code{\link[spatstat.geom]{owin2mask}} to determine
     the pixel resolution.
   }
   \item{weights}{
@@ -65,6 +66,17 @@
   then the length of the intersection
   between line segment \code{i} and pixel \code{j} is multiplied by
   \code{weights[i]} before the lengths are summed for each pixel.
+}
+\section{Boundary pixels}{
+  When \code{Window(x)} is a rectangle or a polygonal window,
+  the default behaviour is to represent the window as the set of pixels
+  whose \emph{centres} fall inside the polygon. A pixel which contains
+  part of the interior of the polygon, but whose centre falls outside
+  the polygon, is excluded by default, for the sake of efficiency.
+
+  To ensure that all pixels which intersect the interior of the
+  polygon are included in the pixel image, use the argument
+  \code{op="cover"} which will be passed to \code{owin2mask}.
 }
 \value{
   A pixel image (object of class \code{"im"}) with numeric values.

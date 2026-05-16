@@ -16,9 +16,13 @@
 }
 \arguments{
   \item{x,X}{Point pattern (object of class \code{"ppp"}).}
-  \item{\dots}{Arguments passed to \code{\link[spatstat.geom]{as.mask}} to determine
-    the pixel resolution}
-  \item{W}{Optional window mask (object of class \code{"owin"}) determining
+  \item{\dots}{
+    Arguments passed to
+    \code{\link[spatstat.geom]{owin2mask}} or \code{\link[spatstat.geom]{as.mask}}
+    to determine the pixel resolution.
+  }
+  \item{W}{
+    Optional window mask (object of class \code{"owin"}) determining
     the pixel raster.
   }
   \item{weights}{Optional vector of weights associated with the points.}
@@ -107,6 +111,17 @@
   \code{"map"} which is a 2-column matrix containing the row and column
   indices of the discretised positions of the points of \code{x}
   in the pixel grid.
+}
+\section{Boundary pixels}{
+  When \code{Window(x)} is a rectangle or a polygonal window,
+  the default behaviour is to represent the window as the set of pixels
+  whose \emph{centres} fall inside the polygon. A pixel which contains
+  part of the interior of the polygon, but whose centre falls outside
+  the polygon, is excluded by default, for the sake of efficiency.
+
+  To ensure that all pixels which intersect the interior of the
+  polygon are included in the pixel image, use the argument
+  \code{op="cover"} which will be passed to \code{owin2mask}.
 }
 \value{
   A pixel image (object of class \code{"im"}).

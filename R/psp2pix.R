@@ -1,7 +1,7 @@
 #
 # psp2pix.R
 #
-#  $Revision: 1.19 $  $Date: 2025/06/06 06:01:42 $
+#  $Revision: 1.20 $  $Date: 2026/05/16 04:04:12 $
 #
 #
 
@@ -59,7 +59,7 @@ pixellate.psp <- function(x, W=NULL, ..., weights=NULL,
   else
     W <- as.owin(W)
 
-  W <- do.call.matched(as.mask,
+  W <- do.call.matched(owin2mask,
                          resolve.defaults(list(...),
                                           list(w=quote(W))))
 

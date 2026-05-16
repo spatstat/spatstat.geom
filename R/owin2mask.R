@@ -4,15 +4,19 @@
 #'    Mask approximations which are guaranteed to be entirely inside
 #'    or entirely covering the original window.
 #'
-#'    $Revision: 1.9 $  $Date: 2025/10/30 01:26:55 $
+#'    $Revision: 1.10 $  $Date: 2026/05/15 07:50:03 $
 #'
 
-owin2mask <- function(W, 
+owin2mask <- function(w,
+                      ...,
                       op=c("sample", "notsample",
                            "cover", "inside", "uncover", "outside",
                            "boundary", "majority", "minority"),
-                      ...) {
+                      W=w
+                      ) {
   op <- match.arg(op)
+  if(!missing(w) && !missing(W))
+    warning("Both arguments w and W were given in owin2mask", call.=FALSE)
   if(is.mask(W) && (length(list(...)) == 0)) {
     ## W is already a mask and there is no change to the raster
     switch(op,

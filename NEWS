@@ -1,7 +1,11 @@
-        CHANGES IN spatstat.geom VERSION 3.7-3.008
+        CHANGES IN spatstat.geom VERSION 3.7-3.009
 
 OVERVIEW
 
+    o Improved handling of 'rejected' points.
+    
+    o Improved handling of boundary pixels in pixellate()
+    
     o Bug fixes and minor improvements.
 
 SIGNIFICANT USER-VISIBLE CHANGES
@@ -18,6 +22,11 @@ SIGNIFICANT USER-VISIBLE CHANGES
     o plot.ppp
     New argument 'show.rejects' determines whether rejected points are plotted.
 
+    o pixellate.ppp, pixellate.owin, pixellate.psp
+    These methods now accept the argument 'op' which is passed to 'owin2mask'.
+    This makes it possible to ensure that all pixels which intersect the
+    window are included in the resulting pixel image.
+    
     o project2segment
     Accelerated by 20 percent.
     
@@ -27,6 +36,10 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o bdist.pixels
     Accelerated for polygonal windows.
+
+    o owin2mask
+    Changed formal arguments. First argument is now called 'w'.
+    All arguments must be given by name except for the first argument.
 
 BUG FIXES
 
