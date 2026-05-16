@@ -1,7 +1,7 @@
 #
 #       images.R
 #
-#      $Revision: 1.186 $     $Date: 2026/01/21 06:26:39 $
+#      $Revision: 1.187 $     $Date: 2026/05/16 09:45:10 $
 #
 #      The class "im" of raster images
 #
@@ -250,7 +250,7 @@ shift.im <- function(X, vec=c(0,0), ..., origin=NULL) {
 
         if(!is.mask(i) && !is.null(op)) {
           ## 'op' indicates requirement for pixel coverage of polygonal window
-          i <- owin2mask(i, op=op)
+          i <- owin2mask(i, op=op, xy=xy)
         }
         inside <- inside.owin(xy$x, xy$y, i)
 
