@@ -3,7 +3,7 @@
 #
 #   distance function (returns a function of x,y)
 #
-#   $Revision: 1.33 $   $Date: 2026/01/21 06:26:39 $
+#   $Revision: 1.34 $   $Date: 2026/05/17 02:14:16 $
 #
 
 distfun <- function(X, ...) {
@@ -87,7 +87,7 @@ domain.distfun <- Window.distfun <- function(X, ...) { as.owin(X) }
 as.im.distfun <- function(X, W=NULL, ...,
                           eps=NULL, dimyx=NULL, xy=NULL,
                           rule.eps=c("adjust.eps", "grow.frame", "shrink.frame"),
-                          op=NULL,
+                          rule.pix=NULL,
                           na.replace=NULL, approx=TRUE) {
   k <- attr(X, "k")
   rule.eps <- match.arg(rule.eps)
@@ -95,7 +95,7 @@ as.im.distfun <- function(X, W=NULL, ...,
     # use 'distmap' for speed
     env <- environment(X)
     Xdata  <- get("X",      envir=env)
-    args <- list(X=Xdata, op=op, eps=eps, dimyx=dimyx, xy=xy, rule.eps=rule.eps)
+    args <- list(X=Xdata, rule.pix=rule.pix, eps=eps, dimyx=dimyx, xy=xy, rule.eps=rule.eps)
     if(is.owin(Xdata)) {
       args <- append(args, list(invert = get("invert", envir=env)))
     }
@@ -108,13 +108,13 @@ as.im.distfun <- function(X, W=NULL, ...,
     Xdata  <- get("X",      envir=env)
     D <- nnmap(Xdata, W=W, what="dist", k=k, 
                eps=eps, dimyx=dimyx, xy=xy, na.replace=na.replace,
-               rule.eps=rule.eps, op=op,
+               rule.eps=rule.eps, rule.pix=rule.pix,
                ...)
   } else {
     # evaluate function at pixel centres
     D <- as.im.function(X, W=W,
                         eps=eps, dimyx=dimyx, xy=xy,
-                        rule.eps=rule.eps, op=op,
+                        rule.eps=rule.eps, rule.pix=rule.pix,
                         na.replace=na.replace)
   }
   return(D)

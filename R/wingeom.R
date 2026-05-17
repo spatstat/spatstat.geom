@@ -1,7 +1,7 @@
 #
 #	wingeom.R	Various geometrical computations in windows
 #
-#	$Revision: 4.154 $	$Date: 2026/05/16 10:44:00 $
+#	$Revision: 4.155 $	$Date: 2026/05/17 02:17:12 $
 #
 
 volume.owin <- function(x) { area.owin(x) }
@@ -392,17 +392,17 @@ intersect.owin <- function(..., fatal=FALSE, rescue=TRUE, p) {
   # Did the user specify the pixel raster?
   if(length(rasterinfo) > 0) {
     #' convert to masks with specified parameters, and intersect
-    op <- rasterinfo$op
+    rule.pix <- rasterinfo$rule.pix %orifnull% rasterinfo$op
     if(Amask) {
       A <- do.call(AsMaskInternal, append(list(A), rasterinfo))
-      AB <- restrict.mask(A, B, op=op)
+      AB <- restrict.mask(A, B, rule.pix=rule.pix)
       if(fatal && is.empty(AB)) stop("Intersection is empty", call.=FALSE)
       if(rescue)
         AB <- rescue.rectangle(AB)
       return(AB)
     } else {
       B <- do.call(AsMaskInternal, append(list(B), rasterinfo))
-      BA <- restrict.mask(B,A, op=op)
+      BA <- restrict.mask(B,A, rule.pix=rule.pix)
       if(fatal && is.empty(BA)) stop("Intersection is empty", call.=FALSE)
       if(rescue)
         BA <- rescue.rectangle(BA)
@@ -760,13 +760,13 @@ trim.mask <- function(M, R, tolerant=TRUE) {
     return(Z)
 }
 
-restrict.mask <- function(M, W, ..., op=NULL) {
+restrict.mask <- function(M, W, ..., rule.pix=NULL) {
   ## M is a mask, W is any window
   stopifnot(is.mask(M))
   stopifnot(is.owin(W))
   M <- trim.mask(M, Frame(W))
-  if(!is.null(op)) 
-    W <- owin2mask(W, op=op)
+  if(!is.null(rule.pix)) 
+    W <- owin2mask(W, rule.pix=rule.pix)
   if(is.rectangle(W))
     return(trim.mask(M, W))
   ## Determine which pixels of M are inside W

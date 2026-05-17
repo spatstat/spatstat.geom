@@ -73,7 +73,7 @@
 
   To ensure that all pixels which intersect the interior of the
   polygon are included in the pixel image, use the argument
-  \code{op="cover"} which will be passed to \code{owin2mask}.
+  \code{rule.pix="cover"} which will be passed to \code{\link[spatstat.geom]{owin2mask}}.
 }
 \value{
   A pixel image (object of class \code{"im"}).
@@ -85,10 +85,14 @@
 }
 \examples{
    plot(pixellate(letterR, dimyx=15))
+   plot(letterR, add=TRUE)
+   plot(pixellate(letterR, dimyx=15, rule.pix="cover"))
+   plot(letterR, add=TRUE)
    W <- grow.rectangle(as.rectangle(letterR), 0.2)
    plot(pixellate(letterR, W, dimyx=15))
 }
-\author{\adrian
+\author{
+  \adrian
   and \rolf
 }
 \keyword{spatial}

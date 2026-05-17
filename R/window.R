@@ -3,7 +3,7 @@
 #
 #	A class 'owin' to define the "observation window"
 #
-#	$Revision: 4.219 $	$Date: 2026/05/16 09:03:54 $
+#	$Revision: 4.221 $	$Date: 2026/05/17 02:49:08 $
 #
 #
 #	A window may be either
@@ -564,14 +564,18 @@ as.rectangle <- function(w, ...) {
 ##----------------------------------------------------------------------------
 ##
 
-.Spatstat.RasterInfoNames <- c("eps", "dimyx", "xy", "rule.eps", "op")
+.Spatstat.PixelRuleNames <- "rule.pix"  # arguments of owin2mask
+
+.Spatstat.RasterInfoNames <- c("eps", "dimyx", "xy", "rule.eps",
+                               .Spatstat.PixelRuleNames)
 
 as.mask <- function(w, ...,
                     eps=NULL, dimyx=NULL, xy=NULL,
                     rule.eps=c("adjust.eps", "grow.frame", "shrink.frame")) {
   if(missing(w)) w <- NULL
   rule.eps <- match.arg(rule.eps)
-  if("op" %in% names(list(...))) {
+  if(any(.Spatstat.PixelRuleNames %in% names(list(...)))) {
+    ## undocumented diversion
     owin2mask(w=w, ..., eps=eps, dimyx=dimyx, xy=xy, rule.eps=rule.eps)
   } else {
     AsMaskInternal(w=w,   eps=eps, dimyx=dimyx, xy=xy, rule.eps=rule.eps)

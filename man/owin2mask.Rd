@@ -12,18 +12,18 @@
 \usage{
 owin2mask(w,
          \dots,
-         op = c("sample", "notsample",
-                "cover", "inside",
-                "uncover", "outside",
-                "boundary",
-                "majority", "minority"),
+         rule.pix = c("sample", "notsample",
+                      "cover", "inside",
+                      "uncover", "outside",
+                      "boundary",
+                      "majority", "minority"),
          W=w)
 }
 \arguments{
   \item{w}{
     A window (object of class \code{"owin"}).
   }
-  \item{op}{
+  \item{rule.pix}{
     Character string (partially matched) specifying how \code{w}
     should be converted to a binary pixel mask.
   }
@@ -43,34 +43,34 @@ owin2mask(w,
 
   \itemize{
     \item
-    If \code{op="sample"} (the default), the mask consists of all pixels
+    If \code{rule.pix="sample"} (the default), the mask consists of all pixels
     whose \bold{centres} lie inside the window \code{w}.
     This is the same as using \code{\link[spatstat.geom]{as.mask}}.
     \item 
-    If \code{op="notsample"}, the mask consists of all pixels
+    If \code{rule.pix="notsample"}, the mask consists of all pixels
     whose \emph{centres lie outside} the window \code{w}.
     This is the same as using \code{\link[spatstat.geom]{as.mask}} followed by
     \code{\link{complement.owin}}.
     \item 
-    If \code{op="cover"}, the mask consists of all pixels
+    If \code{rule.pix="cover"}, the mask consists of all pixels
     which overlap the window \code{w}, wholly or partially. 
     \item 
-    If \code{op="inside"}, the mask consists of all pixels which
+    If \code{rule.pix="inside"}, the mask consists of all pixels which
     lie entirely inside the window \code{w}.
     \item 
-    If \code{op="uncover"}, the mask consists of all pixels which
+    If \code{rule.pix="uncover"}, the mask consists of all pixels which
     overlap the outside of the window \code{w}, wholly or partially.
     \item 
-    If \code{op="outside"}, the mask consists of all pixels which
+    If \code{rule.pix="outside"}, the mask consists of all pixels which
     lie entirely outside the window \code{w}.
     \item 
-    If \code{op="boundary"}, the mask consists of all pixels which
+    If \code{rule.pix="boundary"}, the mask consists of all pixels which
     overlap the boundary of the window \code{w}.
     \item 
-    If \code{op="majority"}, the mask consists of all pixels in which
+    If \code{rule.pix="majority"}, the mask consists of all pixels in which
     at least half of the pixel area is covered by the window \code{w}.
     \item 
-    If \code{op="minority"}, the mask consists of all pixels in which
+    If \code{rule.pix="minority"}, the mask consists of all pixels in which
     less than half of the pixel area is covered by the window \code{w}.
   }
   These operations are complementary pairs as follows:
@@ -111,24 +111,24 @@ owin2mask(w,
   opa <- par(mfrow=c(2,5))
   plot(as.mask(W, dimyx=10), col="grey", main="sample")
   plot(W, add=TRUE, lwd=3, border="red")  
-  plot(owin2mask(W, op="ma", dimyx=10), col="grey", main="majority")
+  plot(owin2mask(W, rule.pix="ma", dimyx=10), col="grey", main="majority")
   plot(W, add=TRUE, lwd=3, border="red")
-  plot(owin2mask(W, op="i", dimyx=10), col="grey", main="inside")
+  plot(owin2mask(W, rule.pix="i", dimyx=10), col="grey", main="inside")
   plot(W, add=TRUE, lwd=3, border="red")
-  plot(owin2mask(W, op="c", dimyx=10), col="grey", main="cover")
+  plot(owin2mask(W, rule.pix="c", dimyx=10), col="grey", main="cover")
   plot(W, add=TRUE, lwd=3, border="red")
-  plot(owin2mask(W, op="b", dimyx=10), col="grey", main="boundary")
+  plot(owin2mask(W, rule.pix="b", dimyx=10), col="grey", main="boundary")
   plot(W, add=TRUE, lwd=3, border="red")
   plot(as.mask(complement.owin(W), dimyx=10), col="grey",
        main="notsample")
   plot(W, add=TRUE, lwd=3, border="red")  
-  plot(owin2mask(W, op="mi", dimyx=10), col="grey", main="minority")
+  plot(owin2mask(W, rule.pix="mi", dimyx=10), col="grey", main="minority")
   plot(W, add=TRUE, lwd=3, border="red")
-  plot(owin2mask(W, op="o", dimyx=10), col="grey", main="outside")
+  plot(owin2mask(W, rule.pix="o", dimyx=10), col="grey", main="outside")
   plot(W, add=TRUE, lwd=3, border="red")
-  plot(owin2mask(W, op="u", dimyx=10), col="grey", main="uncover")
+  plot(owin2mask(W, rule.pix="u", dimyx=10), col="grey", main="uncover")
   plot(W, add=TRUE, lwd=3, border="red")
-  plot(owin2mask(W, op="b", dimyx=10), col="grey", main="boundary")
+  plot(owin2mask(W, rule.pix="b", dimyx=10), col="grey", main="boundary")
   plot(W, add=TRUE, lwd=3, border="red")
   par(opa)
 }

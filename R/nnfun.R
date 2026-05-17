@@ -3,7 +3,7 @@
 #
 #   nearest neighbour function (returns a function of x,y)
 #
-#   $Revision: 1.12 $   $Date: 2026/01/21 06:26:39 $
+#   $Revision: 1.13 $   $Date: 2026/05/17 02:15:27 $
 #
 
 nnfun <- function(X, ...) {
@@ -75,7 +75,7 @@ domain.nnfun <- Window.nnfun <- function(X, ...) { as.owin(X) }
 as.im.nnfun <- function(X, W=NULL, ...,
                         eps=NULL, dimyx=NULL, xy=NULL,
                         rule.eps=c("adjust.eps", "grow.frame", "shrink.frame"),
-                        op=NULL,
+                        rule.pix=NULL,
                         na.replace=NULL, approx=TRUE) {
   rule.eps <- match.arg(rule.eps)
   if(approx && is.null(W)) {
@@ -85,7 +85,7 @@ as.im.nnfun <- function(X, W=NULL, ...,
       #' fast approximation is supported only for point patterns
       k <- mget("k", envir=env, inherits=FALSE, ifnotfound=list(1))[[1L]]
       value <- mget("value", envir=env, ifnotfound=list(NULL))[[1L]] 
-      Z <- nnmap(Xdata, k=k, what="which", op=op,
+      Z <- nnmap(Xdata, k=k, what="which", rule.pix=rule.pix,
                  eps=eps, dimyx=dimyx, xy=xy, rule.eps=rule.eps)
       if(identical(value, "mark")) {
         marx <- get("marx", envir=env)
@@ -99,7 +99,7 @@ as.im.nnfun <- function(X, W=NULL, ...,
   if(is.null(W)) W <- Window(X)
   result <- as.im.function(X, W=W,
                            eps=eps, dimyx=dimyx, xy=xy,
-                           rule.eps=rule.eps, op=op,
+                           rule.eps=rule.eps, rule.pix=rule.pix,
                            na.replace=na.replace, ...)
   return(result)
 }

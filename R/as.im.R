@@ -17,7 +17,7 @@ as.im.NAobject <- function(X, ...) { NAobject("im") }
 as.im.im <- function(X, W=NULL, ...,
                      eps=NULL, dimyx=NULL, xy=NULL,
                      rule.eps=c("adjust.eps", "grow.frame", "shrink.frame"),
-                     op=NULL,
+                     rule.pix=NULL,
                      na.replace=NULL) {
   X <- repair.old.factor.image(X)
   nopar <- is.null(eps) && is.null(dimyx) && is.null(xy)
@@ -32,15 +32,16 @@ as.im.im <- function(X, W=NULL, ...,
     # pixel raster determined by dimyx etc
     W <- owin2mask(as.rectangle(X),
                    eps=eps, dimyx=dimyx, xy=xy, rule.eps=rule.eps,
-                   op=op)
+                   rule.pix=rule.pix)
     # invoke as.im.owin
     Y <- as.im(W)
   } else if(is.mask(W) || is.im(W) || !nopar) {
     #' raster information is present in { W, eps, dimyx, xy }
-    Y <- as.im(W, eps=eps, dimyx=dimyx, xy=xy, rule.eps=rule.eps, op=op)
+    Y <- as.im(W, eps=eps, dimyx=dimyx, xy=xy, rule.eps=rule.eps,
+               rule.pix=rule.pix)
   } else {
     #' use existing raster information in X
-    return(X[W, drop=FALSE, tight=TRUE, op=op])
+    return(X[W, drop=FALSE, tight=TRUE, rule.pix=rule.pix])
   }
   # resample X onto raster of Y
   Y <- rastersample(X, Y)
@@ -50,13 +51,13 @@ as.im.im <- function(X, W=NULL, ...,
 as.im.owin <- function(X, W=NULL, ...,
                        eps=NULL, dimyx=NULL, xy=NULL,
                        rule.eps=c("adjust.eps", "grow.frame", "shrink.frame"),
-                       op=NULL,
+                       rule.pix=NULL,
                        na.replace=NULL, value=1) {
   if(!(is.null(eps) && is.null(dimyx) && is.null(xy))) {
     ## raster dimensions determined by dimyx etc
     ## convert X to a mask
     rule.eps <- match.arg(rule.eps)
-    M <- owin2mask(X, eps=eps, dimyx=dimyx, xy=xy, rule.eps=rule.eps, op=op)
+    M <- owin2mask(X, eps=eps, dimyx=dimyx, xy=xy, rule.eps=rule.eps, rule.pix=rule.pix)
     ## convert mask to image
     d <- M$dim
     v <- matrix(value, d[1L], d[2L])
@@ -104,7 +105,7 @@ as.im.owin <- function(X, W=NULL, ...,
   # X is not a mask - it is either a rectangle or a polygonal window.
   # W is either missing, or is not a mask.
   # Convert X to an image using default settings
-  M <- owin2mask(X, op=op)
+  M <- owin2mask(X, rule.pix=rule.pix)
   # convert mask to image
   d <- M$dim
   v <- matrix(value, d[1L], d[2L])
@@ -122,7 +123,7 @@ as.im.funxy <- function(X, W=Window(X), ...) {
 as.im.function <- function(X, W=NULL, ...,
                            eps=NULL, dimyx=NULL, xy=NULL,
                            rule.eps=c("adjust.eps", "grow.frame", "shrink.frame"),
-                           op = NULL,
+                           rule.pix = NULL,
                            na.replace=NULL,
                            stringsAsFactors=NULL,
                            strict=FALSE, drop=TRUE) {
@@ -132,7 +133,7 @@ as.im.function <- function(X, W=NULL, ...,
   stringsAsFactors <- resolve.stringsAsFactors(stringsAsFactors)
   W <- as.owin(W)
   rule.eps <- match.arg(rule.eps)
-  W <- owin2mask(W, eps=eps, dimyx=dimyx, xy=xy, rule.eps=rule.eps, op=op)
+  W <- owin2mask(W, eps=eps, dimyx=dimyx, xy=xy, rule.eps=rule.eps, rule.pix=rule.pix)
   m <- W$m
   funnywindow <- !all(m)
 
@@ -219,14 +220,14 @@ as.im.matrix <- function(X, W=NULL, ...) {
 as.im.default <- function(X, W=NULL, ...,
                           eps=NULL, dimyx=NULL, xy=NULL,
                           rule.eps=c("adjust.eps", "grow.frame", "shrink.frame"),
-                          op=NULL, 
+                          rule.pix=NULL, 
                           na.replace=NULL) {
   rule.eps <- match.arg(rule.eps)
   if((is.vector(X) || is.factor(X)) && length(X) == 1) {
     # numerical value: interpret as constant function
     xvalue <- X
     X <- function(xx, yy, ...) { rep.int(xvalue, length(xx)) }
-    return(as.im(X, W, ..., op=op, eps=eps, dimyx=dimyx, xy=xy,
+    return(as.im(X, W, ..., rule.pix=rule.pix, eps=eps, dimyx=dimyx, xy=xy,
                  rule.eps=rule.eps, na.replace=na.replace))
   }
   
@@ -258,7 +259,7 @@ as.im.default <- function(X, W=NULL, ...,
                  dimyx=dimyx,
                  xy=xy,
                  rule.eps=rule.eps,
-                 op=op)
+                 rule.pix=rule.pix)
     return(na.handle.im(out, na.replace))
   }
   stop("Can't convert X to a pixel image")
@@ -334,11 +335,11 @@ as.im.data.frame <- function(X, ..., step, fatal=TRUE, drop=TRUE) {
 do.as.im <- function(x, action, ...,
                      W = NULL, eps = NULL, dimyx = NULL, xy = NULL, 
                      rule.eps=c("adjust.eps", "grow.frame", "shrink.frame"),
-                     op=NULL,
+                     rule.pix=NULL,
                      na.replace = NULL) {
   rule.eps <- match.arg(rule.eps)
   Z <- as.im(x, W=W, eps=eps, dimyx=dimyx, xy=xy,
-             rule.eps=rule.eps, na.replace=na.replace, op=op)
+             rule.eps=rule.eps, na.replace=na.replace, rule.pix=rule.pix)
   Y <- do.call(action, list(Z, ...))
   return(Y)
 }

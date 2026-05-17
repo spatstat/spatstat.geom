@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.7-3.013
+        CHANGES IN spatstat.geom VERSION 3.7-3.014
 
 OVERVIEW
 
@@ -11,19 +11,19 @@ OVERVIEW
 SIGNIFICANT USER-VISIBLE CHANGES
 
     o pixellate.ppp, pixellate.owin, pixellate.psp
-    These methods now accept the argument 'op' which is passed to 'owin2mask'.
+    These methods now accept the argument 'rule.pix' passed to 'owin2mask'.
     This makes it possible to ensure that boundary pixels which partially
     intersect the window are included in the resulting pixel image,
-    by setting op="cover".
+    by setting rule.pix="cover".
     
     o as.im
-    Methods for as.im now accept argument 'op' which is passed to 'owin2mask'.
+    Methods for as.im now accept argument 'rule.pix' passed to 'owin2mask'.
     This makes it possible to ensure that boundary pixels which partially
     intersect the window are included in the resulting pixel image,
-    by setting op="cover".
+    by setting rule.pix="cover".
 
     o "[.im"
-    New argument 'op' controls the handling of boundary pixels
+    New argument 'rule.pix' controls the handling of boundary pixels
     in computations like x[W] where W is a polygonal window.
 
     o as.layered.ppp
@@ -50,6 +50,7 @@ SIGNIFICANT USER-VISIBLE CHANGES
 
     o owin2mask
     Changed formal arguments. First argument is now called 'w'.
+    Formal argument 'op' renamed 'rule.pix'.
     All arguments must be given by name except for the first argument.
 
     o union.owin, intersect.owin, setminus.owin

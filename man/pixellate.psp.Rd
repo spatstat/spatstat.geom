@@ -76,7 +76,7 @@
 
   To ensure that all pixels which intersect the interior of the
   polygon are included in the pixel image, use the argument
-  \code{op="cover"} which will be passed to
+  \code{rule.pix="cover"} which will be passed to
   \code{\link[spatstat.geom]{owin2mask}}.
 }
 \value{
