@@ -7,9 +7,9 @@
   Yields the intersection, union or set subtraction of windows.
 }
 \usage{
-   intersect.owin(\dots, fatal=FALSE, rescue=TRUE, p)
-   union.owin(\dots, rescue=TRUE, p)
-   setminus.owin(A, B, \dots, rescue=TRUE, p)
+   intersect.owin(\dots, fatal=FALSE, rescue=FALSE, p)
+   union.owin(\dots, rescue=FALSE, p)
+   setminus.owin(A, B, \dots, rescue=FALSE, p)
 }
 \arguments{
   \item{A,B}{Windows (objects of class \code{"owin"}).}
@@ -59,7 +59,7 @@
   the result is an empty window or \code{NULL},
   while if \code{fatal=TRUE} an error occurs.
 
-  If \code{rescue=TRUE} (the default) then \code{\link[spatstat.geom]{rescue.rectangle}}
+  If \code{rescue=TRUE} then \code{\link[spatstat.geom]{rescue.rectangle}}
   will be applied to check whether the result is equivalent to a
   rectangle, in which case the equivalent rectangle will be returned.
 }

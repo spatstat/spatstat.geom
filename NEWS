@@ -1,3 +1,14 @@
+        CHANGES IN spatstat.geom VERSION 3.8-1
+
+OVERVIEW
+
+    o Minor correction.
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o union.owin, intersect.owin, setminus.owin
+    Default value of 'rescue' set to 'FALSE'.
+    
         CHANGES IN spatstat.geom VERSION 3.8-0
 
 OVERVIEW

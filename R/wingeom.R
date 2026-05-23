@@ -1,7 +1,7 @@
 #
 #	wingeom.R	Various geometrical computations in windows
 #
-#	$Revision: 4.155 $	$Date: 2026/05/17 02:17:12 $
+#	$Revision: 4.156 $	$Date: 2026/05/23 10:18:49 $
 #
 
 volume.owin <- function(x) { area.owin(x) }
@@ -258,7 +258,7 @@ function(x, i, ...) {
 #
 #
 
-intersect.owin <- function(..., fatal=FALSE, rescue=TRUE, p) {
+intersect.owin <- function(..., fatal=FALSE, rescue=FALSE, p) {
   argh <- list(...)
   ## p is a list of arguments to polyclip::polyclip
   if(missing(p) || is.null(p)) p <- list()
@@ -462,7 +462,7 @@ intersect.owin <- function(..., fatal=FALSE, rescue=TRUE, p) {
 }
 
 
-union.owin <- function(..., rescue=TRUE, p) {
+union.owin <- function(..., rescue=FALSE, p) {
   argh <- list(...)
   ## weed out NULL arguments
   argh <- argh[!sapply(argh, is.null)]
@@ -610,7 +610,7 @@ union.owin <- function(..., rescue=TRUE, p) {
   return(C)
 }
 
-setminus.owin <- function(A, B, ..., rescue=TRUE, p) {
+setminus.owin <- function(A, B, ..., rescue=FALSE, p) {
   if(is.null(B)) return(A)
   verifyclass(B, "owin")
   if(is.null(A)) return(emptywindow(Frame(B)))
