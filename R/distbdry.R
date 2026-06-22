@@ -1,9 +1,10 @@
 #
 #	distbdry.S		Distance to boundary
 #
-#	$Revision: 4.51 $	$Date: 2026/05/10 04:15:56 $
+#	$Revision: 4.53 $	$Date: 2026/06/21 05:20:08 $
 #
 # -------- functions ----------------------------------------
+#
 #
 #	bdist.points()
 #                       compute vector of distances 
@@ -17,8 +18,17 @@
 #       erodemask()    erode the window mask by a distance r
 #                       [yields a new window]
 #
-#
+#       distbdry              
+#       distbdry.ppp  -> bdist.points            
 # 
+
+distbdry <- function(X) {
+  UseMethod("distbdry")
+}
+
+distbdry.ppp <- function(X) { bdist.points(X) }
+
+##
 "bdist.points"<-
 function(X)
 {
@@ -246,4 +256,3 @@ rebound.owin <- local({
 })
 
     
-  

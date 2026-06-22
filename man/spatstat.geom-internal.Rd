@@ -119,6 +119,7 @@
 \alias{imagelistOp}
 \alias{inpoint}
 \alias{inside.arc}
+\alias{inside.box3}
 \alias{interpretAsOrigin}
 \alias{intX.owin}     
 \alias{intX.xypolygon}     
@@ -311,6 +312,7 @@
 \alias{row.names.hyperframe}
 \alias{row.names<-.hyperframe}
 \alias{ruletextline}
+\alias{runifSphereCoords}
 \alias{safedeldir}
 \alias{safeDevCapabilities}
 \alias{safelookup}
@@ -510,6 +512,7 @@ imageOp(e1, e2, op)
 imagelistOp(e1, e2, op)
 inpoint(W)
 inside.arc(theta, arc)
+inside.box3(x, y, z, b)
 interpretAsOrigin(x, W)
 intX.owin(w)
 intX.xypolygon(polly)
@@ -712,6 +715,7 @@ rotxypolygon(p, angle)
 \method{row.names}{hyperframe}(x)
 \method{row.names}{hyperframe}(x) <- value
 ruletextline(ch, n, terse)
+runifSphereCoords(n)
 safedeldir(X)
 safeDevCapabilities()
 safelookup(Z, x, factor, warn)

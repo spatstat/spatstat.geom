@@ -1,3 +1,26 @@
+        CHANGES IN spatstat.geom VERSION 3.8-1.001
+
+OVERVIEW
+
+    o More capabilities for three-dimensional point patterns.
+
+NEW FUNCTIONS
+
+    o distbdry
+    New generic
+
+    o distbdry.ppp
+    Distance from each point in a 2D point pattern
+    to the boundary of the observation window.
+    Equivalent to bdist.points.
+
+    o distbdry.pp3
+    Distance from each point in a 3D point pattern
+    to the boundary of the containing box.
+
+    o rjitter.pp3
+    Randomly displace the points in a three-dimensional point pattern.
+    
         CHANGES IN spatstat.geom VERSION 3.8-1
 
 OVERVIEW

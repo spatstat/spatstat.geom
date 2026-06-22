@@ -3,7 +3,7 @@
 #
 #  class of three-dimensional point patterns in rectangular boxes
 #
-#  $Revision: 1.36 $  $Date: 2026/01/21 06:26:39 $
+#  $Revision: 1.39 $  $Date: 2026/06/21 05:31:41 $
 #
 
 box3 <- function(xrange=c(0,1), yrange=xrange, zrange=yrange, unitname=NULL) {
@@ -96,6 +96,15 @@ bounding.box3 <- function(...) {
   zr <- range(unlist(lapply(boxes, getElement, name="zrange")))
   box3(xr, yr, zr)
 }
+
+inside.box3 <- function(x, y, z, b) {
+  stopifnot(inherits(b, "box3"))
+  inside.range(x, b$xrange) &
+    inside.range(y, b$yrange) &
+      inside.range(z, b$zrange)
+}
+
+## -----------------------------------------------------------
 
 pp3 <- function(x, y, z, ..., marks=NULL) {
   stopifnot(is.numeric(x))
@@ -240,5 +249,16 @@ volume.box3 <- function(x) {
   with(x, prod(diff(xrange), diff(yrange), diff(zrange)))
 }
 
-
-
+distbdry.pp3 <- function(X) {
+  if(is.NAobject(X)) return(NA_integer_)
+  b <- domain(X)
+  xyz <- coords(X)
+  d <- with(xyz,
+            pmin(x - b$xrange[1],
+                 b$xrange[2] - x,
+                 y - b$yrange[1],
+                 b$yrange[2] - y,
+                 z - b$zrange[1],
+                 b$zrange[2] - z))
+  return(d)
+}

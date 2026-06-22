@@ -7,7 +7,7 @@
 #'    rsyst()           systematic random (randomly-displaced grid)
 #'    rjitter()         random perturbation
 #'
-#'   $Revision: 1.21 $  $Date: 2026/04/10 04:48:30 $
+#'   $Revision: 1.22 $  $Date: 2026/06/21 06:20:41 $
 
 
 simulationresult <- function(resultlist, nsim=length(resultlist), drop=TRUE, NameBase="Simulation") {
@@ -199,7 +199,103 @@ rjitter.ppp <- function(X, radius, retry=TRUE, giveup=10000, trim=FALSE, ...,
   return(result)
 }
 
-## rexplode
+#----------- rjitter for 3D point patterns ---------------
+
+rjitter.pp3 <- function(X, radius, retry=TRUE, giveup=10000, trim=FALSE, ...,
+                        nsim=1, drop=TRUE, adjust=1) {
+  verifyclass(X, "pp3")
+  if(!missing(nsim)) {
+    check.1.integer(nsim)
+    stopifnot(nsim >= 0)
+  }
+  if(is.NAobject(X) || (nX <- npoints(X)) == 0) {
+    result <- rep(list(X), nsim)
+    result <- simulationresult(result, nsim, drop)
+    return(result)
+  }
+  B <- domain(X)
+  #' determine the jitter radius
+  if(missing(radius) || is.null(radius)) {
+    radius <- shortside(B)/5
+  } else {
+    ## either one radius, or a vector of radii
+    check.nvector(radius, nX, oneok=TRUE, vname="radius")
+    check.finite(radius, xname="radius")
+    if(min(radius) < 0) {
+      warning("Negative values of jitter radius were set to zero")
+      radius <- pmax(0, radius)
+    }
+  }
+  #' trim?
+  if(isTRUE(trim)) 
+    radius <- pmin(radius, distbdry(X))
+  #' adjust the jitter radius
+  if(!missing(adjust)) {
+    check.nvector(adjust, nX, oneok=TRUE, vname="adjust")
+    if(min(adjust) < 0) {
+      nbad <- sum(adjust < 0)
+      howmanyvalues <- if(length(adjust) == 1) {
+                         "the value"
+                       } else {
+                         paste(nbad, ngettext(nbad, "value", "values"))
+                       }
+      warning(paste("Negative sign was ignored in",
+                    howmanyvalues, "of", sQuote("adjust")),
+              call.=FALSE)
+      adjust <- abs(adjust)
+    }
+    radius <- adjust * radius
+  }
+  #'
+  sameradius <- (length(radius) == 1)
+  #' start jitterin'
+  result <- vector(mode="list", length=nsim)
+  for(isim in seq_len(nsim)) {
+    Xshift <- X
+    if(!retry) {
+      ## retry = FALSE: points outside window are lost
+      xyzshift <- coords(Xshift) + radius * runifSphereCoords(nX)
+      ok <- with(xyzshift, inside.box3(x, y, z, B))
+      Xshift <- Xshift[ok]
+      if(any(ok)) 
+        coords(Xshift) <- xyzshift[ok,,drop=FALSE]
+    } else {
+      ## retry = TRUE: condition on points being inside window
+      undone <- rep.int(TRUE, nX)
+      triesleft <- giveup
+      while(any(undone)) {
+        triesleft <- triesleft - 1
+        if(triesleft <= 0) 
+	  break
+        Y <- Xshift[undone]
+        nY <- npoints(Y)
+        RY <- if(sameradius) radius else radius[undone]
+        xyzshift <- coords(Y) + radius * runifSphereCoords(nY)
+        ok <- with(xyzshift, inside.box3(x, y, z, B))
+        if(any(ok)) {
+          changed <- which(undone)[ok]
+          coords(Xshift)[changed, ] <- xyzshift[ok, ]
+          undone[changed] <- FALSE
+        }
+      }
+      attr(Xshift, "tries") <- giveup - triesleft
+    }
+    attr(Xshift, "radius") <- radius
+    result[[isim]] <- Xshift
+  }
+  result <- simulationresult(result, nsim, drop)
+  return(result)
+}
+
+runifSphereCoords <- function(n) {
+  ## points uniformly distributed in the interior of a sphere
+  v <- matrix(rnorm(n * 3), nrow=n, ncol=3)
+  xyz <- (runif(n)^(1/3)) * v/sqrt(rowSums(v^2))
+  colnames(xyz) <- c("x", "y", "z")
+  return(xyz)
+}
+
+#### ---------------  rexplode ------------------------------------
 
 rexplode <- function(X, ...) {
   UseMethod("rexplode")
