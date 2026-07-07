@@ -1,8 +1,8 @@
-        CHANGES IN spatstat.geom VERSION 3.8-1.002
+        CHANGES IN spatstat.geom VERSION 3.8-1.003
 
 OVERVIEW
 
-    o We thank Sergey Sergushichev for contributions.
+    o We thank Alexey Sergushichev for contributions.
     
     o More capabilities for three-dimensional point patterns.
 
@@ -30,14 +30,14 @@ BUG FIXES
     o dilation.owin
     For very small positive distances 'r > 0' the result did not always
     contain the input region 'w' (and was empty in some extreme cases).
-    [Spotted by Sergey Sergushichev.]
+    [Spotted by Alexey Sergushichev.]
     Fixed.
     
     o rebound.owin
     (Undocumented internal function)
     For binary mask windows, the pixel coordinates of the input and output
     were not aligned, even when the new rectangle was the same as the old one.
-    [Spotted by Sergey Sergushichev.]
+    [Spotted by Alexey Sergushichev.]
     Fixed.
 
         CHANGES IN spatstat.geom VERSION 3.8-1
