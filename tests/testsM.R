@@ -16,7 +16,7 @@ cat(paste("--------- Executing",
 #' 
 #' morphology code blocks
 #'
-#' $Revision: 1.3 $ $Date: 2020/04/30 02:18:23 $
+#' $Revision: 1.4 $ $Date: 2026/07/07 05:57:51 $
 
 local({
   if(ALWAYS) { # depends on C code etc
@@ -42,5 +42,27 @@ local({
     #'
     reset.spatstat.options()
   }
+
+  if(FULLTEST) {
+    #' example from Alexey Sergushichev
+    pixelSize <- 0.1
+    #' 3x3 cross inside 40x40 pixel raster window.
+    croix <- as.mask(owin(xrange = c(0, 4), yrange = c(0, 4)), eps = pixelSize)
+    croix$m[] <- FALSE
+    croix$m[33:35, 34] <- TRUE
+    croix$m[34, 33:35] <- TRUE
+    #' check the cross has 5 pixels
+    nblack <- sum(as.im(croix))
+    stopifnot(nblack == 5)
+    ## try an increasing sequence of small radii 
+    rvals <- ((0:10)/5) * pixelSize
+    counts <- sapply(rvals, function(r) sum(as.im(dilation(croix, r))))
+    print(data.frame(rvals, counts))
+    if(any(counts < nblack))
+      stop("Small dilation(s) failed to contain input region")
+    if(any(diff(counts) < 0))
+      stop("Area of dilation was not a monotone function of radius")
+  }
+
 })
 
