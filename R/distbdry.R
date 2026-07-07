@@ -1,7 +1,7 @@
 #
 #	distbdry.S		Distance to boundary
 #
-#	$Revision: 4.53 $	$Date: 2026/06/21 05:20:08 $
+#	$Revision: 4.55 $	$Date: 2026/07/07 02:40:15 $
 #
 # -------- functions ----------------------------------------
 #
@@ -190,69 +190,52 @@ erodemask <- function(w, r, strict=FALSE) {
   rebound.owin(X, value)
 }
 
-rebound.owin <- local({
-
-  rebound.owin <- function(x, rect) {
-    w <- x
-    verifyclass(rect, "owin")
-    if(is.empty(w))
-      return(emptywindow(rect))
-    verifyclass(w, "owin")
-    if(!is.subset.owin(as.rectangle(w), rect)) {
-      bb <- boundingbox(w)
-      if(!is.subset.owin(bb, rect))
-        stop(paste("The new rectangle",
-                   sQuote("rect"),
-                   "does not contain the window",
-                   sQuote("win")))
-    }
-    xr <- rect$xrange
-    yr <- rect$yrange
-    ## determine unitname
-    uu <- list(unitname(x), unitname(rect))
-    uu <- unique(uu[sapply(uu, is.vanilla)])
-    if(length(uu) > 1) {
-      warning("Arguments of rebound.owin have incompatible unitnames",
-              call.=FALSE)
-      uu <- list()
-    }
-    un <- if(length(uu)) uu[[1]] else NULL
-    ## 
-    switch(w$type,
-           rectangle={
-             return(owin(xr, yr,
-                         poly=list(x=w$xrange[c(1L,2L,2L,1L)],
-                                   y=w$yrange[c(1L,1L,2L,2L)]),
-                         unitname = un,
-                         check=FALSE))
-           },
-           polygonal={
-             return(owin(xr, yr, poly=w$bdry, unitname=un, check=FALSE))
-           },
-           mask={
-             xcol <- newseq(w$xcol, xr)
-             yrow <- newseq(w$yrow, yr)
-             newmask <- as.mask(xy=list(x=xcol, y=yrow))
-             xx <- rasterx.mask(newmask)
-             yy <- rastery.mask(newmask)
-             newmask$m <- inside.owin(xx, yy, w)
-             unitname(newmask) <- un
-             return(newmask)
-           }
-           )
+rebound.owin <- function(x, rect) {
+  w <- x
+  verifyclass(rect, "owin")
+  if(is.empty(w))
+    return(emptywindow(rect))
+  verifyclass(w, "owin")
+  if(!is.subset.owin(as.rectangle(w), rect)) {
+    bb <- boundingbox(w)
+    if(!is.subset.owin(bb, rect))
+      stop(paste("The new rectangle",
+                 sQuote("rect"),
+                 "does not contain the window",
+                 sQuote("win")))
   }
-
-  newseq <- function(oldseq, newrange) {
-    oldrange <- range(oldseq)
-    dstep <- mean(diff(oldseq))
-    nleft <- max(0, floor((oldrange[1L] - newrange[1L])/dstep))
-    nright <- max(0, floor((newrange[2L] - oldrange[2L])/dstep))
-    newstart <- max(oldrange[1L] - nleft * dstep, newrange[1L])
-    newend <- min(oldrange[2L] + nright * dstep, newrange[2L])
-    seq(from=newstart, by=dstep, to=newend)
+  xr <- rect$xrange
+  yr <- rect$yrange
+  ## determine unitname
+  uu <- list(unitname(x), unitname(rect))
+  uu <- unique(uu[sapply(uu, is.vanilla)])
+  if(length(uu) > 1) {
+    warning("Arguments of rebound.owin have incompatible unitnames",
+            call.=FALSE)
+    uu <- list()
   }
-
-  rebound.owin
-})
-
-    
+  un <- if(length(uu)) uu[[1]] else NULL
+  ## 
+  switch(w$type,
+         rectangle={
+           return(owin(xr, yr,
+                       poly=list(x=w$xrange[c(1L,2L,2L,1L)],
+                                 y=w$yrange[c(1L,1L,2L,2L)]),
+                       unitname = un,
+                       check=FALSE))
+         },
+         polygonal={
+           return(owin(xr, yr, poly=w$bdry, unitname=un, check=FALSE))
+         },
+         mask={
+           xcol <- seq(from=xr[1L] + w$xstep/2, by=w$xstep, to=xr[2L])
+           yrow <- seq(from=yr[1L] + w$ystep/2, by=w$ystep, to=yr[2L])
+           newmask <- as.mask(xy=list(x=xcol, y=yrow))
+           xx <- rasterx.mask(newmask)
+           yy <- rastery.mask(newmask)
+           newmask$m <- inside.owin(xx, yy, w)
+           unitname(newmask) <- un
+           return(newmask)
+         }
+         )
+}

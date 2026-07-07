@@ -6,7 +6,7 @@
 #  generic functions
 #  and methods for owin, psp, ppp
 #
-#  $Revision: 1.37 $   $Date: 2026/03/21 04:21:45 $
+#  $Revision: 1.40 $   $Date: 2026/07/07 03:51:10 $
 #
 
 # ............ generic  ............................
@@ -129,11 +129,10 @@ dilation.owin <-
     return(w)
 
   u <- unitname(w)
-  ismask <- is.mask(w)
   
   # determine type of computation
   if(is.null(polygonal)) {
-    polygonal <- !ismask
+    polygonal <- !is.mask(w)
   } else stopifnot(is.logical(polygonal))
   
   if(polygonal) {
@@ -143,18 +142,32 @@ dilation.owin <-
       polygonal <- FALSE
   }
   
-  # bounding frame
+  #' bounding frame for result
   bb <- if(tight) boundingbox(w) else as.rectangle(w)
   newbox <- grow.rectangle(bb, r)
 
   # compute dilation
   if(!polygonal) {
-    # compute pixel approximation
-    epsilon <- sqrt(w$xstep^2 + w$ystep^2)
-    r <- max(r, epsilon)
-    w <- rebound.owin(w, newbox)
-    distant <- distmap(w, ...)
-    dil <- levelset(distant, r, "<=")
+    #' compute pixel approximation of dilation using distance transform
+    if(length(list(...))) 
+      w <- as.mask(w=w, ...)
+    if(is.mask(w)) {
+      #' for computation, expand frame to an integer multiple of pixel size
+      xstep <- w$xstep
+      ystep <- w$ystep
+      delta <- 2 * .Machine$double.eps
+      rx <- xstep * ceiling(delta + r/xstep)
+      ry <- ystep * ceiling(delta + r/ystep)
+      safebox <- grow.rectangle(bb, rx, ry)
+      w <- rebound.owin(w, safebox)
+    }
+    #' distance transform
+    distant <- distmap(w)
+    #' threshold (allowing for numerical effects)
+    epsilon <- with(distant, sqrt(xstep^2 + ystep^2)/16)
+    dil <- levelset(distant, r + epsilon, "<=")
+    #' clip
+    dil <- dil[newbox]
     return(dil)
   } else {
     #' compute polygonal region using polyclip package
