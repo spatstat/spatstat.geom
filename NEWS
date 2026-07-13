@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.8-1.004
+        CHANGES IN spatstat.geom VERSION 3.8-1.005
 
 OVERVIEW
 
@@ -6,7 +6,7 @@ OVERVIEW
     
     o More capabilities for three-dimensional point patterns.
 
-    o Bug fixes and internal improvements.
+    o Bug fixes and minor improvements.
     
 NEW FUNCTIONS
 
@@ -27,6 +27,10 @@ NEW FUNCTIONS
     
 BUG FIXES
 
+    o anyDuplicated.ppp
+    New argument 'rule' supports different levels of accuracy
+    consistent with the options for 'duplicated.ppp'.
+    
     o dilation.owin
     For very small positive distances 'r > 0' the result did not always
     contain the input region 'w' (and was empty in some extreme cases).

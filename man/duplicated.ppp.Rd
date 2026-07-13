@@ -13,7 +13,7 @@
 
  \method{duplicated}{ppx}(x, \dots)
 
- \method{anyDuplicated}{ppp}(x, \dots)
+ \method{anyDuplicated}{ppp}(x, \dots, rule=c("spatstat", "deldir", "unmark"))
 
  \method{anyDuplicated}{ppx}(x, \dots)
 }
@@ -84,12 +84,7 @@
    duplicated(X, rule="deldir")
 }
 
-\author{\adrian
-  
-  
-  and \rolf
-  
-}
+\author{\adrian and \rolf}
 \keyword{spatial}
 \keyword{methods}
  

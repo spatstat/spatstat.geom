@@ -59,21 +59,38 @@ duplicated.ppp <- function(x, ...,
   return(result)
 }
 
-anyDuplicated.ppp <- function(x, ...) {
-  #' first check duplication of coordinates using fast code
+anyDuplicated.ppp <- function(x, ..., rule=c("spatstat", "deldir", "unmark")) {
+  if(is.NAobject(x)) return(NA)
   n <- npoints(x)
   if(n <= 1) return(FALSE)
-  xx <- x$x
-  yy <- x$y
-  o <- order(xx, seq_len(n))
-  anydupXY <- .C(SG_anydupxy,
-                 n=as.integer(n),
-                 x=as.double(xx[o]),
-                 y=as.double(yy[o]),
-                 anydup=as.integer(integer(1)),
-                 PACKAGE="spatstat.geom")$anydup
-  anydupXY && (!is.marked(x) || anyDuplicated(as.data.frame(x), ...))
+  rule <- match.arg(rule)
+  switch(rule,
+         deldir = {
+           #' as used in deldir
+           anydup <- anyDuplicated(as.data.frame(x))
+         },
+         unmark = ,
+         spatstat = {
+           #' More stringent
+           #' First check *exact* duplication of spatial coordinates
+           #' using fast internal code
+           xx <- x$x
+           yy <- x$y
+           o <- order(xx, seq_len(n))
+           anydupXY <- .C(SG_anydupxy,
+                          n=as.integer(n),
+                          x=as.double(xx[o]),
+                          y=as.double(yy[o]),
+                          anydup=as.integer(integer(1)),
+                          PACKAGE="spatstat.geom")$anydup
+           #' now check duplication of marked points
+           anydup <- anydupXY && (rule == "unmark" ||
+                                  !is.marked(x) ||
+                                  anyDuplicated(as.data.frame(x), ...))
+         })
+  return(anydup)
 }
+         
 
 ## .......... multiplicity .............
 
