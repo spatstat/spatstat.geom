@@ -4,6 +4,7 @@
 
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/spatstat.geom)](http://CRAN.R-project.org/package=spatstat.geom) 
 [![GitHub R package version](https://img.shields.io/github/r-package/v/spatstat/spatstat.geom)](https://github.com/spatstat/spatstat.geom)
+[![R-universe](https://spatstat.r-universe.dev/spatstat.geom/badges/version)](https://spatstat.r-universe.dev/spatstat.geom)
 
 
 You are viewing the GitHub repository which
