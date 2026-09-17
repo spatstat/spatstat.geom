@@ -7,7 +7,7 @@
   the spatial domain from which they came.
 }
 \usage{
- ripras(x, y=NULL, shape="convex", f)
+ ripras(x, y=NULL, shape=c("convex", "rectangle"), f)
 }
 \arguments{
   \item{x}{
@@ -18,7 +18,8 @@
   }
   \item{y}{(optional) vector of \code{y} coordinates of observed points,
     if \code{x} is a vector.}
-  \item{shape}{String indicating the type of window to be estimated:
+  \item{shape}{String (partially matched)
+    indicating the type of window to be estimated:
     either \code{"convex"} or \code{"rectangle"}.
   }
   \item{f}{

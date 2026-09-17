@@ -2,7 +2,7 @@
 #	ripras.S	Ripley-Rasson estimator of domain
 #
 #
-#	$Revision: 1.15 $	$Date: 2024/02/04 08:04:51 $
+#	$Revision: 1.16 $	$Date: 2026/08/27 05:58:49 $
 #
 #
 #
@@ -28,9 +28,10 @@ convexhull.xy <- function(x, y=NULL) {
   return(w)
 }
 
-ripras <- function(x, y=NULL, shape="convex", f) {
+ripras <- function(x, y=NULL, shape=c("convex", "rectangle"), f) {
   xy <- xy.coords(x, y)
   n <- length(xy$x)
+  shape <- match.arg(shape)
   w <- switch(shape,
               convex = convexhull.xy(xy),
               rectangle = boundingbox(xy),

@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.179 $   $Date: 2026/01/21 06:26:39 $
+#  $Revision: 1.181 $   $Date: 2026/08/11 07:31:58 $
 #
 #  Plotting code for pixel images
 #
@@ -1043,13 +1043,23 @@ invokeColourmapRule <- function(colfun, x, ..., zlim=NULL, colargs=list()) {
   if(xtype %in% c("real", "integer") && "range" %in% colargnames) {
     ## function(range) -> colourmap
     vrange <- range(range(x, finite=TRUE), zlim)
-    cvals <- try(do.call.matched(colfun,
-                                 append(list(range=vrange), colargs)),
+    ## Determine colour values
+    ##       (passing all auxiliary arguments in 'colargs')
+    cvals <- try(do.call(colfun,
+                         append(list(range=vrange), colargs)),
                  silent=TRUE)
-    if(!inherits(cvals, "try-error")) {
-      colmap <- if(inherits(cvals, "colourmap")) cvals else
-      if(is.character(cvals)) colourmap(cvals, range=vrange) else NULL
+    if(inherits(cvals, "try-error")) {
+      ## try passing only those 'colargs' which are formal arguments of 'colfun'
+      cvals <- try(do.call.matched(colfun,
+                                   append(list(range=vrange), colargs)),
+                   silent=TRUE)
+      if(inherits(cvals, "try-error")) {
+        ## give up; omit colargs
+        cvals <- colfun(range=vrange)
+      }
     }
+    colmap <- if(inherits(cvals, "colourmap")) cvals else
+              if(is.character(cvals)) colourmap(cvals, range=vrange) else NULL
   } else if(xtype != "real" && "inputs" %in% colargnames) {
     ## function(inputs) -> colourmap
     vpossible <- switch(xtype,
@@ -1057,15 +1067,24 @@ invokeColourmapRule <- function(colfun, x, ..., zlim=NULL, colargs=list()) {
                         factor = levels(x),
                         unique(as.matrix(x)))
     if(!is.null(vpossible) && length(vpossible) < 256) {
-      cvals <- try(do.call.matched(colfun,
-                                   append(list(inputs=vpossible),
-                                          colargs)),
+      #' try passing 'colargs'
+      cvals <- try(do.call(colfun,
+                           append(list(inputs=vpossible),
+                                  colargs)),
                    silent=TRUE)
-      if(!inherits(cvals, "try-error")) {
-        colmap <- if(inherits(cvals, "colourmap")) cvals else
-        if(is.character(cvals))
-          colourmap(cvals, inputs=vpossible) else NULL
+      if(inherits(cvals, "try-error")) {
+        #' try passing only recognised 'colargs'
+        cvals <- try(do.call.matched(colfun,
+                                     append(list(inputs=vpossible),
+                                            colargs)),
+                     silent=TRUE)
+        if(!inherits(cvals, "try-error")) {
+          #' reject colargs
+          cvals <- colfun(inputs=vpossible)
+        }
       }
+      colmap <- if(inherits(cvals, "colourmap")) cvals else
+      if(is.character(cvals)) colourmap(cvals, inputs=vpossible) else NULL
     }
   }
   return(colmap)

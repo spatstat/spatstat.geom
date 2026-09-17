@@ -1,3 +1,21 @@
+        CHANGES IN spatstat.geom VERSION 3.8-2.003
+
+OVERVIEW
+
+    o Minor improvements and bug fixes.
+    
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o ripras
+    Argument 'shape' is partially matched.
+
+BUG FIXES
+
+    o plot.im
+    If 'col' was a function, entries in the argument 'colargs'
+    were not passed to 'col' unless they were formal arguments of 'col'.
+    Fixed.
+    
         CHANGES IN spatstat.geom VERSION 3.8-2
 
 OVERVIEW
@@ -25,12 +43,14 @@ NEW FUNCTIONS
     o rjitter.pp3
     Randomly displace the points in a three-dimensional point pattern.
     
-BUG FIXES
+SIGNIFICANT USER-VISIBLE CHANGES
 
     o anyDuplicated.ppp
     New argument 'rule' supports different levels of accuracy
     consistent with the options for 'duplicated.ppp'.
-    
+
+BUG FIXES
+
     o dilation.owin
     For very small positive distances 'r > 0' the result did not always
     contain the input region 'w' (and was empty in some extreme cases).
