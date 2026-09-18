@@ -58,6 +58,7 @@
 \alias{closethresh}
 \alias{cocoEngine}
 \alias{cocoLabels}
+\alias{coerce.marks.categorical}
 \alias{coerce.marks.numeric}
 \alias{coerceNAtoObject}
 \alias{crosspairquad}
@@ -451,6 +452,7 @@ clippoly.psp(s, window, fragments)
 closethresh(X,R,S,twice,\dots)
 cocoEngine(nv, ie, je, algoname)
 cocoLabels(nv, ie, je, algoname, check, resequence)
+coerce.marks.categorical(X, warn)
 coerce.marks.numeric(X, warn)
 coerceNAtoObject(x, cls)
 crosspairquad(Q,rmax,what)

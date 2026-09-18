@@ -1,7 +1,7 @@
 #
 # marks.R
 #
-#   $Revision: 1.49 $   $Date: 2026/01/21 06:26:39 $
+#   $Revision: 1.51 $   $Date: 2026/09/18 03:19:08 $
 #
 # stuff for handling marks
 #
@@ -409,6 +409,28 @@ coerce.marks.numeric <- function(X, warn=TRUE) {
   return(X)
 }
 
+coerce.marks.categorical <- function(X, warn=TRUE) {
+  marx <- marks(X)
+  switch(markformat(marx),
+         none = { },
+         vector = {
+           marx <- as.factor(marx)
+         },
+         dataframe = {
+           marx <- do.call(data.frame, lapply(marx, as.factor))
+         },
+         hyperframe = {
+           ## never reached
+           marx <- as.data.frame(marx, warn=warn)
+           marx <- do.call(data.frame, lapply(marx, as.factor))
+         },
+         list = {
+           ## never reached
+           marx <- factor(uniquemap(marx))
+         })
+  return(X %mark% marx)
+}
+  
 #' for 'print' methods
 markvaluetype <- function(x) {
   if(is.hyperframe(x)) return(unclass(x)$vclass)
