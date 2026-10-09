@@ -3,7 +3,7 @@
 #
 # support for colour maps and other lookup tables
 #
-# $Revision: 1.75 $ $Date: 2026/01/01 00:28:23 $
+# $Revision: 1.78 $ $Date: 2026/10/09 04:31:35 $
 #
 
 colourmap <- function(col, ..., range=NULL, breaks=NULL, inputs=NULL, gamma=1,
@@ -94,13 +94,28 @@ lut <- function(outputs, ..., range=NULL, breaks=NULL, inputs=NULL,
     timeclasses <- c("Date", "POSIXt")
     is.time <- inherits(range, timeclasses) || inherits(breaks, timeclasses)
     if(is.null(breaks)) {
-      #' determine breaks
-      if(is.null(compress)) {
-        breaks <- gammabreaks(range, n + 1L, gamma)
+      #' determine breaks to span range of inputs
+      check.range(as.numeric(range))
+      if(diff(range) > 0) {
+        #' Usual case
+        #' Number of breaks = 1 + number of outputs
+        if(is.null(compress)) {
+          breaks <- gammabreaks(range, n + 1L, gamma)
+        } else {
+          breaks <- decompress(gammabreaks(compress(range), n + 1L, gamma))
+        }
+        gamma.used <- gamma
       } else {
-        breaks <- decompress(gammabreaks(compress(range), n + 1L, gamma))
-      }
-      gamma.used <- gamma
+        #' Trivial interval [a,a]
+        breaks <- range
+        compress <- decompress <- gamma.used <- NULL
+        if(n > 1) {
+          #' select a single output value from the middle of the sequence
+          mid <- round((1+n)/2)
+          outputs <- outputs[mid]
+          n <- 1
+        }
+      } 
     } else {
       #' check user-specified breaks
       stopifnot(length(breaks) >= 2)
@@ -353,8 +368,14 @@ plot.colourmap <- local({
       bks <- compress(stuff$breaks)
       rr <- range(bks)
       trivial <- (diff(rr) == 0)
-      v <- if(trivial) rr[1] else
-           seq(from=rr[1L], to=rr[2L], length.out=max(n+1L, 1024))
+      if(trivial) {
+        ## collapse to a single value with a single colour
+        bks <- rr
+        v <- mean(rr)
+        col <- col[1L]
+      } else {
+        v <- seq(from=rr[1L], to=rr[2L], length.out=max(n+1L, 1024))
+      }
     } else if(!separate) {
       # discrete values: blocks of colour, run together
       v <- (1:n) - 0.5
@@ -449,12 +470,12 @@ plot.colourmap <- local({
       # ................... plot ribbon image .............................
       if(!vertical) {
         # horizontal colour ribbon
-        x <- linmap(v, rr, xlim)
+        x <- if(trivial) xlim else linmap(v, rr, xlim)
         y <- ylim
         z <- matrix(v, ncol=1L)
       } else {
         # vertical colour ribbon
-        y <- linmap(v, rr, ylim)
+        y <- if(trivial) ylim else linmap(v, rr, ylim)
         z <- matrix(v, nrow=1L)
         x <- xlim
       }
