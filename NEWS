@@ -1,9 +1,15 @@
-        CHANGES IN spatstat.geom VERSION 3.8-3.002
+        CHANGES IN spatstat.geom VERSION 3.8-3.003
 
 OVERVIEW
 
     o Minor improvements and bug fixes.
     
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o plot.im
+    New arguments 'ribxlim', 'ribylim' control position of colour ribbon,
+    overriding the default rule.
+        
 BUG FIXES
 
     o colourmap
@@ -11,9 +17,6 @@ BUG FIXES
     the resulting colour map was malformed.
     Fixed.
 
-    o plot.im
-    New arguments 'ribxlim', 'ribylim' control position of colour ribbon.
-        
         CHANGES IN spatstat.geom VERSION 3.8-3
 
 OVERVIEW

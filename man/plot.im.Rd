@@ -107,8 +107,9 @@
     if all pixel values are equal.
   }
   \item{ribside}{
-    Character string indicating where to display the ribbon
-    relative to the main image.
+    Character string indicating where to display the ribbon,
+    relative to the main image. The default is to display the
+    ribbon to the right of the main image.
   }
   \item{ribsep}{
     Factor controlling the space between the ribbon and the image.
@@ -366,8 +367,16 @@
     a box should be drawn.
   }
 }
-\section{Display of the colour map}{
-  If \code{ribbon=TRUE} (the default), a colour ribbon is plotted.
+\section{Displaying the colour map}{
+  If \code{ribbon=TRUE} (the default), the colour map is also
+  displayed in a legend next to the main image.
+
+  The legend is a strip or ribbon of colours, representing \code{ribn}
+  different numerical values, evenly spaced between the minimum and
+  maximum pixel values in the image \code{x}, rendered as colours according to
+  the chosen colour map. This ribbon is annotated by axis ticks and
+  labels indicating the corresponding numerical values.
+
   The position of the colour ribbon is determined as follows.
   \itemize{
     \item
@@ -375,8 +384,10 @@
     of the main image.
     \item 
     If \code{ribxlim} and \code{ribylim} are given,
-    then they specify the position of the ribbon as a rectangle
+    then they specify the exact position of the ribbon as a rectangle
     (in the same spatial coordinate system as the image \code{x}).
+    The annotation of the ribbon is placed on the side of the rectangle
+    indicated by \code{ribside}.
     \item
     Otherwise the placement of the colour ribbon is
     determined by a rule controlled by the
@@ -388,11 +399,6 @@
     The distance separating the ribbon and the image is \code{ribsep} times
     the size of the pixel image.
   }
-
-  The ribbon contains the colours representing \code{ribn}
-  different numerical values, evenly spaced between the minimum and
-  maximum pixel values in the image \code{x}, rendered according to
-  the chosen colour map.
 
   The argument \code{ribargs} controls the \emph{annotation} of the
   colour ribbon. It is a list of arguments to be passed to
@@ -575,6 +581,11 @@
    # it's complex
    Y <- exp(Z + V * 1i)
    plot(Y)
+   # fit the colour map legend into available space
+   U <- as.im(function(x,y) { 108 * sqrt((x-131.03)^2 + (y + 25.3)^2) },
+              Window(austates))
+   plot(U, ribxlim=c(116, 138), ribylim=c(-39, -38), ribside="bottom",
+           main="", ribargs=list(cex.axis=0.8))
 }
 \references{
   \baddrubaturnbook
