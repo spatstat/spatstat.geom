@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.8-3.001
+        CHANGES IN spatstat.geom VERSION 3.8-3.002
 
 OVERVIEW
 
@@ -10,6 +10,9 @@ BUG FIXES
     If 'range' specified an interval of length 0,
     the resulting colour map was malformed.
     Fixed.
+
+    o plot.im
+    New arguments 'ribxlim', 'ribylim' control position of colour ribbon.
         
         CHANGES IN spatstat.geom VERSION 3.8-3
 

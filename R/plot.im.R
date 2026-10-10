@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.181 $   $Date: 2026/08/11 07:31:58 $
+#  $Revision: 1.185 $   $Date: 2026/10/10 02:42:05 $
 #
 #  Plotting code for pixel images
 #
@@ -253,7 +253,9 @@ plot.im <- local({
                      drop.ribbon=FALSE,
                      ribside=c("right", "left", "bottom", "top"),
                      ribsep=0.15, ribwid=0.05, ribn=1024,
-                     ribscale=1, ribargs=list(), riblab=NULL, colargs=list(),
+                     ribscale=1, ribargs=list(), riblab=NULL,
+                     ribxlim=NULL, ribylim=NULL,
+                     colargs=list(),
                      useRaster=NULL, workaround=FALSE, zap=1,
                      do.plot=TRUE,
                      addcontour=FALSE, contourargs=list(),
@@ -270,6 +272,7 @@ plot.im <- local({
       out <- eval(cl, parent.frame())
       return(invisible(out))
     }
+    ribside.given <- !missing(ribside)
     ribside <- match.arg(ribside)
     col.given <- !is.null(col)
     dotargs <- list(...)
@@ -779,44 +782,68 @@ plot.im <- local({
       return(invisible(output.colmap))
     }
     
-    # determine plot region
+    #' determine plot region including colour ribbon
     bb <- owinInternalRect(x$xrange, x$yrange)
-    Width <- diff(bb$xrange)
-    Height <- diff(bb$yrange)
-    Size <- max(Width, Height)
-    switch(ribside,
-           right={
-             # ribbon to right of image
-             bb.rib <- owinInternalRect(bb$xrange[2] + c(ribsep, ribsep+ribwid) * Size,
-                            bb$yrange)
-             rib.iside <- 4
-           },
-           left={
-             # ribbon to left of image
-             bb.rib <- owinInternalRect(bb$xrange[1] - c(ribsep+ribwid, ribsep) * Size,
-                            bb$yrange)
-             rib.iside <- 2
-           },
-           top={
-             # ribbon above image
-             bb.rib <- owinInternalRect(bb$xrange,
-                            bb$yrange[2] + c(ribsep, ribsep+ribwid) * Size)
-             rib.iside <- 3
-           },
+    #' determine box for colour ribbon
+    need.all.or.none(ribxlim=ribxlim, ribylim=ribylim)
+    if(!is.null(ribxlim)) {
+      #' ribbon position given by ribxlim, ribylim
+      check.range(ribxlim)
+      check.range(ribylim)
+      if(!ribside.given) {
+        ## guess appropriate side for annotation
+        mx <- mean(ribxlim)
+        my <- mean(ribylim)
+        ribside <- if(my < bb$yrange[1]) "bottom" else
+                   if(mx < bb$xrange[1]) "left" else
+                   if(my > bb$yrange[2]) "top" else "right"
+      }
+      rib.iside <- sideCode(ribside)
+    } else {
+      #' usual case: ribbon position determined by rule
+      Width <- diff(bb$xrange)
+      Height <- diff(bb$yrange)
+      Size <- max(Width, Height)
+      switch(ribside,
+             right={
+               ## ribbon to right of image
+               ribxlim <- bb$xrange[2] + c(ribsep, ribsep+ribwid) * Size
+               ribylim <- bb$yrange
+               rib.iside <- 4
+             },
+             left={
+               ## ribbon to left of image
+               ribxlim <- bb$xrange[1] - c(ribsep+ribwid, ribsep) * Size
+               ribylim <- bb$yrange
+               rib.iside <- 2
+             },
+             top={
+               ## ribbon above image
+               ribxlim <- bb$xrange
+               ribylim <- bb$yrange[2] + c(ribsep, ribsep+ribwid) * Size
+               rib.iside <- 3
+             },
            bottom={
-             # ribbon below image
-             bb.rib <- owinInternalRect(bb$xrange,
-                            bb$yrange[1] - c(ribsep+ribwid, ribsep) * Size)
+             ## ribbon below image
+             ribxlim <- bb$xrange
+             ribylim <- bb$yrange[1] - c(ribsep+ribwid, ribsep) * Size
              rib.iside <- 1
            })
+    }
+    ## box containing colours of colour ribbon
+    bb.rib <- owinInternalRect(ribxlim, ribylim)
+    ## box containing everything
     bb.all <- boundingbox(bb.rib, bb, backbox)
 
     attr(output.colmap, "bbox") <- bb.all
     attr(output.colmap, "bbox.legend") <- bb.rib
     attr(output.colmap, "side.legend") <- rib.iside
+
     if(!do.plot)
       return(output.colmap)
 
+    ## ............. start plotting ..................................
+    
     pt <- prepareTitle(main)
     
     if(!add) {

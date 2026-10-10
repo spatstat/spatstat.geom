@@ -16,8 +16,9 @@
                    drop.ribbon=FALSE,
                    ribside=c("right", "left", "bottom", "top"),
                    ribsep=0.15, ribwid=0.05, ribn=1024,
-                   ribscale=1, ribargs=list(), riblab=NULL, colargs=list(),
-                   useRaster=NULL, workaround=FALSE, zap=1,
+                   ribscale=1, ribargs=list(), riblab=NULL,
+                   ribxlim=NULL, ribylim=NULL,
+                   colargs=list(), useRaster=NULL, workaround=FALSE, zap=1,
                    do.plot=TRUE,
                    addcontour=FALSE, contourargs=list(),
                    background=NULL, clip.background=FALSE)
@@ -32,8 +33,9 @@
                    drop.ribbon=FALSE,
                    ribside=c("right", "left", "bottom", "top"),
                    ribsep=0.15, ribwid=0.05, ribn=1024,
-                   ribscale=1, ribargs=list(), riblab=NULL, colargs=list(),
-                   useRaster=NULL, workaround=FALSE, zap=1,
+                   ribscale=1, ribargs=list(), riblab=NULL,
+                   ribxlim=NULL, ribylim=NULL,
+                   colargs=list(), useRaster=NULL, workaround=FALSE, zap=1,
                    do.plot=TRUE,
                    addcontour=FALSE, contourargs=list(),
                    background=NULL, clip.background=FALSE)
@@ -110,9 +112,11 @@
   }
   \item{ribsep}{
     Factor controlling the space between the ribbon and the image.
+    Ignored if \code{ribxlim}, \code{ribylim} are given.
   }
   \item{ribwid}{
     Factor controlling the width of the ribbon.
+    Ignored if \code{ribxlim}, \code{ribylim} are given.
   }
   \item{ribn}{
     Number of different values to display in the ribbon.
@@ -134,6 +138,12 @@
     A character string or expression to be interpreted as text,
     or a list of arguments to be passed to
     \code{\link[graphics]{mtext}}.
+  }
+  \item{ribxlim, ribylim}{
+    Optional. The position of the colour ribbon.
+    Numeric vectors of length 2 specifying the ranges of the spatial coordinates
+    \eqn{x} and \eqn{y} where the colour ribbon will
+    be drawn. Overrides the default rule for placement of the ribbon.
   }
   \item{colargs}{
     List of additional arguments passed to
@@ -203,58 +213,15 @@
   The pixel image \code{x} is displayed on the current plot device,
   using equal scales on the \code{x} and \code{y} axes.
 
-  If \code{ribbon=TRUE}, a legend will be plotted.
-  The legend consists of a colour ribbon and an axis with tick-marks,
-  showing the correspondence between the pixel values and the colour map.
+  The correspondence between pixel values and colours
+  (the colour map) can be specified by the user.
 
-  Arguments \code{ribside, ribsep, ribwid} control the placement
-  of the colour ribbon.
-  By default, the ribbon is placed at the right of the main image.
-  This can be changed using the argument \code{ribside}.
-  The width of the ribbon is \code{ribwid} times the size of the pixel
-  image, where `size' means the larger of the width and the height.
-  The distance separating the ribbon and the image is \code{ribsep} times
-  the size of the pixel image.
+  If \code{ribbon=TRUE} (the default), the colour map will also
+  be displayed in a legend.
 
-  The ribbon contains the colours representing \code{ribn}
-  different numerical values, evenly spaced between the minimum and
-  maximum pixel values in the image \code{x}, rendered according to
-  the chosen colour map.
-
-  The argument \code{ribargs} controls the annotation of the
-  colour ribbon. It is a list of arguments to be passed to
-  \code{\link[graphics]{image.default}}, 
-  \code{\link[graphics]{axis}} and
-  \code{\link[grDevices]{axisTicks}}.
-  To plot the colour ribbon without the axis and
-  tick-marks, use \code{ribargs=list(axes=FALSE)}.
-  To ensure that the numerals or symbols printed next to the colour map
-  are oriented horizontally, use \code{ribargs=list(las=1)}.
-  To double the size of the numerals or symbols, 
-  use \code{ribargs=list(cex.axis=2)}.
-  To control the number of tick-marks, use \code{ribargs=list(nint=N)}
-  where \code{N} is the desired number of intervals (so there will
-  be \code{N+1} tickmarks, subject to the vagaries of \R internal
-  code). To draw a box around the colour ribbon but not around the main
-  image, use \code{ribargs=list(box=TRUE)}.
-  
-
-  The argument \code{riblab} contains text that should be displayed 
-  in the margin next to the ribbon. Alternatively \code{riblab} may be a
-  list of arguments to be passed to
-  \code{\link[graphics]{mtext}}; in that case \code{riblab$text} should
-  specify the text to be displayed, while other arguments
-  can specify a different
-  location for the text (e.g. \code{riblab$side = 1} for text at the
-  bottom of the ribbon) and a different font and colour if desired.
-  
-  The argument \code{ribscale} is used
-  to rescale the numerical values printed next to the colour map,
-  for convenience. 
-  For example if the pixel values in \code{x} range between 1000 and
-  4000, it would be sensible to use \code{ribscale=1/1000} so that the
-  colour map tickmarks would be labelled 1 to 4. 
-
+  The return value of \code{plot.im} is the colour map that was used.
+}
+\section{Determining the colour map}{
   Normally the pixel values are displayed using the colours given in the
   argument \code{col}. This may be either
   \itemize{
@@ -352,31 +319,6 @@
   Finally if \code{opacity} is a value less than 1,
   the \bold{colours are transformed to semi-transparent colours}.
 
-  Other graphical parameters controlling the display of both the pixel image
-  and the ribbon can be passed through the \code{...} arguments
-  to the function \code{\link[graphics]{image.default}}.
-  A parameter is handled only if it is one of the following:
-  \itemize{
-    \item a formal argument of \code{\link[graphics]{image.default}}
-    that is operative when \code{add=TRUE}.
-    \item one of the parameters
-    \code{"main", "asp", "sub", "axes", "xlab", "ylab"}
-    described in \code{\link[graphics]{plot.default}}.
-    \item one of the parameters
-    \code{"ann", "cex", "font", "cex.axis", "cex.lab", "cex.main", "cex.sub",
-      "col.axis", "col.lab", "col.main", "col.sub",
-      "font.axis", "font.lab", "font.main", "font.sub"}
-    described in \code{\link[graphics]{par}}.
-    \item the argument \code{box}, a logical value specifying whether
-    a box should be drawn.
-  }
-  Images are plotted using a bitmap raster if \code{useRaster=TRUE}
-  or by drawing polygons if \code{useRaster=FALSE}.
-  Bitmap raster display (performed by \code{\link[graphics]{rasterImage}})
-  tends to produce better results, but is not supported on all graphics devices.
-  The default is to use bitmap raster display if it is
-  supported according to \code{\link[grDevices]{dev.capabilities}}.
-
   Alternatively, the pixel values could be directly 
   interpretable as colour values in \R. That is, the pixel values
   could be character strings that represent colours, or
@@ -396,6 +338,94 @@
   If pixel values are interpreted as colours, 
   the arguments \code{col} and \code{ribbon} will be ignored,
   and a ribbon will not be plotted.
+}
+\section{Displaying the image}{
+  Images are plotted using a bitmap raster if \code{useRaster=TRUE}
+  or by drawing polygons if \code{useRaster=FALSE}.
+  Bitmap raster display (performed by \code{\link[graphics]{rasterImage}})
+  tends to produce better results, but is not supported on all graphics devices.
+  The default is to use bitmap raster display if it is
+  supported according to \code{\link[grDevices]{dev.capabilities}}.
+
+  Other graphical parameters controlling the display of both the pixel image
+  and the ribbon can be passed through the \code{...} arguments
+  to the function \code{\link[graphics]{image.default}}.
+  A parameter is handled only if it is one of the following:
+  \itemize{
+    \item a formal argument of \code{\link[graphics]{image.default}}
+    that is operative when \code{add=TRUE}.
+    \item one of the parameters
+    \code{"main", "asp", "sub", "axes", "xlab", "ylab"}
+    described in \code{\link[graphics]{plot.default}}.
+    \item one of the parameters
+    \code{"ann", "cex", "font", "cex.axis", "cex.lab", "cex.main", "cex.sub",
+      "col.axis", "col.lab", "col.main", "col.sub",
+      "font.axis", "font.lab", "font.main", "font.sub"}
+    described in \code{\link[graphics]{par}}.
+    \item the argument \code{box}, a logical value specifying whether
+    a box should be drawn.
+  }
+}
+\section{Display of the colour map}{
+  If \code{ribbon=TRUE} (the default), a colour ribbon is plotted.
+  The position of the colour ribbon is determined as follows.
+  \itemize{
+    \item
+    By default, the colour ribbon is drawn at the right-hand side
+    of the main image.
+    \item 
+    If \code{ribxlim} and \code{ribylim} are given,
+    then they specify the position of the ribbon as a rectangle
+    (in the same spatial coordinate system as the image \code{x}).
+    \item
+    Otherwise the placement of the colour ribbon is
+    determined by a rule controlled by the
+    arguments \code{ribside, ribsep, ribwid}.
+    The ribbon can be placed next to the left, right, top or bottom of the
+    main image using the argument \code{ribside}.
+    The width of the ribbon is \code{ribwid} times the size of the pixel
+    image, where `size' means the larger of the width and the height.
+    The distance separating the ribbon and the image is \code{ribsep} times
+    the size of the pixel image.
+  }
+
+  The ribbon contains the colours representing \code{ribn}
+  different numerical values, evenly spaced between the minimum and
+  maximum pixel values in the image \code{x}, rendered according to
+  the chosen colour map.
+
+  The argument \code{ribargs} controls the \emph{annotation} of the
+  colour ribbon. It is a list of arguments to be passed to
+  \code{\link[graphics]{image.default}}, 
+  \code{\link[graphics]{axis}} and
+  \code{\link[grDevices]{axisTicks}}.
+  To plot the colour ribbon without the axis and
+  tick-marks, use \code{ribargs=list(axes=FALSE)}.
+  To ensure that the numerals or symbols printed next to the colour map
+  are oriented horizontally, use \code{ribargs=list(las=1)}.
+  To double the size of the numerals or symbols, 
+  use \code{ribargs=list(cex.axis=2)}.
+  To control the number of tick-marks, use \code{ribargs=list(nint=N)}
+  where \code{N} is the desired number of intervals (so there will
+  be \code{N+1} tickmarks, subject to the vagaries of \R internal
+  code). To draw a box around the colour ribbon but not around the main
+  image, use \code{ribargs=list(box=TRUE)}.
+  
+  The argument \code{riblab} contains text that should be displayed 
+  in the margin next to the ribbon. Alternatively \code{riblab} may be a
+  list of arguments to be passed to
+  \code{\link[graphics]{mtext}}; in that case \code{riblab$text} should
+  specify the text to be displayed, while other arguments
+  can specify a different
+  location for the text (e.g. \code{riblab$side = 1} for text at the
+  bottom of the ribbon) and a different font and colour if desired.
+  
+  The argument \code{ribscale} is used
+  to rescale the numerical values printed next to the colour map,
+  for convenience. 
+  For example if the pixel values in \code{x} range between 1000 and
+  4000, it would be sensible to use \code{ribscale=1/1000} so that the
+  colour map tickmarks would be labelled 1 to 4. 
 }
 \section{Adding contour lines}{
   If \code{addcontour=TRUE}, contour lines will be superimposed on the
@@ -514,7 +544,8 @@
   \code{\link{hist.im}},
   \code{\link[graphics]{image.default}},
   \code{\link{spatstat.options}},
-  \code{\link{default.image.colours}}
+  \code{\link{default.image.colours}},
+  \code{\link{layered}}
 }
 \examples{
    # an image
