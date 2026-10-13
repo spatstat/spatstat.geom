@@ -420,11 +420,14 @@
   The argument \code{riblab} contains text that should be displayed 
   in the margin next to the ribbon. Alternatively \code{riblab} may be a
   list of arguments to be passed to
-  \code{\link[graphics]{mtext}}; in that case \code{riblab$text} should
+  \code{\link[graphics]{mtext}} or \code{\link[graphics]{text.default}};
+  in that case \code{riblab$text} should
   specify the text to be displayed, while other arguments
   can specify a different
-  location for the text (e.g. \code{riblab$side = 1} for text at the
-  bottom of the ribbon) and a different font and colour if desired.
+  location for the text (e.g. \code{riblab$side = 1} to place text at the
+  bottom of the ribbon, \code{riblab$offset = 2} to offset the
+  text by 2 character widths from the default position)
+  and a different font and colour if desired. See the Examples.
   
   The argument \code{ribscale} is used
   to rescale the numerical values printed next to the colour map,
@@ -584,8 +587,13 @@
    # fit the colour map legend into available space
    U <- as.im(function(x,y) { 108 * sqrt((x-131.03)^2 + (y + 25.3)^2) },
               Window(austates))
-   plot(U, ribxlim=c(116, 138), ribylim=c(-39, -38), ribside="bottom",
-           main="", ribargs=list(cex.axis=0.8))
+   plot(U, ribxlim=c(116, 138), ribylim=c(-39, -38),
+           ribside="bottom",
+           main="",
+           ribargs=list(cex.axis=0.8),
+           riblab=list(text="distance to Uluru",
+                       offset=2.5, cex=1.25,
+                       vfont=c("script", "plain")))
 }
 \references{
   \baddrubaturnbook

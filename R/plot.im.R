@@ -1,7 +1,7 @@
 #
 #   plot.im.R
 #
-#  $Revision: 1.185 $   $Date: 2026/10/10 02:42:05 $
+#  $Revision: 1.186 $   $Date: 2026/10/13 07:43:47 $
 #
 #  Plotting code for pixel images
 #
@@ -272,6 +272,7 @@ plot.im <- local({
       out <- eval(cl, parent.frame())
       return(invisible(out))
     }
+    need.all.or.none(ribxlim=ribxlim, ribylim=ribylim)
     ribside.given <- !missing(ribside)
     ribside <- match.arg(ribside)
     col.given <- !is.null(col)
@@ -727,10 +728,11 @@ plot.im <- local({
       }
     }
     
-    ## ........ start plotting .................
+    ## >>>>>>>> start plotting <<<<<<<<<<<<<<<<<<<<
 
+    
     if(!isTRUE(ribbon) || (trivial && isTRUE(drop.ribbon))) {
-      ## no ribbon wanted
+      ## ............ no ribbon wanted .......................
 
       attr(output.colmap, "bbox") <- boundingbox(as.rectangle(x), backbox)
       if(!do.plot)
@@ -778,15 +780,17 @@ plot.im <- local({
 ##        fakemaintitle(x, main, dotargs)
 
       do.box.etc(Frame(x), add, dotargs)
-      
+
+      ## RETURN
       return(invisible(output.colmap))
     }
+
+    #' ................... ribbon wanted .......................
     
     #' determine plot region including colour ribbon
     bb <- owinInternalRect(x$xrange, x$yrange)
     #' determine box for colour ribbon
-    need.all.or.none(ribxlim=ribxlim, ribylim=ribylim)
-    if(!is.null(ribxlim)) {
+    if(given.riblim <- !is.null(ribxlim) && !is.null(ribylim)) {
       #' ribbon position given by ribxlim, ribylim
       check.range(ribxlim)
       check.range(ribylim)
@@ -1012,7 +1016,7 @@ plot.im <- local({
       ## temporarily suppress clipping 
       opa <- par(xpd=NA)
       on.exit(par(opa))
-      if(sideCode(riblab$side) == sideCode(rib.iside)) {
+      if(!given.riblim && sideCode(riblab$side) == sideCode(rib.iside)) {
         ## use 'mtext'
         do.call(mtext, riblab)
       } else {
