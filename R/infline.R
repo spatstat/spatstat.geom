@@ -3,7 +3,7 @@
 #
 # Infinite lines
 #
-# $Revision: 1.29 $ $Date: 2024/02/04 08:04:51 $
+# $Revision: 1.31 $ $Date: 2026/10/19 05:00:07 $
 #
 
 infline <- function(a=NULL, b=NULL, h=NULL, v=NULL, p=NULL, theta=NULL) {
@@ -225,9 +225,15 @@ whichhalfplane <- function(L, x, y=NULL) {
   return(Z)
 }
 
-rotate.infline <- function(X, angle=pi/2, ...) {
+rotate.infline <- function(X, angle=pi/2, ..., centre=NULL) {
   if(nrow(X) == 0) return(X)
+  if(shifty <- !is.null(centre)) {
+    centre <- as2vector(centre)
+    X <- shift(X, -centre)
+  }
   Y <- with(X, infline(p = p, theta=theta + angle))
+  if(shifty)
+    Y <- shift(Y, centre)
   return(Y)
 }
 

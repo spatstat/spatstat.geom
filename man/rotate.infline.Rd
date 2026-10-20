@@ -8,10 +8,10 @@
 }
 \description{
   Given the coordinates of one or more infinite straight lines in the
-  plane, apply a rotation or shift.
+  plane, apply a rotation or a shift.
 }
 \usage{
-\method{rotate}{infline}(X, angle = pi/2, \dots)
+\method{rotate}{infline}(X, angle = pi/2, \dots, centre=NULL)
 
 \method{shift}{infline}(X, vec = c(0,0), \dots)
 
@@ -30,6 +30,13 @@
   \item{vec}{
     Translation (shift) vector: a numeric vector of length 2,
     or a \code{list(x,y)}, or a point pattern containing one point.
+  }
+  \item{centre}{
+    Centre of rotation.
+    A numeric vector of length 2 containing spatial coordinates,
+    or a \code{list(x,y)} containing spatial coordinates,
+    or a point pattern containing exactly one point.
+    The default is the coordinate origin \code{c(0,0)}.
   }
   \item{\dots}{
     Ignored.
