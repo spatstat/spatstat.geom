@@ -1,4 +1,4 @@
-        CHANGES IN spatstat.geom VERSION 3.8-3.006
+        CHANGES IN spatstat.geom VERSION 3.8-4
 
 OVERVIEW
 
@@ -10,6 +10,9 @@ SIGNIFICANT USER-VISIBLE CHANGES
     New arguments 'ribxlim', 'ribylim' control position of colour ribbon,
     overriding the default rule.
 
+    o plot.im
+    Improved rule for layout of text labels.
+    
     o rotate.infline
     New argument 'centre' determines the centre of rotation.
 
